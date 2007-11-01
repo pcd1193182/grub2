@@ -1,21 +1,20 @@
 /* lvm.c - module to read Logical Volumes.  */
 /*
  *  GRUB  --  GRand Unified Bootloader
- *  Copyright (C) 2006  Free Software Foundation, Inc.
+ *  Copyright (C) 2006,2007  Free Software Foundation, Inc.
  *
- *  GRUB is free software; you can redistribute it and/or modify
+ *  GRUB is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
+ *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  GRUB is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with GRUB; if not, write to the Free Software
- *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *  along with GRUB.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <grub/dl.h>
@@ -25,7 +24,7 @@
 #include <grub/misc.h>
 #include <grub/lvm.h>
 
-static struct grub_lvm_vg *vgs;
+static struct grub_lvm_vg *vg_list;
 static int lv_count;
 
 
@@ -42,10 +41,10 @@ static int
 grub_lvm_iterate (int (*hook) (const char *name))
 {
   struct grub_lvm_vg *vg;
-  for (vg = vgs; vg; vg = vg->next)
+  for (vg = vg_list; vg; vg = vg->next)
     {
       struct grub_lvm_lv *lv;
-      for (lv = vgs->lvs; lv; lv = lv->next)
+      for (lv = vg->lvs; lv; lv = lv->next)
 	if (hook (lv->name))
 	  return 1;
     }
@@ -58,9 +57,9 @@ grub_lvm_open (const char *name, grub_disk_t disk)
 {
   struct grub_lvm_vg *vg;
   struct grub_lvm_lv *lv = NULL;
-  for (vg = vgs; vg; vg = vg->next)
+  for (vg = vg_list; vg; vg = vg->next)
     {
-      for (lv = vgs->lvs; lv; lv = lv->next)
+      for (lv = vg->lvs; lv; lv = lv->next)
 	if (! grub_strcmp (lv->name, name))
 	  break;
 
@@ -291,7 +290,7 @@ grub_lvm_scan_device (const char *name)
   grub_memcpy (vg_id, p, GRUB_LVM_ID_STRLEN);
   vg_id[GRUB_LVM_ID_STRLEN] = '\0';
 
-  for (vg = vgs; vg; vg = vg->next)
+  for (vg = vg_list; vg; vg = vg->next)
     {
       if (! grub_memcmp(vg_id, vg->id, GRUB_LVM_ID_STRLEN))
 	break;
@@ -314,8 +313,8 @@ grub_lvm_scan_device (const char *name)
 
       vg->lvs = NULL;
       vg->pvs = NULL;
-      vg->next = vgs;
-      vgs = vg;
+      vg->next = vg_list;
+      vg_list = vg;
 
       p = grub_strstr (p, "physical_volumes {")
 	+ sizeof ("physical_volumes {") - 1;
@@ -369,7 +368,7 @@ grub_lvm_scan_device (const char *name)
 	  if (*p == '}')
 	    break;
 
-	  lv = grub_malloc (sizeof (lv));
+	  lv = grub_malloc (sizeof (*lv));
 
 	  q = p;
 	  while (*q != ' ')
