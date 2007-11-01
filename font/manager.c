@@ -1,20 +1,19 @@
 /*
  *  GRUB  --  GRand Unified Bootloader
- *  Copyright (C) 2003,2005,2006  Free Software Foundation, Inc.
+ *  Copyright (C) 2003,2005,2006,2007  Free Software Foundation, Inc.
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  GRUB is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
+ *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  GRUB is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *  along with GRUB.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <grub/file.h>
@@ -127,7 +126,7 @@ find_glyph (const struct font *font, grub_uint32_t code)
 {
   grub_uint32_t start = 0;
   grub_uint32_t end = font->num - 1;
-  struct entry *table = font->table;
+  const struct entry *table = font->table;
   
   /* This shouldn't happen.  */
   if (font->num == 0)
@@ -206,9 +205,8 @@ grub_font_get_glyph (grub_uint32_t code,
 	      goto restart;
 	    }
 
-	  if (bitmap
-	      && (grub_file_read (font->file, (char *) bitmap, w * 16)
-		  != (grub_ssize_t) w * 16))
+	  if (grub_file_read (font->file, (char *) bitmap, w * 16)
+	      != (grub_ssize_t) w * 16)
 	    {
 	      remove_font (font);
 	      goto restart;

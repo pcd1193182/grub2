@@ -1,21 +1,20 @@
 /* mm.c - functions for memory manager */
 /*
  *  GRUB  --  GRand Unified Bootloader
- *  Copyright (C) 2002,2005  Free Software Foundation, Inc.
+ *  Copyright (C) 2002,2005,2007  Free Software Foundation, Inc.
  *
- *  GRUB is free software; you can redistribute it and/or modify
+ *  GRUB is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
+ *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  GRUB is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with GRUB; if not, write to the Free Software
- *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *  along with GRUB.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /*
@@ -396,7 +395,33 @@ grub_realloc (void *ptr, grub_size_t size)
 }
 
 #ifdef MM_DEBUG
-grub_mm_debug = 0;
+int grub_mm_debug = 0;
+
+void
+grub_mm_dump_free (void)
+{
+  grub_mm_region_t r;
+
+  for (r = base; r; r = r->next)
+    {
+      grub_mm_header_t p;
+
+      /* Follow the free list.  */
+      p = r->first;
+      do
+	{
+	  if (p->magic != GRUB_MM_FREE_MAGIC)
+	    grub_fatal ("free magic is broken at %p: 0x%x", p, p->magic);
+
+	  grub_printf ("F:%p:%u:%p\n",
+		       p, (unsigned int) p->size << GRUB_MM_ALIGN_LOG2, p->next);
+	  p = p->next;
+	}
+      while (p != r->first);
+    }
+
+  grub_printf ("\n");
+}
 
 void
 grub_mm_dump (unsigned lineno)
@@ -447,6 +472,7 @@ grub_debug_free (const char *file, int line, void *ptr)
 {
   if (grub_mm_debug)
     grub_printf ("%s:%d: free (%p)\n", file, line, ptr);
+  grub_free (ptr);
 }
 
 void *

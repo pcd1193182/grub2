@@ -1,21 +1,20 @@
 /* fshelp.c -- Filesystem helper functions */
 /*
  *  GRUB  --  GRand Unified Bootloader
- *  Copyright (C) 2004,2005,2006  Free Software Foundation, Inc.
+ *  Copyright (C) 2004,2005,2006,2007  Free Software Foundation, Inc.
  *
- *  GRUB is free software; you can redistribute it and/or modify
+ *  GRUB is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
+ *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  GRUB is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with GRUB; if not, write to the Free Software
- *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *  along with GRUB.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <grub/err.h>
@@ -101,7 +100,7 @@ grub_fshelp_find_file (const char *path, grub_fshelp_node_t rootnode,
       while (*name == '/')
 	name++;
   
-      if (!*name)
+      if (! *name)
 	{
 	  *currfound = currnode;
 	  return 0;
@@ -130,7 +129,7 @@ grub_fshelp_find_file (const char *path, grub_fshelp_node_t rootnode,
 	  
 	  /* Iterate over the directory.  */
 	  found = iterate_dir (currnode, iterate);
-	  if (!found)
+	  if (! found)
 	    {
 	      if (grub_errno)
 		return grub_errno;
@@ -148,7 +147,8 @@ grub_fshelp_find_file (const char *path, grub_fshelp_node_t rootnode,
 		{
 		  free_node (currnode);
 		  free_node (oldnode);
-		  return grub_error (GRUB_ERR_SYMLINK_LOOP, "too deep nesting of symlinks");
+		  return grub_error (GRUB_ERR_SYMLINK_LOOP,
+                                     "too deep nesting of symlinks");
 		}
 	      
 	      symlink = read_symlink (currnode);
@@ -182,7 +182,7 @@ grub_fshelp_find_file (const char *path, grub_fshelp_node_t rootnode,
 	  free_node (oldnode);
 	  
 	  /* Found the node!  */
-	  if (!next || *next == '\0')
+	  if (! next || *next == '\0')
 	    {
 	      *currfound = currnode;
 	      foundtype = type;
@@ -222,7 +222,7 @@ grub_fshelp_find_file (const char *path, grub_fshelp_node_t rootnode,
    blocks have a size of LOG2BLOCKSIZE (in log2).  */
 grub_ssize_t
 grub_fshelp_read_file (grub_disk_t disk, grub_fshelp_node_t node,
-		       void (*read_hook) (grub_disk_addr_t sector,
+		       void NESTED_FUNC_ATTR (*read_hook) (grub_disk_addr_t sector,
 					  unsigned offset, unsigned length),
 		       int pos, grub_size_t len, char *buf,
 		       int (*get_block) (grub_fshelp_node_t node, int block),
@@ -232,12 +232,11 @@ grub_fshelp_read_file (grub_disk_t disk, grub_fshelp_node_t node,
   int blockcnt;
   int blocksize = 1 << (log2blocksize + GRUB_DISK_SECTOR_BITS);
 
-  /* Adjust len so it we can't read past the end of the file.  */
+  /* Adjust LEN so it we can't read past the end of the file.  */
   if (len > filesize)
     len = filesize;
 
-  blockcnt = ((len + pos) 
-	      + blocksize - 1) / blocksize;
+  blockcnt = ((len + pos) + blocksize - 1) / blocksize;
 
   for (i = pos / blocksize; i < blockcnt; i++)
     {
@@ -259,7 +258,7 @@ grub_fshelp_read_file (grub_disk_t disk, grub_fshelp_node_t node,
 	  blockend = (len + pos) % blocksize;
 	  
 	  /* The last portion is exactly blocksize.  */
-	  if (!blockend)
+	  if (! blockend)
 	    blockend = blocksize;
 	}
 
@@ -299,7 +298,7 @@ grub_fshelp_log2blksize (unsigned int blksize, unsigned int *pow)
   *pow = 0;
   while (blksize > 1)
     {
-      mod =  blksize - ((blksize >> 1) << 1);
+      mod = blksize - ((blksize >> 1) << 1);
       blksize >>= 1;
 
       /* Check if it really is a power of two.  */
