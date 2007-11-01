@@ -1,21 +1,20 @@
 /* fat.c - FAT filesystem */
 /*
  *  GRUB  --  GRand Unified Bootloader
- *  Copyright (C) 2000,2001,2002,2003,2004,2005  Free Software Foundation, Inc.
+ *  Copyright (C) 2000,2001,2002,2003,2004,2005,2007  Free Software Foundation, Inc.
  *
- *  This program is free software; you can redistribute it and/or modify
+ *  GRUB is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
+ *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  GRUB is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *  along with GRUB.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <grub/fs.h>
@@ -243,7 +242,7 @@ grub_fat_mount (grub_disk_t disk)
   else
     {
       /* FAT12 or FAT16.  */
-      data->root_cluster = ~0UL;
+      data->root_cluster = ~0U;
 
       if (data->num_clusters <= 4085 + 2)
 	{
@@ -297,7 +296,7 @@ grub_fat_mount (grub_disk_t disk)
 
   /* Start from the root directory.  */
   data->file_cluster = data->root_cluster;
-  data->cur_cluster_num = ~0UL;
+  data->cur_cluster_num = ~0U;
   data->attr = GRUB_FAT_ATTR_DIRECTORY;
   return data;
 
@@ -310,7 +309,7 @@ grub_fat_mount (grub_disk_t disk)
 
 static grub_ssize_t
 grub_fat_read_data (grub_disk_t disk, struct grub_fat_data *data,
-		    void (*read_hook) (grub_disk_addr_t sector,
+		    void NESTED_FUNC_ATTR (*read_hook) (grub_disk_addr_t sector,
 				       unsigned offset, unsigned length),
 		    grub_off_t offset, grub_size_t len, char *buf)
 {
@@ -322,7 +321,7 @@ grub_fat_read_data (grub_disk_t disk, struct grub_fat_data *data,
   
   /* This is a special case. FAT12 and FAT16 doesn't have the root directory
      in clusters.  */
-  if (data->file_cluster == ~0UL)
+  if (data->file_cluster == ~0U)
     {
       size = (data->num_root_sectors << GRUB_DISK_SECTOR_BITS) - offset;
       if (size > len)
@@ -618,7 +617,7 @@ grub_fat_find_dir (grub_disk_t disk, struct grub_fat_data *data,
   data->file_size = grub_le_to_cpu32 (dir.file_size);
   data->file_cluster = ((grub_le_to_cpu16 (dir.first_cluster_high) << 16)
 			| grub_le_to_cpu16 (dir.first_cluster_low));
-  data->cur_cluster_num = ~0UL;
+  data->cur_cluster_num = ~0U;
   
   return dirp;
 }
