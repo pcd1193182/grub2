@@ -1,3 +1,31 @@
+grub2 (1.96+20080724-12ubuntu1) jaunty; urgency=low
+
+  * Merge from Debian Unstable (LP: #298872, LP: #256578).  
+    Remaining Ubuntu changes:
+    + debian/control:
+      - Depend on rather than Suggest os-prober; Ubuntu version does not 
+        suffer from the mount problem that prevents Debian from marking this
+      	Depends.
+    + debian/default/grub 
+      - Adjust for default Ubuntu boot options.
+      - Use new GRUB_CMDLINE_LINUX_DEFAULT option to set "quiet splash" for
+        default items only.  These options won't be set in single user mode.
+    + debian/patches/03_ubuntu_grub_standards
+      - Remove GNU/Linux from default string.
+  * New upstream snapshot includes ext4 extents support (LP: #294763)
+  * Debian patch 02_dpkg_version_comparison.diff fixes kernel ordering
+    (LP: #215513)
+  * debian/patches/04_uuids_and_abstraction_dont_play_along_nicely:
+    + Drop.  Ubuntu's mdadm and lvm properly populate /dev/disk/by-uuid, so
+      this workaround is unnecessary.
+  * debian/changelog:
+    + Drop duplicated 1.96+20080203-1ubuntu2 and 1.96+20080203-1ubuntu1 
+      entries.  We only really need them in there once!
+  * Drop debian/patches/04_convert_root_uuid:
+    - GRUB2 upstream now uses UUIDs when possible.
+
+ -- Christopher James Halse Rogers <raof@ubuntu.com>  Mon, 17 Nov 2008 10:06:18 +1100
+
 grub2 (1.96+20080724-12) unstable; urgency=high
 
   [ Updated translations ]
@@ -305,6 +333,33 @@ grub2 (1.96+20080531-1) unstable; urgency=low
 
  -- Robert Millan <rmh@aybabtu.com>  Sat, 31 May 2008 00:02:54 +0200
 
+grub2 (1.96+20080512-1ubuntu2) intrepid; urgency=low
+
+  [ Onkar Shinde ]
+  * debian/patches:
+    - Add 03_ubuntu_grub_standards to remove GNU/Linux from the
+      default string. (LP: #192955) Don't show splash screen or quiet mode
+      in single user mode.
+    - Add 04_convert_root_uuid.diff to default to using UUIDs
+      on new GRUB2 installations.  (LP: #192956)
+  * debian/control:
+    - Move os-prober to 'Depends' since Ubuntu version does not suffer from
+      the mount problem in Debian version. 'os-prober' is needed for probing
+      other operating systems. (LP: #214642)
+  * Other bugs fixed - LP: #219580
+
+  [ Mario Limonciello ]
+  * Add items from missed merge bug (LP: #234288)
+
+ -- Onkar Shinde <onkarshinde@gmail.com>  Fri, 23 May 2008 14:28:36 +0530
+
+grub2 (1.96+20080512-1ubuntu1) intrepid; urgency=low
+
+  * Merge from debian unstable, remaining changes:
+    - Adjust debian/default/grub for default Ubuntu boot options.
+
+ -- Mario Limonciello <mario_limonciello@dell.com>  Tue, 27 May 2008 11:32:41 -0500
+
 grub2 (1.96+20080512-1) unstable; urgency=low
 
   * New CVS snapshot.
@@ -483,6 +538,29 @@ grub2 (1.96+20080209-1) unstable; urgency=low
   * Lower base-files versioned dependency to >= 4.0.1~bpo40+1.
 
  -- Robert Millan <rmh@aybabtu.com>  Sat,  9 Feb 2008 13:43:49 +0100
+
+grub2 (1.96+20080203-1ubuntu2) hardy; urgency=low
+
+  * Update 03_ubuntu_grub_standards.
+    - Don't show splash screen or quiet mode in single user mode.
+
+ -- Mario Limonciello <mario_limonciello@dell.com>  Wed, 05 Mar 2008 19:05:04 -0600
+
+grub2 (1.96+20080203-1ubuntu1) hardy; urgency=low
+
+  * debian/default/grub
+    - Show lsb_release rather than statically displaying "Debian" (LP: #192955)
+    - Include Ubuntu specific "quiet splash" on default grub command line.
+      (LP: #193024)
+  * debian/patches:
+    - Add 03_ubuntu_grub_standards to remove GNU/Linux from the
+      default string. (LP: #192955)
+    - Add 04_convert_root_uuid.diff to default to using UUIDs
+      on new GRUB2 installations.  (LP: #192956)
+  * debian/control:
+    - Update maintainer per XSBC-Original-Maintainer spec.
+
+ -- Mario Limonciello <mario_limonciello@dell.com>  Mon, 18 Feb 2008 14:05:06 -0600
 
 grub2 (1.96+20080203-1) unstable; urgency=low
 
