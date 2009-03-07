@@ -1,7 +1,7 @@
 /* sfs.c - Amiga Smart FileSystem.  */
 /*
  *  GRUB  --  GRand Unified Bootloader
- *  Copyright (C) 2005,2006,2007  Free Software Foundation, Inc.
+ *  Copyright (C) 2005,2006,2007,2008  Free Software Foundation, Inc.
  *
  *  GRUB is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -172,7 +172,7 @@ grub_sfs_read_extent (struct grub_sfs_data *data, unsigned int block,
 	  return grub_errno;
 	}
 
-      for (i = 0; i < tree->nodes; i++)
+      for (i = grub_be_to_cpu16 (tree->nodes) - 1; i >= 0; i--)
 	{
 
 #define EXTNODE(tree, index)						\
@@ -180,16 +180,8 @@ grub_sfs_read_extent (struct grub_sfs_data *data, unsigned int block,
 					 + (index) * (tree)->nodesize))
 
 	  /* Follow the tree down to the leaf level.  */
-	  if ((grub_be_to_cpu32 (EXTNODE(tree, i)->key) >= block)
+	  if ((grub_be_to_cpu32 (EXTNODE(tree, i)->key) <= block)
 	      && !tree->leaf)
-	    {
-	      next = grub_be_to_cpu32 (EXTNODE (tree, i - 1)->data);
-	      break;
-	    }
-
-	  /* In case the last node is reached just use that one, it is
-	     the right match.  */
-	  if (i + 1 == tree->nodes && !tree->leaf)
 	    {
 	      next = grub_be_to_cpu32 (EXTNODE (tree, i)->data);
 	      break;
@@ -219,8 +211,8 @@ grub_sfs_read_extent (struct grub_sfs_data *data, unsigned int block,
   return grub_error (GRUB_ERR_FILE_READ_ERROR, "SFS extent not found");
 }
 
-static int
-grub_sfs_read_block (grub_fshelp_node_t node, int fileblock)
+static grub_disk_addr_t
+grub_sfs_read_block (grub_fshelp_node_t node, grub_disk_addr_t fileblock)
 {
   int blk = node->block;
   int size = 0;
@@ -239,7 +231,7 @@ grub_sfs_read_block (grub_fshelp_node_t node, int fileblock)
       if (err)
 	return 0;
 
-      if (fileblock < size)
+      if (fileblock < (unsigned int) size)
 	return fileblock + blk;
 
       fileblock -= size;
@@ -451,7 +443,7 @@ grub_sfs_iterate_dir (grub_fshelp_node_t dir,
 
  fail:
   grub_free (objc_data);
-  return 1;
+  return 0;
 }
 
 

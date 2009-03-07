@@ -24,6 +24,7 @@
 #include <grub/machine/machine.h>
 #ifndef ASM_FILE
 #include <grub/types.h>
+#include <grub/err.h>
 #endif
 
 /* The scratch buffer used in real mode code.  */
@@ -76,11 +77,27 @@
 /* The data segment of the pseudo real mode.  */
 #define GRUB_MEMORY_MACHINE_PSEUDO_REAL_DSEG	0x20
 
-#ifndef GRUB_MACHINE_IEEE1275
 #ifndef ASM_FILE
+
+#ifndef GRUB_MACHINE_IEEE1275
 extern grub_size_t EXPORT_VAR(grub_lower_mem);
-extern grub_size_t EXPORT_VAR(grub_upper_mem);
 #endif
+
+extern grub_size_t EXPORT_VAR(grub_upper_mem);
+
+struct grub_machine_mmap_entry
+{
+  grub_uint32_t size;
+  grub_uint64_t addr;
+  grub_uint64_t len;
+#define GRUB_MACHINE_MEMORY_AVAILABLE	1
+#define GRUB_MACHINE_MEMORY_RESERVED	2
+  grub_uint32_t type;
+} __attribute__((packed));
+
+grub_err_t EXPORT_FUNC(grub_machine_mmap_iterate)
+     (int NESTED_FUNC_ATTR (*hook) (grub_uint64_t, grub_uint64_t, grub_uint32_t));
+
 #endif
 
 #endif /* ! GRUB_MEMORY_MACHINE_HEADER */

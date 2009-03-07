@@ -1,7 +1,7 @@
 /* hfsplus.c - HFS+ Filesystem.  */
 /*
  *  GRUB  --  GRand Unified Bootloader
- *  Copyright (C) 2005,2006,2007  Free Software Foundation, Inc.
+ *  Copyright (C) 2005,2006,2007,2008  Free Software Foundation, Inc.
  *
  *  GRUB is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -285,8 +285,8 @@ static int grub_hfsplus_cmp_extkey (struct grub_hfsplus_key *keya,
 
 /* Search for the block FILEBLOCK inside the file NODE.  Return the
    blocknumber of this block on disk.  */
-static int
-grub_hfsplus_read_block (grub_fshelp_node_t node, int fileblock)
+static grub_disk_addr_t
+grub_hfsplus_read_block (grub_fshelp_node_t node, grub_disk_addr_t fileblock)
 {
   struct grub_hfsplus_btnode *nnode = 0;
   int blksleft = fileblock;
@@ -766,6 +766,9 @@ grub_hfsplus_iterate_dir (grub_fshelp_node_t dir,
       /* Restore the byte order to what it was previously.  */
       for (i = 0; i < grub_be_to_cpu16 (catkey->namelen); i++)
 	catkey->name[i] = grub_be_to_cpu16 (catkey->name[i]);
+
+      /* hfs+ is case insensitive.  */
+      type |= GRUB_FSHELP_CASE_INSENSITIVE;
 
       /* Only accept valid nodes.  */
       if (grub_strlen (filename) == grub_be_to_cpu16 (catkey->namelen))
