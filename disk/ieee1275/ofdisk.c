@@ -1,7 +1,7 @@
 /* ofdisk.c - Open Firmware disk access.  */
 /*
  *  GRUB  --  GRand Unified Bootloader
- *  Copyright (C) 2004,2006,2007  Free Software Foundation, Inc.
+ *  Copyright (C) 2004,2006,2007,2008  Free Software Foundation, Inc.
  *
  *  GRUB is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -109,7 +109,7 @@ grub_ofdisk_open (const char *name, grub_disk_t disk)
   if (grub_ieee1275_get_property (dev, "device_type", prop, sizeof (prop),
 				  &actual))
     {
-      grub_error (GRUB_ERR_BAD_DEVICE, "Can't read the device type");
+      grub_error (GRUB_ERR_UNKNOWN_DEVICE, "Can't read the device type");
       goto fail;
     }
 

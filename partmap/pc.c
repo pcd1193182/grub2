@@ -1,7 +1,7 @@
 /* pc.c - Read PC style partition tables.  */
 /*
  *  GRUB  --  GRand Unified Bootloader
- *  Copyright (C) 2002,2004,2005,2006,2007  Free Software Foundation, Inc.
+ *  Copyright (C) 2002,2004,2005,2006,2007,2008,2009  Free Software Foundation, Inc.
  *
  *  GRUB is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -138,7 +138,9 @@ pc_partition_map_iterate (grub_disk_t disk,
 
 	  grub_dprintf ("partition",
 			"partition %d: flag 0x%x, type 0x%x, start 0x%llx, len 0x%llx\n",
-			p.index, e->flag, pcdata.dos_type, p.start, p.len);
+			p.index, e->flag, pcdata.dos_type,
+			(unsigned long long) p.start,
+			(unsigned long long) p.len);
 
 	  /* If this is a GPT partition, this MBR is just a dummy.  */
 	  if (e->type == GRUB_PC_PARTITION_TYPE_GPT_DISK && p.index == 0)
@@ -151,16 +153,17 @@ pc_partition_map_iterate (grub_disk_t disk,
 	      pcdata.dos_part++;
 	      
 	      if (hook (disk, &p))
-		goto finish;
+		return 1;
 
 	      /* Check if this is a BSD partition.  */
 	      if (grub_pc_partition_is_bsd (e->type))
 		{
 		  /* Check if the BSD label is within the DOS partition.  */
 		  if (p.len <= GRUB_PC_PARTITION_BSD_LABEL_SECTOR)
-		    return grub_error (GRUB_ERR_BAD_PART_TABLE,
-				       "no space for disk label");
-
+		    {
+		      grub_dprintf ("partition", "no space for disk label\n");
+		      continue;
+		    }
 		  /* Read the BSD label.  */
 		  if (grub_disk_read (&raw,
 				      (p.start
@@ -173,10 +176,12 @@ pc_partition_map_iterate (grub_disk_t disk,
 		  /* Check if it is valid.  */
 		  if (label.magic
 		      != grub_cpu_to_le32 (GRUB_PC_PARTITION_BSD_LABEL_MAGIC))
-		    return grub_error (GRUB_ERR_BAD_PART_TABLE,
-				       "invalid disk label magic 0x%x",
-				       label.magic);
-
+		    {
+		      grub_dprintf ("partition",
+				    "invalid disk label magic 0x%x on partition %d\n",
+				    label.magic, p.index);
+		      continue;
+		    }
 		  for (pcdata.bsd_part = 0;
 		       pcdata.bsd_part < grub_cpu_to_le16 (label.num_partitions);
 		       pcdata.bsd_part++)
@@ -190,7 +195,7 @@ pc_partition_map_iterate (grub_disk_t disk,
 		      
 		      if (be->fs_type != GRUB_PC_PARTITION_BSD_TYPE_UNUSED)
 			if (hook (disk, &p))
-			  goto finish;
+			  return 1;
 		    }
 		}
 	    }
@@ -255,7 +260,8 @@ pc_partition_map_probe (grub_disk_t disk, const char *str)
     return 0;
   
   pcdata = p->data;
-  if (pc_partition_map_iterate (disk, find_func))
+  pc_partition_map_iterate (disk, find_func);
+  if (grub_errno)
     goto fail;
 
   if (p->index < 0)

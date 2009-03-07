@@ -2,7 +2,7 @@
    SUSP, Rock Ridge.  */
 /*
  *  GRUB  --  GRand Unified Bootloader
- *  Copyright (C) 2004,2005,2006,2007  Free Software Foundation, Inc.
+ *  Copyright (C) 2004,2005,2006,2007,2008  Free Software Foundation, Inc.
  *
  *  GRUB is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,6 +38,12 @@
 #define GRUB_ISO9660_RR_DOT		2
 #define GRUB_ISO9660_RR_DOTDOT		4
 
+#define GRUB_ISO9660_VOLDESC_BOOT	0
+#define GRUB_ISO9660_VOLDESC_PRIMARY	1
+#define GRUB_ISO9660_VOLDESC_SUPP	2
+#define GRUB_ISO9660_VOLDESC_PART	3
+#define GRUB_ISO9660_VOLDESC_END	255
+
 /* The head of a volume descriptor.  */
 struct grub_iso9660_voldesc
 {
@@ -61,18 +67,35 @@ struct grub_iso9660_dir
   grub_uint8_t namelen;
 } __attribute__ ((packed));
 
+struct grub_iso9660_date
+{
+  grub_uint8_t year[4];
+  grub_uint8_t month[2];
+  grub_uint8_t day[2];
+  grub_uint8_t hour[2];
+  grub_uint8_t minute[2];
+  grub_uint8_t second[2];
+  grub_uint8_t hundredth[2];
+  grub_uint8_t offset;
+} __attribute__ ((packed));
+
 /* The primary volume descriptor.  Only little endian is used.  */
 struct grub_iso9660_primary_voldesc
 {
   struct grub_iso9660_voldesc voldesc;
   grub_uint8_t unused1[33];
   grub_uint8_t volname[32];
-  grub_uint8_t unused2[60];
+  grub_uint8_t unused2[16];
+  grub_uint8_t escape[32];
+  grub_uint8_t unused3[12];
   grub_uint32_t path_table_size;
-  grub_uint8_t unused3[4];
+  grub_uint8_t unused4[4];
   grub_uint32_t path_table;
-  grub_uint8_t unused4[12];
+  grub_uint8_t unused5[12];
   struct grub_iso9660_dir rootdir;
+  grub_uint8_t unused6[624];
+  struct grub_iso9660_date created;
+  struct grub_iso9660_date modified;
 } __attribute__ ((packed));
 
 /* A single entry in the path table.  */
@@ -115,6 +138,7 @@ struct grub_iso9660_data
   unsigned int length;
   int rockridge;
   int susp_skip;
+  int joliet;
 };
 
 struct grub_fshelp_node
@@ -197,6 +221,23 @@ grub_iso9660_susp_iterate (struct grub_iso9660_data *data,
   return 0;
 }
 
+static char *
+grub_iso9660_convert_string (grub_uint16_t *us, int len)
+{
+  char *p;
+  int i;
+
+  p = grub_malloc (len * 4 + 1);
+  if (! p)
+    return p;
+
+  for (i=0; i<len; i++)
+    us[i] = grub_be_to_cpu16 (us[i]);
+
+  *grub_utf16_to_utf8 ((grub_uint8_t *) p, us, len) = '\0';
+
+  return p;
+}
 
 static struct grub_iso9660_data *
 grub_iso9660_mount (grub_disk_t disk)
@@ -207,6 +248,8 @@ grub_iso9660_mount (grub_disk_t disk)
   int sua_size;
   char *sua;
   struct grub_iso9660_susp_entry *entry;
+  struct grub_iso9660_primary_voldesc voldesc;
+  int block;
   
   auto grub_err_t susp_iterate (struct grub_iso9660_susp_entry *);
   
@@ -226,34 +269,51 @@ grub_iso9660_mount (grub_disk_t disk)
   if (! data)
     return 0;
   
-  /* Read the superblock.  */
-  if (grub_disk_read (disk, 16 << GRUB_ISO9660_LOG2_BLKSZ, 0,
-		      sizeof (struct grub_iso9660_primary_voldesc),
-		      (char *) &data->voldesc))
-    {
-      grub_error (GRUB_ERR_BAD_FS, "not a iso9660 filesystem");
-      goto fail;
-    }
-
-  if (grub_strncmp ((char *) data->voldesc.voldesc.magic, "CD001", 5) != 0)
-    {
-      grub_error (GRUB_ERR_BAD_FS, "not a iso9660 filesystem");
-      goto fail;
-    }
-  
   data->disk = disk;
   data->rockridge = 0;
-  
+  data->joliet = 0;
+
+  block = 16;
+  do
+    {
+      int copy_voldesc = 0;
+
+      /* Read the superblock.  */
+      if (grub_disk_read (disk, block << GRUB_ISO9660_LOG2_BLKSZ, 0,
+			  sizeof (struct grub_iso9660_primary_voldesc),
+			  (char *) &voldesc))
+        {
+          grub_error (GRUB_ERR_BAD_FS, "not a iso9660 filesystem");
+          goto fail;
+        }
+
+      if (grub_strncmp ((char *) voldesc.voldesc.magic, "CD001", 5) != 0)
+        {
+          grub_error (GRUB_ERR_BAD_FS, "not a iso9660 filesystem");
+          goto fail;
+        }
+
+      if (voldesc.voldesc.type == GRUB_ISO9660_VOLDESC_PRIMARY)
+        copy_voldesc = 1;
+      else if ((voldesc.voldesc.type == GRUB_ISO9660_VOLDESC_SUPP) &&
+               (voldesc.escape[0] == 0x25) && (voldesc.escape[1] == 0x2f) &&
+               ((voldesc.escape[2] == 0x40) ||	/* UCS-2 Level 1.  */
+                (voldesc.escape[2] == 0x43) ||  /* UCS-2 Level 2.  */
+                (voldesc.escape[2] == 0x45)))	/* UCS-2 Level 3.  */
+        {
+          copy_voldesc = 1;
+          data->joliet = 1;
+        }
+
+      if (copy_voldesc)
+        grub_memcpy((char *) &data->voldesc, (char *) &voldesc,
+                    sizeof (struct grub_iso9660_primary_voldesc));
+
+      block++;
+    } while (voldesc.voldesc.type != GRUB_ISO9660_VOLDESC_END);
+
   /* Read the system use area and test it to see if SUSP is
      supported.  */
-  if (grub_disk_read (disk, (grub_le_to_cpu32 (data->voldesc.rootdir.first_sector)
-			     << GRUB_ISO9660_LOG2_BLKSZ), 0,
-		      sizeof (rootdir), (char *) &rootdir))
-    {
-      grub_error (GRUB_ERR_BAD_FS, "not a iso9660 filesystem");
-      goto fail;
-    }
-  
   if (grub_disk_read (disk, (grub_le_to_cpu32 (data->voldesc.rootdir.first_sector)
 			     << GRUB_ISO9660_LOG2_BLKSZ), 0,
 		      sizeof (rootdir), (char *) &rootdir))
@@ -572,6 +632,20 @@ grub_iso9660_iterate_dir (grub_fshelp_node_t dir,
 	      filename = name;
 	  }
 	
+        if (dir->data->joliet)
+          {
+            char *oldname;
+
+            oldname = filename;
+            filename = grub_iso9660_convert_string
+                  ((grub_uint16_t *) oldname, dirent.namelen >> 1);
+
+            if (filename_alloc)
+              grub_free (oldname);
+
+            filename_alloc = 1;
+          }
+
 	if (hook (filename, type, node))
 	  {
 	    if (filename_alloc)
@@ -740,11 +814,67 @@ grub_iso9660_label (grub_device_t device, char **label)
   
   if (data)
     {
-      *label = grub_strndup ((char *) data->voldesc.volname, 32);
+      if (data->joliet)
+        *label = grub_iso9660_convert_string
+                 ((grub_uint16_t *) &data->voldesc.volname, 16);
+      else
+        *label = grub_strndup ((char *) data->voldesc.volname, 32);
       grub_free (data);
     }
   else
     *label = 0;
+
+  return grub_errno;
+}
+
+
+static grub_err_t
+grub_iso9660_uuid (grub_device_t device, char **uuid)
+{
+  struct grub_iso9660_data *data;
+  grub_disk_t disk = device->disk;
+
+#ifndef GRUB_UTIL
+  grub_dl_ref (my_mod);
+#endif
+
+  data = grub_iso9660_mount (disk);
+  if (data)
+    {
+      if (! data->voldesc.modified.year[0] && ! data->voldesc.modified.year[1]
+	  && ! data->voldesc.modified.year[2] && ! data->voldesc.modified.year[3]
+	  && ! data->voldesc.modified.month[0] && ! data->voldesc.modified.month[1]
+	  && ! data->voldesc.modified.day[0] && ! data->voldesc.modified.day[1]
+	  && ! data->voldesc.modified.hour[0] && ! data->voldesc.modified.hour[1]
+	  && ! data->voldesc.modified.minute[0] && ! data->voldesc.modified.minute[1]
+	  && ! data->voldesc.modified.second[0] && ! data->voldesc.modified.second[1]
+	  && ! data->voldesc.modified.hundredth[0] && ! data->voldesc.modified.hundredth[1])
+	{
+	  grub_error (GRUB_ERR_BAD_NUMBER, "No creation date in filesystem to generate UUID.");
+	  *uuid = NULL;
+	}
+      else 
+	{
+	  *uuid = grub_malloc (sizeof ("YYYY-MM-DD-HH-mm-ss-hh"));
+	  grub_sprintf (*uuid, "%c%c%c%c-%c%c-%c%c-%c%c-%c%c-%c%c-%c%c",
+			data->voldesc.modified.year[0], data->voldesc.modified.year[1], 
+			data->voldesc.modified.year[2], data->voldesc.modified.year[3],
+			data->voldesc.modified.month[0], data->voldesc.modified.month[1],
+			data->voldesc.modified.day[0], data->voldesc.modified.day[1],
+			data->voldesc.modified.hour[0], data->voldesc.modified.hour[1],
+			data->voldesc.modified.minute[0], data->voldesc.modified.minute[1],
+			data->voldesc.modified.second[0], data->voldesc.modified.second[1],
+			data->voldesc.modified.hundredth[0], data->voldesc.modified.hundredth[1]);
+	}
+    }
+  else
+    *uuid = NULL;
+
+#ifndef GRUB_UTIL
+	grub_dl_unref (my_mod);
+#endif
+
+  grub_free (data);
 
   return grub_errno;
 }
@@ -759,6 +889,7 @@ static struct grub_fs grub_iso9660_fs =
     .read = grub_iso9660_read,
     .close = grub_iso9660_close,
     .label = grub_iso9660_label,
+    .uuid = grub_iso9660_uuid,
     .next = 0
   };
 
