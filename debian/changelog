@@ -1,3 +1,11 @@
+grub2 (1.96+20080724-12ubuntu2.1) jaunty-proposed; urgency=low
+
+  * debian/legacy/update-grub: fix generation to use select uuid for the
+    root specifier when the groot is a UUID.  Use the same test as is used
+    in the 'grub' package.  LP: #376879
+
+ -- Andy Whitcroft <apw@canonical.com>  Fri, 15 May 2009 12:01:11 +0100
+
 grub2 (1.96+20080724-12ubuntu2) jaunty; urgency=low
 
   * Build for lpia.
