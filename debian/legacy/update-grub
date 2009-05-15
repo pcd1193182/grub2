@@ -499,6 +499,12 @@ write_kernel_entry()
 		local hypervisor_options; hypervisor_options=$1; shift
 	fi
 
+	local grub_root_type
+	case "$grub_root_device" in
+	[^A-Za-z0-9]*)	grub_root_type='root' ;;
+	*)		grub_root_type='uuid' ;;
+	esac
+
 	echo -n "title		" >> $buffer
 
 	if [ -n "$hypervisor" ]; then
@@ -523,7 +529,7 @@ write_kernel_entry()
 	echo "lock" >> $buffer
 	fi
 
-	echo "root		$grub_root_device" >> $buffer
+	echo "$grub_root_type		$grub_root_device" >> $buffer
 
 	echo -n "kernel		"  >> $buffer
 	if [ -n "$hypervisor" ]; then
@@ -852,13 +858,18 @@ esac
 ## heres where we start writing out the kernel entries
 counter=0
 
+case "$grub_root_device" in
+[^A-Za-z0-9]*)	grub_root_type='root' ;;
+*)		grub_root_type='uuid' ;;
+esac
+
 grub2name="${kernel_dir}/grub/core.img"
 if [ "$LET_US_TRY_GRUB_2" = "true" ] \
   && test -f /boot/grub/core.img ; then
 	echo "Found GRUB 2: $grub2name" >&2
 	cat >> $buffer << EOF
 title		Chainload into GRUB 2
-root		$grub_root_device
+$grub_root_type		$grub_root_device
 kernel		$grub2name
 
 title		`echo ───────────────────────────────────────────────────────────────────── | iconv -f utf-8 -t cp437`
