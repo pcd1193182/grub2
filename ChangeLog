@@ -1,3 +1,435 @@
+2009-05-22  Pavel Roskin  <proski@gnu.org>
+
+	* aclocal.m4 (grub_I386_CHECK_REGPARM_BUG): Remove.
+	* configure.ac: Don't call grub_I386_CHECK_REGPARM_BUG.  Define
+	NESTED_FUNC_ATTR using AH_BOTTOM.  Use regparm(1) only when
+	compiling for the i386 targets, but not for the utilities.
+
+	* include/grub/i386/pc/kernel.h (grub_boot_drive): Change type
+	to grub_uint8_t.
+	(grub_root_drive): Likewise.
+	* kern/i386/pc/startup.S (grub_boot_drive): Change size to byte,
+	remove alignment.
+	(grub_root_drive): Change size to byte.
+	(grub_start_addr): Remove.
+	(grub_end_addr): Likewise.
+	(grub_apm_bios_info): Likewise.
+
+2009-05-21  Felix Zielcke  <fzielcke@z-51.de>
+
+	* normal/i386: Remove.
+	* normal/powerpc: Likewise.
+	* normal/sparc64: Likewise.
+	* normal/x86_64: Likewise.
+
+2009-05-19  Vladimir Serbinenko  <phcoder@gmail.com>
+
+	* conf/x86_64-efi.rmk (linux_mod_ASFLAGS): Add missing variable
+	* loader/i386/linux_trampoline.S: Fix identation
+	* loader/i386/xnu_helper.S: Likewise
+
+2009-05-18  Colin D Bennett  <colin@gibibit.com>
+
+	Display error messages when parsing a Lua statement fails.
+	Previously, executing a syntactically invalid statement like
+	")foo" or "bar;" would silently fail.
+
+	* script/lua/grub_main.c (handle_lua_error): New function.
+	(grub_lua_parse_line): Improved reporting of Lua parser and
+	execution errors.
+
+2009-05-17  Vladimir Serbinenko  <phcoder@gmail.com>
+
+	Remove -Werror which causes build to fail on some systems
+
+	* conf/i386-pc.rmk (xnu_mod_CFLAGS): Remove -Werror -Wall
+	* conf/i386-efi.rmk (xnu_mod_CFLAGS): Likewise
+	* conf/x86_64-efi.rmk (xnu_mod_CFLAGS): Likewise
+
+2009-05-17  Vladimir Serbinenko  <phcoder@gmail.com>
+
+	trampoline for linux on 64-bit platform
+
+	* conf/x86_64-efi.rmk (linux_mod_SOURCES): added
+	loader/i386/efi/linux_trampoline.S
+	* include/grub/x86_64/efi/loader.h (grub_linux_real_boot): removed
+	declration
+	* kern/x86_64/efi/startup.S (grub_linux_real_boot): moved from
+	here
+	* loader/i386/linux_trampoline.S: moved here
+	* loader/i386/efi/linux.c (allocate_pages): reserve space for
+	trampoline
+	(jumpvector): removed
+	(grub_linux_trampoline_start): new declaration
+	(grub_linux_trampoline_end): likewise
+	(grub_linux_boot): use trampoline when on 64-bit platform
+	* loader/i386/linux.c: likewise
+
+2009-05-16  Pavel Roskin  <proski@gnu.org>
+
+	* script/lua/grub_lib.c (grub_lua_getenv): Make name and value
+	const to avoid a warning.
+	(grub_lua_setenv): Likewise.
+	* script/lua/grub_main.c (grub_lua_parse_line): Use size_t for
+	lmsg to fix a warning.
+
+2009-05-16  Felix Zielcke  <fzielcke@z-51.de>
+
+	* conf/i386.rmk (setjmp_mod_CFLAGS): Rename to ...
+	(setjmp_mod_ASFLAGS): ... this. Set to $(COMMON_ASFLAGS).
+	* conf/x86_64-efi.rmk (setjmp_mod_CFLAGS): Rename to ...
+	(setjmp_mod_ASFLAGS): ... this. Set to $(COMMON_ASFLAGS).
+	* conf/powerpc-ieee1275.rmk (setjmp_mod_CFLAGS): Rename to ...
+	(setjmp_mod_ASFLAGS): ... this. Set to $(COMMON_ASFLAGS).
+	* conf/sparc64-ieee1275.rmk (setjmp_mod_CFLAGS): Rename to ...
+	(setjmp_mod_ASFLAGS): ... this. Set to $(COMMON_ASFLAGS).
+
+2009-05-16  Felix Zielcke  <fzielcke@z-51.de>
+
+	* util/grub-mkconfig.in: Export GRUB_TERMINAL_INPUT.
+
+2009-05-16  Bean  <bean123ch@gmail.com>
+
+	* conf/common.rmk (pkglib_MODULES): Add lua.mod.
+	(lua_mod_SOURCES): New variable.
+	(lua_mod_CFLAGS): Likewise.
+	(lua_mod_LDFLAGS): Likewise.
+
+	* conf/i386.rmk (pkglib_MODULES): Add setjmp.mod.
+	(setjmp_mod_SOURCES): New variable.
+	(setjmp_mod_CFLAGS): Likewise.
+	(setjmp_LDFLAGS): Likewise.
+
+	* conf/x86_64-efi.rmk (pkglib_MODULES): Add setjmp.mod.
+	(setjmp_mod_SOURCES): New variable.
+	(setjmp_mod_CFLAGS): Likewise.
+	(setjmp_LDFLAGS): Likewise.
+
+	* conf/powerpc-ieee1275.rmk (pkglib_MODULES): Add setjmp.mod.
+	(setjmp_mod_SOURCES): New variable.
+	(setjmp_mod_CFLAGS): Likewise.
+	(setjmp_LDFLAGS): Likewise.
+
+	* conf/sparc64-ieee1275.rmk (pkglib_MODULES): Add setjmp.mod.
+	(setjmp_mod_SOURCES): New variable.
+	(setjmp_mod_CFLAGS): Likewise.
+	(setjmp_LDFLAGS): Likewise.
+
+	* normal/i386/setjmp.S: Moved from here ...
+	* lib/i386/setjmp.S: ... Moved here
+	* normal/x86_64/setjmp.S: Moved from here ...
+	* lib/x86_64/setjmp.S: ... Moved here
+	* normal/powerpc/setjmp.S: Moved from here ...
+	* lib/powerpc/setjmp.S: ... Moved here
+	* normal/sparc64/setjmp.S: Moved from here ...
+	* lib/sparc64/setjmp.S: ... Moved here
+
+	* include/grub/i386/setjmp.h (grub_setjmp): Don't use attribute
+	returns_twice in mingw.
+
+	* script/lua/grub_lib.c: New file.
+	* script/lua/grub_lib.h: Likewise.
+	* script/lua/grub_lua.h: Likewise.
+	* script/lua/grub_main.c: Likewise.
+	* script/lua/lapi.c: Likewise.
+	* script/lua/lapi.h: Likewise.
+	* script/lua/lauxlib.c: Likewise.
+	* script/lua/lauxlib.h: Likewise.
+	* script/lua/lbaselib.c: Likewise.
+	* script/lua/lcode.c: Likewise.
+	* script/lua/lcode.h: Likewise.
+	* script/lua/ldblib.c: Likewise.
+	* script/lua/ldebug.c: Likewise.
+	* script/lua/ldebug.h: Likewise.
+	* script/lua/ldo.c: Likewise.
+	* script/lua/ldo.h: Likewise.
+	* script/lua/ldump.c: Likewise.
+	* script/lua/lfunc.c: Likewise.
+	* script/lua/lfunc.h: Likewise.
+	* script/lua/lgc.c: Likewise.
+	* script/lua/lgc.h: Likewise.
+	* script/lua/linit.c: Likewise.
+	* script/lua/liolib.c: Likewise.
+	* script/lua/llex.c: Likewise.
+	* script/lua/llex.h: Likewise.
+	* script/lua/llimits.h: Likewise.
+	* script/lua/lmathlib.c: Likewise.
+	* script/lua/lmem.c: Likewise.
+	* script/lua/lmem.h: Likewise.
+	* script/lua/loadlib.c: Likewise.
+	* script/lua/lobject.c: Likewise.
+	* script/lua/lobject.h: Likewise.
+	* script/lua/lopcodes.c: Likewise.
+	* script/lua/lopcodes.h: Likewise.
+	* script/lua/loslib.c: Likewise.
+	* script/lua/lparser.c: Likewise.
+	* script/lua/lparser.h: Likewise.
+	* script/lua/lstate.c: Likewise.
+	* script/lua/lstate.h: Likewise.
+	* script/lua/lstring.c: Likewise.
+	* script/lua/lstring.h: Likewise.
+	* script/lua/lstrlib.c: Likewise.
+	* script/lua/ltable.c: Likewise.
+	* script/lua/ltable.h: Likewise.
+	* script/lua/ltablib.c: Likewise.
+	* script/lua/ltm.c: Likewise.
+	* script/lua/ltm.h: Likewise.
+	* script/lua/lua.h: Likewise.
+	* script/lua/luaconf.h: Likewise.
+	* script/lua/lualib.h: Likewise.
+	* script/lua/lundump.c: Likewise.
+	* script/lua/lundump.h: Likewise.
+	* script/lua/lvm.c: Likewise.
+	* script/lua/lvm.h: Likewise.
+	* script/lua/lzio.c: Likewise.
+	* script/lua/lzio.h: Likewise.
+
+2009-05-16  Bean  <bean123ch@gmail.com>
+
+	* include/grub/kernel.h (grub_module_header_types): Add type
+	OBJ_TYPE_CONFIG.
+
+	* kern/main.c (grub_load_config): New function.
+	(grub_main): Call grub_load_config to read boot config.
+
+	* grub-mkimage (generate_image): New parameter config_path.
+	(options): New option --config.
+	(main): Parse --config option, and pass it to generate_image.
+
+2009-05-14  Christian Franke  <franke@computer.org>
+
+	* commands/i386/pc/drivemap_int13h.S: Add missing EXT_C for symbols.
+	This fixes build on Cygwin.
+
+2009-05-14  Pavel Roskin  <proski@gnu.org>
+
+	* commands/i386/pc/drivemap_int13h.S: Eliminate unconditional
+	jump.  This saves two bytes, so the typical case of 2 swapped
+	drives would fit 32 bytes.
+
+2009-05-13  Pavel Roskin  <proski@gnu.org>
+
+	* loader/i386/multiboot.c (grub_multiboot): Cast mmap_addr to
+	grub_uint32_t to avoid a warning.
+
+	* loader/i386/linux.c (allocate_pages): When assigning
+	real_mode_mem, cast through grub_size_t to fix a warning.  The
+	code already makes sure that the value would fit a pointer.
+	(grub_linux_setup_video): Cast render_target->data to
+	grub_size_t to fix a warning.
+
+2009-05-13  Javier Martín  <lordhabbit@gmail.com>
+
+	* commands/i386/pc/drivemap.c: New file - implement drivemap
+	command.
+	* commands/i386/pc/drivemap_int13h.S: New file - int13 handler.
+	* conf/i386-pc.rmk: Add drivemap.c and drivemap_int13h.S.
+
+2009-05-13  Pavel Roskin  <proski@gnu.org>
+
+	* util/i386/pc/grub-setup.c (setup): Remove unused variable
+	embedding_area_exists.
+
+2009-05-13  Robert Millan  <rmh.grub@aybabtu.com>
+
+	* util/i386/pc/grub-setup.c (setup): Restructure code flow to make
+	it easier to understand / work with.
+	Improve warning messages for cases where there's no embedding area,
+	or when it is too small (or core.img too large).
+
+2009-05-13  Pavel Roskin  <proski@gnu.org>
+
+	* loader/i386/pc/multiboot2.c: Add necessary includes for
+	grub_multiboot2_real_boot().
+
+	* fs/iso9660.c (grub_iso9660_iterate_dir): The file mode in the
+	PX record is always little-endian.  We only need the lower 2
+	bytes of the mode.
+
+	* fs/cpio.c: Use the same name "struct head" for tar and cpio to
+	facilitate code reuse.
+	(grub_cpio_mount): Use "struct head", not a char buffer.  This
+	fixes a warning reported by gcc 4.4.
+
+	* kernel/disk.c (grub_disk_read): Use void pointer for the
+	buffer.
+	(grub_disk_write): Use const void pointer for the buffer.
+	Adjust all callers.  Remove unnecessary casts.
+
+2009-05-10  Robert Millan  <rmh.grub@aybabtu.com>
+
+	* util/i386/pc/grub-install.in: Update copyright year.
+
+2009-05-09  Vladimir Serbinenko  <phcoder@gmail.com>
+
+	gptsync
+
+	* commands/gptsync.c: new file
+	* conf/common.rmk (pkglib_MODULES): add gptsync.mod
+	(gptsync_mod_SOURCES): new variable
+	(gptsync_mod_CFLAGS): likewise
+	(gptsync_mod_LDFLAGS): likewise
+	* include/grub/pc_partition.h (GRUB_PC_PARTITION_TYPE_NTFS):
+	new definition
+	(GRUB_PC_PARTITION_TYPE_HFS): likewise
+	* conf/i386-coreboot.rmk (grub_emu_SOURCES): add commands/gptsync.c
+	* conf/i386-ieee1275.rmk: likewise
+	* conf/i386-pc.rmk: likewise
+	* conf/powerpc-ieee1275.rmk: likewise
+
+2009-05-09  Vladimir Serbinenko  <phcoder@gmail.com>
+
+	Fixed grub-emu
+
+	* kern/dl.c (grub_dl_ref): omit when compiling grub-emu
+	(grub_dl_ref): likewise
+
+2009-05-08  Robert Millan  <rmh.grub@aybabtu.com>
+
+	* util/i386/pc/grub-setup.c (setup): Factorize find_usable_region(),
+	split in two functions (one for msdos and one for gpt).
+
+2009-05-08  Pavel Roskin  <proski@gnu.org>
+
+	* disk/raid.c (grub_raid_block_xor): Make buf2 constant, it's
+	not modified.
+
+	* disk/raid6_recover.c (grub_raid6_recover): Fix warnings about
+	uninitialized err[0] and err[1].  Rename them to bad1 and bad2.
+	Initialize them with -1.  Add sanity check for bad1.  Eliminate
+	nerr variable.
+
+2009-05-08  David S. Miller  <davem@davemloft.net>
+
+	* util/sparc64/ieee1275/grub-ofpathname.c (main): Set progname.
+
+2009-05-06  Robert Millan  <rmh.grub@aybabtu.com>
+
+	* util/i386/pc/grub-setup.c (setup): Fix check for embed region
+	existance.
+
+2009-05-05  Felix Zielcke  <fzielcke@z-51.de>
+
+	* conf/powerpc-ieee1275.rmk (grub_emu_SOURCES): Add
+	`kern/rescue_reader.c', `kern/rescue_parser.c' and `normal/autofs.c'.
+
+2009-05-05  David S. Miller  <davem@davemloft.net>
+
+	* util/sparc64/ieee1275/grub-install.in: Fix sed arg quoting.
+
+2009-05-05  Pavel Roskin  <proski@gnu.org>
+
+	* include/grub/dl.h [GRUB_UTIL]: Provide inline implementations
+	of grub_dl_ref() and grub_dl_unref().
+	* commands/parttool.c: Remove preprocessor conditionals around
+	grub_dl_ref() and grub_dl_unref().
+	* fs/affs.c: Likewise.
+	* fs/afs.c: Likewise.
+	* fs/cpio.c: Likewise.
+	* fs/ext2.c: Likewise.
+	* fs/fat.c: Likewise.
+	* fs/hfs.c: Likewise.
+	* fs/hfsplus.c: Likewise.
+	* fs/iso9660.c: Likewise.
+	* fs/jfs.c: Likewise.
+	* fs/minix.c: Likewise.
+	* fs/ntfs.c: Likewise.
+	* fs/reiserfs.c: Likewise.
+	* fs/sfs.c: Likewise.
+	* fs/udf.c: Likewise.
+	* fs/ufs.c: Likewise.
+	* fs/xfs.c: Likewise.
+	* include/grub/dl.h: Likewise.
+	* loader/xnu.c: Likewise.
+
+2009-05-04  Pavel Roskin  <proski@gnu.org>
+
+	* commands/acpi.c: Remove unused variable my_mod.
+	* partmap/amiga.c: Likewise.
+	* partmap/apple.c: Likewise.
+	* partmap/gpt.c: Likewise.
+	* partmap/pc.c: Likewise.
+	* partmap/sun.c: Likewise.
+	* term/gfxterm.c: Likewise.
+	* term/i386/pc/vesafb.c: Likewise.
+	* term/i386/pc/vga.c: Likewise.
+
+2009-05-04  David S. Miller  <davem@davemloft.net>
+
+	* kern/ieee1275/openfw.c (grub_children_iterate): Fix string
+	pointer args to grub_ieee1275_get_property().
+
+	* conf/sparc64-ieee1275.rmk: Fix build due to missing '\'.
+
+	* disk/ieee1275/ofdisk.c (grub_ofdisk_iterate): Bypass cdrom
+	devices, and do not traverse down under controller nodes.
+
+	* disk/ieee1275/ofdisk.c (compute_dev_path): New.
+	(grub_ofdisk_open): Use it to un-escape "," characters.
+	* kern/disk.c (find_part_sep): New.
+	(grub_disk_open): Use it to find the first non-escaped ','
+	character in the disk name.
+	* util/ieee1275/devicemap.c (escape_of_path): New.
+	(grub_util_emit_devicemap_entry): Use it.
+	* util/sparc64/ieee1275/grub-install.in: Update script to
+	strip partition specifiers properly by not triggering on
+	'\' escaped ',' characters.
+
+2009-05-04  Robert Millan  <rmh.grub@aybabtu.com>
+
+	* include/grub/i386/linux.h (GRUB_LINUX_VID_MODE_VESA_START): Set
+	to 0x300.
+	* loader/i386/linux.c (vga_modes, linux_vesafb_res): Add a few
+	resolutions.
+	(linux_vesafb_modes): Add a lot of additional modes to the list (based
+	on documentation from Wikipedia).
+
+2009-05-04  Pavel Roskin  <proski@gnu.org>
+
+	* disk/ata.c: Spelling fixes.
+	* disk/raid.c: Likewise.
+	* disk/usbms.c: Likewise.
+	* disk/dmraid_nvidia.c: Likewise.
+	* kern/ieee1275/openfw.c: Likewise.
+	* kern/ieee1275/init.c: Likewise.
+	* kern/ieee1275/cmain.c: Likewise.
+	* boot/i386/pc/cdboot.S: Likewise.
+	* video/readers/png.c: Likewise.
+	* video/i386/pc/vbe.c: Likewise.
+	* fs/udf.c: Likewise.
+	* fs/hfs.c: Likewise.
+	* fs/reiserfs.c: Likewise.
+	* efiemu/runtime/efiemu.c: Likewise.
+	* efiemu/main.c: Likewise.
+	* efiemu/mm.c: Likewise.
+	* include/grub/elf.h: Likewise.
+	* include/grub/xnu.h: Likewise.
+	* include/grub/usbdesc.h: Likewise.
+	* include/grub/usb.h: Likewise.
+	* include/grub/script_sh.h: Likewise.
+	* include/grub/lib/LzmaEnc.h: Likewise.
+	* include/grub/efiemu/efiemu.h: Likewise.
+	* include/grub/command.h: Likewise.
+	* normal/menu.c: Likewise.
+	* normal/main.c: Likewise.
+	* normal/datetime.c: Likewise.
+	* bus/usb/uhci.c: Likewise.
+	* mmap/i386/uppermem.c: Likewise.
+	* mmap/mmap.c: Likewise.
+	* commands/acpi.c: Likewise.
+	* commands/test.c: Likewise.
+	* partmap/apple.c: Likewise.
+	* font/font.c: Likewise.
+	* loader/sparc64/ieee1275/linux.c: Likewise.
+	* loader/macho.c: Likewise.
+	* loader/i386/bsd_trampoline.S: Likewise.
+	* loader/i386/bsd.c: Likewise.
+	* loader/xnu.c: Likewise.
+	* term/i386/pc/vesafb.c: Likewise.
+	* term/usb_keyboard.c: Likewise.
+	* util/resolve.c: Likewise.
+	* util/getroot.c: Likewise.
+
 2009-05-04  Felix Zielcke  <fzielcke@z-51.de>
 
 	* conf/i386-pc.rmk (libpkg_DATA): Rename to pkglib_DATA.
@@ -34,7 +466,7 @@
 	* conf/i386-efi.rmk (grub_emu_SOURCES): Remove `normal/execute.c',
 	`normal/lexer.c', `kern/rescue.c', `normal/function.c', `normal/misc.c'
 	and `normal/script.c'.  Add `kern/rescue_reader.c',
-	`kern/rescue_parser.c', `script/sh/main.c', `script/sh/execute.c', 
+	`kern/rescue_parser.c', `script/sh/main.c', `script/sh/execute.c',
 	`script/sh/function.c', `script/sh/lexer.c', `script/sh/script.c' and
 	`grub_script.tab.c'.
 
@@ -61,7 +493,7 @@
 	install in odd layouts.  Refuse to install using blocklists unless
 	--force was set.
 
-2009-05-04  martin f. krafft <madduck@madduck.net>
+2009-05-04  martin f. krafft  <madduck@madduck.net>
 
 	* disk/raid.c (grub_raid_scan_device): Improve debug message.
 
@@ -70,12 +502,12 @@
 	Updated copyright year
 
 	* fs/hfsplus.c: updated copyright year
-	
+
 2009-05-04  Vladimir Serbinenko  <phcoder@gmail.com>
 
 	HFS+ UUID
 
-	* fs/hfsplus.c (grub_hfsplus_volheader): added num_serial field 
+	* fs/hfsplus.c (grub_hfsplus_volheader): added num_serial field
 	in the space previously used by unused3
 	(grub_hfsplus_uuid): new function
 	(grub_hfsplus_fs): added uuid field
@@ -149,11 +581,11 @@
 	* util/i386/pc/grub-install.in: Likewise.  Use "cp -f" for
 	copying.
 
-2009-05-03  Bean  <bean123ch@gmail.com> Vladimir Serbinenko <phcoder@gmail.com>
+2009-05-03  Bean  <bean123ch@gmail.com> Vladimir Serbinenko  <phcoder@gmail.com>
 
 	FreeBSD 64-bit support
 
-	* conf/i386-pc.rmk (bsd_mod_SOURCES): add loader/i386/bsd_helper.S 
+	* conf/i386-pc.rmk (bsd_mod_SOURCES): add loader/i386/bsd_helper.S
 	and loader/i386/bsd_trampoline.S
 	(bsd_mod_ASFLAGS): new variable
 	* include/grub/i386/bsd.h (FREEBSD_MODINFOMD_SMAP): new definition
@@ -166,7 +598,7 @@
 	* include/grub/i386/bsd.h (grub_unix_real_boot): ... moved here
 	* kern/i386/loader.S (grub_unix_real_boot): moved from here ...
 	* loader/i386/bsd_helper.S (grub_unix_real_boot): moved here
-	* include/grub/gpt_partition.h (grub_gpt_partentry): Corrected the type 
+	* include/grub/gpt_partition.h (grub_gpt_partentry): Corrected the type
 	of "attrib" member
 	* loader/i386/bsd_pagetable.c: new file
 	* loader/i386/bsd_trampoline.S: likewise

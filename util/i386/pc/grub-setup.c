@@ -93,6 +93,7 @@ setup (const char *dir,
   size_t boot_size, core_size;
   grub_uint16_t core_sectors;
   grub_device_t root_dev, dest_dev;
+  const char *dest_partmap;
   grub_uint8_t *boot_drive, *root_drive;
   grub_disk_addr_t *kernel_sector;
   grub_uint16_t *boot_drive_check;
@@ -109,45 +110,47 @@ setup (const char *dir,
   FILE *fp;
   struct { grub_uint64_t start; grub_uint64_t end; } embed_region;
   embed_region.start = embed_region.end = ~0UL;
-  int embedding_area_exists = 0;
   
   auto void NESTED_FUNC_ATTR save_first_sector (grub_disk_addr_t sector, unsigned offset,
 			       unsigned length);
   auto void NESTED_FUNC_ATTR save_blocklists (grub_disk_addr_t sector, unsigned offset,
 			     unsigned length);
 
-  auto int find_usable_region (grub_disk_t disk,
-			       const grub_partition_t p);
-  int find_usable_region (grub_disk_t disk __attribute__ ((unused)),
-			  const grub_partition_t p)
+  auto int NESTED_FUNC_ATTR find_usable_region_msdos (grub_disk_t disk,
+						      const grub_partition_t p);
+  int NESTED_FUNC_ATTR find_usable_region_msdos (grub_disk_t disk __attribute__ ((unused)),
+						 const grub_partition_t p)
     {
-      if (! strcmp (p->partmap->name, "pc_partition_map"))
+      struct grub_pc_partition *pcdata = p->data;
+      
+      /* There's always an embed region, and it starts right after the MBR.  */
+      embed_region.start = 1;
+      
+      /* For its end offset, include as many dummy partitions as we can.  */
+      if (! grub_pc_partition_is_empty (pcdata->dos_type)
+	  && ! grub_pc_partition_is_bsd (pcdata->dos_type)
+	  && embed_region.end > p->start)
+	embed_region.end = p->start;
+      
+      return 1;
+    }
+  
+  auto int NESTED_FUNC_ATTR find_usable_region_gpt (grub_disk_t disk,
+						    const grub_partition_t p);
+  int NESTED_FUNC_ATTR find_usable_region_gpt (grub_disk_t disk __attribute__ ((unused)),
+					       const grub_partition_t p)
+    {
+      struct grub_gpt_partentry *gptdata = p->data;
+      
+      /* If there's an embed region, it is in a dedicated partition.  */
+      if (! memcmp (&gptdata->type, &grub_gpt_partition_type_bios_boot, 16))
 	{
-	  struct grub_pc_partition *pcdata = p->data;
+	  embed_region.start = p->start;
+	  embed_region.end = p->start + p->len;
 	  
-	  /* There's always an embed region, and it starts right after the MBR.  */
-	  embed_region.start = 1;
-	  
-	  /* For its end offset, include as many dummy partitions as we can.  */
-	  if (! grub_pc_partition_is_empty (pcdata->dos_type)
-	      && ! grub_pc_partition_is_bsd (pcdata->dos_type)
-	      && embed_region.end > p->start)
-	    embed_region.end = p->start;
+	  return 1;
 	}
-      else
-	{
-	  struct grub_gpt_partentry *gptdata = p->data;
-	  
-	  /* If there's an embed region, it is in a dedicated partition.  */
-	  if (! memcmp (&gptdata->type, &grub_gpt_partition_type_bios_boot, 16))
-	    {
-	      embed_region.start = p->start;
-	      embed_region.end = p->start + p->len;
-	      
-	      return 1;
-	    }
-	}
-
+      
       return 0;
     }
   
@@ -306,66 +309,88 @@ setup (const char *dir,
 		  dos_part, bsd_part);
 
   if (! dest_dev->disk->has_partitions)
-    grub_util_warn ("Attempting to install GRUB to a partitionless disk.  This is a BAD idea.");
-
-  if (dest_dev->disk->partition)
-    grub_util_warn ("Attempting to install GRUB to a partition instead of the MBR.  This is a BAD idea.");
-  
-  /* If the destination device can have partitions and it is the MBR,
-     try to embed the core image into after the MBR.  */
-  if (dest_dev->disk->has_partitions && ! dest_dev->disk->partition)
     {
-      grub_partition_iterate (dest_dev->disk, find_usable_region);
-
-      if (embed_region.end != 0)
-	embedding_area_exists = 1;
-
-      /* If there is enough space...  */
-      if ((unsigned long) core_sectors <= embed_region.end - embed_region.start)
-	{
-	  grub_util_info ("will embed the core image at sector 0x%llx", embed_region.start);
-
-	  *install_dos_part = grub_cpu_to_le32 (dos_part);
-	  *install_bsd_part = grub_cpu_to_le32 (bsd_part);
-
-	  /* The first blocklist contains the whole sectors.  */
-	  first_block->start = grub_cpu_to_le64 (embed_region.start + 1);
-	  first_block->len = grub_cpu_to_le16 (core_sectors - 1);
-	  first_block->segment
-	    = grub_cpu_to_le16 (GRUB_BOOT_MACHINE_KERNEL_SEG
-				+ (GRUB_DISK_SECTOR_SIZE >> 4));
-
-	  /* Make sure that the second blocklist is a terminator.  */
-	  block = first_block - 1;
-	  block->start = 0;
-	  block->len = 0;
-	  block->segment = 0;
-
-	  /* Write the core image onto the disk.  */
-	  if (grub_disk_write (dest_dev->disk, embed_region.start, 0, core_size, core_img))
-	    grub_util_error ("%s", grub_errmsg);
-
-	  /* FIXME: can this be skipped?  */
-	  *boot_drive = 0xFF;
-	  *root_drive = 0xFF;
-
-	  *kernel_sector = grub_cpu_to_le64 (embed_region.start);
-
-	  /* Write the boot image onto the disk.  */
-	  if (grub_disk_write (dest_dev->disk, 0, 0, GRUB_DISK_SECTOR_SIZE,
-			       boot_img))
-	    grub_util_error ("%s", grub_errmsg);
-
-	  goto finish;
-	}
+      grub_util_warn ("Attempting to install GRUB to a partitionless disk.  This is a BAD idea.");
+      goto unable_to_embed;
     }
 
-  /* If we reached this point, it means we were unable to embed.  */
+  if (dest_dev->disk->partition)
+    {
+      grub_util_warn ("Attempting to install GRUB to a partition instead of the MBR.  This is a BAD idea.");
+      goto unable_to_embed;
+    }
+  
+  /* Unlike root_dev, with dest_dev we're interested in the partition map even
+     if dest_dev itself is a whole disk.  */
+  auto int NESTED_FUNC_ATTR identify_partmap (grub_disk_t disk,
+					      const grub_partition_t p);
+  int NESTED_FUNC_ATTR identify_partmap (grub_disk_t disk __attribute__ ((unused)),
+					 const grub_partition_t p)
+    {
+      dest_partmap = p->partmap->name;
+      return 1;
+    }
+  grub_partition_iterate (dest_dev->disk, identify_partmap);
+  
+  grub_partition_iterate (dest_dev->disk, (strcmp (dest_partmap, "pc_partition_map") ?
+					   find_usable_region_gpt : find_usable_region_msdos));
+  if (embed_region.end == embed_region.start)
+    {
+      if (! strcmp (dest_partmap, "pc_partition_map"))
+	grub_util_warn ("This msdos-style partition label has no post-MBR gap; embedding won't be possible!");
+      else
+	grub_util_warn ("This GPT partition label has no BIOS Boot Partition; embedding won't be possible!");
+      goto unable_to_embed;
+    }
 
-  if (embedding_area_exists)
-    grub_util_warn ("Embedding area is too small for core.img.");
-  else
-    grub_util_warn ("Embedding area is not present at all!");
+  if ((unsigned long) core_sectors > embed_region.end - embed_region.start)
+    {
+      if (core_sectors > 62 * 512)
+	grub_util_warn ("Your core.img is unusually large.  It won't fit in the embedding area.");
+      else if (embed_region.end - embed_region.start < 62 * 512)
+	grub_util_warn ("Your embedding area is unusually small.  core.img won't fit in it.");
+      else
+	grub_util_warn ("Embedding area is too small for core.img.");
+      goto unable_to_embed;
+    }
+
+
+  grub_util_info ("will embed the core image at sector 0x%llx", embed_region.start);
+  
+  *install_dos_part = grub_cpu_to_le32 (dos_part);
+  *install_bsd_part = grub_cpu_to_le32 (bsd_part);
+  
+  /* The first blocklist contains the whole sectors.  */
+  first_block->start = grub_cpu_to_le64 (embed_region.start + 1);
+  first_block->len = grub_cpu_to_le16 (core_sectors - 1);
+  first_block->segment
+    = grub_cpu_to_le16 (GRUB_BOOT_MACHINE_KERNEL_SEG
+			+ (GRUB_DISK_SECTOR_SIZE >> 4));
+  
+  /* Make sure that the second blocklist is a terminator.  */
+  block = first_block - 1;
+  block->start = 0;
+  block->len = 0;
+  block->segment = 0;
+  
+  /* Write the core image onto the disk.  */
+  if (grub_disk_write (dest_dev->disk, embed_region.start, 0, core_size, core_img))
+    grub_util_error ("%s", grub_errmsg);
+  
+  /* FIXME: can this be skipped?  */
+  *boot_drive = 0xFF;
+  *root_drive = 0xFF;
+  
+  *kernel_sector = grub_cpu_to_le64 (embed_region.start);
+  
+  /* Write the boot image onto the disk.  */
+  if (grub_disk_write (dest_dev->disk, 0, 0, GRUB_DISK_SECTOR_SIZE,
+		       boot_img))
+    grub_util_error ("%s", grub_errmsg);
+  
+  goto finish;
+  
+unable_to_embed:
   
   if (must_embed)
     grub_util_error ("Embedding is not possible, but this is required when "

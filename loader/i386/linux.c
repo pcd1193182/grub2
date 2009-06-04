@@ -102,46 +102,65 @@ struct linux_vesafb_res
   grub_uint16_t height;
 };
 
-enum vga_modes
-  {
-    VGA_640_480,
-    VGA_800_600,
-    VGA_1024_768,
-    VGA_1280_1024,
-  };
-
 struct linux_vesafb_mode
 {
   grub_uint8_t res_index;
   grub_uint8_t depth;
 };
 
-static struct linux_vesafb_res linux_vesafb_res[] =
+enum vga_modes
   {
-    { 640, 480 },
-    { 800, 600 },
-    { 1024, 768 },
-    { 1280, 1024 }
+    VGA_320_200,
+    VGA_640_400,
+    VGA_640_480,
+    VGA_800_500,
+    VGA_800_600,
+    VGA_896_672,
+    VGA_1024_640,
+    VGA_1024_768,
+    VGA_1152_720,
+    VGA_1280_1024,
+    VGA_1440_900,
+    VGA_1600_1200,
   };
 
-/* This is the reverse of the table in [linux]/Documentation/fb/vesafb.txt.  */
+static struct linux_vesafb_res linux_vesafb_res[] =
+  {
+    { 320, 200 },
+    { 640, 400 },
+    { 640, 480 },
+    { 800, 500 },
+    { 800, 600 },
+    { 896, 672 },
+    { 1024, 640 },
+    { 1024, 768 },
+    { 1152, 720 },
+    { 1280, 1024 },
+    { 1440, 900 },
+    { 1600, 1200 },
+  };
+
+/* This is the reverse of the table in [linux]/Documentation/fb/vesafb.txt
+   plus a few more modes based on the table in
+   http://en.wikipedia.org/wiki/VESA_BIOS_Extensions  */
 struct linux_vesafb_mode linux_vesafb_modes[] =
   {
+    { VGA_640_400, 8 },		/* 0x300 */
     { VGA_640_480, 8 },		/* 0x301 */
-    { 0, 0 },
+    { VGA_800_600, 4 },		/* 0x302 */
     { VGA_800_600, 8 },		/* 0x303 */
-    { 0, 0 },
+    { VGA_1024_768, 4 },	/* 0x304 */
     { VGA_1024_768, 8 },	/* 0x305 */
-    { 0, 0 },
+    { VGA_1280_1024, 4 },	/* 0x306 */
     { VGA_1280_1024, 8 },	/* 0x307 */
     { 0, 0 },
     { 0, 0 },
     { 0, 0 },
     { 0, 0 },
     { 0, 0 },
-    { 0, 0 },
-    { 0, 0 },
-    { 0, 0 },
+    { VGA_320_200, 15 },	/* 0x30d */
+    { VGA_320_200, 16 },	/* 0x30e */
+    { VGA_320_200, 24 },	/* 0x30f */
     { VGA_640_480, 15 },	/* 0x310 */
     { VGA_640_480, 16 },	/* 0x311 */
     { VGA_640_480, 24 },	/* 0x312 */
@@ -154,6 +173,94 @@ struct linux_vesafb_mode linux_vesafb_modes[] =
     { VGA_1280_1024, 15 },	/* 0x319 */
     { VGA_1280_1024, 16 },	/* 0x31a */
     { VGA_1280_1024, 24 },	/* 0x31b */
+    { VGA_1600_1200, 8 },	/* 0x31c */
+    { VGA_1600_1200, 15 },	/* 0x31d */
+    { VGA_1600_1200, 16 },	/* 0x31e */
+    { VGA_1600_1200, 24 },	/* 0x31f */
+    { 0, 0 },
+    { VGA_640_400, 15 },	/* 0x321 */
+    { VGA_640_400, 16 },	/* 0x322 */
+    { VGA_640_400, 24 },	/* 0x323 */
+    { VGA_640_400, 32 },	/* 0x324 */
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { VGA_640_480, 32 },	/* 0x329 */
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { VGA_896_672, 8 },		/* 0x32f */
+    { VGA_896_672, 15 },	/* 0x330 */
+    { VGA_896_672, 16 },	/* 0x331 */
+    { VGA_896_672, 24 },	/* 0x332 */
+    { VGA_896_672, 32 },	/* 0x333 */
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { VGA_1600_1200, 32 },	/* 0x342 */
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { 0, 0 },
+    { VGA_1440_900, 8 },	/* 0x360 */
+    { VGA_1440_900, 15 },	/* 0x361 */
+    { VGA_1440_900, 16 },	/* 0x362 */
+    { VGA_1440_900, 24 },	/* 0x363 */
+    { VGA_1440_900, 32 },	/* 0x364 */
+    { VGA_1152_720, 8 },	/* 0x365 */
+    { VGA_1152_720, 15 },	/* 0x366 */
+    { VGA_1152_720, 16 },	/* 0x367 */
+    { VGA_1152_720, 24 },	/* 0x368 */
+    { VGA_1152_720, 32 },	/* 0x369 */
+    { VGA_1024_640, 8 },	/* 0x36a */
+    { VGA_1024_640, 15 },	/* 0x36b */
+    { VGA_1024_640, 16 },	/* 0x36c */
+    { VGA_1024_640, 24 },	/* 0x36d */
+    { VGA_1024_640, 32 },	/* 0x36e */
+    { VGA_800_500, 8 },		/* 0x36f */
+    { VGA_800_500, 15 },	/* 0x370 */
+    { VGA_800_500, 16 },	/* 0x371 */
+    { VGA_800_500, 24 },	/* 0x372 */
+    { VGA_800_500, 32 },	/* 0x373 */
   };
 
 static inline grub_size_t
@@ -240,7 +347,8 @@ allocate_pages (grub_size_t prot_size)
 	  if (real_size + mmap_size > size)
 	    return 0;
 
-	  real_mode_mem = (void *) ((addr + size) - (real_size + mmap_size));
+	  real_mode_mem =
+	    (void *) (grub_size_t) ((addr + size) - (real_size + mmap_size));
 	  return 1;
 	}
 
@@ -309,7 +417,7 @@ grub_linux_setup_video (struct linux_kernel_params *params)
   params->lfb_depth = mode_info.bpp;
   params->lfb_line_len = mode_info.pitch;
 
-  params->lfb_base = (void *) render_target->data;
+  params->lfb_base = (grub_size_t) render_target->data;
   params->lfb_size = (params->lfb_line_len * params->lfb_height + 65535) >> 16;
 
   params->red_mask_size = mode_info.red_mask_size;
@@ -325,11 +433,8 @@ grub_linux_setup_video (struct linux_kernel_params *params)
 }
 
 #ifdef __x86_64__
-struct
-{
-  grub_uint32_t kernel_entry;
-  grub_uint32_t kernel_cs;
-} jumpvector;
+extern grub_uint8_t grub_linux_trampoline_start[];
+extern grub_uint8_t grub_linux_trampoline_end[];
 #endif
 
 static grub_err_t
@@ -441,6 +546,16 @@ grub_linux_boot (void)
   grub_mmap_iterate (hook);
   params->mmap_size = e820_num;
 
+#ifdef __x86_64__
+
+  grub_memcpy ((char *) prot_mode_mem + (prot_mode_pages << 12), 
+	       grub_linux_trampoline_start, 
+	       grub_linux_trampoline_end - grub_linux_trampoline_start);
+  
+  ((void (*) (unsigned long, void *)) ((char *) prot_mode_mem 
+				       + (prot_mode_pages << 12)))
+    (params->code32_start, real_mode_mem);
+#else
 
   /* Hardware interrupts are not safe any longer.  */
   asm volatile ("cli" : : );
@@ -448,18 +563,6 @@ grub_linux_boot (void)
   /* Load the IDT and the GDT for the bootstrap.  */
   asm volatile ("lidt %0" : : "m" (idt_desc));
   asm volatile ("lgdt %0" : : "m" (gdt_desc));
-
-#ifdef __x86_64__
-
-  jumpvector.kernel_entry = (grub_uint64_t) grub_linux_real_boot;
-  jumpvector.kernel_cs = 0x10;
-
-  asm volatile ( "mov %0, %%rbx" : : "m" (params->code32_start));
-  asm volatile ( "mov %0, %%rsi" : : "m" (real_mode_mem));
-
-  asm volatile ( "ljmp *%0" : : "m" (jumpvector));
-
-#else
 
   /* Pass parameters.  */
   asm volatile ("movl %0, %%ecx" : : "m" (params->code32_start));

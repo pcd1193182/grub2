@@ -1053,7 +1053,7 @@ grub_xnu_scan_dir_for_kexts (char *dirname, char *osbundlerequired,
   return GRUB_ERR_NONE;
 }
 
-/* Load extension DIRNAME. (extensions are directoris in xnu) */
+/* Load extension DIRNAME. (extensions are directories in xnu) */
 grub_err_t
 grub_xnu_load_kext_from_dir (char *dirname, char *osbundlerequired, 
 			     int maxrecursion)
@@ -1226,7 +1226,7 @@ grub_cmd_xnu_kext (grub_command_t cmd __attribute__ ((unused)),
   grub_file_t binfile = 0;
   if (argc == 2)
     {
-      /* User explicitely specified plist and binary. */
+      /* User explicitly specified plist and binary. */
       if (grub_strcmp (args[1], "-") != 0)
 	{
 	  binfile = grub_gzfile_open (args[1], 1);
@@ -1306,20 +1306,16 @@ grub_cmd_xnu_resume (grub_command_t cmd __attribute__ ((unused)),
 void
 grub_xnu_lock ()
 {
-#ifndef GRUB_UTIL
   if (!locked)
     grub_dl_ref (my_mod);
-#endif
   locked = 1;
 }
 
 void
 grub_xnu_unlock ()
 {
-#ifndef GRUB_UTIL
   if (locked)
     grub_dl_unref (my_mod);
-#endif
   locked = 0;
 }
 

@@ -53,7 +53,7 @@ static const struct grub_arg_option options[] = {
   {"oemtablecreatorrev", 'd', 0, 
    "Set creator revision of RSDP, XSDT and RSDT", 0, ARG_TYPE_INT},  
   {"no-ebda", 'e', 0, "Don't update EBDA. May fix failures or hangs on some"
-   " BIOSes but makes it uneffective with OS not recieving RSDP fro GRUB", 
+   " BIOSes but makes it ineffective with OS not receiving RSDP from GRUB",
    0, ARG_TYPE_NONE},
   {0, 0, 0, 0, 0, 0}
 };
@@ -73,7 +73,6 @@ grub_byte_checksum (void *base, grub_size_t size)
 /* rev1 is 1 if ACPIv1 is to be generated, 0 otherwise. 
    rev2 contains the revision of ACPIv2+ to generate or 0 if none. */
 static int rev1, rev2;
-static grub_dl_t my_mod;
 /* OEMID of RSDP, RSDT and XSDT. */
 static char root_oemid[6];
 /* OEMTABLE of the same tables. */
@@ -186,7 +185,7 @@ grub_acpi_create_ebda (void)
   if (! mmapregion)
     return grub_errno;
 
-  /* XXX: EBDA is unstandartised, so this implementation is heuristical. */
+  /* XXX: EBDA is unstandardized, so this implementation is heuristical. */
   if (ebda_kb_len)
     grub_memcpy (targetebda, ebda, 0x400);
   else
@@ -503,7 +502,7 @@ grub_cmd_acpi (struct grub_extcmd *cmd,
 	    *ptr = grub_tolower (*ptr);
 	}
 
-      /* Set revision variables to replicant the same version as host. */
+      /* Set revision variables to replicate the same version as host. */
       rev1 = ! rsdp->revision;
       rev2 = rsdp->revision;
       rsdt = (struct grub_acpi_table_header *) UINT_TO_PTR (rsdp->rsdt_addr);
@@ -558,7 +557,7 @@ grub_cmd_acpi (struct grub_extcmd *cmd,
 		  grub_memcpy (table_dsdt, dsdt, dsdt->length);
 		}
 
-	      /* Save FACS address. FACS shouldn't be overriden. */
+	      /* Save FACS address. FACS shouldn't be overridden. */
 	      facs_addr = fadt->facs_addr;
 	    }
   
@@ -764,7 +763,6 @@ GRUB_MOD_INIT(acpi)
 			      "Load host acpi tables and tables "
 			      "specified by arguments", 
 			      options);
-  my_mod=mod;
 }
 
 GRUB_MOD_FINI(acpi)

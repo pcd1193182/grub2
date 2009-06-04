@@ -1,3 +1,47 @@
+grub2 (1.96+20090523-1ubuntu1) karmic; urgency=low
+
+  [ Colin Watson ]
+  * Resynchronise with Debian. Remaining changes:
+    + debian/control:
+      - Depend on rather than Suggest os-prober; Ubuntu version does not 
+        suffer from the mount problem that prevents Debian from marking this
+      	Depends.
+    + debian/default/grub 
+      - Adjust for default Ubuntu boot options.
+      - Use new GRUB_CMDLINE_LINUX_DEFAULT option to set "quiet splash" for
+        default items only.  These options won't be set in single user mode.
+    + debian/patches/03_ubuntu_grub_standards
+      - Remove GNU/Linux from default string.
+  * debian/legacy/update-grub: Apply Ubuntu branding: title, recovery mode,
+    quiet option, and tweak how memtest86+ is displayed.
+
+  [ Andy Whitcroft ]
+  * debian/legacy/update-grub: fix generation to use the uuid command for
+    the root specifier when the groot is a UUID.  Use the same test as is
+    used in the 'grub' package.  LP: #376879
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Thu, 04 Jun 2009 11:20:12 +0100
+
+grub2 (1.96+20090523-1) unstable; urgency=low
+
+  * New SVN snapshot.
+    - Add drivemap command, similar to grub-legacy's map command.
+      (Closes: 503630)
+    - Export GRUB_TERMINAL_INPUT in grub-mkconfig. (Closes: #526741)
+
+  [ Robert Millan ]
+  * rules: Set GRUB_ASSUME_LINUX_HAS_FB_SUPPORT=1 in CFLAGS.
+  * patches/905_setup_force.diff: Relax blocklist warnings.
+  * patches/906_revert_to_linux16.diff: Keep using linux16 for now.
+
+  [ Felix Zielcke ]
+  * patches/07_core_in_fs.diff: Updated.
+  * Remove /etc/grub.d/10_hurd on non-Hurd systems in the grub-common
+    preinst. Likewise for 10_freebsd for non kFreebsd and 10_linux on
+    kFreebsd and Hurd. (Closes: #523777)
+
+ -- Felix Zielcke <fzielcke@z-51.de>  Sat, 23 May 2009 20:05:10 +0200
+
 grub2 (1.96+20090504-1) experimental; urgency=low
 
   * New SVN snapshot.
@@ -254,6 +298,40 @@ grub2 (1.96+20080730-1) experimental; urgency=low
 
  -- Robert Millan <rmh@aybabtu.com>  Wed, 30 Jul 2008 22:12:07 +0200
 
+grub2 (1.96+20080724-12ubuntu2) jaunty; urgency=low
+
+  * Build for lpia.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Wed, 25 Feb 2009 18:28:37 +0000
+
+grub2 (1.96+20080724-12ubuntu1) jaunty; urgency=low
+
+  * Merge from Debian Unstable (LP: #298872, LP: #256578).  
+    Remaining Ubuntu changes:
+    + debian/control:
+      - Depend on rather than Suggest os-prober; Ubuntu version does not 
+        suffer from the mount problem that prevents Debian from marking this
+      	Depends.
+    + debian/default/grub 
+      - Adjust for default Ubuntu boot options.
+      - Use new GRUB_CMDLINE_LINUX_DEFAULT option to set "quiet splash" for
+        default items only.  These options won't be set in single user mode.
+    + debian/patches/03_ubuntu_grub_standards
+      - Remove GNU/Linux from default string.
+  * New upstream snapshot includes ext4 extents support (LP: #294763)
+  * Debian patch 02_dpkg_version_comparison.diff fixes kernel ordering
+    (LP: #215513)
+  * debian/patches/04_uuids_and_abstraction_dont_play_along_nicely:
+    + Drop.  Ubuntu's mdadm and lvm properly populate /dev/disk/by-uuid, so
+      this workaround is unnecessary.
+  * debian/changelog:
+    + Drop duplicated 1.96+20080203-1ubuntu2 and 1.96+20080203-1ubuntu1 
+      entries.  We only really need them in there once!
+  * Drop debian/patches/04_convert_root_uuid:
+    - GRUB2 upstream now uses UUIDs when possible.
+
+ -- Christopher James Halse Rogers <raof@ubuntu.com>  Mon, 17 Nov 2008 10:06:18 +1100
+
 grub2 (1.96+20080724-4) unstable; urgency=high
 
   * patches/00_fix_overflow.diff: fix overflow with a big grub.cfg.
@@ -423,6 +501,33 @@ grub2 (1.96+20080531-1) unstable; urgency=low
   * Galician (gl.po) by Jacobo Tarrio  (Closes: #480977)
 
  -- Robert Millan <rmh@aybabtu.com>  Sat, 31 May 2008 00:02:54 +0200
+
+grub2 (1.96+20080512-1ubuntu2) intrepid; urgency=low
+
+  [ Onkar Shinde ]
+  * debian/patches:
+    - Add 03_ubuntu_grub_standards to remove GNU/Linux from the
+      default string. (LP: #192955) Don't show splash screen or quiet mode
+      in single user mode.
+    - Add 04_convert_root_uuid.diff to default to using UUIDs
+      on new GRUB2 installations.  (LP: #192956)
+  * debian/control:
+    - Move os-prober to 'Depends' since Ubuntu version does not suffer from
+      the mount problem in Debian version. 'os-prober' is needed for probing
+      other operating systems. (LP: #214642)
+  * Other bugs fixed - LP: #219580
+
+  [ Mario Limonciello ]
+  * Add items from missed merge bug (LP: #234288)
+
+ -- Onkar Shinde <onkarshinde@gmail.com>  Fri, 23 May 2008 14:28:36 +0530
+
+grub2 (1.96+20080512-1ubuntu1) intrepid; urgency=low
+
+  * Merge from debian unstable, remaining changes:
+    - Adjust debian/default/grub for default Ubuntu boot options.
+
+ -- Mario Limonciello <mario_limonciello@dell.com>  Tue, 27 May 2008 11:32:41 -0500
 
 grub2 (1.96+20080512-1) unstable; urgency=low
 
@@ -602,6 +707,29 @@ grub2 (1.96+20080209-1) unstable; urgency=low
   * Lower base-files versioned dependency to >= 4.0.1~bpo40+1.
 
  -- Robert Millan <rmh@aybabtu.com>  Sat,  9 Feb 2008 13:43:49 +0100
+
+grub2 (1.96+20080203-1ubuntu2) hardy; urgency=low
+
+  * Update 03_ubuntu_grub_standards.
+    - Don't show splash screen or quiet mode in single user mode.
+
+ -- Mario Limonciello <mario_limonciello@dell.com>  Wed, 05 Mar 2008 19:05:04 -0600
+
+grub2 (1.96+20080203-1ubuntu1) hardy; urgency=low
+
+  * debian/default/grub
+    - Show lsb_release rather than statically displaying "Debian" (LP: #192955)
+    - Include Ubuntu specific "quiet splash" on default grub command line.
+      (LP: #193024)
+  * debian/patches:
+    - Add 03_ubuntu_grub_standards to remove GNU/Linux from the
+      default string. (LP: #192955)
+    - Add 04_convert_root_uuid.diff to default to using UUIDs
+      on new GRUB2 installations.  (LP: #192956)
+  * debian/control:
+    - Update maintainer per XSBC-Original-Maintainer spec.
+
+ -- Mario Limonciello <mario_limonciello@dell.com>  Mon, 18 Feb 2008 14:05:06 -0600
 
 grub2 (1.96+20080203-1) unstable; urgency=low
 

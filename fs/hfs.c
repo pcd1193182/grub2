@@ -124,7 +124,7 @@ struct grub_hfs_extent_key
   grub_uint16_t first_block;
 } __attribute__ ((packed));
 
-/* A dirrect record.  This is used to find out the directory ID.  */
+/* A directory record.  This is used to find out the directory ID.  */
 struct grub_hfs_dirrec
 {
   /* For a directory, type == 1.  */
@@ -159,9 +159,7 @@ struct grub_hfs_record
   int datalen;
 };
 
-#ifndef GRUB_UTIL
 static grub_dl_t my_mod;
-#endif
 
 static int grub_hfs_find_node (struct grub_hfs_data *, char *,
 			       grub_uint32_t, int, char *, int);
@@ -321,7 +319,7 @@ grub_hfs_mount (grub_disk_t disk)
 
   /* Read the superblock.  */
   if (grub_disk_read (disk, GRUB_HFS_SBLOCK, 0,
-		      sizeof (struct grub_hfs_sblock), (char *) &data->sblock))
+		      sizeof (struct grub_hfs_sblock), &data->sblock))
     goto fail;
   
   /* Check if this is a HFS filesystem.  */
@@ -347,7 +345,7 @@ grub_hfs_mount (grub_disk_t disk)
 		 + grub_be_to_cpu16 (data->sblock.first_block));
   
   if (grub_disk_read (data->disk, first_block, 0,
-		      sizeof (treehead), (char *)  &treehead))
+		      sizeof (treehead), &treehead))
     goto fail;
   data->ext_root = grub_be_to_cpu32 (treehead.head.root_node);
   data->ext_size = grub_be_to_cpu16 (treehead.head.node_size);
@@ -357,7 +355,7 @@ grub_hfs_mount (grub_disk_t disk)
 		  * GRUB_HFS_BLKS)
 		 + grub_be_to_cpu16 (data->sblock.first_block));
   if (grub_disk_read (data->disk, first_block, 0,
-		      sizeof (treehead), (char *)  &treehead))
+		      sizeof (treehead), &treehead))
     goto fail;
   data->cat_root = grub_be_to_cpu32 (treehead.head.root_node);
   data->cat_size = grub_be_to_cpu16 (treehead.head.node_size);
@@ -686,7 +684,7 @@ grub_hfs_iterate_records (struct grub_hfs_data *data, int type, int idx,
 	return grub_errno;
       
       if (grub_disk_read (data->disk, blk, 0,
-			  sizeof (node), (char *)  &node))
+			  sizeof (node), &node))
 	return grub_errno;
       
       /* Iterate over all records in this node.  */
@@ -744,7 +742,7 @@ grub_hfs_find_node (struct grub_hfs_data *data, char *key,
       else
 	cmp = grub_hfs_cmp_extkeys (rec->key, (void *) key);
       
-      /* If the key is smaller or equal to the currect node, mark the
+      /* If the key is smaller or equal to the current node, mark the
 	 entry.  In case of a non-leaf mode it will be used to lookup
 	 the rest of the tree.  */
       if (cmp <= 0)
@@ -972,9 +970,7 @@ grub_hfs_dir (grub_device_t device, const char *path,
   struct grub_hfs_data *data;
   struct grub_hfs_filerec frec;
 
-#ifndef GRUB_UTIL
   grub_dl_ref (my_mod);
-#endif
   
   data = grub_hfs_mount (device->disk);
   if (!data)
@@ -995,9 +991,7 @@ grub_hfs_dir (grub_device_t device, const char *path,
  fail:
   grub_free (data);
 
-#ifndef GRUB_UTIL
   grub_dl_unref (my_mod);
-#endif
   
   return grub_errno;
 }
@@ -1010,18 +1004,14 @@ grub_hfs_open (struct grub_file *file, const char *name)
   struct grub_hfs_data *data;
   struct grub_hfs_filerec frec;
   
-#ifndef GRUB_UTIL
   grub_dl_ref (my_mod);
-#endif
 
   data = grub_hfs_mount (file->device->disk);
   
   if (grub_hfs_find_dir (data, name, &frec, 0))
     {
       grub_free (data);
-#ifndef GRUB_UTIL
-  grub_dl_unref (my_mod);
-#endif
+      grub_dl_unref (my_mod);
       return grub_errno;
     }
   
@@ -1029,9 +1019,7 @@ grub_hfs_open (struct grub_file *file, const char *name)
     {
       grub_free (data);
       grub_error (GRUB_ERR_BAD_FILE_TYPE, "not a file");
-#ifndef GRUB_UTIL
       grub_dl_unref (my_mod);
-#endif
       return grub_errno;
     }
   
@@ -1061,9 +1049,7 @@ grub_hfs_close (grub_file_t file)
 {
   grub_free (file->data);
 
-#ifndef GRUB_UTIL
   grub_dl_unref (my_mod);
-#endif
 
   return 0;
 }
@@ -1102,9 +1088,7 @@ static struct grub_fs grub_hfs_fs =
 GRUB_MOD_INIT(hfs)
 {
   grub_fs_register (&grub_hfs_fs);
-#ifndef GRUB_UTIL
   my_mod = mod;
-#endif
 }
 
 GRUB_MOD_FINI(hfs)
