@@ -137,8 +137,9 @@ appleldr_mod_CFLAGS = $(COMMON_CFLAGS)
 appleldr_mod_LDFLAGS = $(COMMON_LDFLAGS)
 
 # For linux.mod.
-linux_mod_SOURCES = loader/i386/efi/linux.c
+linux_mod_SOURCES = loader/i386/efi/linux.c loader/i386/linux_trampoline.S
 linux_mod_CFLAGS = $(COMMON_CFLAGS)
+linux_mod_ASFLAGS = $(COMMON_ASFLAGS)
 linux_mod_LDFLAGS = $(COMMON_LDFLAGS)
 
 # For halt.mod.
@@ -189,8 +190,14 @@ fixvideo_mod_LDFLAGS = $(COMMON_LDFLAGS)
 pkglib_MODULES += xnu.mod
 xnu_mod_SOURCES = loader/xnu_resume.c loader/i386/xnu.c loader/i386/efi/xnu.c\
 	 loader/macho.c loader/xnu.c loader/i386/xnu_helper.S
-xnu_mod_CFLAGS = $(COMMON_CFLAGS) -Werror -Wall
+xnu_mod_CFLAGS = $(COMMON_CFLAGS)
 xnu_mod_LDFLAGS = $(COMMON_LDFLAGS)
 xnu_mod_ASFLAGS = $(COMMON_ASFLAGS)
+
+# For setjmp.mod
+pkglib_MODULES += setjmp.mod
+setjmp_mod_SOURCES = lib/x86_64/setjmp.S
+setjmp_mod_ASFLAGS = $(COMMON_ASFLAGS)
+setjmp_mod_LDFLAGS = $(COMMON_LDFLAGS)
 
 include $(srcdir)/conf/common.mk

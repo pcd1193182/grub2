@@ -112,9 +112,7 @@ struct grub_minix_data
   int filename_size;
 };
 
-#ifndef GRUB_UTIL
 static grub_dl_t my_mod;
-#endif
 
 static grub_err_t grub_minix_find_file (struct grub_minix_data *data,
 					const char *path);
@@ -269,7 +267,7 @@ grub_minix_read_inode (struct grub_minix_data *data, int ino)
 		  * sizeof (struct grub_minix_inode));
       
       grub_disk_read (data->disk, block, offs,
-		      sizeof (struct grub_minix_inode), (char *) &data->inode);
+		      sizeof (struct grub_minix_inode), &data->inode);
     }
   else
     {
@@ -280,7 +278,7 @@ grub_minix_read_inode (struct grub_minix_data *data, int ino)
 		  * sizeof (struct grub_minix2_inode));
       
       grub_disk_read (data->disk, block, offs,
-		      sizeof (struct grub_minix2_inode),(char *) &data->inode2);
+		      sizeof (struct grub_minix2_inode),&data->inode2);
     }
   
   return GRUB_ERR_NONE;
@@ -421,7 +419,7 @@ grub_minix_mount (grub_disk_t disk)
   
   /* Read the superblock.  */
   grub_disk_read (disk, GRUB_MINIX_SBLOCK, 0,
-		  sizeof (struct grub_minix_sblock),(char *) &data->sblock);
+		  sizeof (struct grub_minix_sblock),&data->sblock);
   if (grub_errno)
     goto fail;
 
@@ -607,9 +605,7 @@ static struct grub_fs grub_minix_fs =
 GRUB_MOD_INIT(minix)
 {
   grub_fs_register (&grub_minix_fs);
-#ifndef GRUB_UTIL
   my_mod = mod;
-#endif
 }
 
 GRUB_MOD_FINI(minix)

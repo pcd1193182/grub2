@@ -351,7 +351,7 @@ find_cygwin_root_device (const char *path, dev_t dev)
   /* Cygwin returns the partition serial number in stat.st_dev.
      This is never identical to the device number of the emulated
      /dev/sdXN device, so above find_root_device () does not work.
-     Search the partion with the same serial in boot sector instead.  */
+     Search the partition with the same serial in boot sector instead.  */
   char devpath[sizeof ("/dev/sda15") + 13]; /* Size + Paranoia.  */
   int d;
   for (d = 'a'; d <= 'z'; d++)
@@ -398,7 +398,7 @@ grub_guess_root_device (const char *dir)
 }
 
 int
-grub_util_get_dev_abstraction (const char *os_dev)
+grub_util_get_dev_abstraction (const char *os_dev UNUSED)
 {
 #ifdef __linux__
   /* Check for LVM.  */

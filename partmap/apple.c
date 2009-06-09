@@ -77,7 +77,7 @@ struct grub_apple_part
   /* Reserved.  */
   grub_uint32_t reserved2;
   
-  /* The entrypoint of the bootcode.  */
+  /* The entry point of the bootcode.  */
   grub_uint32_t bootcode_entrypoint;
 
   /* Reserved.  */
@@ -94,10 +94,6 @@ struct grub_apple_part
 };
 
 static struct grub_partition_map grub_apple_partition_map;
-
-#ifndef GRUB_UTIL
-static grub_dl_t my_mod;
-#endif
 
 
 static grub_err_t
@@ -118,7 +114,7 @@ apple_partition_map_iterate (grub_disk_t disk,
 
   part.partmap = &grub_apple_partition_map;
 
-  if (grub_disk_read (&raw, 0, 0, sizeof (aheader), (char *) &aheader))
+  if (grub_disk_read (&raw, 0, 0, sizeof (aheader), &aheader))
     return grub_errno;
 
   if (grub_be_to_cpu16 (aheader.magic) != GRUB_APPLE_HEADER_MAGIC)
@@ -134,7 +130,7 @@ apple_partition_map_iterate (grub_disk_t disk,
     {
       if (grub_disk_read (&raw, pos / GRUB_DISK_SECTOR_SIZE,
 			  pos % GRUB_DISK_SECTOR_SIZE,
-			  sizeof (struct grub_apple_part),  (char *) &apart))
+			  sizeof (struct grub_apple_part),  &apart))
 	return grub_errno;
 
       if (grub_be_to_cpu16 (apart.magic) != GRUB_APPLE_PART_MAGIC)
@@ -247,9 +243,6 @@ static struct grub_partition_map grub_apple_partition_map =
 GRUB_MOD_INIT(apple_partition_map)
 {
   grub_partition_map_register (&grub_apple_partition_map);
-#ifndef GRUB_UTIL
-  my_mod = mod;
-#endif
 }
 
 GRUB_MOD_FINI(apple_partition_map)

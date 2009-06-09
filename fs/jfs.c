@@ -229,9 +229,7 @@ struct grub_jfs_diropen
 } __attribute__ ((packed));
 
 
-#ifndef GRUB_UTIL
 static grub_dl_t my_mod;
-#endif
 
 static grub_err_t grub_jfs_lookup_symlink (struct grub_jfs_data *data, int ino);
 
@@ -311,7 +309,7 @@ grub_jfs_read_inode (struct grub_jfs_data *data, int ino,
   if (grub_disk_read (data->disk,
 		      iagblk << (grub_le_to_cpu16 (data->sblock.log2_blksz)
 				 - GRUB_DISK_SECTOR_BITS), 0,
-		      sizeof (struct grub_jfs_iag), (char *) &iag))
+		      sizeof (struct grub_jfs_iag), &iag))
     return grub_errno;
   
   inoblk = grub_le_to_cpu32 (iag.inodes[inoext].blk2);
@@ -320,7 +318,7 @@ grub_jfs_read_inode (struct grub_jfs_data *data, int ino,
   inoblk += inonum;
   
   if (grub_disk_read (data->disk, inoblk, 0,
-		      sizeof (struct grub_jfs_inode), (char *) inode))
+		      sizeof (struct grub_jfs_inode), inode))
     return grub_errno;
 
   return 0;
@@ -338,7 +336,7 @@ grub_jfs_mount (grub_disk_t disk)
 
   /* Read the superblock.  */
   if (grub_disk_read (disk, GRUB_JFS_SBLOCK, 0,
-		      sizeof (struct grub_jfs_sblock), (char *) &data->sblock))
+		      sizeof (struct grub_jfs_sblock), &data->sblock))
     goto fail;
   
   if (grub_strncmp ((char *) (data->sblock.magic), "JFS1", 4))
@@ -353,7 +351,7 @@ grub_jfs_mount (grub_disk_t disk)
 
   /* Read the inode of the first fileset.  */
   if (grub_disk_read (data->disk, GRUB_JFS_FS1_INODE_BLK, 0,
-		      sizeof (struct grub_jfs_inode), (char *) &data->fileset))
+		      sizeof (struct grub_jfs_inode), &data->fileset))
     goto fail;
   
   return data;
@@ -734,9 +732,7 @@ grub_jfs_dir (grub_device_t device, const char *path,
   struct grub_jfs_data *data = 0;
   struct grub_jfs_diropen *diro = 0;
 
-#ifndef GRUB_UTIL
   grub_dl_ref (my_mod);
-#endif
 
   data = grub_jfs_mount (device->disk);
   if (!data)
@@ -773,9 +769,7 @@ grub_jfs_dir (grub_device_t device, const char *path,
   grub_jfs_closedir (diro);
   grub_free (data);
 
-#ifndef GRUB_UTIL
   grub_dl_unref (my_mod);
-#endif
 
   return grub_errno;
 }
@@ -787,9 +781,7 @@ grub_jfs_open (struct grub_file *file, const char *name)
 {
   struct grub_jfs_data *data;
 
-#ifndef GRUB_UTIL
   grub_dl_ref (my_mod);
-#endif
 
   data = grub_jfs_mount (file->device->disk);
   if (!data)
@@ -814,9 +806,7 @@ grub_jfs_open (struct grub_file *file, const char *name)
   
  fail:
 
-#ifndef GRUB_UTIL
   grub_dl_unref (my_mod);
-#endif
   
   grub_free (data);
   
@@ -839,9 +829,7 @@ grub_jfs_close (grub_file_t file)
 {
   grub_free (file->data);
   
-#ifndef GRUB_UTIL
   grub_dl_unref (my_mod);
-#endif
   
   return GRUB_ERR_NONE;
 }
@@ -876,9 +864,7 @@ static struct grub_fs grub_jfs_fs =
 GRUB_MOD_INIT(jfs)
 {
   grub_fs_register (&grub_jfs_fs);
-#ifndef GRUB_UTIL
   my_mod = mod;
-#endif
 }
 
 GRUB_MOD_FINI(jfs)
