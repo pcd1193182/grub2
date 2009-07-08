@@ -1,6 +1,6 @@
 /*
  *  GRUB  --  GRand Unified Bootloader
- *  Copyright (C) 2005,2007  Free Software Foundation, Inc.
+ *  Copyright (C) 2009  Free Software Foundation, Inc.
  *
  *  GRUB is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,18 +16,9 @@
  *  along with GRUB.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <setjmp.h>
+#ifndef GRUB_LUA_LIB_HEADER
+#define GRUB_LUA_LIB_HEADER 1
 
-#include <grub/util/misc.h>
+extern luaL_Reg grub_lua_lib[];
 
-void
-grub_reboot (void)
-{
-  longjmp (main_env, 1);
-}
-
-void
-grub_halt (void)
-{
-  grub_reboot ();
-}
+#endif

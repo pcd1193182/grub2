@@ -17,7 +17,6 @@
  *  along with GRUB.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <alloca.h>
 #include <grub/types.h>
 #include <grub/err.h>
 #include <grub/misc.h>
@@ -78,7 +77,7 @@ grub_children_iterate (char *devpath,
       struct grub_ieee1275_devalias alias;
       grub_ssize_t actual;
 
-      if (grub_ieee1275_get_property (child, "device_type", &childtype,
+      if (grub_ieee1275_get_property (child, "device_type", childtype,
 				      sizeof childtype, &actual))
 	continue;
 
@@ -86,7 +85,7 @@ grub_children_iterate (char *devpath,
 					 &actual))
 	continue;
 
-      if (grub_ieee1275_get_property (child, "name", &childname,
+      if (grub_ieee1275_get_property (child, "name", childname,
 				      sizeof childname, &actual))
 	continue;
 
@@ -409,7 +408,7 @@ grub_reboot (void)
 void
 grub_halt (void)
 {
-  /* Not standarized.  We try both known commands.  */
+  /* Not standardized.  We try both known commands.  */
 
   grub_ieee1275_interpret ("shut-down", 0);
   grub_ieee1275_interpret ("power-off", 0);
