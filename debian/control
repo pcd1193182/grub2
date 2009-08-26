@@ -1,7 +1,8 @@
 Source: grub2
 Section: admin
 Priority: extra
-Maintainer: GRUB Maintainers <pkg-grub-devel@lists.alioth.debian.org>
+Maintainer: Ubuntu Core Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+XSBC-Original-Maintainer: GRUB Maintainers <pkg-grub-devel@lists.alioth.debian.org>
 Uploaders: Robert Millan <rmh.debian.grub@aybabtu.com>, Felix Zielcke <fzielcke@z-51.de>, Jordi Mallach <jordi@debian.org>
 DM-Upload-Allowed: yes
 Build-Depends: cdbs,
@@ -18,7 +19,7 @@ Build-Depends: cdbs,
  bf-utf-source,
  libfreetype6-dev
 Build-Conflicts: autoconf2.13 
-Standards-Version: 3.8.2
+Standards-Version: 3.8.3
 Homepage: http://www.gnu.org/software/grub/grub-2.en.html
 Vcs-Svn: svn://svn.debian.org/svn/pkg-grub/grub2/trunk/
 Vcs-Browser: http://svn.debian.org/viewsvn/pkg-grub/grub2/
@@ -48,8 +49,9 @@ Description: GRand Unified Bootloader, version 2 (dummy package)
 Package: grub-common
 Architecture: i386 kfreebsd-i386 hurd-i386 kopensolaris-i386 amd64 kfreebsd-amd64 lpia powerpc sparc
 Depends: ${shlibs:Depends}, base-files (>= 4.0.1~), ${misc:Depends}
+Recommends: os-prober
 Replaces: grub-pc (<< 1.96+20080831-1), grub-ieee1275 (<< 1.96+20080831-1), grub-efi (<< 1.96+20080831-1), grub-coreboot (<< 1.96+20080831-1), grub-linuxbios (<< 1.96+20080831-1)
-Suggests: multiboot-doc [i386 kfreebsd-i386 hurd-i386 kopensolaris-i386 amd64 kfreebsd-amd64 lpia], os-prober
+Suggests: multiboot-doc [i386 kfreebsd-i386 hurd-i386 kopensolaris-i386 amd64 kfreebsd-amd64 lpia]
 # See bugs #435983 and #455746
 Conflicts: mdadm (<< 2.6.7-2)
 Description: GRand Unified Bootloader, version 2 (common files)
