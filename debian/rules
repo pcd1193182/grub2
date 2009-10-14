@@ -28,6 +28,8 @@ CONFIGURE = CC=$(CC) \
 	--libexecdir="\$${prefix}/lib/$(package)" --srcdir=$(CURDIR) \
 	--enable-grub-emu --enable-grub-mkfont --disable-grub-fstest 
 
+DEB_UPDATE_RCD_PARAMS_grub-common += start 99 2 3 4 5 .
+
 AUTOGEN_FILES = configure config.h.in conf/*.mk
 AUTOGEN_DEB_FILES = docs examples manpages config templates postinst postrm dirs install
 
@@ -142,9 +144,10 @@ install/grub-pc install/grub-efi-ia32 install/grub-efi-amd64 install/grub-ieee12
 install/grub-common::
 	$(MAKE) -C $(subst install/,build/,$@) install DESTDIR=$(CURDIR)/debian/$(subst install/,,$@)/
 	rm -rf $(CURDIR)/debian/$(subst install/,,$@)/usr/lib/grub/{i386,powerpc,sparc64}-*
-	rm -f $(CURDIR)/debian/$(subst install/,,$@)/usr/{sbin,share/man/man8}/{update-grub,grub-install,grub-setup,grub-emu}{,.8}
+	rm -f $(CURDIR)/debian/$(subst install/,,$@)/usr/{sbin,share/man/man8}/{update-grub,grub-install,grub-setup,grub-emu,grub-reboot,grub-set-default}{,.8}
 	rm -f $(CURDIR)/debian/$(subst install/,,$@)/usr/{bin,share/man/man1}/grub-{mkimage,mkrescue}{,.1}
 	rm -f $(CURDIR)/debian/$(subst install/,,$@)/usr/share/info/dir*
+	install -m 0755 debian/grub-common.pm-sleep $(CURDIR)/debian/$(subst install/,,$@)/etc/pm/sleep.d/10_grub-common
 
 clean:: debian/legacy/update-grub debian/grub-extras
 	chmod +x debian/{script,grub.d/*,legacy/*}
