@@ -1,3 +1,15 @@
+grub2 (1.97~beta4-1ubuntu4.1) karmic-security; urgency=low
+
+  * SECURITY UPDATE: fix password validation when using password-based
+    authentication
+    - debian/patches/970_security_fix_password_validation.diff: update
+      grub_auth_strcmp() to use grub_strcmp() and add a small added delay.
+      Also update grub_auth_check_authentication() to add a delay if
+      authentication does not succeed.
+    - CVE-2009-4128
+
+ -- Jamie Strandboge <jamie@ubuntu.com>  Mon, 07 Dec 2009 14:15:58 -0600
+
 grub2 (1.97~beta4-1ubuntu4) karmic-proposed; urgency=low
 
   * New patch, 969_os_prober_separate_boot, fixes wrong kernel/initrd
