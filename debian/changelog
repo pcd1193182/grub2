@@ -1,3 +1,10 @@
+grub2 (1.97~beta4-1ubuntu5) karmic-proposed; urgency=low
+
+  * 971_eliminate_ntfs_4g_barrier.diff: Backport upstream patch (r1927):
+    Eliminate NTFS 4Gib barrier (LP: #477104).
+
+ -- Agostino Russo <agostino.russo@gmail.com>  Thu, 31 Dec 2009 10:35:29 +0100
+
 grub2 (1.97~beta4-1ubuntu4.1) karmic-security; urgency=low
 
   * SECURITY UPDATE: fix password validation when using password-based
