@@ -1,3 +1,52 @@
+grub2 (1.98-1ubuntu1) lucid; urgency=low
+
+  * Resynchronise with Debian (bug-fixes relative to previous snapshot
+    release).  Remaining changes:
+    - Adjust for default Ubuntu boot options ("quiet splash").
+    - Default to hiding the menu; holding down Shift at boot will show it.
+    - Set a monochromatic theme for Ubuntu.
+    - Apply Ubuntu GRUB Legacy changes to legacy update-grub script: title,
+      recovery mode, quiet option, tweak how memtest86+ is displayed, and
+      use UUIDs where appropriate.
+    - Conflict with grub (<< 0.97-54) as well as grub-legacy.
+    - Fix backslash-escaping in merge_debconf_into_conf.
+    - Remove "GNU/Linux" from default distributor string.
+    - Add crashkernel= options if kdump and makedumpfile are available.
+    - If other operating systems are installed, then automatically unhide
+      the menu. Otherwise, if GRUB_HIDDEN_TIMEOUT is 0, then use keystatus
+      if available to check whether Shift is pressed. If it is, show the
+      menu, otherwise boot immediately. If keystatus is not available, then
+      fall back to a short delay interruptible with Escape.
+    - Allow Shift to interrupt 'sleep --interruptible'.
+    - Don't display introductory message about line editing unless we're
+      actually offering a shell prompt. Don't clear the screen just before
+      booting if we never drew the menu in the first place.
+    - Remove some verbose messages printed before reading the configuration
+      file.
+    - Suppress progress messages as the kernel and initrd load for
+      non-recovery kernel menu entries.
+    - Keep the loopback file open so that subsequent changes to the "root"
+      environment variable don't affect it.
+    - Change prepare_grub_to_access_device to handle filesystems
+      loop-mounted on file images.
+    - Ignore devices loop-mounted from files in 10_linux.
+    - Show the boot menu if the previous boot failed, that is if it failed
+      to get to the end of one of the normal runlevels.
+    - Handle RAID devices containing virtio components.
+    - Improve DM-RAID probing support.
+    - Don't generate /boot/grub/device.map during grub-install by default.
+    - Store grub-pc/install_devices as persistent device names under
+      /dev/disk/by-id/.
+    - Change priority to optional to match the priority of grub.
+    - Shave eight bytes off the pre-partition-table part of boot.img.
+    - Don't display "GRUB loading" unless Shift is held down.
+    - Adjust versions of grub-doc and grub-legacy-doc conflicts to tolerate
+      our backport of the grub-doc split.
+    - Optimise hostdisk device handling, substantially speeding up
+      grub-probe filesystem reads.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Tue, 09 Mar 2010 22:18:14 +0000
+
 grub2 (1.98-1) unstable; urgency=low
 
   * New upstream release (closes: #572898).
@@ -37,6 +86,88 @@ grub2 (1.98~20100128-1.1) unstable; urgency=low
 
  -- Torsten Landschoff <torsten@debian.org>  Mon, 08 Feb 2010 22:15:01 +0100
 
+grub2 (1.98~20100128-1ubuntu4) lucid; urgency=low
+
+  [ Colin Watson ]
+  * Update DM-RAID probing patch, removing some configure.ac cruft.
+  * Add patch from Colin King to shave eight bytes off the
+    pre-partition-table part of boot.img.
+  * Don't display "GRUB loading" unless Shift is held down.
+  * Use light-gray as the default background for highlighted menu entries;
+    white is not safe because some systems interpret the top bit as blink
+    (thanks, proski; LP: #527334).
+  * Adjust versions of grub-doc and grub-legacy-doc conflicts to tolerate
+    our backport of the grub-doc split (LP: #493968).
+  * Optimise hostdisk device handling, substantially speeding up grub-probe
+    filesystem reads (LP: #425650).
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Wed, 03 Mar 2010 20:33:03 +0000
+
+grub2 (1.98~20100128-1ubuntu3) lucid; urgency=low
+
+  * Stop forcing gfxpayload=keep when CONFIG_FB_EFI=y, which it always is on
+    Ubuntu kernels; this apparently causes trouble with some KMS
+    framebuffers.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Thu, 04 Feb 2010 18:23:39 -0800
+
+grub2 (1.98~20100128-1ubuntu2) lucid; urgency=low
+
+  [ Michael Vogt ]
+  * Change the priority to optional to match the priority of grub.  This
+    prevents grub-pc getting removed in favour of grub (LP: #449679).
+
+  [ Colin Watson ]
+  * Stop the postinst failing if there are no devices.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Thu, 04 Feb 2010 12:44:29 -0800
+
+grub2 (1.98~20100128-1ubuntu1) lucid; urgency=low
+
+  * Resynchronise with Debian.  Remaining changes:
+    - Adjust for default Ubuntu boot options ("quiet splash").
+    - Default to hiding the menu; holding down Shift at boot will show it.
+    - Set a monochromatic theme for Ubuntu.
+    - Apply Ubuntu GRUB Legacy changes to legacy update-grub script: title,
+      recovery mode, quiet option, tweak how memtest86+ is displayed, and
+      use UUIDs where appropriate.
+    - Conflict with grub (<< 0.97-54) as well as grub-legacy.
+    - Fix backslash-escaping in merge_debconf_into_conf.
+    - Remove "GNU/Linux" from default distributor string.
+    - Add crashkernel= options if kdump and makedumpfile are available.
+    - If other operating systems are installed, then automatically unhide
+      the menu. Otherwise, if GRUB_HIDDEN_TIMEOUT is 0, then use keystatus
+      if available to check whether Shift is pressed. If it is, show the
+      menu, otherwise boot immediately. If keystatus is not available, then
+      fall back to a short delay interruptible with Escape.
+    - Allow Shift to interrupt 'sleep --interruptible'.
+    - Don't display introductory message about line editing unless we're
+      actually offering a shell prompt. Don't clear the screen just before
+      booting if we never drew the menu in the first place.
+    - Remove some verbose messages printed before reading the configuration
+      file.
+    - Suppress progress messages as the kernel and initrd load for
+      non-recovery kernel menu entries.
+    - Keep the loopback file open so that subsequent changes to the "root"
+      environment variable don't affect it.
+    - Change prepare_grub_to_access_device to handle filesystems
+      loop-mounted on file images.
+    - Ignore devices loop-mounted from files in 10_linux.
+    - Show the boot menu if the previous boot failed, that is if it failed
+      to get to the end of one of the normal runlevels.
+    - Handle RAID devices containing virtio components.
+    - Improve DM-RAID probing support.
+  * Don't generate /boot/grub/device.map during grub-install by default.
+  * Store grub-pc/install_devices as persistent device names under
+    /dev/disk/by-id/ (LP: #496435).  Migrate previous device names to that,
+    with explicit confirmation in non-trivial cases to make sure we got the
+    right ones.  If the devices we were told to install to ever go away, ask
+    again.
+  * If the user opts to install GRUB nowhere, make sure they really mean it.
+  * Backport disk read fixes from upstream.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Wed, 03 Feb 2010 16:53:33 -0800
+
 grub2 (1.98~20100128-1) unstable; urgency=low
 
   * New Bazaar snapshot.
@@ -68,6 +199,60 @@ grub2 (1.98~20100126-1) unstable; urgency=low
 
  -- Felix Zielcke <fzielcke@z-51.de>  Tue, 26 Jan 2010 19:26:25 +0100
 
+grub2 (1.98~20100115-1ubuntu3) lucid; urgency=low
+
+  * Build-depend on libdevmapper-dev for DM-RAID probing patch.
+  * Handle conversion of DM-RAID disk paths (as well as partition paths) to
+    GRUB drive names.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Mon, 01 Feb 2010 15:31:07 +0000
+
+grub2 (1.98~20100115-1ubuntu2) lucid; urgency=low
+
+  * Restore patch to suppress progress messages as the kernel and initrd
+    load for non-recovery kernel menu entries.  The messages were just moved
+    into the configuration file upstream, not removed entirely as I'd
+    mistakenly thought.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Thu, 28 Jan 2010 18:31:37 +0000
+
+grub2 (1.98~20100115-1ubuntu1) lucid; urgency=low
+
+  * Resynchronise with Debian.  Remaining changes:
+    - Adjust for default Ubuntu boot options ("quiet splash").
+    - Default to hiding the menu; holding down Shift at boot will show it.
+    - Set a monochromatic theme for Ubuntu.
+    - Apply Ubuntu GRUB Legacy changes to legacy update-grub script: title,
+      recovery mode, quiet option, tweak how memtest86+ is displayed, and
+      use UUIDs where appropriate.
+    - Conflict with grub (<< 0.97-54) as well as grub-legacy.
+    - Fix backslash-escaping in merge_debconf_into_conf.
+    - Remove "GNU/Linux" from default distributor string.
+    - Add crashkernel= options if kdump and makedumpfile are available.
+    - If other operating systems are installed, then automatically unhide
+      the menu. Otherwise, if GRUB_HIDDEN_TIMEOUT is 0, then use keystatus
+      if available to check whether Shift is pressed. If it is, show the
+      menu, otherwise boot immediately. If keystatus is not available, then
+      fall back to a short delay interruptible with Escape.
+    - Allow Shift to interrupt 'sleep --interruptible'.
+    - Don't display introductory message about line editing unless we're
+      actually offering a shell prompt. Don't clear the screen just before
+      booting if we never drew the menu in the first place.
+    - Remove some verbose messages printed before reading the configuration
+      file.
+    - Keep the loopback file open so that subsequent changes to the "root"
+      environment variable don't affect it.
+    - Change prepare_grub_to_access_device to handle filesystems
+      loop-mounted on file images.
+    - Ignore devices loop-mounted from files in 10_linux.
+    - Show the boot menu if the previous boot failed, that is if it failed
+      to get to the end of one of the normal runlevels.
+    - Handle RAID devices containing virtio components.
+  * Improve DM-RAID probing support; grub-probe and grub-mkdevicemap should
+    both now do something reasonable.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Thu, 28 Jan 2010 14:04:48 +0000
+
 grub2 (1.98~20100115-1) unstable; urgency=low
 
   * New Bazaar snapshot.
@@ -97,6 +282,59 @@ grub2 (1.98~20100107-1) unstable; urgency=low
   * Chinese (zh_TW.po) by Tetralet. (Closes: #564044)
 
  -- Robert Millan <rmh.debian@aybabtu.com>  Thu, 07 Jan 2010 17:56:10 +0100
+
+grub2 (1.98~20100101-1ubuntu2) lucid; urgency=low
+
+  * Renumber Ubuntu patches to start from 950 with no gaps.
+  * Don't record failed boots when using grub-reboot, as that can leave
+    remote users stranded at a timeout=-1 menu (thanks, Jordan Uggla).
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Fri, 15 Jan 2010 12:29:50 +0000
+
+grub2 (1.98~20100101-1ubuntu1) lucid; urgency=low
+
+  * Resynchronise with Debian. Remaining changes:
+    - Adjust for default Ubuntu boot options ("quiet splash").
+    - Default to hiding the menu; holding down Shift at boot will show it.
+    - Set a monochromatic theme for Ubuntu.
+    - Apply Ubuntu GRUB Legacy changes to legacy update-grub script: title,
+      recovery mode, quiet option, tweak how memtest86+ is displayed, and
+      use UUIDs where appropriate.
+    - Conflict with grub (<< 0.97-54) as well as grub-legacy.
+    - Fix backslash-escaping in merge_debconf_into_conf.
+    - Remove "GNU/Linux" from default distributor string.
+    - Add crashkernel= options if kdump and makedumpfile are available.
+    - If other operating systems are installed, then automatically unhide
+      the menu. Otherwise, if GRUB_HIDDEN_TIMEOUT is 0, then use keystatus
+      if available to check whether Shift is pressed. If it is, show the
+      menu, otherwise boot immediately. If keystatus is not available, then
+      fall back to a short delay interruptible with Escape.
+    - Allow Shift to interrupt 'sleep --interruptible'.
+    - Don't display introductory message about line editing unless we're
+      actually offering a shell prompt. Don't clear the screen just before
+      booting if we never drew the menu in the first place.
+    - Remove some verbose messages printed before reading the configuration
+      file.
+    - If the environment variable "quiet" is set to something other than 0,
+      suppress progress messages as the kernel and initrd load. Set this for
+      non-recovery kernel menu entries.
+    - Add GRUB_DEFAULT=saved, as well as grub-set-default and grub-reboot
+      utilities. Provides functionality essentially equivalent to GRUB
+      Legacy's savedefault.
+    - Keep the loopback file open so that subsequent changes to the "root"
+      environment variable don't affect it.
+    - Change prepare_grub_to_access_device to handle filesystems
+      loop-mounted on file images.
+    - Ignore devices loop-mounted from files in 10_linux.
+    - Show the boot menu if the previous boot failed, that is if it failed
+      to get to the end of one of the normal runlevels.
+    - Handle RAID devices containing virtio components.
+  * Update savedefault patch from current Bazaar branch, fixing grub-reboot
+    to have distinct behaviour from grub-set-default (LP: #497326).
+  * Fix grub-mkisofs compilation error with FORTIFY_SOURCE.
+  * Convert recordfail boilerplate in each menu entry to use a function.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Mon, 11 Jan 2010 11:12:55 +0000
 
 grub2 (1.98~20100101-1) unstable; urgency=high
 
@@ -167,6 +405,82 @@ grub2 (1.97+20091210-1) unstable; urgency=low
   * Fix dpkg dependency for lenny compatibility.
 
  -- Robert Millan <rmh.debian@aybabtu.com>  Thu, 10 Dec 2009 00:35:20 +0100
+
+grub2 (1.97+20091130-1ubuntu1) lucid; urgency=low
+
+  * Resynchronise with Debian (LP: #485457). Remaining changes:
+    + debian/default/grub:
+      - Adjust for default Ubuntu boot options.
+      - Use GRUB_CMDLINE_LINUX_DEFAULT option to set "quiet splash" for
+        default items only.  These options won't be set in single user mode.
+      - Default to hiding the menu; holding down Shift at boot will show it.
+    + debian/templates.in:
+      - Change default value of grub2/linux_cmdline_default to "quiet
+        splash".
+    + debian/config.in, debian/postinst.in, debian/grub-pc.templates.in:
+      - Migrate timeout settings from menu.lst.
+    + debian/grub.d/05_debian_theme:
+      - Set a monochromatic theme for Ubuntu.
+    + debian/legacy/update-grub:
+      - Apply Ubuntu branding: title, recovery mode, quiet option, and tweak
+        how memtest86+ is displayed.
+      - Use UUIDs where appropriate.
+    + debian/control:
+      - Conflict with grub (<< 0.97-54) as well as grub-legacy.
+    + debian/postinst.in:
+      - Fix backslash-escaping in merge_debconf_into_conf.
+    + debian/patches/03_ubuntu_grub_standards:
+      - Remove GNU/Linux from default string.
+    + debian/patches/10_crashkernel.patch:
+      - Add crashkernel= options if kdump and makedumpfile are available.
+    + debian/patches/951_quick_boot.diff:
+      - If other operating systems are installed, then automatically unhide
+        the menu.
+      - Otherwise, if GRUB_HIDDEN_TIMEOUT is 0, then use keystatus if
+        available to check whether Shift is pressed. If it is, show the
+        menu, otherwise boot immediately. If keystatus is not available,
+        then fall back to a short delay interruptible with Escape.
+    + debian/patches/952_sleep_shift.diff:
+      - Allow Shift to interrupt 'sleep --interruptible'.
+    + debian/patches/954_normal_quiet.diff:
+      - Don't display introductory message about line editing unless we're
+        actually offering a shell prompt. Don't clear the screen just before
+        booting if we never drew the menu in the first place.
+    + debian/patches/955_really_quiet.diff:
+      - Remove some verbose messages printed before reading the
+        configuration file.
+    + debian/patches/956_linux_quiet.diff:
+      - If the environment variable "quiet" is set to something other than
+        0, suppress progress messages as the kernel and initrd load. Set
+        this for non-recovery kernel menu entries.
+    + debian/patches/957_savedefault.diff, debian/rules:
+      - Add GRUB_DEFAULT=saved, as well as grub-set-default and grub-reboot
+        utilities. Provides functionality essentially equivalent to GRUB
+        Legacy's savedefault.
+    + debian/patches/959_loopback_root.diff:
+      - Keep the loopback file open so that subsequent changes to the "root"
+        environment variable don't affect it.
+    + debian/patches/961_handle_loopback.diff:
+      - Change prepare_grub_to_access_device to handle filesystems
+        loop-mounted on file images.
+    + debian/patches/963_linux_no_loopmount.diff:
+      - Ignore devices loop-mounted from files in 10_linux.
+    + debian/patches/965_failed_boot_menu.diff, debian/grub-common.init,
+      debian/grub-common.pm-sleep, debian/grub-common.dirs, debian/rules:
+      - Show the boot menu if the previous boot failed, that is if it failed
+        to get to the end of one of the normal runlevels.
+    + debian/patches/968_raid_virtio.diff:
+      - Handle RAID devices containing virtio components.
+  * debian/patches/957_savedefault.diff: Fix --version output from
+    grub-reboot and grub-set-default (see LP #480571).
+  * debian/patches/957_savedefault.diff: Cope with /boot being on a separate
+    filesystem (LP: #478035).
+  * debian/patches/957_savedefault.diff, 965_failed_boot_menu.diff: Use 'set
+    var=val' rather than plain 'var=val'.
+  * debian/patches/969_format_errors.diff: Fix compilation errors due to
+    gettext work.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Mon, 07 Dec 2009 20:04:28 +0000
 
 grub2 (1.97+20091130-1) unstable; urgency=low
 
@@ -279,6 +593,107 @@ grub2 (1.97-1) unstable; urgency=low
 
  -- Felix Zielcke <fzielcke@z-51.de>  Sun, 25 Oct 2009 19:50:21 +0100
 
+grub2 (1.97~beta4-1ubuntu4) karmic-proposed; urgency=low
+
+  * New patch, 969_os_prober_separate_boot, fixes wrong kernel/initrd
+    pathnames and wrong partition UUID/GRUB path when generating menuentries
+    from os-prober output of a detected system with a separate /boot; thanks
+    Colin Watson; LP: #462961.
+
+ -- Loïc Minier <loic.minier@ubuntu.com>  Thu, 29 Oct 2009 02:30:35 +0000
+
+grub2 (1.97~beta4-1ubuntu3) karmic; urgency=low
+
+  * Backport from Debian (Felix Zielcke):
+    - Add a build dependency on texinfo (LP: #453442).
+  * debian/patches/968_raid_virtio.diff: Handle RAID devices containing
+    virtio components (LP: #457687).
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Fri, 23 Oct 2009 21:58:13 +0100
+
+grub2 (1.97~beta4-1ubuntu2) karmic; urgency=low
+
+  * debian/patches/967_no_mmx_sse.diff: Build with -mno-mmx -mno-sse
+    -mno-sse2 on i386/lpia, since otherwise lpia is unbootable (LP:
+    #444562).
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Fri, 16 Oct 2009 16:31:12 +0100
+
+grub2 (1.97~beta4-1ubuntu1) karmic; urgency=low
+
+  * Resynchronise with Debian. Remaining changes:
+    + debian/default/grub:
+      - Adjust for default Ubuntu boot options.
+      - Use GRUB_CMDLINE_LINUX_DEFAULT option to set "quiet splash" for
+        default items only.  These options won't be set in single user mode.
+      - Default to hiding the menu; holding down Shift at boot will show it.
+    + debian/templates.in:
+      - Change default value of grub2/linux_cmdline_default to "quiet
+        splash".
+    + debian/config.in, debian/postinst.in, debian/grub-pc.templates.in:
+      - Migrate timeout settings from menu.lst.
+    + debian/grub.d/05_debian_theme:
+      - Set a monochromatic theme for Ubuntu.
+    + debian/legacy/update-grub:
+      - Apply Ubuntu branding: title, recovery mode, quiet option, and tweak
+        how memtest86+ is displayed.
+      - Use UUIDs where appropriate.
+    + debian/control:
+      - Conflict with grub (<< 0.97-54) as well as grub-legacy.
+    + debian/patches/03_ubuntu_grub_standards:
+      - Remove GNU/Linux from default string.
+    + debian/patches/10_crashkernel.patch:
+      - Add crashkernel= options if kdump and makedumpfile are available.
+    + debian/patches/951_quick_boot.diff:
+      - If other operating systems are installed, then automatically unhide
+        the menu.
+      - Otherwise, if GRUB_HIDDEN_TIMEOUT is 0, then use keystatus if
+        available to check whether Shift is pressed. If it is, show the
+        menu, otherwise boot immediately. If keystatus is not available,
+        then fall back to a short delay interruptible with Escape.
+    + debian/patches/952_sleep_shift.diff:
+      - Allow Shift to interrupt 'sleep --interruptible'.
+    + debian/patches/954_normal_quiet.diff:
+      - Don't display introductory message about line editing unless we're
+        actually offering a shell prompt. Don't clear the screen just before
+        booting if we never drew the menu in the first place.
+    + debian/patches/955_really_quiet.diff:
+      - Remove some verbose messages printed before reading the
+        configuration file.
+    + debian/patches/956_linux_quiet.diff:
+      - If the environment variable "quiet" is set to something other than
+        0, suppress progress messages as the kernel and initrd load. Set
+        this for non-recovery kernel menu entries.
+    + debian/patches/957_savedefault.diff, debian/rules:
+      - Add GRUB_DEFAULT=saved, as well as grub-set-default and grub-reboot
+        utilities. Provides functionality essentially equivalent to GRUB
+        Legacy's savedefault.
+    + debian/patches/959_loopback_root.diff:
+      - Keep the loopback file open so that subsequent changes to the "root"
+        environment variable don't affect it.
+    + debian/patches/961_handle_loopback.diff:
+      - Change prepare_grub_to_access_device to handle filesystems
+        loop-mounted on file images.
+    + debian/patches/963_linux_no_loopmount.diff:
+      - Ignore devices loop-mounted from files in 10_linux.
+    + debian/patches/965_failed_boot_menu.diff, debian/grub-common.init,
+      debian/rules:
+      - Show the boot menu if the previous boot failed, that is if it failed
+        to get to the end of one of the normal runlevels.
+  * debian/patches/957_savedefault.diff,
+    debian/patches/965_failed_boot_menu.diff: Silently ignore zero-sized
+    environment blocks (thanks, Felix Zielcke; LP: #439784).
+  * debian/grub-common.pm-sleep, debian/grub-common.dirs, debian/rules:
+    Record a successful boot on resume from hibernate (thanks, Maxim
+    Levitsky; LP: #447725).
+  * debian/postinst.in: Fix backslash-escaping in merge_debconf_into_conf
+    (LP: #448413).
+  * debian/patches/966_mkconfig_probe_option.diff: Backport upstream patch
+    to make the grub-install --grub-probe option work, which is useful for
+    vm-builder.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Wed, 14 Oct 2009 12:07:42 +0100
+
 grub2 (1.97~beta4-1) unstable; urgency=low
 
   * New upstream beta release.
@@ -306,6 +721,123 @@ grub2 (1.97~beta4-1) unstable; urgency=low
 
  -- Robert Millan <rmh.debian@aybabtu.com>  Mon, 05 Oct 2009 20:03:04 +0200
 
+grub2 (1.97~beta3-1ubuntu8) karmic; urgency=low
+
+  [ Colin Watson ]
+  * debian/control: Conflict with grub (<< 0.97-54) as well as grub-legacy
+    (see LP #410886).
+  * debian/grub-common.init: Create /boot/grub if it doesn't exist, to avoid
+    noise on fresh installations.
+
+  [ Tormod Volden ]
+  * debian/grub-common.init: do not call log_end_msg if not VERBOSE
+    (LP: #440879)
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Tue, 06 Oct 2009 23:32:54 +0100
+
+grub2 (1.97~beta3-1ubuntu7) karmic; urgency=low
+
+  * debian/grub-common.init: /boot/grub/grubenv sometimes seems to end up
+    zero-sized for some reason. If it is, just delete it (LP: #439784).
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Sun, 04 Oct 2009 21:52:10 +0100
+
+grub2 (1.97~beta3-1ubuntu6) karmic; urgency=low
+
+  * debian/patches/965_failed_boot_menu.diff, debian/grub-common.init,
+    debian/rules: Show the boot menu if the previous boot failed, that is if
+    it failed to get to the end of one of the normal runlevels.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Mon, 28 Sep 2009 09:29:34 +0100
+
+grub2 (1.97~beta3-1ubuntu5) karmic; urgency=low
+
+  * debian/patches/957_savedefault.diff: Quote the value assigned to
+    'default', in case it contains spaces (LP: #431179).
+  * debian/patches/964_os-prober_errors.diff: Don't throw away errors from
+    os-prober; it makes things hard to debug.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Fri, 18 Sep 2009 18:47:06 +0100
+
+grub2 (1.97~beta3-1ubuntu4) karmic; urgency=low
+
+  * debian/patches/963_linux_no_loopmount.diff: Ignore devices loop-mounted
+    from files in 10_linux.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Wed, 16 Sep 2009 17:46:10 +0100
+
+grub2 (1.97~beta3-1ubuntu3) karmic; urgency=low
+
+  * debian/patches/962_os-prober_windows_7.diff: Cope with Windows 7 in
+    os-prober output.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Tue, 15 Sep 2009 06:48:13 +0100
+
+grub2 (1.97~beta3-1ubuntu2) karmic; urgency=low
+
+  * debian/config.in: Fix logic if GRUB_HIDDEN_TIMEOUT is entirely missing
+    from /etc/default/grub.
+  * debian/patches/961_handle_loopback.diff: Change
+    prepare_grub_to_access_device to handle filesystems loop-mounted on file
+    images.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Tue, 15 Sep 2009 00:34:11 +0100
+
+grub2 (1.97~beta3-1ubuntu1) karmic; urgency=low
+
+  * Resynchronise with Debian. Remaining changes:
+    + debian/default/grub:
+      - Adjust for default Ubuntu boot options.
+      - Use GRUB_CMDLINE_LINUX_DEFAULT option to set "quiet splash" for
+        default items only.  These options won't be set in single user mode.
+      - Default to hiding the menu; holding down Shift at boot will show it.
+    + debian/templates.in:
+      - Change default value of grub2/linux_cmdline_default to "quiet
+        splash".
+    + debian/config.in, debian/postinst.in, debian/grub-pc.templates.in:
+      - Migrate timeout settings from menu.lst.
+    + debian/grub.d/05_debian_theme:
+      - Set a monochromatic theme for Ubuntu.
+    + debian/legacy/update-grub:
+      - Apply Ubuntu branding: title, recovery mode, quiet option, and tweak
+        how memtest86+ is displayed.
+      - Use UUIDs where appropriate.
+    + debian/patches/03_ubuntu_grub_standards:
+      - Remove GNU/Linux from default string.
+    + debian/patches/10_crashkernel.patch:
+      - Add crashkernel= options if kdump and makedumpfile are available.
+    + debian/patches/951_quick_boot.diff:
+      - If other operating systems are installed, then automatically unhide
+        the menu.
+      - Otherwise, if GRUB_HIDDEN_TIMEOUT is 0, then use keystatus if
+        available to check whether Shift is pressed. If it is, show the
+        menu, otherwise boot immediately. If keystatus is not available,
+        then fall back to a short delay interruptible with Escape.
+    + debian/patches/952_sleep_shift.diff:
+      - Allow Shift to interrupt 'sleep --interruptible'.
+    + debian/patches/954_normal_quiet.diff:
+      - Don't display introductory message about line editing unless we're
+        actually offering a shell prompt. Don't clear the screen just before
+        booting if we never drew the menu in the first place.
+    + debian/patches/955_really_quiet.diff:
+      - Remove some verbose messages printed before reading the
+        configuration file.
+    + debian/patches/956_linux_quiet.diff:
+      - If the environment variable "quiet" is set to something other than
+        0, suppress progress messages as the kernel and initrd load. Set
+        this for non-recovery kernel menu entries.
+    + debian/patches/957_savedefault.diff, debian/rules:
+      - Add GRUB_DEFAULT=saved, as well as grub-set-default and grub-reboot
+        utilities. Provides functionality essentially equivalent to GRUB
+        Legacy's savedefault.
+    + debian/patches/959_loopback_root.diff:
+      - Keep the loopback file open so that subsequent changes to the "root"
+        environment variable don't affect it.
+  * debian/patches/960_test_invalid_fs.diff: Fix test crash if loopback
+    device does not contain a filesystem.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Mon, 14 Sep 2009 10:52:59 +0100
+
 grub2 (1.97~beta3-1) unstable; urgency=high
 
   * New upstream beta release.
@@ -332,6 +864,77 @@ grub2 (1.97~beta3-1) unstable; urgency=high
   * Italian (it.po) by Luca Monducci. (Closes: #546035)
 
  -- Felix Zielcke <fzielcke@z-51.de>  Sat, 12 Sep 2009 15:28:20 +0200
+
+grub2 (1.97~beta2-2ubuntu2) karmic; urgency=low
+
+  * debian/patches/951_quick_boot.diff: Only do the hidden-timeout checks if
+    timeout is not already set to -1 (i.e. show menu, no timeout).
+  * debian/patches/954_normal_quiet.diff: Don't clear the screen just before
+    booting if we never drew the menu in the first place.
+  * debian/patches/955_really_quiet.diff: Remove "Booting" message; it turns
+    out to be hard to suppress any other way.
+  * debian/patches/956_linux_quiet.diff: Don't try to suppress "Booting"
+    based on the value of "quiet", as the menu entry commands aren't run
+    until after this message.
+  * debian/patches/958_ntfs_64bit.diff: Handle 64-bit file sizes in NTFS.
+  * debian/patches/959_loopback_root.diff: Keep the loopback file open so
+    that subsequent changes to the "root" environment variable don't affect
+    it.
+  * debian/config.in, debian/postinst.in, debian/grub-pc.templates.in:
+    Migrate timeout settings from menu.lst (LP: #386789).
+  * debian/grub-pc.templates.in: Add grub-pc/kopt_extracted template.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Fri, 11 Sep 2009 15:40:38 +0100
+
+grub2 (1.97~beta2-2ubuntu1) karmic; urgency=low
+
+  * Resynchronise with Debian. Remaining changes:
+    + debian/control:
+      - Recommend rather than Suggest os-prober.
+    + debian/default/grub:
+      - Adjust for default Ubuntu boot options.
+      - Use GRUB_CMDLINE_LINUX_DEFAULT option to set "quiet splash" for
+        default items only.  These options won't be set in single user mode.
+      - Default to hiding the menu; holding down Shift at boot will show it.
+    + debian/templates.in:
+      - Change default value of grub2/linux_cmdline_default to "quiet
+        splash".
+    + debian/grub.d/05_debian_theme:
+      - Set a monochromatic theme for Ubuntu.
+    + debian/legacy/update-grub:
+      - Apply Ubuntu branding: title, recovery mode, quiet option, and tweak
+        how memtest86+ is displayed.
+      - Use UUIDs where appropriate.
+    + debian/patches/03_ubuntu_grub_standards:
+      - Remove GNU/Linux from default string.
+    + debian/patches/10_crashkernel.patch:
+      - Add crashkernel= options if kdump and makedumpfile are available.
+    + debian/patches/951_quick_boot.diff:
+      - If other operating systems are installed, then automatically unhide
+        the menu.
+      - Otherwise, if GRUB_HIDDEN_TIMEOUT is 0, then use keystatus if
+        available to check whether Shift is pressed. If it is, show the
+        menu, otherwise boot immediately. If keystatus is not available,
+        then fall back to a short delay interruptible with Escape.
+    + debian/patches/952_sleep_shift.diff:
+      - Allow Shift to interrupt 'sleep --interruptible'.
+    + debian/patches/954_normal_quiet.diff:
+      - Don't display introductory message about line editing unless we're
+        actually offering a shell prompt.
+    + debian/patches/955_really_quiet.diff:
+      - Remove some verbose messages printed before reading the
+        configuration file.
+    + debian/patches/956_linux_quiet.diff:
+      - If the environment variable "quiet" is set to something other than
+        0, suppress progress messages as the kernel and initrd load. Set
+        this for non-recovery kernel menu entries.
+    + debian/patches/957_savedefault.diff, debian/rules:
+      - Add GRUB_DEFAULT=saved, as well as grub-set-default and grub-reboot
+        utilities. Provides functionality essentially equivalent to GRUB
+        Legacy's savedefault.
+  * Drop 953_no_eh_frame.diff, merged upstream.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Mon, 07 Sep 2009 13:33:12 +0100
 
 grub2 (1.97~beta2-2) unstable; urgency=low
 
@@ -370,6 +973,81 @@ grub2 (1.97~beta2-1) unstable; urgency=low
   * Build with GCC 4.4.
 
  -- Robert Millan <rmh.debian@aybabtu.com>  Fri, 04 Sep 2009 14:40:20 +0200
+
+grub2 (1.97~beta1-1ubuntu4) karmic; urgency=low
+
+  * Move grub-reboot and grub-set-default to grub-$platform, since
+    grub-common is also used by GRUB Legacy (LP: #424425).
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Fri, 04 Sep 2009 17:54:10 +0100
+
+grub2 (1.97~beta1-1ubuntu3) karmic; urgency=low
+
+  * Restore legacy version of grub-set-default, now moved to
+    /usr/lib/grub-legacy.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Fri, 04 Sep 2009 15:35:19 +0100
+
+grub2 (1.97~beta1-1ubuntu2) karmic; urgency=low
+
+  * debian/patches/953_no_eh_frame.diff: Build with -fno-dwarf2-cfi-asm to
+    stop gcc-4.4 generating .eh_frame sections that cause core.img to be too
+    big to embed in some common cases (LP: #423412).
+  * debian/patches/954_normal_quiet.diff: Don't display introductory message
+    about line editing unless we're actually offering a shell prompt.
+  * debian/patches/955_really_quiet.diff: Remove some verbose messages
+    printed before reading the configuration file. In some ways this is
+    awkward because it makes debugging harder, but it's a requirement for a
+    smooth-looking boot process; we may be able to do better in future (LP:
+    #386922).
+  * debian/patches/956_linux_quiet.diff: If the environment variable "quiet"
+    is set to something other than 0, suppress progress messages as the
+    kernel and initrd load. Set this for non-recovery kernel menu entries
+    (LP: #386922).
+  * debian/patches/957_savedefault.diff: Add GRUB_DEFAULT=saved, as well as
+    grub-set-default and grub-reboot utilities. Provides functionality
+    essentially equivalent to GRUB Legacy's savedefault (LP: #216178).
+  * debian/rules, debian/grub-pc.install.in: Install grub-reboot and
+    grub-set-default only in grub-common.
+  * Add tag information to old Ubuntu patches.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Fri, 04 Sep 2009 15:02:36 +0100
+
+grub2 (1.97~beta1-1ubuntu1) karmic; urgency=low
+
+  * Resynchronise with Debian. Remaining changes:
+    + debian/control:
+      - Recommend rather than Suggest os-prober.
+    + debian/default/grub:
+      - Adjust for default Ubuntu boot options.
+      - Use GRUB_CMDLINE_LINUX_DEFAULT option to set "quiet splash" for
+        default items only.  These options won't be set in single user mode.
+      - Default to hiding the menu; holding down Shift at boot will show it.
+    + debian/templates.in:
+      - Change default value of grub2/linux_cmdline_default to "quiet
+        splash".
+    + debian/grub.d/05_debian_theme:
+      - Set a monochromatic theme for Ubuntu.
+    + debian/legacy/update-grub:
+      - Apply Ubuntu branding: title, recovery mode, quiet option, and tweak
+        how memtest86+ is displayed.
+      - Use UUIDs where appropriate.
+    + debian/patches/03_ubuntu_grub_standards:
+      - Remove GNU/Linux from default string.
+    + debian/patches/10_crashkernel.patch:
+      - Add crashkernel= options if kdump and makedumpfile are available.
+    + debian/patches/951_quick_boot.diff:
+      - If other operating systems are installed, then automatically unhide
+        the menu.
+      - Otherwise, if GRUB_HIDDEN_TIMEOUT is 0, then use keystatus if
+        available to check whether Shift is pressed. If it is, show the
+        menu, otherwise boot immediately. If keystatus is not available,
+        then fall back to a short delay interruptible with Escape.
+    + debian/patches/952_sleep_shift.diff:
+      - Allow Shift to interrupt 'sleep --interruptible'.
+  * Drop 950_getkeystatus.diff, merged upstream.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Tue, 01 Sep 2009 17:37:19 +0100
 
 grub2 (1.97~beta1-1) unstable; urgency=low
 
@@ -416,6 +1094,61 @@ grub2 (1.96+20090829-1) unstable; urgency=low
   * Italian (it.po) by Luca Monducci. (Closes: #544200)
 
  -- Felix Zielcke <fzielcke@z-51.de>  Sat, 29 Aug 2009 17:01:17 +0200
+
+grub2 (1.96+20090826-3ubuntu3) karmic; urgency=low
+
+  * 951_quick_boot.diff: Always initialise timeout from GRUB_TIMEOUT,
+    otherwise there'll be no timeout when other operating systems are
+    installed.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Thu, 27 Aug 2009 14:13:03 +0100
+
+grub2 (1.96+20090826-3ubuntu2) karmic; urgency=low
+
+  * 952_sleep_shift.patch: New patch. Allow Shift to interrupt 'sleep
+    --interruptible', for consistency with the quick-boot scheme.
+  * debian/*.templates: Change default value of grub2/linux_cmdline_default
+    to 'quiet splash', to match debian/default/grub.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Thu, 27 Aug 2009 11:29:24 +0100
+
+grub2 (1.96+20090826-3ubuntu1) karmic; urgency=low
+
+  * Resynchronise with Debian (LP: #413151). Remaining changes:
+    + debian/control:
+      - Recommend rather than Suggest os-prober.
+    + debian/default/grub:
+      - Adjust for default Ubuntu boot options.
+      - Use GRUB_CMDLINE_LINUX_DEFAULT option to set "quiet splash" for
+        default items only.  These options won't be set in single user mode.
+      - Default to hiding the menu with a three-second timeout. Pressing
+        Escape during this time will show the menu.
+    + debian/grub.d/05_debian_theme:
+      - Set a monochromatic theme for Ubuntu.
+    + debian/legacy/update-grub:
+      - Apply Ubuntu branding: title, recovery mode, quiet option, and tweak
+        how memtest86+ is displayed.
+      - Use UUIDs where appropriate.
+    + debian/patches/03_ubuntu_grub_standards:
+      - Remove GNU/Linux from default string.
+    + debian/patches/10_crashkernel.patch:
+      - add crashkernel= options if kdump and makedumpfile
+        is available (part of the kernel-crashdump spec)
+  * Drop 950_hidden_timeout.diff, merged upstream.
+  * Drop 951_gfxpayload_keep.diff. It doesn't make as much sense as I
+    thought, and it needs better kernel support anyway.
+  * 950_getkeystatus.diff: New patch. Add getkeystatus terminal method, and
+    add a new keystatus command to query it.
+  * 951_quick_boot.diff: New patch:
+    - If other operating systems are installed, then automatically unhide
+      the menu (LP: #411584).
+    - Otherwise, if GRUB_HIDDEN_TIMEOUT is 0, then use keystatus if
+      available to check whether Shift is pressed. If it is, show the menu,
+      otherwise boot immediately. If keystatus is not available, then fall
+      back to a short delay interruptible with Escape.
+  * debian/default/grub: Adjust defaults to match new quick-boot code.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Thu, 27 Aug 2009 00:35:22 +0100
 
 grub2 (1.96+20090826-3) unstable; urgency=low
 
@@ -507,6 +1240,50 @@ grub2 (1.96+20090808-1) unstable; urgency=low
     10_freebsd.in to handle multiple kernel versions & acpi.ko.
 
  -- Robert Millan <rmh.debian@aybabtu.com>  Mon, 10 Aug 2009 18:49:52 +0200
+
+grub2 (1.96+20090725-1ubuntu2) karmic; urgency=low
+
+  * 950_hidden_timeout.diff: New patch. Add GRUB_HIDDEN_TIMEOUT support.
+    Move the timeout setting to the end so that the sleep comes after
+    terminal setup.
+  * debian/default/grub: Default to hiding the menu with a three-second
+    timeout. Pressing Escape during this time will show the menu.
+    grub-installer will unhide it if other operating systems are installed.
+  * debian/grub.d/05_debian_theme: Set a monochromatic theme for Ubuntu.
+  * 951_gfxpayload_keep.diff: New patch. If gfxpayload starts with "keep" or
+    if GRUB_ASSUME_LINUX_HAS_FB_SUPPORT is defined, then tell Linux to use
+    the current video mode.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Mon, 10 Aug 2009 13:08:21 +0100
+
+grub2 (1.96+20090725-1ubuntu1) karmic; urgency=low
+
+  * New upstream version.
+    + Fixes offering Windows (LP: #402795)
+    + Fixes Vista/Win7 fails to boot (LP: #402154)
+    + Fixes installation onto VFAT (LP: #401971)
+  * Merge from debian unstable, remaining changes:
+    + debian/control:
+      - Depend on rather than Suggest os-prober; Ubuntu version does not
+        suffer from the mount problem that prevents Debian from marking this
+        Depends.
+    + debian/default/grub:
+      - Adjust for default Ubuntu boot options.
+      - Use new GRUB_CMDLINE_LINUX_DEFAULT option to set "quiet splash" for
+        default items only.  These options won't be set in single user mode.
+    + debian/legacy/update-grub:
+      - Apply Ubuntu branding: title, recovery mode, quiet option, and tweak
+        how memtest86+ is displayed.
+      - Use UUIDs where appropriate.
+    + debian/patches/03_ubuntu_grub_standards:
+      - Remove GNU/Linux from default string.
+    + debian/patches/10_crashkernel.patch:
+      - add crashkernel= options if kdump and makedumpfile
+        is available (part of the kernel-crashdump spec)
+  * Update 10_crashkernel.patch for changes upstream.
+  * Drop 999_os-prober_drivemap_root.diff, upstream.
+
+ -- Mario Limonciello <mario_limonciello@dell.com>  Thu, 30 Jul 2009 12:41:19 -0500
 
 grub2 (1.96+20090725-1) unstable; urgency=high
 
@@ -651,6 +1428,54 @@ grub2 (1.96+20090627-1) experimental; urgency=low
 
  -- Robert Millan <rmh.debian@aybabtu.com>  Sat, 27 Jun 2009 00:46:23 +0200
 
+grub2 (1.96+20090611-1ubuntu4) karmic; urgency=low
+
+  * debian/patches/10_crashkernel.diff:
+    - make crashkernel= commandline appear before the other options
+      to workaround a bug in the crashkernel parser 
+      (http://lists.infradead.org/pipermail/kexec/2009-July/003444.html)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Thu, 16 Jul 2009 11:37:05 +0200
+
+grub2 (1.96+20090611-1ubuntu3) karmic; urgency=low
+
+  * Drop os-prober to a Recommends at Felix Zielcke's suggestion.
+  * Don't build grub-efi-amd64 on lpia for the moment, since we don't seem
+    to have sufficient compiler support.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Wed, 08 Jul 2009 16:25:58 +0100
+
+grub2 (1.96+20090611-1ubuntu2) karmic; urgency=low
+
+  * 10_crashkernel.patch:
+    - add crashkernel= options if kdump and makedumpfile
+      is available (part of the kernel-crashdump spec)
+
+ -- Michael Vogt <michael.vogt@ubuntu.com>  Wed, 24 Jun 2009 10:19:57 +0200
+
+grub2 (1.96+20090611-1ubuntu1) karmic; urgency=low
+
+  * Resynchronise with Debian. Remaining changes:
+    + debian/control:
+      - Depend on rather than Suggest os-prober; Ubuntu version does not
+        suffer from the mount problem that prevents Debian from marking this
+        Depends.
+    + debian/default/grub:
+      - Adjust for default Ubuntu boot options.
+      - Use new GRUB_CMDLINE_LINUX_DEFAULT option to set "quiet splash" for
+        default items only.  These options won't be set in single user mode.
+    + debian/legacy/update-grub:
+      - Apply Ubuntu branding: title, recovery mode, quiet option, and tweak
+        how memtest86+ is displayed.
+      - Use UUIDs where appropriate.
+    + debian/patches/03_ubuntu_grub_standards:
+      - Remove GNU/Linux from default string.
+  * debian/patches/999_os-prober_drivemap_root.diff:
+    - Backport r2333 from upstream to fix chain-loading of operating systems
+      detected by os-prober.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Wed, 17 Jun 2009 12:05:47 +0100
+
 grub2 (1.96+20090611-1) experimental; urgency=low
 
   * New SVN snapshot.
@@ -720,6 +1545,30 @@ grub2 (1.96+20090602-1) unstable; urgency=low
   * add grub-pc.preinst
 
  -- Felix Zielcke <fzielcke@z-51.de>  Wed, 03 Jun 2009 14:42:11 +0200
+
+grub2 (1.96+20090523-1ubuntu1) karmic; urgency=low
+
+  [ Colin Watson ]
+  * Resynchronise with Debian. Remaining changes:
+    + debian/control:
+      - Depend on rather than Suggest os-prober; Ubuntu version does not 
+        suffer from the mount problem that prevents Debian from marking this
+      	Depends.
+    + debian/default/grub 
+      - Adjust for default Ubuntu boot options.
+      - Use new GRUB_CMDLINE_LINUX_DEFAULT option to set "quiet splash" for
+        default items only.  These options won't be set in single user mode.
+    + debian/patches/03_ubuntu_grub_standards
+      - Remove GNU/Linux from default string.
+  * debian/legacy/update-grub: Apply Ubuntu branding: title, recovery mode,
+    quiet option, and tweak how memtest86+ is displayed.
+
+  [ Andy Whitcroft ]
+  * debian/legacy/update-grub: fix generation to use the uuid command for
+    the root specifier when the groot is a UUID.  Use the same test as is
+    used in the 'grub' package.  LP: #376879
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Thu, 04 Jun 2009 11:20:12 +0100
 
 grub2 (1.96+20090523-1) unstable; urgency=low
 
@@ -997,6 +1846,40 @@ grub2 (1.96+20080730-1) experimental; urgency=low
 
  -- Robert Millan <rmh@aybabtu.com>  Wed, 30 Jul 2008 22:12:07 +0200
 
+grub2 (1.96+20080724-12ubuntu2) jaunty; urgency=low
+
+  * Build for lpia.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Wed, 25 Feb 2009 18:28:37 +0000
+
+grub2 (1.96+20080724-12ubuntu1) jaunty; urgency=low
+
+  * Merge from Debian Unstable (LP: #298872, LP: #256578).  
+    Remaining Ubuntu changes:
+    + debian/control:
+      - Depend on rather than Suggest os-prober; Ubuntu version does not 
+        suffer from the mount problem that prevents Debian from marking this
+      	Depends.
+    + debian/default/grub 
+      - Adjust for default Ubuntu boot options.
+      - Use new GRUB_CMDLINE_LINUX_DEFAULT option to set "quiet splash" for
+        default items only.  These options won't be set in single user mode.
+    + debian/patches/03_ubuntu_grub_standards
+      - Remove GNU/Linux from default string.
+  * New upstream snapshot includes ext4 extents support (LP: #294763)
+  * Debian patch 02_dpkg_version_comparison.diff fixes kernel ordering
+    (LP: #215513)
+  * debian/patches/04_uuids_and_abstraction_dont_play_along_nicely:
+    + Drop.  Ubuntu's mdadm and lvm properly populate /dev/disk/by-uuid, so
+      this workaround is unnecessary.
+  * debian/changelog:
+    + Drop duplicated 1.96+20080203-1ubuntu2 and 1.96+20080203-1ubuntu1 
+      entries.  We only really need them in there once!
+  * Drop debian/patches/04_convert_root_uuid:
+    - GRUB2 upstream now uses UUIDs when possible.
+
+ -- Christopher James Halse Rogers <raof@ubuntu.com>  Mon, 17 Nov 2008 10:06:18 +1100
+
 grub2 (1.96+20080724-4) unstable; urgency=high
 
   * patches/00_fix_overflow.diff: fix overflow with a big grub.cfg.
@@ -1166,6 +2049,33 @@ grub2 (1.96+20080531-1) unstable; urgency=low
   * Galician (gl.po) by Jacobo Tarrio  (Closes: #480977)
 
  -- Robert Millan <rmh@aybabtu.com>  Sat, 31 May 2008 00:02:54 +0200
+
+grub2 (1.96+20080512-1ubuntu2) intrepid; urgency=low
+
+  [ Onkar Shinde ]
+  * debian/patches:
+    - Add 03_ubuntu_grub_standards to remove GNU/Linux from the
+      default string. (LP: #192955) Don't show splash screen or quiet mode
+      in single user mode.
+    - Add 04_convert_root_uuid.diff to default to using UUIDs
+      on new GRUB2 installations.  (LP: #192956)
+  * debian/control:
+    - Move os-prober to 'Depends' since Ubuntu version does not suffer from
+      the mount problem in Debian version. 'os-prober' is needed for probing
+      other operating systems. (LP: #214642)
+  * Other bugs fixed - LP: #219580
+
+  [ Mario Limonciello ]
+  * Add items from missed merge bug (LP: #234288)
+
+ -- Onkar Shinde <onkarshinde@gmail.com>  Fri, 23 May 2008 14:28:36 +0530
+
+grub2 (1.96+20080512-1ubuntu1) intrepid; urgency=low
+
+  * Merge from debian unstable, remaining changes:
+    - Adjust debian/default/grub for default Ubuntu boot options.
+
+ -- Mario Limonciello <mario_limonciello@dell.com>  Tue, 27 May 2008 11:32:41 -0500
 
 grub2 (1.96+20080512-1) unstable; urgency=low
 
@@ -1345,6 +2255,29 @@ grub2 (1.96+20080209-1) unstable; urgency=low
   * Lower base-files versioned dependency to >= 4.0.1~bpo40+1.
 
  -- Robert Millan <rmh@aybabtu.com>  Sat,  9 Feb 2008 13:43:49 +0100
+
+grub2 (1.96+20080203-1ubuntu2) hardy; urgency=low
+
+  * Update 03_ubuntu_grub_standards.
+    - Don't show splash screen or quiet mode in single user mode.
+
+ -- Mario Limonciello <mario_limonciello@dell.com>  Wed, 05 Mar 2008 19:05:04 -0600
+
+grub2 (1.96+20080203-1ubuntu1) hardy; urgency=low
+
+  * debian/default/grub
+    - Show lsb_release rather than statically displaying "Debian" (LP: #192955)
+    - Include Ubuntu specific "quiet splash" on default grub command line.
+      (LP: #193024)
+  * debian/patches:
+    - Add 03_ubuntu_grub_standards to remove GNU/Linux from the
+      default string. (LP: #192955)
+    - Add 04_convert_root_uuid.diff to default to using UUIDs
+      on new GRUB2 installations.  (LP: #192956)
+  * debian/control:
+    - Update maintainer per XSBC-Original-Maintainer spec.
+
+ -- Mario Limonciello <mario_limonciello@dell.com>  Mon, 18 Feb 2008 14:05:06 -0600
 
 grub2 (1.96+20080203-1) unstable; urgency=low
 
