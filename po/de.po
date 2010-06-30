@@ -900,8 +900,8 @@ msgid ""
 "Ctrl-x to boot, Ctrl-c for a command-line or ESC to return menu."
 msgstr ""
 "Minimale Emacs-ähnliche Bildschirmbearbeitung wird unterstützt. TAB listet "
-"Vervollständigungen auf. Drücken Sie Strg-C für eine Befehlszeile oder ESC, "
-"um zum Menü zurückzukehren."
+"Vervollständigungen auf. Drücken Sie Strg-X zum Booten, Strg-C für eine "
+"Befehlszeile oder ESC, um zum Menü zurückzukehren."
 
 #: normal/menu_text.c:186
 #, c-format
