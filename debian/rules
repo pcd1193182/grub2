@@ -193,9 +193,13 @@ install/grub-common:
 	rm -rf $(CURDIR)/debian/$(package)/usr/lib/grub/{i386,powerpc,sparc64,mips}-*
 	rm -f $(CURDIR)/debian/$(package)/usr/{sbin,share/man/man8}/{update-grub,grub-install,grub-setup,grub-reboot,grub-set-default}{,.8}
 	rm -f $(CURDIR)/debian/$(package)/usr/share/info/dir*
+	install -m 0755 debian/grub-common.pm-sleep $(CURDIR)/debian/$(package)/etc/pm/sleep.d/10_grub-common
 
 override_dh_installdocs:
 	dh_installdocs -A AUTHORS NEWS README THANKS TODO
+
+override_dh_installinit:
+	dh_installinit -- start 99 2 3 4 5 .
 
 override_dh_strip:
 	dh_strip -X/usr/bin/grub-emu
