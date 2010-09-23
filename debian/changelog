@@ -1,3 +1,10 @@
+grub2 (1.98-1ubuntu8) lucid-proposed; urgency=low
+
+  * On Wubi, don't ask for an install device, but just update wubildr using
+    the diverted grub-install (LP: #581760).
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Thu, 23 Sep 2010 14:26:00 +0100
+
 grub2 (1.98-1ubuntu7) lucid-proposed; urgency=low
 
   * Update harmfully incorrect German translation of menu legend, which
