@@ -1,3 +1,9 @@
+grub2 (1.98-1ubuntu9) lucid-proposed; urgency=low
+
+  * in update-grub, explicitly ignore kernels ending in -ec2 (LP: #671097)
+
+ -- Scott Moser <smoser@ubuntu.com>  Mon, 22 Nov 2010 16:15:12 +0000
+
 grub2 (1.98-1ubuntu8) lucid-proposed; urgency=low
 
   * On Wubi, don't ask for an install device, but just update wubildr using
