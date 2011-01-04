@@ -1,0 +1,47 @@
+Ubuntu: https://bugs.launchpad.net/ubuntu/+source/grub2/+bug/386922
+Upstream: not yet, but probably can and should be
+Description: For non-recovery kernel menu entries, suppress progress
+ messages as the kernel and initrd load.
+
+Index: b/util/grub.d/10_linux.in
+===================================================================
+--- a/util/grub.d/10_linux.in
++++ b/util/grub.d/10_linux.in
+@@ -89,15 +89,23 @@
+     prepare_boot_cache="$(prepare_grub_to_access_device ${GRUB_DEVICE_BOOT} | sed -e "s/^/\t/")"
+   fi
+   printf '%s\n' "${prepare_boot_cache}"
+-  message="$(gettext_printf "Loading Linux %s ..." ${version})"
+-  cat << EOF
++  if [ "x$5" != "xquiet" ]; then
++    message="$(gettext_printf "Loading Linux %s ..." ${version})"
++    cat << EOF
+ 	echo	'$message'
++EOF
++  fi
++  cat << EOF
+ 	linux	${rel_dirname}/${basename} root=${linux_root_device_thisversion} ro ${args}
+ EOF
+   if test -n "${initrd}" ; then
+-    message="$(gettext_printf "Loading initial ramdisk ...")"
+-    cat << EOF
++    if [ "x$5" != "xquiet" ]; then
++      message="$(gettext_printf "Loading initial ramdisk ...")"
++      cat << EOF
+ 	echo	'$message'
++EOF
++    fi
++    cat << EOF
+ 	initrd	${rel_dirname}/${initrd}
+ EOF
+   fi
+@@ -149,7 +157,8 @@
+   fi
+ 
+   linux_entry "${OS}" "${version}" false \
+-      "${GRUB_CMDLINE_LINUX} ${GRUB_CMDLINE_EXTRA} ${GRUB_CMDLINE_LINUX_DEFAULT}"
++      "${GRUB_CMDLINE_LINUX} ${GRUB_CMDLINE_EXTRA} ${GRUB_CMDLINE_LINUX_DEFAULT}" \
++      quiet
+   if [ "x${GRUB_DISABLE_RECOVERY}" != "xtrue" ]; then
+     linux_entry "${OS}" "${version}" true \
+ 	"single ${GRUB_CMDLINE_LINUX}"
