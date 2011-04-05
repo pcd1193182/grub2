@@ -40,3 +40,4 @@ ubuntu_vesafb.patch
 ubuntu_diskless_partitions.patch
 ubuntu_embed_signatures.patch
 ubuntu_disable_bochs_cirrus.patch
+ubuntu_multipath.patch
