@@ -1,3 +1,14 @@
+grub2 (1.98-1ubuntu12) lucid-proposed; urgency=low
+
+  * Fix use of freed memory when replacing existing loopback device
+    (LP: #742967).
+  * Make sure to reinstall GRUB on upgrade if Wubi is in use (LP: #742967).
+  * Enable grub-fstest, so that we can use it to help find wubildr
+    (LP: #610898).
+  * Make NTFS UUIDs uppercase (LP: #695290).
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Wed, 27 Apr 2011 10:39:15 +0100
+
 grub2 (1.98-1ubuntu11) lucid-proposed; urgency=low
 
   * Backport multipath probing fixes (LP: #687501).

@@ -7,9 +7,9 @@ Description: If you set root after running loopback, any attempts to open
  loopback should be relevant to the loopback file name.
 
 diff -Nur -x '*.orig' -x '*~' grub2-1.97~beta2/disk/loopback.c grub2-1.97~beta2.new/disk/loopback.c
---- grub2-1.97~beta2/disk/loopback.c	2009-06-10 22:04:23.000000000 +0100
-+++ grub2-1.97~beta2.new/disk/loopback.c	2009-09-10 21:42:56.000000000 +0100
-@@ -28,6 +28,7 @@
+--- grub2-1.97~beta2/disk/loopback.c	2010-06-06 23:58:07.000000000 +0100
++++ grub2-1.97~beta2.new/disk/loopback.c	2011-04-05 19:52:35.000000000 +0100
+@@ -29,6 +29,7 @@
  {
    char *devname;
    char *filename;
@@ -17,7 +17,7 @@ diff -Nur -x '*.orig' -x '*~' grub2-1.97~beta2/disk/loopback.c grub2-1.97~beta2.
    int has_partitions;
    struct grub_loopback *next;
  };
-@@ -61,6 +62,7 @@
+@@ -62,6 +63,7 @@
    /* Remove the device from the list.  */
    *prev = dev->next;
  
@@ -25,7 +25,7 @@ diff -Nur -x '*.orig' -x '*~' grub2-1.97~beta2/disk/loopback.c grub2-1.97~beta2.
    grub_free (dev->devname);
    grub_free (dev->filename);
    grub_free (dev);
-@@ -90,9 +92,6 @@
+@@ -91,9 +93,6 @@
    if (! file)
      return grub_errno;
  
@@ -35,7 +35,7 @@ diff -Nur -x '*.orig' -x '*~' grub2-1.97~beta2/disk/loopback.c grub2-1.97~beta2.
    /* First try to replace the old device.  */
    for (newdev = loopback_list; newdev; newdev = newdev->next)
      if (grub_strcmp (newdev->devname, args[0]) == 0)
-@@ -102,10 +101,12 @@
+@@ -103,10 +102,12 @@
      {
        char *newname = grub_strdup (args[1]);
        if (! newname)
@@ -49,7 +49,7 @@ diff -Nur -x '*.orig' -x '*~' grub2-1.97~beta2/disk/loopback.c grub2-1.97~beta2.
  
        /* Set has_partitions when `--partitions' was used.  */
        newdev->has_partitions = state[1].set;
-@@ -116,13 +117,13 @@
+@@ -117,13 +118,13 @@
    /* Unable to replace it, make a new entry.  */
    newdev = grub_malloc (sizeof (struct grub_loopback));
    if (! newdev)
@@ -65,7 +65,7 @@ diff -Nur -x '*.orig' -x '*~' grub2-1.97~beta2/disk/loopback.c grub2-1.97~beta2.
      }
  
    newdev->filename = grub_strdup (args[1]);
-@@ -130,9 +131,11 @@
+@@ -131,9 +132,11 @@
      {
        grub_free (newdev->devname);
        grub_free (newdev);
@@ -78,7 +78,7 @@ diff -Nur -x '*.orig' -x '*~' grub2-1.97~beta2/disk/loopback.c grub2-1.97~beta2.
    /* Set has_partitions when `--partitions' was used.  */
    newdev->has_partitions = state[1].set;
  
-@@ -141,6 +144,10 @@
+@@ -142,6 +145,10 @@
    loopback_list = newdev;
  
    return 0;
@@ -89,7 +89,7 @@ diff -Nur -x '*.orig' -x '*~' grub2-1.97~beta2/disk/loopback.c grub2-1.97~beta2.
  }
  
  
-@@ -159,7 +166,6 @@
+@@ -160,7 +167,6 @@
  static grub_err_t
  grub_loopback_open (const char *name, grub_disk_t disk)
  {
@@ -97,9 +97,9 @@ diff -Nur -x '*.orig' -x '*~' grub2-1.97~beta2/disk/loopback.c grub2-1.97~beta2.
    struct grub_loopback *dev;
  
    for (dev = loopback_list; dev; dev = dev->next)
-@@ -169,29 +175,17 @@
+@@ -170,34 +176,22 @@
    if (! dev)
-     return grub_error (GRUB_ERR_UNKNOWN_DEVICE, "Can't open device");
+     return grub_error (GRUB_ERR_UNKNOWN_DEVICE, "can't open device");
  
 -  file = grub_file_open (dev->filename);
 -  if (! file)
@@ -113,7 +113,7 @@ diff -Nur -x '*.orig' -x '*~' grub2-1.97~beta2/disk/loopback.c grub2-1.97~beta2.
  
    disk->has_partitions = dev->has_partitions;
 -  disk->data = file;
-+  disk->data = dev->file;
++  disk->data = dev;
  
    return 0;
  }
@@ -129,7 +129,13 @@ diff -Nur -x '*.orig' -x '*~' grub2-1.97~beta2/disk/loopback.c grub2-1.97~beta2.
  static grub_err_t
  grub_loopback_read (grub_disk_t disk, grub_disk_addr_t sector,
  		    grub_size_t size, char *buf)
-@@ -233,7 +227,6 @@
+ {
+-  grub_file_t file = (grub_file_t) disk->data;
++  grub_file_t file = ((struct grub_loopback *) disk->data)->file;
+   grub_off_t pos;
+ 
+   grub_file_seek (file, sector << GRUB_DISK_SECTOR_BITS);
+@@ -234,7 +228,6 @@
      .id = GRUB_DISK_DEVICE_LOOPBACK_ID,
      .iterate = grub_loopback_iterate,
      .open = grub_loopback_open,
