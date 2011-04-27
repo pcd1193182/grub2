@@ -23,7 +23,7 @@ Last-Update: 2010-09-10
  
  ifeq ($(enable_grub_fstest), yes)
  bin_UTILITIES += grub-fstest
-@@ -60,6 +66,11 @@
+@@ -60,12 +66,18 @@
  	fs/ufs.c fs/ufs2.c fs/xfs.c fs/afs.c fs/afs_be.c fs/befs.c 	\
  	fs/befs_be.c fs/tar.c			\
  	\
