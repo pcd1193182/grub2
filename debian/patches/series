@@ -41,3 +41,5 @@ ubuntu_diskless_partitions.patch
 ubuntu_embed_signatures.patch
 ubuntu_disable_bochs_cirrus.patch
 ubuntu_multipath.patch
+ubuntu_loopback_replace.patch
+ubuntu_ntfs_uuid_uppercase.patch
