@@ -1,0 +1,21 @@
+Description: Make NTFS UUIDs uppercase
+Author: Vladimir Serbinenko <phcoder@gmail.com>
+Forwarded: yes
+Applied-Upstream: http://bazaar.launchpad.net/~vcs-imports/grub/grub2-bzr/revision/2925
+Last-Update: 2011-04-06
+
+diff -Nur -x '*.orig' -x '*~' grub2//fs/ntfs.c grub2.new//fs/ntfs.c
+--- grub2//fs/ntfs.c	2010-06-06 23:58:07.000000000 +0100
++++ grub2.new//fs/ntfs.c	2011-04-06 16:53:05.000000000 +0100
+@@ -1072,7 +1072,11 @@
+   data = grub_ntfs_mount (disk);
+   if (data)
+     {
++      char *ptr;
+       *uuid = grub_xasprintf ("%016llx", (unsigned long long) data->uuid);
++      if (*uuid)
++	for (ptr = *uuid; *ptr; ptr++)
++	  *ptr = grub_toupper (*ptr);
+     }
+   else
+     *uuid = NULL;
