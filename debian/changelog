@@ -1,3 +1,127 @@
+grub2 (2.00-5) experimental; urgency=low
+
+  * Backport from upstream:
+    - Remove extra layer of escaping from grub_probe.
+    - Add efifwsetup module to reboot into firmware setup menu.
+    - Revert incorrect off-by-one fix when embedding in MBR (LP: #1051154).
+  * Switch watch file to point to ftp.gnu.org.
+  * Build-depend on liblzma-dev, enabling 'grub-mkimage -C xz'.
+  * Adjust /etc/grub.d/30_os-prober to detect Ubuntu's use of "recovery"
+    rather than "single".
+
+ -- Colin Watson <cjwatson@debian.org>  Wed, 19 Sep 2012 08:52:27 +0100
+
+grub2 (2.00-4) experimental; urgency=low
+
+  * Fix platform postinsts to handle new core.img location.
+  * Only fix up powerpc key repeat on IEEE1275 machines.  Fixes powerpc-emu
+    compilation.
+  * Move grub-install to grub2-common, since it's now common across
+    platforms but clashes with grub-legacy.
+  * Move grub-mknetdir to grub-common, since it's now common across
+    platforms.
+  * Make grub-install fall back to i386-pc if booted using EFI but the
+    relevant *-efi target is not available (because only grub-pc is
+    installed).
+
+ -- Colin Watson <cjwatson@debian.org>  Fri, 14 Sep 2012 13:38:37 +0100
+
+grub2 (2.00-3) experimental; urgency=low
+
+  * Use dh-autoreconf.
+  * Bail out if trying to run grub-mkconfig during upgrade to 2.00 (e.g.
+    while configuring a kernel image), since the old /etc/grub.d/00_header
+    conffile breaks until such time as grub-common is configured.
+
+ -- Colin Watson <cjwatson@debian.org>  Thu, 13 Sep 2012 17:07:18 +0100
+
+grub2 (2.00-2) experimental; urgency=low
+
+  * Add -Wno-error=unused-result to HOST_CFLAGS for the moment, since at
+    least grub-core/lib/crypto.c fails to compile on Ubuntu otherwise.
+  * Update default/grub.md5sum to include Ubuntu maverick's default md5sum.
+  * Autogenerate packaging files for grub-emu, in order that its postinst
+    does not contain unexpanded @PACKAGE@ symbols.
+  * Only try to install efiemu*.o into grub-emu on *-i386.
+
+ -- Colin Watson <cjwatson@debian.org>  Sat, 08 Sep 2012 10:32:33 +0100
+
+grub2 (2.00-1) experimental; urgency=low
+
+  [ Jordi Mallach, Colin Watson ]
+  * New upstream release.
+    - Add LUKS and GELI encrypted disk support (closes: #463107).
+    - Lazy scanning to avoid accessing devices which aren't really used.
+      This avoids boot delay due to slow device scanning (closes: #549905,
+      #550015, #550083, #564252, #595059, #632408).
+    - Don't override more informative errors when loading kernel/initrd
+      (closes: #551630).
+    - Support 4K-sector NTFS (closes: #567728).
+    - Unify grub-mkrescue interface on powerpc with that on other
+      architectures (closes: #570119).
+    - Fix infinite recursion in gettext when translation fails (closes:
+      #611537, #612454, #616487, #619618, #626853, #643608).
+    - Add more missing quotes to grub-mkconfig (closes: #612417).
+    - Import gnulib change to fix argp_help segfault with help filter
+      (closes: #612692).
+    - Support %1$d syntax in grub_printf (closes: #630647).
+    - Use write-combining MTRR to speed up video with buggy BIOSes (closes:
+      #630926).
+    - Remove multiboot header from PXE images to avoid confusing ipxe
+      (closes: #635877).
+    - Fix crash when attempting to install to a non-BIOS disk (closes:
+      #637208).
+    - Fix handling of grub-mkrescue --xorriso= option (closes: #646788).
+    - Use umask rather than chmod to create grub.cfg.new to avoid insecure
+      grub.cfg (closes: #654599).
+    - Improve font installation logic (closes: #654645).
+    - Add grub-probe info documentation (closes: #666031).
+    - Don't crash on canonicalize_file_name failure in grub-probe (closes:
+      #677211).
+
+  [ Colin Watson ]
+  * Adjust debian/watch to point to xz-compressed tarballs.
+  * debian/grub.d/05_debian_theme: Source grub-mkconfig_lib from
+    /usr/share/grub, not the /usr/lib/grub compatibility link.
+  * Convert to source format 3.0 (quilt).  Developers, note that patches are
+    stored applied in bzr; you may want to 'quilt pop -a' / 'quilt push -a'
+    around merges.
+  * Remove pointless debian/grub-mount-udeb.install.hurd-i386;
+    grub-mount-udeb is not built on the Hurd.
+  * Refactor debian/grub-common.install.hurd-i386 into .in files so that it
+    imposes less of a maintenance burden.
+  * Restore grub-mkdevicemap for now.  While it's kind of a mess, requiring
+    lots of OS-specific code to iterate over all possible devices, we use it
+    in a number of scripts to discover devices and reimplementing those in
+    terms of something else would be very complicated.
+  * Add grub-efi-ia64-bin and grub-efi-ia64 packages.  These are currently
+    experimental, and grub-efi-ia64 does not automatically run grub-install.
+  * Build-depend on gcc-4.6-multilib on kfreebsd-i386 and hurd-i386 as well
+    as the other i386 architectures, since we need it to build efiemu32.o
+    and efiemu64.o.
+  * Add per-platform *-dbg packages containing files needed to use GRUB's
+    GDB stub.  These are relatively large and thus worth splitting out.
+  * Build-depend on ttf-dejavu-core for the starfield theme.
+  * Add a grub-theme-starfield package containing the starfield theme.
+  * Backport from upstream:
+    - Don't decrease efi_mmap_size (LP: #1046429).
+  * grub-common Suggests: console-setup for grub-kbdcomp (closes: #686815).
+  * Silence error messages when translations are unavailable.
+  * Don't pass *.module to dpkg-shlibdeps, avoiding lots of build-time
+    warnings.
+  * Move transitional package to Section: oldlibs.
+  * Acknowledge NMU (closes: #676609).
+
+  [ Debconf translations ]
+  * Lithuanian (Rimas Kudelis).  Closes: #675628
+  * Galician (Jorge Barreiro).  Closes: #677389
+  * Welsh (Daffyd Tomos).
+  * Greek (galaxico).  Closes: #685201
+  * Romanian (Andrei POPESCU).  Closes: #685477
+  * Finnish (Timo Jyrinki).
+
+ -- Colin Watson <cjwatson@debian.org>  Thu, 06 Sep 2012 19:04:21 +0100
+
 grub2 (1.99-22.1) unstable; urgency=low
 
   * Non-maintainer upload.
