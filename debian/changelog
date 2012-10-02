@@ -1,3 +1,13 @@
+grub2 (1.99-12ubuntu5.1) oneiric-proposed; urgency=low
+
+  [ Ben Howard ]
+  * Parameterization of recordfail setting. This allows users to define the
+  default time out of GRUB when recordfail has been set. The current
+  setting causes hangs on headless and appliances where access to the
+  console is limited or prohibited.  (LP: #669481)
+
+ -- Louis Bouchard <louis.bouchard@canonical.com>  Tue, 02 Oct 2012 13:50:50 +0200
+
 grub2 (1.99-12ubuntu5) oneiric; urgency=low
 
   * Never use 'set gfxpayload=keep' in recovery mode (LP: #854967).
