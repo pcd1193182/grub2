@@ -119,9 +119,9 @@ linux_entry ()
   echo "recordfail" | sed "s/^/$submenu_indentation/"
   if [ x$type != xrecovery ] ; then
       save_default_entry | sed -e "s/^/\t/"
-  fi
 
-  echo "	gfxmode \$linux_gfx_mode" | sed "s/^/$submenu_indentation/"
+      echo "	gfxmode \$linux_gfx_mode" | sed "s/^/$submenu_indentation/"
+  fi
 
   echo "	insmod gzio" | sed "s/^/$submenu_indentation/"
 
@@ -296,7 +296,7 @@ while [ "x$list" != "x" ] ; do
               "${GRUB_CMDLINE_LINUX} ${GRUB_CMDLINE_EXTRA} ${GRUB_CMDLINE_LINUX_DEFAULT}"
   if [ "x${GRUB_DISABLE_RECOVERY}" != "xtrue" ]; then
     linux_entry "${OS}" "${version}" recovery \
-                "single ${GRUB_CMDLINE_LINUX}"
+                "single nomodeset ${GRUB_CMDLINE_LINUX}"
   fi
 
   list=`echo $list | tr ' ' '\n' | grep -vx $linux | tr '\n' ' '`
