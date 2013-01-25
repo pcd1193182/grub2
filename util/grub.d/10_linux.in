@@ -78,6 +78,12 @@ esac
 
 title_correction_code=
 
+for word in $GRUB_CMDLINE_LINUX_DEFAULT; do
+  if [ "$word" = splash ]; then
+    GRUB_CMDLINE_LINUX_DEFAULT="$GRUB_CMDLINE_LINUX_DEFAULT \$vt_handoff"
+  fi
+done
+
 # add crashkernel option if we have the required tools
 if [ -x "/usr/bin/makedumpfile" ] && [ -x "/sbin/kexec" ]; then
     GRUB_CMDLINE_EXTRA="$GRUB_CMDLINE_EXTRA crashkernel=384M-2G:64M,2G-:128M"
@@ -124,7 +130,7 @@ linux_entry ()
 	  echo "	load_video" | sed "s/^/$submenu_indentation/"
       fi
   fi
-  echo "	set gfxpayload=\$linux_gfx_mode" | sed "s/^/$submenu_indentation/"
+  echo "	gfxmode \$linux_gfx_mode" | sed "s/^/$submenu_indentation/"
 
   echo "	insmod gzio" | sed "s/^/$submenu_indentation/"
 
@@ -189,6 +195,17 @@ prepare_boot_cache=
 prepare_root_cache=
 boot_device_id=
 title_correction_code=
+
+cat << 'EOF'
+function gfxmode {
+	set gfxpayload="${1}"
+	if [ "${1}" = "keep" ]; then
+		set vt_handoff=vt.handoff=7
+	else
+		set vt_handoff=
+	fi
+}
+EOF
 
 # Use ELILO's generic "efifb" when it's known to be available.
 # FIXME: We need an interface to select vesafb in case efifb can't be used.
