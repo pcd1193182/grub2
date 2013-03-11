@@ -8,7 +8,7 @@ Index: b/grub-core/loader/i386/efi/linux.c
 ===================================================================
 --- a/grub-core/loader/i386/efi/linux.c
 +++ b/grub-core/loader/i386/efi/linux.c
-@@ -219,7 +219,7 @@
+@@ -234,7 +234,7 @@
  
    if (! grub_linuxefi_secure_validate (kernel, filelen))
      {
