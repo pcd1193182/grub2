@@ -1,7 +1,7 @@
 Description: acpihalt: expand parser to handle SSDTs and some more opcodes
 Author: Colin Watson <cjwatson@ubuntu.com>
 Forwarded: https://lists.gnu.org/archive/html/grub-devel/2013-03/msg00060.html
-Last-Update: 2013-03-13
+Last-Update: 2013-05-09
 
 Index: b/grub-core/commands/acpihalt.c
 ===================================================================

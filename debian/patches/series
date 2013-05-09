@@ -43,6 +43,9 @@ linuxefi_require_shim.patch
 linuxefi_non_sb_fallback.patch
 mkconfig_signed_kernel.patch
 install_signed.patch
+install_bios_setup_path.patch
+os_prober_efi.patch
+acpihalt_improvements.patch
 ubuntu_crashkernel.patch
 ubuntu_quick_boot.patch
 ubuntu_sleep_shift.patch
@@ -56,4 +59,3 @@ ubuntu_vt_handoff.patch
 ubuntu_recovery_nomodeset.patch
 ubuntu_wubi_no_windows.patch
 ubuntu_probe_dmraid.patch
-ubuntu_acpihalt_improvements.patch
