@@ -1,3 +1,10 @@
+grub2 (1.99-27+deb7u2) stable; urgency=low
+
+  * Backport from upstream:
+    - Fix booting FreeBSD >= 9.1 amd64 kernels (closes: #699002).
+
+ -- Robert Millan <rmh@debian.org>  Mon, 01 Jul 2013 19:36:21 +0200
+
 grub2 (1.99-27+deb7u1) testing-proposed-updates; urgency=medium
 
   * NMU
