@@ -134,7 +134,9 @@ linux_entry ()
 	  echo "	load_video" | sed "s/^/$submenu_indentation/"
       fi
   fi
-  echo "	gfxmode \$linux_gfx_mode" | sed "s/^/$submenu_indentation/"
+  if [ x$type != xrecovery ] ; then
+      echo "	gfxmode \$linux_gfx_mode" | sed "s/^/$submenu_indentation/"
+  fi
 
   echo "	insmod gzio" | sed "s/^/$submenu_indentation/"
 
@@ -322,10 +324,10 @@ while [ "x$list" != "x" ] ; do
   if [ "x${GRUB_DISABLE_RECOVERY}" != "xtrue" ]; then
     if [ -x /lib/recovery-mode/recovery-menu ]; then
       linux_entry "${OS}" "${version}" recovery \
-                  "recovery ${GRUB_CMDLINE_LINUX}"
+                  "recovery nomodeset ${GRUB_CMDLINE_LINUX}"
     else
       linux_entry "${OS}" "${version}" recovery \
-                  "single ${GRUB_CMDLINE_LINUX}"
+                  "single nomodeset ${GRUB_CMDLINE_LINUX}"
     fi
   fi
 
