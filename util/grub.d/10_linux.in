@@ -31,7 +31,7 @@ CLASS="--class gnu-linux --class gnu --class os"
 if [ "x${GRUB_DISTRIBUTOR}" = "x" ] ; then
   OS=GNU/Linux
 else
-  if [ "${GRUB_DISTRIBUTOR}" = "Ubuntu" ] ; then
+  if [ "${GRUB_DISTRIBUTOR}" = "Ubuntu" ] || [ "${GRUB_DISTRIBUTOR}" = "Kubuntu" ] ; then
     OS="${GRUB_DISTRIBUTOR}"
   else
     OS="${GRUB_DISTRIBUTOR} GNU/Linux"

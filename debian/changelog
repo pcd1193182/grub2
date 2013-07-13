@@ -1,3 +1,52 @@
+grub2 (2.00-15ubuntu1) saucy; urgency=low
+
+  [ Colin Watson ]
+  * Resynchronise with Debian.  Remaining changes:
+    - Default to hiding the menu; holding down Shift at boot will show it.
+    - Add crashkernel option.
+    - Bypass menu unless other OSes are installed or Shift is pressed.
+    - Allow Shift to interrupt 'sleep --interruptible'.
+    - Reduce visual clutter in normal mode.
+    - Remove verbose messages printed before reading configuration.
+    - Suppress kernel/initrd progress messages, except in recovery mode.
+    - Show the boot menu if the previous boot failed.
+    - Suppress "GRUB loading" message unless Shift is held down.
+    - Check hardware support before using gfxpayload=keep.
+    - Set vt.handoff=7 for smooth handoff to kernel graphical mode.
+    - In recovery mode, add nomodeset to the Linux kernel arguments, and
+      remove the 'set gfxpayload=keep' command.
+    - Skip Windows os-prober entries on Wubi systems, and suppress the menu
+      by default if those are the only other-OS entries.
+    - Handle probing striped DM-RAID devices.
+    - Disable cursor as early as possible in grub_main.
+    - Treat Kubuntu as an alias for Ubuntu in GRUB_DISTRIBUTOR.
+
+  [ Harald Sitter ]
+  * Update mkconfig_ubuntu_distributor.patch to handle Kubuntu like Ubuntu;
+    no GNU/Linux suffix.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Sat, 13 Jul 2013 17:08:01 +0100
+
+grub2 (2.00-15) unstable; urgency=low
+
+  [ Colin Watson ]
+  * Install reportbug presubj and script files in all binary packages.
+  * Make grub-yeeloong.postinst explicitly install with
+    --target=mipsel-loongson (closes: #708204).
+  * Make grub-script-check fail on scripts containing no commands (closes:
+    #713886).
+  * Make the description of grub-firmware-qemu a little more generic, rather
+    than assuming that bochsbios provides qemu's default BIOS image (closes:
+    #714277).
+  * Don't assume that the presence of /etc/default/grub or
+    /etc/default/grub.d/*.cfg means that any particular item is set in it
+    (LP: #1199731).
+
+  [ Debconf translations ]
+  * Hungarian (Dr. Nagy Elemér Károly).
+
+ -- Colin Watson <cjwatson@debian.org>  Sat, 13 Jul 2013 11:04:15 +0100
+
 grub2 (2.00-14ubuntu1) saucy; urgency=low
 
   * Resynchronise with Debian.  Remaining changes:

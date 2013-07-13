@@ -14,7 +14,7 @@ Index: b/util/grub.d/10_linux.in
    OS=GNU/Linux
  else
 -  OS="${GRUB_DISTRIBUTOR} GNU/Linux"
-+  if [ "${GRUB_DISTRIBUTOR}" = "Ubuntu" ] ; then
++  if [ "${GRUB_DISTRIBUTOR}" = "Ubuntu" ] || [ "${GRUB_DISTRIBUTOR}" = "Kubuntu" ] ; then
 +    OS="${GRUB_DISTRIBUTOR}"
 +  else
 +    OS="${GRUB_DISTRIBUTOR} GNU/Linux"
