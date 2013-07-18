@@ -1,3 +1,10 @@
+grub2 (2.00-15ubuntu2) saucy; urgency=low
+
+  * Add ubuntu_shim_by_default.patch that makes any EFI system boot into
+    the shim (if installed) even if SecureBoot is disabled. (LP: #1184297)
+
+ -- Stéphane Graber <stgraber@ubuntu.com>  Thu, 18 Jul 2013 15:40:25 -0400
+
 grub2 (2.00-15ubuntu1) saucy; urgency=low
 
   [ Colin Watson ]
