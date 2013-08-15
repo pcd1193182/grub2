@@ -12,7 +12,7 @@ Index: b/util/grub.d/10_linux.in
 ===================================================================
 --- a/util/grub.d/10_linux.in
 +++ b/util/grub.d/10_linux.in
-@@ -82,6 +82,12 @@
+@@ -86,6 +86,12 @@
  
  title_correction_code=
  
@@ -25,7 +25,7 @@ Index: b/util/grub.d/10_linux.in
  # add crashkernel option if we have the required tools
  if [ -x "/usr/bin/makedumpfile" ] && [ -x "/sbin/kexec" ]; then
      GRUB_CMDLINE_EXTRA="$GRUB_CMDLINE_EXTRA crashkernel=384M-2G:64M,2G-:128M"
-@@ -128,7 +134,7 @@
+@@ -132,7 +138,7 @@
  	  echo "	load_video" | sed "s/^/$submenu_indentation/"
        fi
    fi
@@ -34,7 +34,7 @@ Index: b/util/grub.d/10_linux.in
  
    echo "	insmod gzio" | sed "s/^/$submenu_indentation/"
  
-@@ -200,6 +206,17 @@
+@@ -204,6 +210,17 @@
  boot_device_id=
  title_correction_code=
  

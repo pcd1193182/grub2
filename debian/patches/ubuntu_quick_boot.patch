@@ -126,15 +126,15 @@ Index: b/util/grub.d/30_os-prober.in
      if [ x$2 = x32 ]; then
          # TRANSLATORS: it refers to kernel architecture (32-bit)
  	bitstr="$(gettext "(32-bit)")"
-@@ -127,6 +185,7 @@
-   case ${BOOT} in
-     chain)
+@@ -146,6 +204,7 @@
+ 	  ;;
+       esac
  
 +      found_other_os=1
  	  onstr="$(gettext_printf "(on %s)" "${DEVICE}")"
        cat << EOF
  menuentry '$(echo "${LONGNAME} $onstr" | grub_quote)' --class windows --class os \$menuentry_id_option 'osprober-chain-$(grub_get_device_id "${DEVICE}")' {
-@@ -150,6 +209,7 @@
+@@ -169,6 +228,7 @@
  EOF
      ;;
      efi)
@@ -142,7 +142,7 @@ Index: b/util/grub.d/30_os-prober.in
        EFIPATH=${DEVICE#*@}
        DEVICE=${DEVICE%@*}
        cat << EOF
-@@ -192,6 +252,7 @@
+@@ -211,6 +271,7 @@
  	  [ "${prepare_boot_cache}" ] || continue
  	fi
  
@@ -150,7 +150,7 @@ Index: b/util/grub.d/30_os-prober.in
  	onstr="$(gettext_printf "(on %s)" "${DEVICE}")"
  	recovery_params="$(echo "${LPARAMS}" | grep 'single\|recovery')" || true
  	counter=1
-@@ -258,6 +319,7 @@
+@@ -277,6 +338,7 @@
        osx_entry xnu_kernel64 64
      ;;
      hurd)
@@ -158,7 +158,7 @@ Index: b/util/grub.d/30_os-prober.in
        onstr="$(gettext_printf "(on %s)" "${DEVICE}")"
        cat << EOF
  menuentry '$(echo "${LONGNAME} $onstr" | grub_quote)' --class hurd --class gnu --class os \$menuentry_id_option 'osprober-gnuhurd-/boot/gnumach.gz-false-$(grub_get_device_id "${DEVICE}")' {
-@@ -290,3 +352,5 @@
+@@ -309,3 +371,5 @@
      ;;
    esac
  done

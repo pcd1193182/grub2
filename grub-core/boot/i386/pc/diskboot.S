@@ -17,15 +17,22 @@
  */
 
 #include <grub/symbol.h>
-#include <grub/machine/memory.h>
 #include <grub/machine/boot.h>
+#ifdef GRUB_QUIET_BOOT
+#include <grub/machine/memory.h>
+#endif
 
 /*
  *  defines for the code go here
  */
 
 #define MSG(x)	movw $x, %si; call LOCAL(message)
+
+#ifdef GRUB_QUIET_BOOT
 #define SILENT(x)	call LOCAL(check_silent); jz LOCAL(x)
+#else
+#define SILENT(x)
+#endif
 
 	.file	"diskboot.S"
 
@@ -331,11 +338,13 @@ LOCAL(general_error):
 /* go here when you need to stop the machine hard after an error condition */
 LOCAL(stop):	jmp	LOCAL(stop)
 
+#ifdef GRUB_QUIET_BOOT
 LOCAL(check_silent):
 	/* is either shift key held down? */
 	movw	$(GRUB_MEMORY_MACHINE_BIOS_DATA_AREA_ADDR + 0x17), %bx
 	andb	$3, (%bx)
 	ret
+#endif
 
 notification_string:	.asciz "loading"
 

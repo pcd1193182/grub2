@@ -1,3 +1,50 @@
+grub2 (2.00-17ubuntu1) saucy; urgency=low
+
+  * Resynchronise with Debian.  Remaining changes:
+    - Default to hiding the menu; holding down Shift at boot will show it.
+    - Add crashkernel option.
+    - Bypass menu unless other OSes are installed or Shift is pressed.
+    - Show the boot menu if the previous boot failed.
+    - Check hardware support before using gfxpayload=keep.
+    - Set vt.handoff=7 for smooth handoff to kernel graphical mode.
+    - In recovery mode, add nomodeset to the Linux kernel arguments, and
+      remove the 'set gfxpayload=keep' command.
+    - Handle probing striped DM-RAID devices.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Thu, 15 Aug 2013 11:40:37 +0200
+
+grub2 (2.00-17) unstable; urgency=low
+
+  * Really include patches to reduce visual clutter in normal mode when
+    building for Ubuntu.
+
+ -- Colin Watson <cjwatson@debian.org>  Thu, 15 Aug 2013 09:58:59 +0100
+
+grub2 (2.00-16) unstable; urgency=low
+
+  * Make reportbug script file robust against su authentication failures and
+    missing LVM commands.
+  * Backport from upstream:
+    - Move @itemize after @subsection to satisfy texinfo-5.1.
+    - grub-mkconfig: Fix detection of Emacs autosave files.
+    - Fix spurious failure on Xen partition devices without disk devices
+      (closes: #708614).
+  * Merge from Ubuntu:
+    - Treat Kubuntu as an alias for Ubuntu in GRUB_DISTRIBUTOR (Harald
+      Sitter).
+    - Make any EFI system boot into the shim (if installed) even if
+      SecureBoot is disabled (Stéphane Graber).
+    - Allow Shift to interrupt 'sleep --interruptible'.
+    - If building for Ubuntu:
+      + Reduce visual clutter in normal mode.
+      + Remove verbose messages printed before reading configuration.
+      + Suppress kernel/initrd progress messages, except in recovery mode.
+      + Suppress "GRUB loading" message unless Shift is held down.
+    - Skip Windows os-prober entries on Wubi systems.
+  * Consolidate debian/rules logic for when to build signed images.
+
+ -- Colin Watson <cjwatson@debian.org>  Thu, 15 Aug 2013 08:35:53 +0100
+
 grub2 (2.00-15ubuntu2) saucy; urgency=low
 
   * Add ubuntu_shim_by_default.patch that makes any EFI system boot into

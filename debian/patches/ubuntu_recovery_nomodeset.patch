@@ -10,7 +10,7 @@ Index: b/util/grub.d/10_linux.in
 ===================================================================
 --- a/util/grub.d/10_linux.in
 +++ b/util/grub.d/10_linux.in
-@@ -134,7 +134,9 @@
+@@ -138,7 +138,9 @@
  	  echo "	load_video" | sed "s/^/$submenu_indentation/"
        fi
    fi
@@ -21,7 +21,7 @@ Index: b/util/grub.d/10_linux.in
  
    echo "	insmod gzio" | sed "s/^/$submenu_indentation/"
  
-@@ -322,10 +324,10 @@
+@@ -326,10 +328,10 @@
    if [ "x${GRUB_DISABLE_RECOVERY}" != "xtrue" ]; then
      if [ -x /lib/recovery-mode/recovery-menu ]; then
        linux_entry "${OS}" "${version}" recovery \
