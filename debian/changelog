@@ -1,3 +1,26 @@
+grub2 (2.00-18ubuntu1) saucy; urgency=low
+
+  * Resynchronise with Debian.  Remaining changes:
+    - Default to hiding the menu; holding down Shift at boot will show it.
+    - Add crashkernel option.
+    - Bypass menu unless other OSes are installed or Shift is pressed.
+    - Show the boot menu if the previous boot failed.
+    - Check hardware support before using gfxpayload=keep.
+    - Set vt.handoff=7 for smooth handoff to kernel graphical mode.
+    - In recovery mode, add nomodeset to the Linux kernel arguments, and
+      remove the 'set gfxpayload=keep' command.
+    - Handle probing striped DM-RAID devices.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Mon, 26 Aug 2013 21:59:39 +0200
+
+grub2 (2.00-18) unstable; urgency=low
+
+  * Add gettext module to signed UEFI images (LP: #1104627).
+  * Put the preprocessor definition for quiet-boot in the right place so
+    that it actually takes effect.
+
+ -- Colin Watson <cjwatson@debian.org>  Mon, 26 Aug 2013 17:23:09 +0100
+
 grub2 (2.00-17ubuntu1) saucy; urgency=low
 
   * Resynchronise with Debian.  Remaining changes:
