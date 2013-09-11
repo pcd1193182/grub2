@@ -90,7 +90,20 @@ function savedefault {
 
 function recordfail {
   set recordfail=1
+EOF
+FS="$(grub-probe --target=fs "${GRUB_PREFIX}")"
+case "$FS" in
+  btrfs | cpiofs | newc | odc | romfs | squash4 | tarfs | zfs)
+    cat <<EOF
+  # GRUB lacks write support for $FS, so recordfail support is disabled.
+EOF
+    ;;
+  *)
+    cat <<EOF
   if [ -n "\${have_grubenv}" ]; then if [ -z "\${boot_once}" ]; then save_env recordfail; fi; fi
+EOF
+esac
+cat <<EOF
 }
 
 function load_video {
