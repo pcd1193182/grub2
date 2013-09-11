@@ -1,3 +1,10 @@
+grub2 (2.00-18ubuntu3) saucy; urgency=low
+
+  * Fix recordfail-disabling patch to take account of the GRUB_PREFIX
+    variable no longer existing.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Wed, 11 Sep 2013 17:41:22 +0100
+
 grub2 (2.00-18ubuntu2) saucy; urgency=low
 
   [ Colin Watson ]
