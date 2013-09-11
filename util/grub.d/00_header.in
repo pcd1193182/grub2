@@ -23,6 +23,7 @@ prefix="@prefix@"
 exec_prefix="@exec_prefix@"
 datarootdir="@datarootdir@"
 grub_lang=`echo $LANG | cut -d . -f 1`
+grubdir="`echo "/@bootdirname@/@grubdirname@" | sed 's,//*,/,g'`"
 
 export TEXTDOMAIN=@PACKAGE@
 export TEXTDOMAINDIR="@localedir@"
@@ -91,7 +92,7 @@ function savedefault {
 function recordfail {
   set recordfail=1
 EOF
-FS="$(grub-probe --target=fs "${GRUB_PREFIX}")"
+FS="$(grub-probe --target=fs "${grubdir}")"
 case "$FS" in
   btrfs | cpiofs | newc | odc | romfs | squash4 | tarfs | zfs)
     cat <<EOF
