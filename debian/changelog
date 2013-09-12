@@ -1,3 +1,11 @@
+grub2 (2.00-18ubuntu4) saucy; urgency=low
+
+  * Restore "-p /EFI/ubuntu" to the grub-mkimage call that creates
+    grubx64.efi, to fix the case of booting from a hard disk with Secure
+    Boot enabled.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Thu, 12 Sep 2013 15:27:32 +0100
+
 grub2 (2.00-18ubuntu3) saucy; urgency=low
 
   * Fix recordfail-disabling patch to take account of the GRUB_PREFIX
