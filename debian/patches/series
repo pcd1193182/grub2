@@ -54,3 +54,10 @@ probe_error_handling.patch
 wubi_no_windows.patch
 maybe_quiet.patch
 efidisk_non_512_sectors.patch
+ubuntu_crashkernel.patch
+ubuntu_quick_boot.patch
+ubuntu_failed_boot_menu.patch
+ubuntu_gfxpayload_filter.patch
+ubuntu_vt_handoff.patch
+ubuntu_recovery_nomodeset.patch
+ubuntu_probe_dmraid.patch
