@@ -1,3 +1,13 @@
+grub2 (2.00-19ubuntu2) saucy; urgency=low
+
+  [ Steve Langasek ]
+  * debian/patches/ubuntu_efi_always_install_grub_cfg.patch: unconditionally
+    create grub.cfg on our EFI boot partition.  Closes LP: #1236625.
+  * If MokManager is present on the host system, copy it onto the EFI boot
+    partition for use.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Thu, 10 Oct 2013 18:23:29 +0100
+
 grub2 (2.00-19ubuntu1) saucy; urgency=low
 
   * Resynchronise with Debian.  Remaining changes:
