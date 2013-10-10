@@ -1,0 +1,58 @@
+Description: unconditionally create grub.cfg on our EFI boot partition
+ When grub is installed to the EFI partition with Secure Boot support, it
+ always needs some config to tell it the prefix to the /boot/grub disk,
+ because we aren't modifying the grub image at runtime to set the root.
+ So even though when using LVM we don't need to search for the root using
+ search.fs_uuid, we do need to use load.cfg to tell grub what that root
+ is.
+Author: Steve Langasek <steve.langasek@ubuntu.com>
+Bug-Ubuntu: https://bugs.launchpad.net/bugs/1236625
+Forwarded: no
+Last-Update: 2013-10-07
+
+Index: lp.1236625/util/grub-install.in
+===================================================================
+--- lp.1236625.orig/util/grub-install.in
++++ lp.1236625/util/grub-install.in
+@@ -638,7 +638,15 @@
+     config_opt_file="${grubdir}/${grub_modinfo_target_cpu}-$grub_modinfo_platform/load.cfg"
+ fi
+ 
+-if [ "x${devabstraction_module}" = "x" ] ; then
++if [ x"$grub_modinfo_platform" = xefi ]; then
++    if [ $removable = yes ]; then
++	efi_signed="${source_dir}-signed/gcd$efi_suffix.efi.signed"
++    else
++	efi_signed="${source_dir}-signed/grub$efi_suffix.efi.signed"
++    fi
++fi
++
++if [ "x${devabstraction_module}" = "x" ] || ([ x"$grub_modinfo_platform" = xefi ] && [ "$uefi_secure_boot" = yes ] && [ -e "$efi_signed" ]); then
+     if [ x"${install_device}" != x ]; then
+       if echo "${install_device}" | grep -qx "(.*)" ; then
+         install_drive="${install_device}"
+@@ -832,11 +840,6 @@
+     gettext "You will have to set \`SystemPartition' and \`OSLoader' manually." 1>&2
+     echo 1>&2
+ elif [ x"$grub_modinfo_platform" = xefi ]; then
+-    if [ $removable = yes ]; then
+-	efi_signed="${source_dir}-signed/gcd$efi_suffix.efi.signed"
+-    else
+-	efi_signed="${source_dir}-signed/grub$efi_suffix.efi.signed"
+-    fi
+     if [ "$uefi_secure_boot" = yes ] && [ -e "$efi_signed" ]; then
+ 	shim_signed=/usr/lib/shim/shim.efi.signed
+ 	if [ -e "$shim_signed" ]; then
+@@ -848,10 +851,8 @@
+ 	else
+ 	    cp "$efi_signed" "${efidir}/${efi_file}"
+ 	fi
+-	if [ x"$config_opt_file" != x ]; then
+-	    cp "${config_opt_file}" "${efidir}/grub.cfg"
+-	    echo 'configfile $prefix/grub.cfg' >> "${efidir}/grub.cfg"
+-	fi
++	cp "${config_opt_file}" "${efidir}/grub.cfg"
++	echo 'configfile $prefix/grub.cfg' >> "${efidir}/grub.cfg"
+     else
+ 	cp "${grubdir}/${grub_modinfo_target_cpu}-$grub_modinfo_platform/core.${imgext}" "${efidir}/${efi_file}"
+ 	# For old macs. Suggested by Peter Jones.

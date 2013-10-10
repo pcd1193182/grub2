@@ -61,3 +61,5 @@ ubuntu_gfxpayload_filter.patch
 ubuntu_vt_handoff.patch
 ubuntu_recovery_nomodeset.patch
 ubuntu_probe_dmraid.patch
+ubuntu_efi_always_install_grub_cfg.patch
+ubuntu_install_mokmanager.patch
