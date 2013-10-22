@@ -1,3 +1,10 @@
+grub2 (2.00-19ubuntu3) trusty; urgency=low
+
+  * Adjust UEFI installation to cope with Kubuntu setting GRUB_DISTRIBUTOR
+    (LP: #1242417).
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Tue, 22 Oct 2013 09:36:32 +0100
+
 grub2 (2.00-19ubuntu2) saucy; urgency=low
 
   [ Steve Langasek ]
