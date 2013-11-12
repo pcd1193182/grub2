@@ -64,3 +64,4 @@ ubuntu_probe_dmraid.patch
 ubuntu_efi_always_install_grub_cfg.patch
 ubuntu_install_mokmanager.patch
 ubuntu_efi_flavours.patch
+ubuntu_probe_fusionio.patch
