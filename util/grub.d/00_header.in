@@ -272,22 +272,9 @@ fi
 
 make_timeout ()
 {
-    if [ "x${1}" != "x" ] ; then
-	if [ "x${GRUB_HIDDEN_TIMEOUT_QUIET}" = "xtrue" ] ; then
-	    verbose=
-	else
-	    verbose=" --verbose"
-	fi
-	cat << EOF
-if sleep$verbose --interruptible ${1} ; then
-  set timeout=${2}
-fi
-EOF
-    else
-	cat << EOF
+    cat << EOF
 set timeout=${2}
 EOF
-    fi
 }
 
 if [ "x$GRUB_BUTTON_CMOS_ADDRESS" != "x" ]; then
