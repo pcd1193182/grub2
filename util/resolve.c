@@ -16,13 +16,19 @@
  *  along with GRUB.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <config.h>
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <errno.h>
 
-#include <grub/util/resolve.h>
+#include <grub/emu/misc.h>
+#include <grub/misc.h>
 #include <grub/util/misc.h>
+#include <grub/util/resolve.h>
+#include <grub/i18n.h>
 
 /* Module.  */
 struct mod_list
@@ -75,7 +81,7 @@ static struct dep_list *
 read_dep_list (FILE *fp)
 {
   struct dep_list *dep_list = 0;
-  
+
   while (fgets (buf, sizeof (buf), fp))
     {
       char *p;
@@ -84,14 +90,14 @@ read_dep_list (FILE *fp)
       /* Get the target name.  */
       p = strchr (buf, ':');
       if (! p)
-	grub_util_error ("invalid line format: %s", buf);
+	grub_util_error (_("invalid line format: %s"), buf);
 
       *p++ = '\0';
 
       dep = xmalloc (sizeof (*dep));
       dep->name = xstrdup (buf);
       dep->list = 0;
-      
+
       dep->next = dep_list;
       dep_list = dep;
 
@@ -101,8 +107,8 @@ read_dep_list (FILE *fp)
 	  struct mod_list *mod;
 	  char *name;
 
-	  /* Skip white spaces.  */
-	  while (*p && isspace (*p))
+	  /* Skip whitespace.  */
+	  while (*p && grub_isspace (*p))
 	    p++;
 
 	  if (! *p)
@@ -110,12 +116,12 @@ read_dep_list (FILE *fp)
 
 	  name = p;
 
-	  /* Skip non-WSPs.  */
-	  while (*p && ! isspace (*p))
+	  /* Skip non-whitespace.  */
+	  while (*p && ! grub_isspace (*p))
 	    p++;
 
 	  *p++ = '\0';
-	  
+
 	  mod = (struct mod_list *) xmalloc (sizeof (*mod));
 	  mod->name = xstrdup (name);
 	  mod->next = dep->list;
@@ -131,7 +137,7 @@ get_module_name (const char *str)
 {
   char *base;
   char *ext;
-  
+
   base = strrchr (str, '/');
   if (! base)
     base = (char *) str;
@@ -142,13 +148,13 @@ get_module_name (const char *str)
   if (ext && strcmp (ext, ".mod") == 0)
     {
       char *name;
-      
+
       name = xmalloc (ext - base + 1);
       memcpy (name, base, ext - base);
       name[ext - base] = '\0';
       return name;
     }
-  
+
   return xstrdup (base);
 }
 
@@ -159,7 +165,7 @@ get_module_path (const char *prefix, const char *str)
   char *base;
   char *ext;
   char *ret;
-  
+
   ext = strrchr (str, '.');
   if (ext && strcmp (ext, ".mod") == 0)
     base = xstrdup (str);
@@ -168,7 +174,7 @@ get_module_path (const char *prefix, const char *str)
       base = xmalloc (strlen (str) + 4 + 1);
       sprintf (base, "%s.mod", str);
     }
-  
+
   dir = strchr (str, '/');
   if (dir)
     return base;
@@ -189,7 +195,7 @@ add_module (const char *dir,
   struct grub_util_path_list *path;
   struct mod_list *mod;
   struct dep_list *dep;
-  
+
   mod_name = get_module_name (name);
 
   /* Check if the module has already been added.  */
@@ -237,7 +243,7 @@ grub_util_resolve_dependencies (const char *prefix,
   path = grub_util_get_path (prefix, dep_list_file);
   fp = fopen (path, "r");
   if (! fp)
-    grub_util_error ("cannot open %s", path);
+    grub_util_error (_("cannot open `%s': %s"), path, strerror (errno));
 
   free (path);
   dep_list = read_dep_list (fp);

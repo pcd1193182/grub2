@@ -1,6 +1,6 @@
 /*
  *  GRUB  --  GRand Unified Bootloader
- *  Copyright (C) 2005,2006,2007,2008  Free Software Foundation, Inc.
+ *  Copyright (C) 2005,2006,2007,2008,2009  Free Software Foundation, Inc.
  *
  *  GRUB is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,9 +19,6 @@
 #ifndef GRUB_VBE_MACHINE_HEADER
 #define GRUB_VBE_MACHINE_HEADER	1
 
-#include <grub/symbol.h>
-#include <grub/types.h>
-#include <grub/err.h>
 #include <grub/video.h>
 
 /* Default video mode to be used.  */
@@ -30,9 +27,32 @@
 /* VBE status codes.  */
 #define GRUB_VBE_STATUS_OK		0x004f
 
-/* VBE memory model types.  */
-#define GRUB_VBE_MEMORY_MODEL_PACKED_PIXEL	0x04
-#define GRUB_VBE_MEMORY_MODEL_DIRECT_COLOR	0x06
+#define GRUB_VBE_CAPABILITY_DACWIDTH	(1 << 0)
+
+/* Bits from the GRUB_VBE "mode_attributes" field in the mode info struct.  */
+#define GRUB_VBE_MODEATTR_SUPPORTED                 (1 << 0)
+#define GRUB_VBE_MODEATTR_RESERVED_1                (1 << 1)
+#define GRUB_VBE_MODEATTR_BIOS_TTY_OUTPUT_SUPPORT   (1 << 2)
+#define GRUB_VBE_MODEATTR_COLOR                     (1 << 3)
+#define GRUB_VBE_MODEATTR_GRAPHICS                  (1 << 4)
+#define GRUB_VBE_MODEATTR_VGA_COMPATIBLE            (1 << 5)
+#define GRUB_VBE_MODEATTR_VGA_WINDOWED_AVAIL        (1 << 6)
+#define GRUB_VBE_MODEATTR_LFB_AVAIL                 (1 << 7)
+#define GRUB_VBE_MODEATTR_DOUBLE_SCAN_AVAIL         (1 << 8)
+#define GRUB_VBE_MODEATTR_INTERLACED_AVAIL          (1 << 9)
+#define GRUB_VBE_MODEATTR_TRIPLE_BUF_AVAIL          (1 << 10)
+#define GRUB_VBE_MODEATTR_STEREO_AVAIL              (1 << 11)
+#define GRUB_VBE_MODEATTR_DUAL_DISPLAY_START        (1 << 12)
+
+/* Values for the GRUB_VBE memory_model field in the mode info struct.  */
+#define GRUB_VBE_MEMORY_MODEL_TEXT           0x00
+#define GRUB_VBE_MEMORY_MODEL_CGA            0x01
+#define GRUB_VBE_MEMORY_MODEL_HERCULES       0x02
+#define GRUB_VBE_MEMORY_MODEL_PLANAR         0x03
+#define GRUB_VBE_MEMORY_MODEL_PACKED_PIXEL   0x04
+#define GRUB_VBE_MEMORY_MODEL_NONCHAIN4_256  0x05
+#define GRUB_VBE_MEMORY_MODEL_DIRECT_COLOR   0x06
+#define GRUB_VBE_MEMORY_MODEL_YUV            0x07
 
 /* Note:
 
@@ -122,9 +142,9 @@ struct grub_vbe_mode_info_block
   grub_uint8_t lin_rsvd_field_position;
   grub_uint32_t max_pixel_clock;
 
-  /* Reserved field to make structure to be 256 bytes long, VESA BIOS 
-     Extension 3.0 Specification says to reserve 189 bytes here but 
-     that doesn't make structure to be 256 bytes.  So additional one is 
+  /* Reserved field to make structure to be 256 bytes long, VESA BIOS
+     Extension 3.0 Specification says to reserve 189 bytes here but
+     that doesn't make structure to be 256 bytes.  So additional one is
      added here.  */
   grub_uint8_t reserved4[189 + 1];
 } __attribute__ ((packed));
@@ -151,106 +171,62 @@ struct grub_vbe_palette_data
   grub_uint8_t alignment;
 } __attribute__ ((packed));
 
-/* Prototypes for kernel real mode thunks.  */
+struct grub_vbe_flat_panel_info
+{
+  grub_uint16_t horizontal_size;
+  grub_uint16_t vertical_size;
+  grub_uint16_t panel_type;
+  grub_uint8_t red_bpp;
+  grub_uint8_t green_bpp;
+  grub_uint8_t blue_bpp;
+  grub_uint8_t reserved_bpp;
+  grub_uint32_t reserved_offscreen_mem_size;
+  grub_vbe_farptr_t reserved_offscreen_mem_ptr;
 
-/* Call VESA BIOS 0x4f00 to get VBE Controller Information, return status.  */
-grub_vbe_status_t EXPORT_FUNC(grub_vbe_bios_get_controller_info) (struct grub_vbe_info_block *controller_info);
-
-/* Call VESA BIOS 0x4f01 to get VBE Mode Information, return status.  */
-grub_vbe_status_t EXPORT_FUNC(grub_vbe_bios_get_mode_info) (grub_uint32_t mode,
-                                                            struct grub_vbe_mode_info_block *mode_info);
-
-/* Call VESA BIOS 0x4f02 to set video mode, return status.  */
-grub_vbe_status_t EXPORT_FUNC(grub_vbe_bios_set_mode) (grub_uint32_t mode,
-                                                       struct grub_vbe_crtc_info_block *crtc_info);
-
-/* Call VESA BIOS 0x4f03 to return current VBE Mode, return status.  */
-grub_vbe_status_t EXPORT_FUNC(grub_vbe_bios_get_mode) (grub_uint32_t *mode);
-
-/* Call VESA BIOS 0x4f05 to set memory window, return status.  */
-grub_vbe_status_t EXPORT_FUNC(grub_vbe_bios_set_memory_window) (grub_uint32_t window,
-                                                                grub_uint32_t position);
-
-/* Call VESA BIOS 0x4f05 to return memory window, return status.  */
-grub_vbe_status_t EXPORT_FUNC(grub_vbe_bios_get_memory_window) (grub_uint32_t window,
-                                                                grub_uint32_t *position);
-
-/* Call VESA BIOS 0x4f06 to set scanline length (in bytes), return status.  */
-grub_vbe_status_t EXPORT_FUNC(grub_vbe_bios_set_scanline_length) (grub_uint32_t length);
-
-/* Call VESA BIOS 0x4f06 to return scanline length (in bytes), return status.  */
-grub_vbe_status_t EXPORT_FUNC(grub_vbe_bios_get_scanline_length) (grub_uint32_t *length);
-
-/* Call VESA BIOS 0x4f07 to set display start, return status.  */
-grub_vbe_status_t EXPORT_FUNC(grub_vbe_bios_set_display_start) (grub_uint32_t x,
-                                                                grub_uint32_t y);
-
-/* Call VESA BIOS 0x4f07 to get display start, return status.  */
-grub_vbe_status_t EXPORT_FUNC(grub_vbe_bios_get_display_start) (grub_uint32_t *x,
-                                                                grub_uint32_t *y);
-
-/* Call VESA BIOS 0x4f09 to set palette data, return status.  */
-grub_vbe_status_t EXPORT_FUNC(grub_vbe_bios_set_palette_data) (grub_uint32_t color_count,
-                                                               grub_uint32_t start_index,
-                                                               struct grub_vbe_palette_data *palette_data);
+  grub_uint8_t reserved[14];
+} __attribute__ ((packed));
 
 /* Prototypes for helper functions.  */
+/* Call VESA BIOS 0x4f00 to get VBE Controller Information, return status.  */
+grub_vbe_status_t 
+grub_vbe_bios_get_controller_info (struct grub_vbe_info_block *controller_info);
+/* Call VESA BIOS 0x4f01 to get VBE Mode Information, return status.  */
+grub_vbe_status_t 
+grub_vbe_bios_get_mode_info (grub_uint32_t mode,
+			     struct grub_vbe_mode_info_block *mode_info);
+/* Call VESA BIOS 0x4f03 to return current VBE Mode, return status.  */
+grub_vbe_status_t 
+grub_vbe_bios_get_mode (grub_uint32_t *mode);
+/* Call VESA BIOS 0x4f05 to set memory window, return status.  */
+grub_vbe_status_t
+grub_vbe_bios_set_memory_window (grub_uint32_t window, grub_uint32_t position);
+/* Call VESA BIOS 0x4f05 to return memory window, return status.  */
+grub_vbe_status_t
+grub_vbe_bios_get_memory_window (grub_uint32_t window,
+				 grub_uint32_t *position);
+/* Call VESA BIOS 0x4f06 to set scanline length (in bytes), return status.  */
+grub_vbe_status_t 
+grub_vbe_bios_set_scanline_length (grub_uint32_t length);
+/* Call VESA BIOS 0x4f06 to return scanline length (in bytes), return status.  */
+grub_vbe_status_t 
+grub_vbe_bios_get_scanline_length (grub_uint32_t *length);
+/* Call VESA BIOS 0x4f07 to get display start, return status.  */
+grub_vbe_status_t 
+grub_vbe_bios_get_display_start (grub_uint32_t *x,
+				 grub_uint32_t *y);
+
+grub_vbe_status_t grub_vbe_bios_getset_dac_palette_width (int set, int *width);
+
+#define grub_vbe_bios_get_dac_palette_width(width)	grub_vbe_bios_getset_dac_palette_width(0, (width))
+#define grub_vbe_bios_set_dac_palette_width(width)	grub_vbe_bios_getset_dac_palette_width(1, (width))
 
 grub_err_t grub_vbe_probe (struct grub_vbe_info_block *info_block);
-grub_err_t grub_vbe_set_video_mode (grub_uint32_t mode,
-                                    struct grub_vbe_mode_info_block *mode_info);
 grub_err_t grub_vbe_get_video_mode (grub_uint32_t *mode);
 grub_err_t grub_vbe_get_video_mode_info (grub_uint32_t mode,
                                          struct grub_vbe_mode_info_block *mode_info);
+grub_vbe_status_t 
+grub_vbe_bios_get_pm_interface (grub_uint16_t *seg, grub_uint16_t *offset,
+				grub_uint16_t *length);
 
-/* VBE module internal prototypes (should not be used from elsewhere).  */
-struct grub_video_i386_vbeblit_info;
-
-struct grub_video_render_target
-{
-  /* Copy of the screen's mode info structure, except that width, height and
-     mode_type has been re-adjusted to requested render target settings.  */
-  struct grub_video_mode_info mode_info;
-
-  struct
-  {
-    unsigned int x;
-    unsigned int y;
-    unsigned int width;
-    unsigned int height;
-  } viewport;
-
-  /* Indicates whether the data has been allocated by us and must be freed
-     when render target is destroyed.  */
-  int is_allocated;
-
-  /* Pointer to data.  Can either be in video card memory or in local host's
-     memory.  */
-  void *data;
-};
-
-grub_uint8_t * grub_video_vbe_get_video_ptr (struct grub_video_i386_vbeblit_info *source,
-                                             grub_uint32_t x, grub_uint32_t y);
-
-grub_video_color_t grub_video_vbe_map_rgb (grub_uint8_t red, grub_uint8_t green,
-                                           grub_uint8_t blue);
-
-grub_video_color_t grub_video_vbe_map_rgba (grub_uint8_t red,
-                                            grub_uint8_t green,
-                                            grub_uint8_t blue,
-                                            grub_uint8_t alpha);
-
-grub_err_t grub_video_vbe_unmap_color (grub_video_color_t color,
-                                       grub_uint8_t *red,
-                                       grub_uint8_t *green,
-                                       grub_uint8_t *blue,
-                                       grub_uint8_t *alpha);
-
-void grub_video_vbe_unmap_color_int (struct grub_video_i386_vbeblit_info *source,
-                                     grub_video_color_t color,
-                                     grub_uint8_t *red,
-                                     grub_uint8_t *green,
-                                     grub_uint8_t *blue,
-                                     grub_uint8_t *alpha);
 
 #endif /* ! GRUB_VBE_MACHINE_HEADER */

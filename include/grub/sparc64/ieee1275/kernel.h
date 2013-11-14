@@ -1,6 +1,6 @@
 /*
  *  GRUB  --  GRand Unified Bootloader
- *  Copyright (C) 2005,2007  Free Software Foundation, Inc.
+ *  Copyright (C) 2005,2007,2009  Free Software Foundation, Inc.
  *
  *  GRUB is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,12 +19,13 @@
 #ifndef GRUB_KERNEL_MACHINE_HEADER
 #define GRUB_KERNEL_MACHINE_HEADER	1
 
+#define GRUB_KERNEL_MACHINE_STACK_SIZE          0x40000
+
+#ifndef ASM_FILE
+
 #include <grub/symbol.h>
+#include <grub/types.h>
 
-void EXPORT_FUNC (grub_reboot) (void);
-void EXPORT_FUNC (grub_halt) (void);
-
-/* Where grub-mkimage places the core modules in memory.  */
-#define GRUB_IEEE1275_MODULE_BASE 0x00300000
+#endif /* ! ASM_FILE */
 
 #endif /* ! GRUB_KERNEL_MACHINE_HEADER */

@@ -1,7 +1,7 @@
 /* memory.h - describe the memory map */
 /*
  *  GRUB  --  GRand Unified Bootloader
- *  Copyright (C) 2002,2007,2008  Free Software Foundation, Inc.
+ *  Copyright (C) 2002,2007,2008,2009  Free Software Foundation, Inc.
  *
  *  GRUB is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,10 +21,15 @@
 #define GRUB_MEMORY_MACHINE_HEADER	1
 
 #include <grub/symbol.h>
-#include <grub/machine/machine.h>
 #ifndef ASM_FILE
 #include <grub/types.h>
+#include <grub/err.h>
+#include <grub/memory.h>
 #endif
+
+#include <grub/i386/memory.h>
+
+#include <grub/offsets.h>
 
 /* The scratch buffer used in real mode code.  */
 #define GRUB_MEMORY_MACHINE_SCRATCH_ADDR	0x68000
@@ -36,9 +41,6 @@
 
 /* The size of the protect mode stack.  */
 #define GRUB_MEMORY_MACHINE_PROT_STACK_SIZE	0x8000
-
-/* The upper memory area (starting at 640 kiB).  */
-#define GRUB_MEMORY_MACHINE_UPPER		0xa0000
 
 /* The protected mode stack.  */
 #define GRUB_MEMORY_MACHINE_PROT_STACK	\
@@ -61,9 +63,6 @@
 /* The address where another boot loader is loaded.  */
 #define GRUB_MEMORY_MACHINE_BOOT_LOADER_ADDR	0x7c00
 
-/* The flag for protected mode.  */
-#define GRUB_MEMORY_MACHINE_CR0_PE_ON		0x1
-
 /* The code segment of the protected mode.  */
 #define GRUB_MEMORY_MACHINE_PROT_MODE_CSEG	0x8
 
@@ -76,11 +75,23 @@
 /* The data segment of the pseudo real mode.  */
 #define GRUB_MEMORY_MACHINE_PSEUDO_REAL_DSEG	0x20
 
-#ifndef GRUB_MACHINE_IEEE1275
+#define GRUB_MEMORY_MACHINE_BIOS_DATA_AREA_ADDR	0x400
+
 #ifndef ASM_FILE
-extern grub_size_t EXPORT_VAR(grub_lower_mem);
-extern grub_size_t EXPORT_VAR(grub_upper_mem);
-#endif
+
+/* See http://heim.ifi.uio.no/~stanisls/helppc/bios_data_area.html for a
+   description of the BIOS Data Area layout.  */
+struct grub_machine_bios_data_area
+{
+  grub_uint8_t unused1[0x17];
+  grub_uint8_t keyboard_flag_lower; /* 0x17 */
+  grub_uint8_t unused2[0xf0 - 0x18];
+};
+
+grub_err_t grub_machine_mmap_register (grub_uint64_t start, grub_uint64_t size,
+				       int type, int handle);
+grub_err_t grub_machine_mmap_unregister (int handle);
+
 #endif
 
 #endif /* ! GRUB_MEMORY_MACHINE_HEADER */
