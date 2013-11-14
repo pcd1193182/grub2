@@ -54,9 +54,24 @@ endif
 
 ifeq (yes,$(shell dpkg-vendor --derives-from Ubuntu && echo yes))
 DEFAULT_CMDLINE := quiet splash
-confflags += --enable-quiet-boot
+DEFAULT_TIMEOUT := 10
+DEFAULT_HIDDEN_TIMEOUT := 0
+DEFAULT_HIDDEN_TIMEOUT_BOOL := true
+confflags += \
+	--enable-ubuntu-recovery \
+	--enable-quiet-boot \
+	--enable-quick-boot \
+	--enable-gfxpayload-dynamic \
+	--enable-vt-handoff
+substvars := \
+	-Vlsb-base-depends="lsb-base (>= 3.0-6)" \
+	-Vgfxpayload-depends="grub-gfxpayload-lists [any-i386 any-amd64]"
 else
 DEFAULT_CMDLINE := quiet
+DEFAULT_TIMEOUT := 5
+DEFAULT_HIDDEN_TIMEOUT :=
+DEFAULT_HIDDEN_TIMEOUT_BOOL := false
+substvars :=
 endif
 
 SB_PACKAGE :=
@@ -185,6 +200,8 @@ platform_subst = \
 			-e "s/@PACKAGE@/$(2)/g" \
 			-e "s/@CPU_PLATFORM@/$$cpu_platform/g" \
 			-e "s/@DEFAULT_CMDLINE@/$(DEFAULT_CMDLINE)/g" \
+			-e "s/@DEFAULT_TIMEOUT@/$(DEFAULT_TIMEOUT)/g" \
+			-e "s/@DEFAULT_HIDDEN_TIMEOUT_BOOL@/$(DEFAULT_HIDDEN_TIMEOUT_BOOL)/g" \
 			>> debian/$(2).$(3); \
 	fi
 
@@ -303,6 +320,10 @@ install/grub-common:
 				>> debian/grub-common.$$i ; \
 		fi ; \
 	done
+ifeq (yes,$(shell dpkg-vendor --derives-from Ubuntu && echo yes))
+	install -D -m 0755 debian/grub-common.pm-sleep \
+		$(CURDIR)/debian/$(package)/etc/pm/sleep.d/10_grub-common
+endif
 
 override_dh_install:
 	dh_install -pgrub2 -pgrub-linuxbios -pgrub-efi -pgrub-rescue-pc -pgrub-firmware-qemu
@@ -318,8 +339,14 @@ override_dh_install:
 	done
 	dh_install -pgrub-emu --sourcedir=debian/tmp-grub-emu
 	dh_install -pgrub-emu-dbg --sourcedir=debian/tmp-grub-emu
-	sed -i -e "s/@DEFAULT_CMDLINE@/$(DEFAULT_CMDLINE)/g" \
+	sed -i \
+		-e "s/@DEFAULT_CMDLINE@/$(DEFAULT_CMDLINE)/g" \
+		-e "s/@DEFAULT_TIMEOUT@/$(DEFAULT_TIMEOUT)/g" \
 		debian/grub2-common/usr/share/grub/default/grub
+ifneq (,$(DEFAULT_HIDDEN_TIMEOUT))
+	perl -pi -e 's/^GRUB_TIMEOUT=.*/GRUB_HIDDEN_TIMEOUT=0\nGRUB_HIDDEN_TIMEOUT_QUIET=true\n$$&/' \
+		debian/grub2-common/usr/share/grub/default/grub
+endif
 ifeq (yes,$(shell dpkg-vendor --derives-from Ubuntu && echo yes))
 ifneq (,$(filter grub-pc,$(BUILD_PACKAGES)))
 	patch debian/grub-pc/usr/lib/grub-legacy/update-grub \
@@ -330,6 +357,14 @@ endif
 override_dh_installdocs:
 	dh_installdocs -pgrub-common -pgrub-rescue-pc -pgrub-firmware-qemu -A AUTHORS NEWS README THANKS TODO
 	dh_installdocs -Ngrub-common -Ngrub-rescue-pc -Ngrub-firmware-qemu --link-doc=grub-common
+
+ifeq (yes,$(shell dpkg-vendor --derives-from Ubuntu && echo yes))
+override_dh_installinit:
+	dh_installinit -- start 99 2 3 4 5 .
+else
+override_dh_installinit:
+	:
+endif
 
 override_dh_bugfiles:
 	dh_bugfiles -A
@@ -347,7 +382,8 @@ LEGACY_DOC_CONFLICTS := grub-doc (<< 0.97-32), grub-legacy-doc (<< 0.97-59)
 endif
 
 override_dh_gencontrol:
-	dh_gencontrol -- -Vlegacy-doc-conflicts="$(LEGACY_DOC_CONFLICTS)"
+	dh_gencontrol -- \
+		-Vlegacy-doc-conflicts="$(LEGACY_DOC_CONFLICTS)" $(substvars)
 
 TARNAME := grub2_$(deb_version)_$(DEB_HOST_ARCH).tar.gz
 
