@@ -294,6 +294,12 @@ grub_util_devmapper_part_to_disk (struct stat *st,
       grub_util_info ("%s child has no DM name", path);
       goto devmapper_out;
     }
+  if (strstr (child_name, "-") != 0)
+    {
+      grub_util_info ("%s child %s looks like a sub-layer\n",
+		      path, child_name);
+      goto devmapper_out;
+    }
   mapper_name = child_name;
   *is_part = 1;
   node = child;
