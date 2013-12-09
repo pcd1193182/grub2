@@ -25,26 +25,26 @@ Author: Colin Watson <cjwatson@ubuntu.com>
 Bug-Ubuntu: https://bugs.launchpad.net/bugs/386922
 Bug-Ubuntu: https://bugs.launchpad.net/bugs/861048
 Forwarded: (partial) http://lists.gnu.org/archive/html/grub-devel/2009-09/msg00056.html
-Last-Update: 2013-08-26
+Last-Update: 2013-12-08
 
 Index: b/config.h.in
 ===================================================================
 --- a/config.h.in
 +++ b/config.h.in
-@@ -41,6 +41,8 @@
- #define NEED_REGISTER_FRAME_INFO @NEED_REGISTER_FRAME_INFO@
+@@ -11,6 +11,8 @@
  /* Define to 1 to enable disk cache statistics.  */
  #define DISK_CACHE_STATS @DISK_CACHE_STATS@
+ #define BOOT_TIME_STATS @BOOT_TIME_STATS@
 +/* Define to 1 to make GRUB quieter at boot time.  */
 +#define QUIET_BOOT @QUIET_BOOT@
  
- #define GRUB_TARGET_CPU "@GRUB_TARGET_CPU@"
- #define GRUB_PLATFORM "@GRUB_PLATFORM@"
+ #if defined (GRUB_BUILD)
+ #undef ENABLE_NLS
 Index: b/configure.ac
 ===================================================================
 --- a/configure.ac
 +++ b/configure.ac
-@@ -1087,6 +1087,17 @@
+@@ -1512,6 +1512,17 @@
  fi
  AC_SUBST([UBUNTU_RECOVERY])
  
@@ -62,9 +62,9 @@ Index: b/configure.ac
  LIBS=""
  
  AC_SUBST([FONT_SOURCE])
-@@ -1243,5 +1254,10 @@
+@@ -1767,5 +1778,10 @@
  else
- echo With libzfs support: No "($libzfs_excuse)"
+ echo "With liblzma from $LIBLZMA (support for XZ-compressed mips images)"
  fi
 +if [ x"$enable_quiet_boot" = xyes ]; then
 +echo With quiet boot: Yes
@@ -81,17 +81,17 @@ Index: b/grub-core/boot/i386/pc/boot.S
  
  #include <grub/symbol.h>
  #include <grub/machine/boot.h>
-+#ifdef QUIET_BOOT
++#if defined(QUIET_BOOT) && !defined(HYBRID_BOOT)
 +#include <grub/machine/memory.h>
 +#endif
  
  /*
   *  defines for the code go here
-@@ -150,9 +153,17 @@
+@@ -249,9 +252,17 @@
  	/* save drive reference first thing! */
  	pushw	%dx
  
-+#ifdef QUIET_BOOT
++#if defined(QUIET_BOOT) && !defined(HYBRID_BOOT)
 +	/* is either shift key held down? */
 +	movw	$(GRUB_MEMORY_MACHINE_BIOS_DATA_AREA_ADDR + 0x17), %bx
 +	andb	$3, (%bx)
@@ -189,7 +189,7 @@ Index: b/grub-core/kern/main.c
 ===================================================================
 --- a/grub-core/kern/main.c
 +++ b/grub-core/kern/main.c
-@@ -207,13 +207,23 @@
+@@ -264,15 +264,25 @@
  void __attribute__ ((noreturn))
  grub_main (void)
  {
@@ -199,6 +199,8 @@ Index: b/grub-core/kern/main.c
 +
    /* First of all, initialize the machine.  */
    grub_machine_init ();
+ 
+   grub_boot_time ("After machine init.");
  
 +#ifdef QUIET_BOOT
 +  /* Disable the cursor until we need it.  */
@@ -211,11 +213,11 @@ Index: b/grub-core/kern/main.c
    grub_setcolorstate (GRUB_TERM_COLOR_STANDARD);
 +#endif
  
-   /* Load pre-loaded modules and free the space.  */
-   grub_register_exported_symbols ();
-@@ -232,5 +242,12 @@
- 
    grub_load_config ();
+ 
+@@ -308,5 +318,12 @@
+   grub_boot_time ("After execution of embedded config. Attempt to go to normal mode");
+ 
    grub_load_normal_mode ();
 +
 +#ifdef QUIET_BOOT
@@ -230,7 +232,7 @@ Index: b/grub-core/kern/rescue_reader.c
 ===================================================================
 --- a/grub-core/kern/rescue_reader.c
 +++ b/grub-core/kern/rescue_reader.c
-@@ -77,7 +77,9 @@
+@@ -78,7 +78,9 @@
  void __attribute__ ((noreturn))
  grub_rescue_run (void)
  {
@@ -244,7 +246,7 @@ Index: b/grub-core/normal/main.c
 ===================================================================
 --- a/grub-core/normal/main.c
 +++ b/grub-core/normal/main.c
-@@ -399,6 +399,15 @@
+@@ -428,6 +428,15 @@
  grub_normal_read_line_real (char **line, int cont, int nested)
  {
    const char *prompt;
@@ -260,7 +262,7 @@ Index: b/grub-core/normal/main.c
  
    if (cont)
      /* TRANSLATORS: it's command line prompt.  */
-@@ -446,7 +455,9 @@
+@@ -476,7 +485,9 @@
        return;
      }
  
@@ -274,7 +276,7 @@ Index: b/grub-core/normal/menu.c
 ===================================================================
 --- a/grub-core/normal/menu.c
 +++ b/grub-core/normal/menu.c
-@@ -669,12 +669,18 @@
+@@ -826,12 +826,18 @@
  
  /* Callback invoked immediately before a menu entry is executed.  */
  static void
@@ -294,7 +296,7 @@ Index: b/grub-core/normal/menu.c
  }
  
  /* Callback invoked when a default menu entry executed because of a timeout
-@@ -722,6 +728,9 @@
+@@ -879,6 +885,9 @@
        int boot_entry;
        grub_menu_entry_t e;
        int auto_boot;
@@ -304,7 +306,7 @@ Index: b/grub-core/normal/menu.c
  
        boot_entry = run_menu (menu, nested, &auto_boot);
        if (boot_entry < 0)
-@@ -731,7 +740,11 @@
+@@ -888,7 +897,11 @@
        if (! e)
  	continue; /* Menu is empty.  */
  
@@ -329,7 +331,7 @@ Index: b/util/grub.d/10_linux.in
  
  . "@datadir@/@PACKAGE@/grub-mkconfig_lib"
  
-@@ -152,10 +153,12 @@
+@@ -146,10 +147,12 @@
      fi
      printf '%s\n' "${prepare_boot_cache}" | sed "s/^/$submenu_indentation/"
    fi
@@ -344,7 +346,7 @@ Index: b/util/grub.d/10_linux.in
    if test -d /sys/firmware/efi && test -e "${linux}.efi.signed"; then
      sed "s/^/$submenu_indentation/" << EOF
  	linux	${rel_dirname}/${basename}.efi.signed root=${linux_root_device_thisversion} ro ${args}
-@@ -167,9 +170,13 @@
+@@ -161,9 +164,13 @@
    fi
    if test -n "${initrd}" ; then
      # TRANSLATORS: ramdisk isn't identifier. Should be translated.
