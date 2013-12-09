@@ -335,9 +335,41 @@ grub_efi_modules_addr (void)
 #pragma GCC diagnostic error "-Wcast-align"
 
 char *
-grub_efi_get_filename (grub_efi_device_path_t *dp)
+grub_efi_get_filename (grub_efi_device_path_t *dp0)
 {
-  char *name = 0;
+  char *name = 0, *p;
+  grub_size_t filesize = 0;
+  grub_efi_device_path_t *dp;
+
+  dp = dp0;
+
+  while (1)
+    {
+      grub_efi_uint8_t type = GRUB_EFI_DEVICE_PATH_TYPE (dp);
+      grub_efi_uint8_t subtype = GRUB_EFI_DEVICE_PATH_SUBTYPE (dp);
+
+      if (type == GRUB_EFI_END_DEVICE_PATH_TYPE)
+	break;
+      if (type == GRUB_EFI_MEDIA_DEVICE_PATH_TYPE
+	       && subtype == GRUB_EFI_FILE_PATH_DEVICE_PATH_SUBTYPE)
+	{
+	  grub_efi_uint16_t len;
+	  len = ((GRUB_EFI_DEVICE_PATH_LENGTH (dp) - 4)
+		 / sizeof (grub_efi_char16_t));
+	  filesize += GRUB_MAX_UTF8_PER_UTF16 * len + 1;
+	}
+
+      dp = GRUB_EFI_NEXT_DEVICE_PATH (dp);
+    }
+
+  if (!filesize)
+    return NULL;
+
+  dp = dp0;
+
+  p = name = grub_malloc (filesize);
+  if (!name)
+    return NULL;
 
   while (1)
     {
@@ -351,45 +383,25 @@ grub_efi_get_filename (grub_efi_device_path_t *dp)
 	{
 	  grub_efi_file_path_device_path_t *fp;
 	  grub_efi_uint16_t len;
-	  char *p;
-	  grub_size_t size;
 
-	  if (name)
-	    {
-	      size = grub_strlen (name);
-	      name[size] = '/';
-	      size++;
-	    }
-	  else
-	    size = 0;
+	  if (p != name)
+	    *p++ = '/';
 
 	  len = ((GRUB_EFI_DEVICE_PATH_LENGTH (dp) - 4)
 		 / sizeof (grub_efi_char16_t));
-	  p = grub_realloc (name, size + len * 4 + 1);
-	  if (! p)
-	    {
-	      grub_free (name);
-	      return 0;
-	    }
-
-	  name = p;
 	  fp = (grub_efi_file_path_device_path_t *) dp;
-	  *grub_utf16_to_utf8 ((grub_uint8_t *) name + size,
-			       fp->path_name, len) = '\0';
+	  p = (char *) grub_utf16_to_utf8 ((unsigned char *) p, fp->path_name, len);
 	}
 
       dp = GRUB_EFI_NEXT_DEVICE_PATH (dp);
     }
 
-  if (name)
-    {
-      /* EFI breaks paths with backslashes.  */
-      char *p;
+  *p = '\0';
 
-      for (p = name; *p; p++)
-	if (*p == '\\')
-	  *p = '/';
-    }
+  /* EFI breaks paths with backslashes.  */
+  for (p = name; *p; p++)
+    if (*p == '\\')
+      *p = '/';
 
   return name;
 }
@@ -757,12 +769,17 @@ grub_efi_print_device_path (grub_efi_device_path_t *dp)
 	    case GRUB_EFI_FILE_PATH_DEVICE_PATH_SUBTYPE:
 	      {
 		grub_efi_file_path_device_path_t *fp;
-		grub_uint8_t buf[(len - 4) * 2 + 1];
+		grub_uint8_t *buf;
 		fp = (grub_efi_file_path_device_path_t *) dp;
-		*grub_utf16_to_utf8 (buf, fp->path_name,
-				     (len - 4) / sizeof (grub_efi_char16_t))
-		  = '\0';
+		buf = grub_malloc ((len - 4) * 2 + 1);
+		if (buf)
+		  *grub_utf16_to_utf8 (buf, fp->path_name,
+				       (len - 4) / sizeof (grub_efi_char16_t))
+		    = '\0';
+		else
+		  grub_errno = GRUB_ERR_NONE;
 		grub_printf ("/File(%s)", buf);
+		grub_free (buf);
 	      }
 	      break;
 	    case GRUB_EFI_PROTOCOL_DEVICE_PATH_SUBTYPE:

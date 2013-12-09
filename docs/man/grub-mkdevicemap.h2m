@@ -1,4 +1,4 @@
 [NAME]
-grub-mkdevicemap \- generate a GRUB device map file automatically
+grub-mkdevicemap \- make a device map file automatically
 [SEE ALSO]
-.BR grub-install (8)
+.BR grub-probe (8)

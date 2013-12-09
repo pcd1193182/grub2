@@ -34,7 +34,7 @@ static const struct grub_arg_option options[] =
     {0, 0, 0, 0, 0, 0}
   };
 
-static grub_uint16_t *pos;
+static struct grub_term_coordinate *pos;
 
 static void
 do_print (int n)
@@ -53,7 +53,7 @@ grub_check_keyboard (void)
   grub_term_input_t term;
 
   if (grub_term_poll_usb)
-    grub_term_poll_usb ();
+    grub_term_poll_usb (0);
 
   FOR_ACTIVE_TERM_INPUTS(term)
   {
@@ -102,6 +102,8 @@ grub_cmd_sleep (grub_extcmd_context_t ctxt, int argc, char **args)
       /* Either `0' or broken input.  */
       return 0;
     }
+
+  grub_refresh ();
 
   pos = grub_term_save_pos ();
 

@@ -17,7 +17,6 @@ set -e
 # You should have received a copy of the GNU General Public License
 # along with GRUB.  If not, see <http://www.gnu.org/licenses/>.
 
-transform="@program_transform_name@"
 prefix="@prefix@"
 exec_prefix="@exec_prefix@"
 datarootdir="@datarootdir@"
@@ -39,9 +38,9 @@ grub_mkconfig_dir="${sysconfdir}"/grub.d
 
 self=`basename $0`
 
-grub_probe="${sbindir}/`echo grub-probe | sed "${transform}"`"
-grub_editenv="${bindir}/`echo grub-editenv | sed "${transform}"`"
-grub_script_check="${bindir}/`echo grub-script-check | sed "${transform}"`"
+grub_probe="${sbindir}/@grub_probe@"
+grub_editenv="${bindir}/@grub_editenv@"
+grub_script_check="${bindir}/@grub_script_check@"
 
 export TEXTDOMAIN=@PACKAGE@
 export TEXTDOMAINDIR="@localedir@"
@@ -66,7 +65,7 @@ argument () {
   shift
 
   if test $# -eq 0; then
-      gettext_printf "%s: option requires an argument -- \`%s'\n" "$0" "$opt" 1>&2
+      gettext_printf "%s: option requires an argument -- \`%s'\n" "$self" "$opt" 1>&2
       exit 1
   fi
   echo $1
@@ -147,6 +146,10 @@ GRUB_DEVICE_BOOT_UUID="`${grub_probe} --device ${GRUB_DEVICE_BOOT} --target=fs_u
 # choosing Hurd filesystem module.
 GRUB_FS="`${grub_probe} --device ${GRUB_DEVICE} --target=fs 2> /dev/null || echo unknown`"
 
+if [ x"$GRUB_FS" = xunknown ]; then
+    GRUB_FS="$(stat -f --printf=%T / || echo unknown)"
+fi
+
 if test -f ${sysconfdir}/default/grub ; then
   . ${sysconfdir}/default/grub
 fi
@@ -171,7 +174,7 @@ fi
 for x in ${GRUB_TERMINAL_OUTPUT}; do
     case "x${x}" in
 	xgfxterm) ;;
-	xconsole | xserial | xofconsole)
+	xconsole | xserial | xofconsole | xvga_text)
             # make sure all our children behave in conformance with ascii..
 	    export LANG=C;;
 	*) echo "Invalid output terminal \"${GRUB_TERMINAL_OUTPUT}\"" >&2 ; exit 1 ;;
@@ -181,6 +184,10 @@ done
 GRUB_ACTUAL_DEFAULT="$GRUB_DEFAULT"
 
 if [ "x${GRUB_ACTUAL_DEFAULT}" = "xsaved" ] ; then GRUB_ACTUAL_DEFAULT="`"${grub_editenv}" - list | sed -n '/^saved_entry=/ s,^saved_entry=,,p'`" ; fi
+
+if [ "x${GRUB_RECOVERY_TITLE}" = "x" ]; then
+  GRUB_RECOVERY_TITLE="recovery mode"
+fi
 
 
 # These are defined in this script, export them here so that user can
@@ -199,9 +206,11 @@ export GRUB_DEFAULT \
   GRUB_HIDDEN_TIMEOUT \
   GRUB_HIDDEN_TIMEOUT_QUIET \
   GRUB_TIMEOUT \
+  GRUB_TIMEOUT_STYLE \
   GRUB_DEFAULT_BUTTON \
   GRUB_HIDDEN_TIMEOUT_BUTTON \
   GRUB_TIMEOUT_BUTTON \
+  GRUB_TIMEOUT_STYLE_BUTTON \
   GRUB_BUTTON_CMOS_ADDRESS \
   GRUB_BUTTON_CMOS_CLEAN \
   GRUB_DISTRIBUTOR \
@@ -229,7 +238,10 @@ export GRUB_DEFAULT \
   GRUB_SAVEDEFAULT \
   GRUB_ENABLE_CRYPTODISK \
   GRUB_BADRAM \
-  GRUB_RECORDFAIL_TIMEOUT
+  GRUB_OS_PROBER_SKIP_LIST \
+  GRUB_DISABLE_SUBMENU \
+  GRUB_RECORDFAIL_TIMEOUT \
+  GRUB_RECOVERY_TITLE
 
 if test "x${grub_cfg}" != "x"; then
   rm -f "${grub_cfg}.new"
@@ -237,7 +249,7 @@ if test "x${grub_cfg}" != "x"; then
   exec > "${grub_cfg}.new"
   umask $oldumask
 fi
-gettext "Generating grub.cfg ..." >&2
+gettext "Generating grub configuration file ..." >&2
 echo >&2
 
 cat << EOF
