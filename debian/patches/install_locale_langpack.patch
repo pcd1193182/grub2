@@ -1,19 +1,108 @@
-Description: Prefer translations from language packs
+Description: Prefer translations from Ubuntu language packs if available
 Author: Colin Watson <cjwatson@ubuntu.com>
 Bug-Ubuntu: https://bugs.launchpad.net/bugs/537998
 Forwarded: not-needed
-Last-Update: 2012-09-26
+Last-Update: 2013-12-08
 
-Index: b/util/grub-install.in
+Index: b/util/grub-install-common.c
 ===================================================================
---- a/util/grub-install.in
-+++ b/util/grub-install.in
-@@ -543,7 +543,7 @@
+--- a/util/grub-install-common.c
++++ b/util/grub-install-common.c
+@@ -590,17 +590,24 @@
+ }
  
- # Copy gettext files
- mkdir -p "${grubdir}"/locale/
--for dir in "${localedir}"/*; do
-+for dir in "${localedir}"/* "${localedir}-langpack"/*; do
-     if test -f "$dir/LC_MESSAGES/grub.mo"; then
-         cp -f "$dir/LC_MESSAGES/grub.mo" "${grubdir}/locale/${dir##*/}.mo"
-     fi
+ static void
+-copy_locales (const char *dstd)
++copy_locales (const char *dstd, int langpack)
+ {
+   grub_util_fd_dir_t d;
+   grub_util_fd_dirent_t de;
+   const char *locale_dir = get_localedir ();
++  char *dir;
+ 
+-  d = grub_util_fd_opendir (locale_dir);
++  if (langpack)
++    dir = xasprintf ("%s-langpack", locale_dir);
++  else
++    dir = xstrdup (locale_dir);
++
++  d = grub_util_fd_opendir (dir);
+   if (!d)
+     {
+       grub_util_warn (_("cannot open directory `%s': %s"),
+-		      locale_dir, grub_util_fd_strerror ());
++		      dir, grub_util_fd_strerror ());
++      free (dir);
+       return;
+     }
+ 
+@@ -617,14 +624,14 @@
+       if (ext && (grub_strcmp (ext, ".mo") == 0
+ 		  || grub_strcmp (ext, ".gmo") == 0))
+ 	{
+-	  srcf = grub_util_path_concat (2, locale_dir, de->d_name);
++	  srcf = grub_util_path_concat (2, dir, de->d_name);
+ 	  dstf = grub_util_path_concat (2, dstd, de->d_name);
+ 	  ext = grub_strrchr (dstf, '.');
+ 	  grub_strcpy (ext, ".mo");
+ 	}
+       else
+ 	{
+-	  srcf = grub_util_path_concat_ext (4, locale_dir, de->d_name,
++	  srcf = grub_util_path_concat_ext (4, dir, de->d_name,
+ 					    "LC_MESSAGES", PACKAGE, ".mo");
+ 	  dstf = grub_util_path_concat_ext (2, dstd, de->d_name, ".mo");
+ 	}
+@@ -633,6 +640,7 @@
+       free (dstf);
+     }
+   grub_util_fd_closedir (d);
++  free (dir);
+ }
+ 
+ static struct
+@@ -756,12 +764,14 @@
+     {
+       char *srcd = grub_util_path_concat (2, src, "po");
+       copy_by_ext (srcd, dst_locale, ".mo", 0);
+-      copy_locales (dst_locale);
++      copy_locales (dst_locale, 0);
++      copy_locales (dst_locale, 1);
+       free (srcd);
+     }
+   else
+     {
+       const char *locale_dir = get_localedir ();
++      char *locale_langpack_dir = xasprintf ("%s-langpack", locale_dir);
+ 
+       for (i = 0; i < install_locales.n_entries; i++)
+ 	{
+@@ -780,6 +790,19 @@
+ 	    }
+ 	  free (srcf);
+ 	  srcf = grub_util_path_concat_ext (4,
++						 locale_langpack_dir,
++						 install_locales.entries[i],
++						 "LC_MESSAGES",
++						 PACKAGE,
++						 ".mo");
++	  if (grub_install_compress_file (srcf, dstf, 0))
++	    {
++	      free (srcf);
++	      free (dstf);
++	      continue;
++	    }
++	  free (srcf);
++	  srcf = grub_util_path_concat_ext (4,
+ 						 locale_dir,
+ 						 install_locales.entries[i],
+ 						 "LC_MESSAGES",
+@@ -794,6 +817,8 @@
+ 	  grub_util_error (_("cannot find locale `%s'"),
+ 			   install_locales.entries[i]);
+ 	}
++
++      free (locale_langpack_dir);
+     }
+ 
+   if (install_themes.is_default)
