@@ -6,13 +6,13 @@ Description: "single" -> "recovery" when friendly-recovery is installed
 Author: Colin Watson <cjwatson@ubuntu.com>
 Author: Stéphane Graber <stgraber@ubuntu.com>
 Forwarded: no
-Last-Update: 2013-12-08
+Last-Update: 2013-12-25
 
 Index: b/configure.ac
 ===================================================================
 --- a/configure.ac
 +++ b/configure.ac
-@@ -1501,6 +1501,17 @@
+@@ -1572,6 +1572,17 @@
  AC_SUBST([LIBZFS])
  AC_SUBST([LIBNVPAIR])
  

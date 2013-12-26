@@ -4,13 +4,13 @@ Description: Add configure option to use vt.handoff=7
 Author: Colin Watson <cjwatson@ubuntu.com>
 Author: Andy Whitcroft <apw@canonical.com>
 Forwarded: not-needed
-Last-Update: 2013-12-08
+Last-Update: 2013-12-25
 
 Index: b/configure.ac
 ===================================================================
 --- a/configure.ac
 +++ b/configure.ac
-@@ -1545,6 +1545,17 @@
+@@ -1616,6 +1616,17 @@
  fi
  AC_SUBST([GFXPAYLOAD_DYNAMIC])
  

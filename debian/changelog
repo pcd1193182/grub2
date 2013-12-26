@@ -1,3 +1,34 @@
+grub2 (2.02~beta2-1) experimental; urgency=low
+
+  * New upstream beta release.
+  * Drop qemu-utils build-dependency; the test suite no longer uses
+    qemu-img.
+  * Build grub-common, grub2-common, grub-themes-starfield, and grub-mount
+    on ARM and ARM64 architectures.
+  * Install grub-mkrescue in grub-common on all architectures.
+  * Make grub-efi-ia32, grub-efi-amd64, and grub-efi-ia64 conflict with
+    elilo.
+  * Adjust the postinst of grub-efi-ia64, grub-efi-arm, and grub-efi-arm64
+    to keep the EFI System Partition up to date with grub-install after it
+    has been run once, like grub-efi-ia32 and grub-efi-amd64 already do.
+  * Regularise indentation of "recordfail" in /etc/grub.d/10_linux.
+  * Add alpha.gnu.org to debian/watch, for pre-releases.
+  * Add OpenPGP signature checking configuration to watch file.
+  * Drop mkconfig_skip_dmcrypt.patch; it breaks GRUB_ENABLE_CRYPTODISK=y,
+    which is a better fix for the original problem (closes: #732245).
+  * Fix mismerge of mkconfig_loopback.patch.
+  * Build for ppc64el, using a powerpc cross-compiler at least for now.
+  * Don't run gettext_strings_test; this test is mainly useful as an
+    upstream maintenance check.
+  * Silence warning if /usr/share/locale-langpack does not exist (closes:
+    #732595).
+  * Remove debian/grub-common.preinst, superseded by .maintscript files.
+  * Install grub-file in grub-common.
+  * Fix crash due to pointer confusion in grub-mkdevicemap, introduced while
+    converting away from nested functions in 2.00+20131208-1.
+
+ -- Colin Watson <cjwatson@debian.org>  Thu, 26 Dec 2013 00:52:47 +0000
+
 grub2 (2.00+20131208-1) experimental; urgency=low
 
   * New upstream snapshot.

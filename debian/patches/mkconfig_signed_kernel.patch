@@ -1,7 +1,7 @@
 Description: Generate configuration for signed UEFI kernels if available
 Author: Colin Watson <cjwatson@ubuntu.com>
 Forwarded: no
-Last-Update: 2013-12-08
+Last-Update: 2013-12-25
 
 Index: b/util/grub.d/10_linux.in
 ===================================================================

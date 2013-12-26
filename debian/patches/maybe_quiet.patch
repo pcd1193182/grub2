@@ -25,7 +25,7 @@ Author: Colin Watson <cjwatson@ubuntu.com>
 Bug-Ubuntu: https://bugs.launchpad.net/bugs/386922
 Bug-Ubuntu: https://bugs.launchpad.net/bugs/861048
 Forwarded: (partial) http://lists.gnu.org/archive/html/grub-devel/2009-09/msg00056.html
-Last-Update: 2013-12-08
+Last-Update: 2013-12-25
 
 Index: b/config.h.in
 ===================================================================
@@ -44,7 +44,7 @@ Index: b/configure.ac
 ===================================================================
 --- a/configure.ac
 +++ b/configure.ac
-@@ -1512,6 +1512,17 @@
+@@ -1583,6 +1583,17 @@
  fi
  AC_SUBST([UBUNTU_RECOVERY])
  
@@ -62,7 +62,7 @@ Index: b/configure.ac
  LIBS=""
  
  AC_SUBST([FONT_SOURCE])
-@@ -1767,5 +1778,10 @@
+@@ -1837,5 +1848,10 @@
  else
  echo "With liblzma from $LIBLZMA (support for XZ-compressed mips images)"
  fi
@@ -246,7 +246,7 @@ Index: b/grub-core/normal/main.c
 ===================================================================
 --- a/grub-core/normal/main.c
 +++ b/grub-core/normal/main.c
-@@ -428,6 +428,15 @@
+@@ -381,6 +381,15 @@
  grub_normal_read_line_real (char **line, int cont, int nested)
  {
    const char *prompt;
@@ -262,7 +262,7 @@ Index: b/grub-core/normal/main.c
  
    if (cont)
      /* TRANSLATORS: it's command line prompt.  */
-@@ -476,7 +485,9 @@
+@@ -429,7 +438,9 @@
        return;
      }
  

@@ -79,6 +79,7 @@ grub_util_get_image_size (const char *path)
 {
   FILE *f;
   size_t ret;
+  off_t sz;
 
   f = grub_util_fopen (path, "rb");
 
@@ -87,7 +88,10 @@ grub_util_get_image_size (const char *path)
 
   fseeko (f, 0, SEEK_END);
   
-  ret = ftello (f);
+  sz = ftello (f);
+  if (sz != (size_t) sz)
+    grub_util_error (_("file `%s' is too big"), path);
+  ret = (size_t) sz;
 
   fclose (f);
 
@@ -146,7 +150,8 @@ void
 grub_util_write_image_at (const void *img, size_t size, off_t offset, FILE *out,
 			  const char *name)
 {
-  grub_util_info ("writing 0x%llx bytes at offset 0x%llx",
+  grub_util_info ("writing 0x%" GRUB_HOST_PRIxLONG_LONG " bytes at offset 0x%"
+		  GRUB_HOST_PRIxLONG_LONG,
 		  (unsigned long long) size, (unsigned long long) offset);
   if (fseeko (out, offset, SEEK_SET) == -1)
     grub_util_error (_("cannot seek `%s': %s"),
@@ -160,7 +165,7 @@ void
 grub_util_write_image (const char *img, size_t size, FILE *out,
 		       const char *name)
 {
-  grub_util_info ("writing 0x%llx bytes", (unsigned long long) size);
+  grub_util_info ("writing 0x%" GRUB_HOST_PRIxLONG_LONG " bytes", (unsigned long long) size);
   if (fwrite (img, 1, size, out) != size)
     {
       if (!name)
@@ -261,6 +266,6 @@ grub_register_exported_symbols (void)
 int
 grub_qsort_strcmp (const void *p1, const void *p2)
 {
-  return strcmp(*(char **)p1, *(char **)p2);
+  return strcmp(*(char *const *)p1, *(char *const *)p2);
 }
 

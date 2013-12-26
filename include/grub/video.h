@@ -273,7 +273,7 @@ struct grub_video_edid_info
 
   grub_uint8_t extension_flag;
   grub_uint8_t checksum;
-} __attribute__ ((packed));
+} GRUB_PACKED;
 
 typedef enum grub_video_driver_id
   {
@@ -290,7 +290,9 @@ typedef enum grub_video_driver_id
     GRUB_VIDEO_DRIVER_RADEON_FULOONG2E,
     GRUB_VIDEO_DRIVER_COREBOOT,
     GRUB_VIDEO_DRIVER_IEEE1275,
-    GRUB_VIDEO_ADAPTER_CAPTURE
+    GRUB_VIDEO_ADAPTER_CAPTURE,
+    GRUB_VIDEO_DRIVER_XEN,
+    GRUB_VIDEO_DRIVER_RADEON_YEELOONG3A
   } grub_video_driver_id_t;
 
 typedef enum grub_video_adapter_prio
@@ -550,7 +552,7 @@ grub_video_check_mode_flag (grub_video_mode_type_t flags,
 grub_video_driver_id_t EXPORT_FUNC (grub_video_get_driver_id) (void);
 
 static __inline grub_video_rgba_color_t
-grub_video_rgba_color_rgb (int r, int g, int b)
+grub_video_rgba_color_rgb (grub_uint8_t r, grub_uint8_t g, grub_uint8_t b)
 {
   grub_video_rgba_color_t c;
   c.red = r;
@@ -577,6 +579,8 @@ extern void grub_video_sis315pro_init (void);
 extern void grub_video_radeon_fuloong2e_init (void);
 extern void grub_video_sis315pro_fini (void);
 extern void grub_video_radeon_fuloong2e_fini (void);
+extern void grub_video_radeon_yeeloong3a_init (void);
+extern void grub_video_radeon_yeeloong3a_fini (void);
 #endif
 
 void

@@ -40,64 +40,6 @@ GRUB_MOD_LICENSE ("GPLv3+");
 static int nested_level = 0;
 int grub_normal_exit_level = 0;
 
-/* Read a line from the file FILE.  */
-char *
-grub_file_getline (grub_file_t file)
-{
-  char c;
-  grub_size_t pos = 0;
-  char *cmdline;
-  int have_newline = 0;
-  grub_size_t max_len = 64;
-
-  /* Initially locate some space.  */
-  cmdline = grub_malloc (max_len);
-  if (! cmdline)
-    return 0;
-
-  while (1)
-    {
-      if (grub_file_read (file, &c, 1) != 1)
-	break;
-
-      /* Skip all carriage returns.  */
-      if (c == '\r')
-	continue;
-
-
-      if (pos + 1 >= max_len)
-	{
-	  char *old_cmdline = cmdline;
-	  max_len = max_len * 2;
-	  cmdline = grub_realloc (cmdline, max_len);
-	  if (! cmdline)
-	    {
-	      grub_free (old_cmdline);
-	      return 0;
-	    }
-	}
-
-      if (c == '\n')
-	{
-	  have_newline = 1;
-	  break;
-	}
-
-      cmdline[pos++] = c;
-    }
-
-  cmdline[pos] = '\0';
-
-  /* If the buffer is empty, don't return anything at all.  */
-  if (pos == 0 && !have_newline)
-    {
-      grub_free (cmdline);
-      cmdline = 0;
-    }
-
-  return cmdline;
-}
-
 void
 grub_normal_free_menu (grub_menu_t menu)
 {
@@ -190,14 +132,26 @@ read_config_file (const char *config)
   ctmp = grub_env_get ("config_directory");
   if (ctmp)
     old_dir = grub_strdup (ctmp);
-  grub_env_set ("config_file", config);
-  config_dir = grub_strdup (config);
+  if (*config == '(')
+    {
+      grub_env_set ("config_file", config);
+      config_dir = grub_strdup (config);
+    }
+  else
+    {
+      /* $root is guranteed to be defined, otherwise open above would fail */
+      config_dir = grub_xasprintf ("(%s)%s", grub_env_get ("root"), config);
+      if (config_dir)
+	grub_env_set ("config_file", config_dir);
+    }
   if (config_dir)
-    ptr = grub_strrchr (config_dir, '/');
-  if (ptr)
-    *ptr = 0;
-  grub_env_set ("config_directory", config_dir);
-  grub_free (config_dir);
+    {
+      ptr = grub_strrchr (config_dir, '/');
+      if (ptr)
+	*ptr = 0;
+      grub_env_set ("config_directory", config_dir);
+      grub_free (config_dir);
+    }
 
   grub_env_export ("config_file");
   grub_env_export ("config_directory");
@@ -240,14 +194,13 @@ grub_normal_init_page (struct grub_term_output *term,
 {
   grub_ssize_t msg_len;
   int posx;
-  const char *msg = _("GNU GRUB  version %s");
   char *msg_formatted;
   grub_uint32_t *unicode_msg;
   grub_uint32_t *last_position;
  
   grub_term_cls (term);
 
-  msg_formatted = grub_xasprintf (msg, PACKAGE_VERSION);
+  msg_formatted = grub_xasprintf (_("GNU GRUB  version %s"), PACKAGE_VERSION);
   if (!msg_formatted)
     return;
  
@@ -396,13 +349,13 @@ static grub_err_t
 grub_normal_reader_init (int nested)
 {
   struct grub_term_output *term;
-  const char *msg = _("Minimal BASH-like line editing is supported. For "
-		      "the first word, TAB lists possible command completions. Anywhere "
-		      "else TAB lists possible device or file completions. %s");
   const char *msg_esc = _("ESC at any time exits.");
   char *msg_formatted;
 
-  msg_formatted = grub_xasprintf (msg, nested ? msg_esc : "");
+  msg_formatted = grub_xasprintf (_("Minimal BASH-like line editing is supported. For "
+				    "the first word, TAB lists possible command completions. Anywhere "
+				    "else TAB lists possible device or file completions. %s"),
+				  nested ? msg_esc : "");
   if (!msg_formatted)
     return grub_errno;
 
