@@ -20,6 +20,7 @@
 #include <config.h>
 
 #include <grub/util/misc.h>
+#include <grub/util/install.h>
 #include <grub/i18n.h>
 #include <grub/term.h>
 #include <grub/font.h>
@@ -32,7 +33,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <argp.h>
 #include <unistd.h>
 #include <errno.h>
 
@@ -41,7 +41,7 @@ struct header
   grub_uint8_t magic;
   grub_uint16_t width;
   grub_uint16_t height;
-} __attribute__ ((packed));
+} GRUB_PACKED;
 
 static struct grub_video_palette_data ieee1275_palette[256];
 
@@ -166,10 +166,6 @@ grub_util_render_label (const char *label_font,
 
   fontfull = xasprintf ("(host)/%s", t);
   free (t);
-
-  grub_init_all ();
-  grub_hostfs_init ();
-  grub_host_init ();
 
   grub_font_loader_init ();
   font = grub_font_load (fontfull);

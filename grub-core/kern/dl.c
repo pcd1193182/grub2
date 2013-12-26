@@ -227,25 +227,25 @@ static grub_err_t
 grub_dl_load_segments (grub_dl_t mod, const Elf_Ehdr *e)
 {
   unsigned i;
-  Elf_Shdr *s;
+  const Elf_Shdr *s;
   grub_size_t tsize = 0, talign = 1;
-#if !defined (__i386__) && !defined (__x86_64__) && !defined (__sparc__)
+#if !defined (__i386__) && !defined (__x86_64__)
   grub_size_t tramp;
   grub_size_t got;
   grub_err_t err;
 #endif
   char *ptr;
 
-  for (i = 0, s = (Elf_Shdr *)((char *) e + e->e_shoff);
+  for (i = 0, s = (const Elf_Shdr *)((const char *) e + e->e_shoff);
        i < e->e_shnum;
-       i++, s = (Elf_Shdr *)((char *) s + e->e_shentsize))
+       i++, s = (const Elf_Shdr *)((const char *) s + e->e_shentsize))
     {
       tsize = ALIGN_UP (tsize, s->sh_addralign) + s->sh_size;
       if (talign < s->sh_addralign)
 	talign = s->sh_addralign;
     }
 
-#if !defined (__i386__) && !defined (__x86_64__) && !defined (__sparc__)
+#if !defined (__i386__) && !defined (__x86_64__)
   err = grub_arch_dl_get_tramp_got_size (e, &tramp, &got);
   if (err)
     return err;
@@ -308,7 +308,7 @@ grub_dl_load_segments (grub_dl_t mod, const Elf_Ehdr *e)
 	  mod->segment = seg;
 	}
     }
-#if !defined (__i386__) && !defined (__x86_64__) && !defined (__sparc__)
+#if !defined (__i386__) && !defined (__x86_64__)
   ptr = (char *) ALIGN_UP ((grub_addr_t) ptr, GRUB_ARCH_DL_TRAMP_ALIGN);
   mod->tramp = ptr;
   mod->trampptr = ptr;
@@ -661,6 +661,8 @@ grub_dl_load_core (void *addr, grub_size_t size)
 {
   grub_dl_t mod;
 
+  grub_boot_time ("Parsing module");
+
   mod = grub_dl_load_core_noinit (addr, size);
 
   if (!mod)
@@ -690,6 +692,8 @@ grub_dl_load_file (const char *filename)
       return 0;
     }
 #endif
+
+  grub_boot_time ("Loading module %s", filename);
 
   file = grub_file_open (filename);
   if (! file)
