@@ -26,8 +26,11 @@ CFLAGS_LIBRARY += $(CFLAGS_PLATFORM) -fno-builtin
 CPPFLAGS_LIBRARY += $(CPPFLAGS_PLATFORM)
 CCASFLAGS_LIBRARY += $(CCASFLAGS_PLATFORM)
 
+build-grub-pep2elf: $(top_srcdir)/util/grub-pe2elf.c $(top_srcdir)/grub-core/kern/emu/misc.c $(top_srcdir)/util/misc.c
+	$(BUILD_CC) -o $@ -I$(top_srcdir)/include $(BUILD_CFLAGS) $(BUILD_CPPFLAGS) -DGRUB_BUILD=1 -DGRUB_TARGET_WORDSIZE=64 -DGRUB_UTIL=1 -DGRUB_BUILD_PROGRAM_NAME=\"build-grub-pep2elf\" $^
+
 build-grub-pe2elf: $(top_srcdir)/util/grub-pe2elf.c $(top_srcdir)/grub-core/kern/emu/misc.c $(top_srcdir)/util/misc.c
-	$(BUILD_CC) -o $@ -I$(top_srcdir)/include $(BUILD_CFLAGS) $(BUILD_CPPFLAGS) -DGRUB_BUILD=1 -DGRUB_UTIL=1 -DGRUB_BUILD_PROGRAM_NAME=\"build-grub-pe2elf\" $^
+	$(BUILD_CC) -o $@ -I$(top_srcdir)/include $(BUILD_CFLAGS) $(BUILD_CPPFLAGS) -DGRUB_BUILD=1 -DGRUB_TARGET_WORDSIZE=32 -DGRUB_UTIL=1 -DGRUB_BUILD_PROGRAM_NAME=\"build-grub-pe2elf\" $^
 
 # gentrigtables
 gentrigtables: gentrigtables.c
@@ -100,7 +103,6 @@ endif
 if COND_i386_coreboot
 KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/i386/tsc.h
 KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/i386/coreboot/lbio.h
-KERNEL_HEADER_FILES += $(top_builddir)/include/grub/i386/pc/int.h
 KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/video.h
 KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/video_fb.h
 KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/gfxterm.h
@@ -110,7 +112,6 @@ endif
 
 if COND_i386_multiboot
 KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/i386/tsc.h
-KERNEL_HEADER_FILES += $(top_builddir)/include/grub/i386/pc/int.h
 endif
 
 if COND_i386_qemu
@@ -220,12 +221,14 @@ KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/uboot/uboot.h
 KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/uboot/disk.h
 KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/extcmd.h
 KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/lib/arg.h
+KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/arm/system.h
 endif
 
 if COND_arm_efi
 KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/arm/efi/loader.h
 KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/efi/efi.h
 KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/efi/disk.h
+KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/arm/system.h
 endif
 
 if COND_arm64_efi

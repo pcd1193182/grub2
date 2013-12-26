@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: grub 2.00\n"
+"Project-Id-Version: grub 2.02~beta1\n"
 "Report-Msgid-Bugs-To: bug-grub@gnu.org\n"
-"POT-Creation-Date: 2013-12-08 19:22+0000\n"
-"PO-Revision-Date: 2013-12-08 19:22+0000\n"
+"POT-Creation-Date: 2013-12-24 21:18+0100\n"
+"PO-Revision-Date: 2013-12-21 01:46+0100\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: en@greek\n"
@@ -90,10 +90,11 @@ msgstr ""
 #: grub-core/commands/keylayouts.c:243 grub-core/commands/keylayouts.c:261
 #: grub-core/commands/verify.c:878 grub-core/efiemu/loadcore.c:347
 #: grub-core/kern/elf.c:81 grub-core/kern/elfXX.c:29
-#: grub-core/kern/elfXX.c:137 grub-core/loader/arm/linux.c:191
-#: grub-core/loader/arm/linux.c:302 grub-core/loader/efi/chainloader.c:269
-#: grub-core/loader/efi/chainloader.c:290
-#: grub-core/loader/efi/chainloader.c:322 grub-core/loader/i386/bsd.c:1261
+#: grub-core/kern/elfXX.c:137 grub-core/loader/arm/linux.c:316
+#: grub-core/loader/arm64/linux.c:218 grub-core/loader/arm64/linux.c:423
+#: grub-core/loader/efi/chainloader.c:266
+#: grub-core/loader/efi/chainloader.c:287
+#: grub-core/loader/efi/chainloader.c:319 grub-core/loader/i386/bsd.c:1261
 #: grub-core/loader/i386/bsd.c:2087 grub-core/loader/i386/bsdXX.c:20
 #: grub-core/loader/i386/bsdXX.c:36 grub-core/loader/i386/bsdXX.c:63
 #: grub-core/loader/i386/bsdXX.c:345 grub-core/loader/i386/bsdXX.c:359
@@ -102,19 +103,19 @@ msgstr ""
 #: grub-core/loader/i386/coreboot/chainloader.c:112
 #: grub-core/loader/i386/coreboot/chainloader.c:148
 #: grub-core/loader/i386/coreboot/chainloader.c:170
-#: grub-core/loader/i386/linux.c:704 grub-core/loader/i386/linux.c:811
-#: grub-core/loader/i386/linux.c:1019
+#: grub-core/loader/i386/linux.c:706 grub-core/loader/i386/linux.c:813
+#: grub-core/loader/i386/linux.c:1021
 #: grub-core/loader/i386/multiboot_mbi.c:141
 #: grub-core/loader/i386/pc/chainloader.c:186
 #: grub-core/loader/i386/pc/linux.c:149 grub-core/loader/i386/pc/linux.c:317
 #: grub-core/loader/i386/pc/linux.c:357 grub-core/loader/i386/pc/plan9.c:447
 #: grub-core/loader/i386/pc/plan9.c:530 grub-core/loader/i386/pc/plan9.c:546
 #: grub-core/loader/i386/xen.c:670 grub-core/loader/i386/xen_fileXX.c:38
-#: grub-core/loader/i386/xen_fileXX.c:175
-#: grub-core/loader/i386/xen_fileXX.c:317
+#: grub-core/loader/i386/xen_fileXX.c:177
+#: grub-core/loader/i386/xen_fileXX.c:319
 #: grub-core/loader/ia64/efi/linux.c:464 grub-core/loader/ia64/efi/linux.c:512
-#: grub-core/loader/linux.c:280 grub-core/loader/macho.c:82
-#: grub-core/loader/macho.c:107 grub-core/loader/machoXX.c:33
+#: grub-core/loader/linux.c:280 grub-core/loader/macho.c:84
+#: grub-core/loader/macho.c:109 grub-core/loader/machoXX.c:33
 #: grub-core/loader/machoXX.c:46 grub-core/loader/machoXX.c:76
 #: grub-core/loader/machoXX.c:116 grub-core/loader/machoXX.c:131
 #: grub-core/loader/machoXX.c:147 grub-core/loader/machoXX.c:196
@@ -122,12 +123,12 @@ msgstr ""
 #: grub-core/loader/multiboot_elfxx.c:118
 #: grub-core/loader/multiboot_elfxx.c:178
 #: grub-core/loader/multiboot_elfxx.c:225
-#: grub-core/loader/multiboot_mbi2.c:104 grub-core/loader/xnu.c:731
+#: grub-core/loader/multiboot_mbi2.c:105 grub-core/loader/xnu.c:731
 #: grub-core/loader/xnu.c:785 grub-core/loader/xnu.c:806
 #: grub-core/loader/xnu.c:861 grub-core/loader/xnu.c:904
 #: grub-core/loader/xnu.c:942 grub-core/loader/xnu_resume.c:68
 #: grub-core/loader/xnu_resume.c:153 grub-core/loader/xnu_resume.c:165
-#: util/grub-mkimagexx.c:1428
+#: util/grub-mkimagexx.c:1469
 #, c-format
 msgid "premature end of file %s"
 msgstr "πρεματυρε ενδ οφ φιλε %s"
@@ -154,7 +155,9 @@ msgstr "ερρορ: %s.\n"
 #: grub-core/kern/emu/mm.c:34 grub-core/kern/emu/mm.c:62
 #: grub-core/kern/mm.c:365 grub-core/lib/relocator.c:1270
 #: grub-core/lib/relocator.c:1427 grub-core/lib/relocator.c:1526
-#: grub-core/loader/efi/chainloader.c:282
+#: grub-core/loader/arm/linux.c:421 grub-core/loader/arm/linux.c:480
+#: grub-core/loader/arm64/linux.c:358 grub-core/loader/arm64/linux.c:414
+#: grub-core/loader/arm64/linux.c:433 grub-core/loader/efi/chainloader.c:279
 #: grub-core/net/drivers/ieee1275/ofnet.c:290 grub-core/osdep/unix/dl.c:48
 #: grub-core/osdep/windows/dl.c:46 grub-core/script/lexer.c:156
 #: grub-core/script/lexer.c:181
@@ -165,10 +168,10 @@ msgstr "ουτ οφ μεμορϋ"
 #: grub-core/disk/cryptodisk.c:622 grub-core/kern/emu/hostdisk.c:307
 #: grub-core/kern/emu/hostfs.c:150 grub-core/osdep/linux/ofpath.c:148
 #: grub-core/osdep/linux/ofpath.c:362 grub-core/osdep/linux/ofpath.c:375
-#: util/glue-efi.c:80 util/glue-efi.c:94 util/grub-editenv.c:146
-#: util/grub-fstest.c:563 util/grub-mkrescue.c:517 util/grub-mkrescue.c:737
-#: util/grub-mount.c:507 util/grub-render-label.c:163 util/misc.c:115
-#: util/misc.c:139 util/setup.c:709 util/setup.c:728
+#: util/glue-efi.c:80 util/glue-efi.c:94 util/grub-editenv.c:155
+#: util/grub-fstest.c:576 util/grub-mkrescue.c:538 util/grub-mkrescue.c:764
+#: util/grub-mount.c:507 util/grub-render-label.c:176 util/misc.c:119
+#: util/misc.c:143 util/setup.c:722 util/setup.c:741
 #, c-format
 msgid "cannot read `%s': %s"
 msgstr "ϲαννοτ ρεαδ `%s': %s"
@@ -184,28 +187,31 @@ msgstr "Λιστ δεβιϲεσ."
 
 #: grub-core/commands/blocklist.c:122 grub-core/commands/cat.c:57
 #: grub-core/commands/configfile.c:35 grub-core/commands/efi/loadbios.c:168
-#: grub-core/commands/hexdump.c:47 grub-core/commands/legacycfg.c:200
-#: grub-core/commands/legacycfg.c:305 grub-core/commands/minicmd.c:44
+#: grub-core/commands/file.c:152 grub-core/commands/hexdump.c:47
+#: grub-core/commands/legacycfg.c:200 grub-core/commands/legacycfg.c:305
+#: grub-core/commands/minicmd.c:44 grub-core/commands/syslinuxcfg.c:143
 #: grub-core/commands/testload.c:58 grub-core/commands/testspeed.c:52
-#: grub-core/disk/loopback.c:91 grub-core/efiemu/main.c:293
+#: grub-core/disk/loopback.c:93 grub-core/efiemu/main.c:293
 #: grub-core/font/font_cmd.c:32 grub-core/kern/emu/hostdisk.c:519
-#: grub-core/loader/arm/linux.c:230 grub-core/loader/arm/linux.c:271
-#: grub-core/loader/arm/linux.c:336 grub-core/loader/efi/chainloader.c:209
-#: grub-core/loader/i386/bsd.c:1447 grub-core/loader/i386/bsd.c:1790
-#: grub-core/loader/i386/bsd.c:2060
+#: grub-core/loader/arm/linux.c:360 grub-core/loader/arm/linux.c:402
+#: grub-core/loader/arm/linux.c:463 grub-core/loader/arm64/linux.c:200
+#: grub-core/loader/arm64/linux.c:337 grub-core/loader/arm64/linux.c:390
+#: grub-core/loader/efi/chainloader.c:206 grub-core/loader/i386/bsd.c:1447
+#: grub-core/loader/i386/bsd.c:1790 grub-core/loader/i386/bsd.c:2060
 #: grub-core/loader/i386/coreboot/chainloader.c:437
-#: grub-core/loader/i386/linux.c:693 grub-core/loader/i386/linux.c:1055
+#: grub-core/loader/i386/linux.c:695 grub-core/loader/i386/linux.c:1057
 #: grub-core/loader/i386/pc/chainloader.c:274
 #: grub-core/loader/i386/pc/freedos.c:105 grub-core/loader/i386/pc/linux.c:138
 #: grub-core/loader/i386/pc/linux.c:395 grub-core/loader/i386/pc/ntldr.c:85
 #: grub-core/loader/i386/pc/plan9.c:399
 #: grub-core/loader/i386/pc/pxechainloader.c:94
-#: grub-core/loader/i386/xen.c:402 grub-core/loader/i386/xen.c:529
-#: grub-core/loader/i386/xen.c:588 grub-core/loader/i386/xen.c:598
-#: grub-core/loader/i386/xnu.c:485 grub-core/loader/ia64/efi/linux.c:500
-#: grub-core/loader/ia64/efi/linux.c:575 grub-core/loader/mips/linux.c:238
-#: grub-core/loader/mips/linux.c:421 grub-core/loader/multiboot.c:260
-#: grub-core/loader/multiboot.c:312 grub-core/loader/multiboot.c:322
+#: grub-core/loader/i386/pc/truecrypt.c:96 grub-core/loader/i386/xen.c:402
+#: grub-core/loader/i386/xen.c:529 grub-core/loader/i386/xen.c:588
+#: grub-core/loader/i386/xen.c:598 grub-core/loader/i386/xnu.c:485
+#: grub-core/loader/ia64/efi/linux.c:500 grub-core/loader/ia64/efi/linux.c:575
+#: grub-core/loader/mips/linux.c:238 grub-core/loader/mips/linux.c:421
+#: grub-core/loader/multiboot.c:260 grub-core/loader/multiboot.c:312
+#: grub-core/loader/multiboot.c:322
 #: grub-core/loader/powerpc/ieee1275/linux.c:269
 #: grub-core/loader/powerpc/ieee1275/linux.c:340
 #: grub-core/loader/sparc64/ieee1275/linux.c:305
@@ -222,24 +228,28 @@ msgstr "φιλεναμε εξπεϲτεδ"
 #: grub-core/commands/configfile.c:65 grub-core/commands/configfile.c:68
 #: grub-core/commands/configfile.c:74 grub-core/commands/configfile.c:80
 #: grub-core/commands/configfile.c:86 grub-core/commands/hashsum.c:34
-#: grub-core/commands/i386/nthibr.c:71 grub-core/commands/legacycfg.c:789
-#: grub-core/commands/legacycfg.c:796 grub-core/commands/legacycfg.c:801
-#: grub-core/commands/legacycfg.c:806 grub-core/commands/minicmd.c:189
+#: grub-core/commands/legacycfg.c:802 grub-core/commands/legacycfg.c:809
+#: grub-core/commands/legacycfg.c:814 grub-core/commands/legacycfg.c:819
+#: grub-core/commands/macbless.c:223 grub-core/commands/minicmd.c:195
+#: grub-core/commands/syslinuxcfg.c:183 grub-core/commands/syslinuxcfg.c:191
+#: grub-core/commands/syslinuxcfg.c:197 grub-core/commands/syslinuxcfg.c:203
 #: grub-core/commands/testload.c:163 grub-core/efiemu/main.c:312
 #: grub-core/kern/emu/main.c:91 grub-core/loader/i386/bsd.c:2108
 #: grub-core/loader/i386/bsd.c:2111 grub-core/loader/i386/bsd.c:2114
 #: grub-core/loader/i386/coreboot/chainloader.c:504
 #: grub-core/loader/ia64/efi/linux.c:630 include/grub/util/install.h:62
-#: util/grub-glue-efi.c:47 util/grub-glue-efi.c:49 util/grub-glue-efi.c:51
-#: util/grub-install.c:210 util/grub-mkfont.c:933 util/grub-mkimage.c:62
-#: util/grub-mkimage.c:69 util/grub-mkimage.c:71 util/grub-mkimage.c:74
-#: util/grub-mklayout.c:45 util/grub-mklayout.c:47 util/grub-mkrescue.c:95
-#: util/grub-mkrescue.c:99 util/grub-mkrescue.c:102 util/grub-mkrescue.c:103
-#: util/grub-mkrescue.c:104 util/grub-mkstandalone.c:42
-#: util/grub-mkstandalone.c:44 util/grub-probe.c:656
-#: util/grub-render-label.c:53 util/grub-render-label.c:61
-#: util/grub-render-label.c:63 util/grub-setup.c:68 util/grub-setup.c:70
-#: util/grub-setup.c:74 util/grub-kbdcomp.in:29 util/grub-mkconfig.in:56
+#: util/grub-glue-efi.c:52 util/grub-glue-efi.c:54 util/grub-glue-efi.c:56
+#: util/grub-install.c:255 util/grub-install.c:302 util/grub-mkfont.c:933
+#: util/grub-mkimage.c:68 util/grub-mkimage.c:75 util/grub-mkimage.c:77
+#: util/grub-mkimage.c:80 util/grub-mklayout.c:52 util/grub-mklayout.c:54
+#: util/grub-mkrescue.c:96 util/grub-mkrescue.c:100 util/grub-mkrescue.c:103
+#: util/grub-mkrescue.c:104 util/grub-mkrescue.c:105
+#: util/grub-mkstandalone.c:47 util/grub-mkstandalone.c:49
+#: util/grub-probe.c:710 util/grub-render-label.c:59
+#: util/grub-render-label.c:70 util/grub-render-label.c:72
+#: util/grub-setup.c:78 util/grub-setup.c:80 util/grub-setup.c:84
+#: util/grub-syslinux2cfg.c:74 util/grub-syslinux2cfg.c:147
+#: util/grub-kbdcomp.in:29 util/grub-mkconfig.in:57
 msgid "FILE"
 msgstr "ΦΙΛΕ"
 
@@ -247,9 +257,10 @@ msgstr "ΦΙΛΕ"
 msgid "Print a block list."
 msgstr "Πριντ α ϭλοϲκ λιστ."
 
-#: grub-core/commands/boot.c:147 grub-core/commands/legacycfg.c:490
-#: grub-core/commands/legacycfg.c:529 grub-core/loader/i386/bsd.c:1782
-#: grub-core/loader/i386/bsd.c:2015 grub-core/loader/i386/linux.c:1061
+#: grub-core/commands/boot.c:147 grub-core/commands/legacycfg.c:503
+#: grub-core/commands/legacycfg.c:542 grub-core/loader/arm64/linux.c:195
+#: grub-core/loader/arm64/linux.c:344 grub-core/loader/i386/bsd.c:1782
+#: grub-core/loader/i386/bsd.c:2015 grub-core/loader/i386/linux.c:1063
 #: grub-core/loader/i386/pc/linux.c:401 grub-core/loader/i386/xen.c:536
 #: grub-core/loader/i386/xen.c:603 grub-core/loader/ia64/efi/linux.c:581
 #: grub-core/loader/mips/linux.c:424 grub-core/loader/multiboot.c:326
@@ -272,7 +283,8 @@ msgid "No boot time statistics is available\n"
 msgstr "Νο ϭοοτ τιμε στατιστιϲσ ισ αβαιλαϭλε\n"
 
 #: grub-core/commands/boottime.c:59
-msgid "Get boot time statistics."
+#, fuzzy
+msgid "Show boot time statistics."
 msgstr "Γετ ϭοοτ τιμε στατιστιϲσ."
 
 #: grub-core/commands/cacheinfo.c:38
@@ -292,7 +304,7 @@ msgstr "Γετ δισκ ϲαϲχε ινφο."
 msgid "Accept DOS-style CR/NL line endings."
 msgstr "Αϲϲεπτ ΔΟΣ-στϋλε ϲΡ/ΝΛ λινε ενδινγσ."
 
-#: grub-core/commands/cat.c:160 grub-core/commands/minicmd.c:189
+#: grub-core/commands/cat.c:160 grub-core/commands/minicmd.c:195
 msgid "Show the contents of a file."
 msgstr "Σχοω τχε ϲοντεντσ οφ α φιλε."
 
@@ -412,6 +424,167 @@ msgstr "ΣΤΡΙΝΓ ..."
 msgid "Evaluate arguments as GRUB commands"
 msgstr "Εβαλυατε αργυμεντσ ασ ΓΡΥϬ ϲομμανδσ"
 
+#: grub-core/commands/file.c:39
+#, fuzzy
+msgid "Check if FILE can be booted as i386 PAE Xen unprivileged guest kernel"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ϲαν ϭε ϭοοτεδ ασ ι386 ΠΑΕ ξεν υνπριβιλεγεδ γυεστ κερνελ"
+
+#: grub-core/commands/file.c:42
+#, fuzzy
+msgid "Check if FILE can be booted as x86_64 Xen unprivileged guest kernel"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ϲαν ϭε ϭοοτεδ ασ ξ86_64 ξεν υνπριβιλεγεδ γυεστ κερνελ"
+
+#: grub-core/commands/file.c:44
+#, fuzzy
+msgid "Check if FILE can be used as Xen x86 privileged guest kernel"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ϲαν ϭε υσεδ ασ ξεν ξ86 πριβιλεγεδ γυεστ κερνελ"
+
+#: grub-core/commands/file.c:46
+msgid "Check if FILE can be used as x86 multiboot kernel"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ϲαν ϭε υσεδ ασ ξ86 μυλτιϭοοτ κερνελ"
+
+#: grub-core/commands/file.c:48
+msgid "Check if FILE can be used as x86 multiboot2 kernel"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ϲαν ϭε υσεδ ασ ξ86 μυλτιϭοοτ2 κερνελ"
+
+#: grub-core/commands/file.c:50
+#, fuzzy
+msgid "Check if FILE is ARM Linux"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ισ ΑΡΜ λινυξ"
+
+#: grub-core/commands/file.c:52
+#, fuzzy
+msgid "Check if FILE is ARM64 Linux"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ισ ΑΡΜ λινυξ"
+
+#: grub-core/commands/file.c:54
+#, fuzzy
+msgid "Check if FILE is IA64 Linux"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ισ ΙΑ64 λινυξ"
+
+#: grub-core/commands/file.c:56
+#, fuzzy
+msgid "Check if FILE is MIPS Linux"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ισ ΜΙΠΣ λινυξ"
+
+#: grub-core/commands/file.c:58
+#, fuzzy
+msgid "Check if FILE is MIPSEL Linux"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ισ ΜΙΠΣΕΛ λινυξ"
+
+#: grub-core/commands/file.c:60
+#, fuzzy
+msgid "Check if FILE is SPARC64 Linux"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ισ ΣΠΑΡϲ64 λινυξ"
+
+#: grub-core/commands/file.c:62
+#, fuzzy
+msgid "Check if FILE is POWERPC Linux"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ισ ΠΟΩΕΡΠϲ λινυξ"
+
+#: grub-core/commands/file.c:64
+#, fuzzy
+msgid "Check if FILE is x86 Linux"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ισ ξ86 λινυξ"
+
+#: grub-core/commands/file.c:66
+#, fuzzy
+msgid "Check if FILE is x86 Linux supporting 32-bit protocol"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ισ ξ86 λινυξ συππορτινγ 32-ϭιτ προτοϲολ"
+
+#: grub-core/commands/file.c:68
+#, fuzzy
+msgid "Check if FILE is x86 kFreeBSD"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ισ ξ86 κφρεεϭσδ"
+
+#: grub-core/commands/file.c:70
+#, fuzzy
+msgid "Check if FILE is i386 kFreeBSD"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ισ ι386 κφρεεϭσδ"
+
+#: grub-core/commands/file.c:72
+#, fuzzy
+msgid "Check if FILE is x86_64 kFreeBSD"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ισ ξ86_64 κφρεεϭσδ"
+
+#: grub-core/commands/file.c:75
+#, fuzzy
+msgid "Check if FILE is x86 kNetBSD"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ισ ξ86 κνετϭσδ"
+
+#: grub-core/commands/file.c:77
+#, fuzzy
+msgid "Check if FILE is i386 kNetBSD"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ισ ι386 κνετϭσδ"
+
+#: grub-core/commands/file.c:79
+#, fuzzy
+msgid "Check if FILE is x86_64 kNetBSD"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ισ ξ86_64 κνετϭσδ"
+
+#: grub-core/commands/file.c:82
+msgid "Check if FILE is i386 EFI file"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ισ ι386 ΕΦΙ φιλε"
+
+#: grub-core/commands/file.c:84
+#, fuzzy
+msgid "Check if FILE is x86_64 EFI file"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ισ ξ86-64 ΕΦΙ φιλε"
+
+#: grub-core/commands/file.c:86
+msgid "Check if FILE is IA64 EFI file"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ισ ΙΑ64 ΕΦΙ φιλε"
+
+#: grub-core/commands/file.c:88
+#, fuzzy
+msgid "Check if FILE is ARM64 EFI file"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ισ ΑΡΜ ΕΦΙ φιλε"
+
+#: grub-core/commands/file.c:90
+msgid "Check if FILE is ARM EFI file"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ισ ΑΡΜ ΕΦΙ φιλε"
+
+#: grub-core/commands/file.c:92
+msgid "Check if FILE is hiberfil.sys in hibernated state"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ισ χιϭερφιλ.σϋσ ιν χιϭερνατεδ στατε"
+
+#: grub-core/commands/file.c:94
+#, fuzzy
+msgid "Check if FILE is x86_64 XNU (Mac OS X kernel)"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ισ ξ86_64 ξνυ (Μαϲ ΟΣ Ξ κερνελ)"
+
+#: grub-core/commands/file.c:96
+#, fuzzy
+msgid "Check if FILE is i386 XNU (Mac OS X kernel)"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ισ ι386 ξνυ (Μαϲ ΟΣ Ξ κερνελ)"
+
+#: grub-core/commands/file.c:98
+#, fuzzy
+msgid "Check if FILE is XNU (Mac OS X kernel) hibernated image"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ισ ξνυ (Μαϲ ΟΣ Ξ κερνελ) χιϭερνατεδ ιμαγε"
+
+#: grub-core/commands/file.c:100
+msgid "Check if FILE is BIOS bootsector"
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ισ ϬΙΟΣ ϭοοτσεϲτορ"
+
+#. TRANSLATORS: it's a standalone boolean value,
+#. opposite of "true".
+#: grub-core/commands/file.c:661 grub-core/commands/i386/cmostest.c:63
+#: grub-core/commands/i386/cpuid.c:71 grub-core/commands/keystatus.c:83
+#: grub-core/commands/keystatus.c:87 grub-core/commands/keystatus.c:96
+#: grub-core/commands/test.c:436 grub-core/commands/true.c:39
+#: grub-core/script/execute.c:246 grub-core/script/execute.c:1001
+msgid "false"
+msgstr "φαλσε"
+
+#: grub-core/commands/file.c:670
+msgid "OPTIONS FILE"
+msgstr "ΟΠΤΙΟΝΣ ΦΙΛΕ"
+
+#: grub-core/commands/file.c:671
+msgid "Check if FILE is of specified type."
+msgstr "ϲχεϲκ ιφ ΦΙΛΕ ισ οφ σπεϲιφιεδ τϋπε."
+
 #. TRANSLATORS: It means that the specified partition e.g.
 #. hd0,msdos1=/dev/sda1 doesn't exist.
 #: grub-core/commands/gptsync.c:140 grub-core/kern/disk.c:258
@@ -465,12 +638,16 @@ msgstr "Ϭασε διρεϲτορϋ φορ χασχ λιστ."
 
 #. TRANSLATORS: platform here isn't identifier. It can be translated.
 #: grub-core/commands/hashsum.c:35 grub-core/commands/ls.c:150
-#: grub-core/kern/emu/main.c:94 include/grub/util/install.h:48
-#: include/grub/util/install.h:51 include/grub/util/install.h:54
-#: include/grub/util/install.h:57 util/grub-install.c:206
-#: util/grub-install.c:208 util/grub-install.c:250 util/grub-mkimage.c:58
-#: util/grub-mkimage.c:61 util/grub-mknetdir.c:41 util/grub-mknetdir.c:43
-#: util/grub-mkrescue.c:97 util/grub-setup.c:72 util/grub-reboot.in:52
+#: grub-core/commands/macbless.c:227 grub-core/commands/syslinuxcfg.c:51
+#: grub-core/commands/syslinuxcfg.c:54 grub-core/kern/emu/main.c:94
+#: include/grub/util/install.h:48 include/grub/util/install.h:51
+#: include/grub/util/install.h:54 include/grub/util/install.h:57
+#: util/grub-install.c:251 util/grub-install.c:253 util/grub-install.c:298
+#: util/grub-install.c:300 util/grub-mkimage.c:64 util/grub-mkimage.c:67
+#: util/grub-mknetdir.c:46 util/grub-mknetdir.c:48 util/grub-mkrescue.c:98
+#: util/grub-setup.c:82 util/grub-syslinux2cfg.c:63
+#: util/grub-syslinux2cfg.c:65 util/grub-syslinux2cfg.c:67
+#: util/grub-syslinux2cfg.c:71 util/grub-reboot.in:52
 #: util/grub-set-default.in:54
 msgid "DIR"
 msgstr "ΔΙΡ"
@@ -577,9 +754,9 @@ msgstr "Δισαϭλε/εναϭλε ΣΜΑΡΤ (0/1)."
 msgid "Do not print messages."
 msgstr "Δο νοτ πριντ μεσσαγεσ."
 
-#: grub-core/commands/hdparm.c:286 grub-core/commands/i386/nthibr.c:40
-#: grub-core/commands/iorw.c:47 grub-core/commands/legacycfg.c:715
-#: grub-core/commands/legacycfg.c:767 grub-core/commands/memrw.c:47
+#: grub-core/commands/hdparm.c:286 grub-core/commands/iorw.c:47
+#: grub-core/commands/legacycfg.c:728 grub-core/commands/legacycfg.c:780
+#: grub-core/commands/macbless.c:190 grub-core/commands/memrw.c:47
 #: grub-core/commands/search.c:304 grub-core/commands/search_wrap.c:178
 #: grub-core/commands/setpci.c:243 grub-core/commands/sleep.c:71
 #: grub-core/commands/verify.c:668 grub-core/commands/verify.c:720
@@ -630,18 +807,8 @@ msgid "Show raw contents of a file or memory."
 msgstr "Σχοω ραω ϲοντεντσ οφ α φιλε ορ μεμορϋ."
 
 #: grub-core/commands/i386/cmosdump.c:58
-msgid "Dump CMOS contents."
-msgstr "Δυμπ ϲΜΟΣ ϲοντεντσ."
-
-#. TRANSLATORS: it's a standalone boolean value,
-#. opposite of "true".
-#: grub-core/commands/i386/cmostest.c:63 grub-core/commands/i386/cpuid.c:52
-#: grub-core/commands/keystatus.c:83 grub-core/commands/keystatus.c:87
-#: grub-core/commands/keystatus.c:96 grub-core/commands/test.c:436
-#: grub-core/commands/true.c:39 grub-core/script/execute.c:246
-#: grub-core/script/execute.c:1001
-msgid "false"
-msgstr "φαλσε"
+msgid "Show raw dump of the CMOS contents."
+msgstr "Σχοω ραω δυμπ οφ τχε ϲΜΟΣ ϲοντεντσ."
 
 #: grub-core/commands/i386/cmostest.c:108
 #: grub-core/commands/i386/cmostest.c:111
@@ -654,15 +821,17 @@ msgid "Test bit at BYTE:BIT in CMOS."
 msgstr "Τεστ ϭιτ ατ ϬΫΤΕ:ϬΙΤ ιν ϲΜΟΣ."
 
 #: grub-core/commands/i386/cmostest.c:112
-msgid "Clean bit at BYTE:BIT in CMOS."
-msgstr "ϲλεαν ϭιτ ατ ϬΫΤΕ:ϬΙΤ ιν ϲΜΟΣ."
+msgid "Clear bit at BYTE:BIT in CMOS."
+msgstr "ϲλεαρ ϭιτ ατ ϬΫΤΕ:ϬΙΤ ιν ϲΜΟΣ."
 
-#: grub-core/commands/i386/cmostest.c:115
+#. TRANSLATORS: A bit may be either set (1) or clear (0).
+#: grub-core/commands/i386/cmostest.c:116
 msgid "Set bit at BYTE:BIT in CMOS."
 msgstr "Σετ ϭιτ ατ ϬΫΤΕ:ϬΙΤ ιν ϲΜΟΣ."
 
 #: grub-core/commands/i386/coreboot/cb_timestamps.c:112
-msgid "Get coreboot boot time statistics."
+#, fuzzy
+msgid "Show coreboot boot time statistics."
 msgstr "Γετ ϲορεϭοοτ ϭοοτ τιμε στατιστιϲσ."
 
 #: grub-core/commands/i386/coreboot/cbls.c:137
@@ -675,13 +844,13 @@ msgstr "Λιστ ϲορεϭοοτ ταϭλεσ."
 msgid "Check if CPU supports 64-bit (long) mode (default)."
 msgstr "ϲχεϲκ ιφ ϲΠΥ συππορτσ 64-ϭιτ (λονγ) μοδε (δεφαυλτ)."
 
-#: grub-core/commands/i386/cpuid.c:93
+#: grub-core/commands/i386/cpuid.c:37
+msgid "Check if CPU supports Physical Address Extension."
+msgstr "ϲχεϲκ ιφ ϲΠΥ συππορτσ Πχϋσιϲαλ Αδδρεσσ Εξτενσιον."
+
+#: grub-core/commands/i386/cpuid.c:119
 msgid "Check for CPU features."
 msgstr "ϲχεϲκ φορ ϲΠΥ φεατυρεσ."
-
-#: grub-core/commands/i386/nthibr.c:72
-msgid "Test whether a hiberfil.sys is in hibernated state."
-msgstr "Τεστ ωχετχερ α χιϭερφιλ.σϋσ ισ ιν χιϭερνατεδ στατε."
 
 #. TRANSLATORS: In this file "mapping" refers to a change GRUB makes so if
 #. your language doesn't have an equivalent of "mapping" you can
@@ -795,14 +964,15 @@ msgstr "Σχοω ΑΠΜ ινφορματιον."
 msgid "filename or tempo and notes expected"
 msgstr "φιλεναμε ορ τεμπο ανδ νοτεσ εξπεϲτεδ"
 
-#: grub-core/commands/i386/pc/play.c:136 grub-core/fs/archelp.c:259
-#: grub-core/fs/bfs.c:622 grub-core/fs/bfs.c:705 grub-core/fs/btrfs.c:1288
-#: grub-core/fs/btrfs.c:1317 grub-core/fs/btrfs.c:1361
-#: grub-core/fs/btrfs.c:1444 grub-core/fs/btrfs.c:1468 grub-core/fs/fat.c:953
-#: grub-core/fs/fshelp.c:192 grub-core/fs/hfs.c:1169 grub-core/fs/hfs.c:1178
-#: grub-core/fs/jfs.c:689 grub-core/fs/minix.c:416 grub-core/fs/proc.c:139
-#: grub-core/fs/ufs.c:538 grub-core/fs/zfs/zfs.c:2026
-#: grub-core/fs/zfs/zfs.c:2232 grub-core/net/http.c:120
+#: grub-core/commands/i386/pc/play.c:136 grub-core/commands/macbless.c:172
+#: grub-core/fs/archelp.c:259 grub-core/fs/bfs.c:622 grub-core/fs/bfs.c:705
+#: grub-core/fs/btrfs.c:1298 grub-core/fs/btrfs.c:1327
+#: grub-core/fs/btrfs.c:1371 grub-core/fs/btrfs.c:1454
+#: grub-core/fs/btrfs.c:1478 grub-core/fs/fat.c:953 grub-core/fs/fshelp.c:192
+#: grub-core/fs/hfs.c:1169 grub-core/fs/hfs.c:1178 grub-core/fs/jfs.c:689
+#: grub-core/fs/minix.c:416 grub-core/fs/proc.c:139 grub-core/fs/ufs.c:538
+#: grub-core/fs/zfs/zfs.c:2030 grub-core/fs/zfs/zfs.c:2236
+#: grub-core/net/http.c:120
 #, c-format
 msgid "file `%s' not found"
 msgstr "φιλε `%s' νοτ φουνδ"
@@ -959,7 +1129,7 @@ msgstr "Ωριτε 32-ϭιτ ΒΑΛΥΕ το ΠΟΡΤ."
 #: grub-core/commands/keylayouts.c:213 grub-core/commands/loadenv.c:60
 #: grub-core/commands/nativedisk.c:185 grub-core/efiemu/main.c:235
 #: grub-core/font/font.c:428 grub-core/gfxmenu/gfxmenu.c:63
-#: grub-core/kern/device.c:42 grub-core/kern/dl.c:730
+#: grub-core/kern/device.c:42 grub-core/kern/dl.c:734
 #, c-format
 msgid "variable `%s' isn't set"
 msgstr "βαριαϭλε `%s' ισν'τ σετ"
@@ -987,66 +1157,66 @@ msgstr "ϲχεϲκ Αλτ κεϋ."
 msgid "Check key modifier status."
 msgstr "ϲχεϲκ κεϋ μοδιφιερ στατυσ."
 
-#: grub-core/commands/legacycfg.c:474 grub-core/commands/legacycfg.c:483
-#: grub-core/commands/legacycfg.c:503 grub-core/commands/legacycfg.c:520
+#: grub-core/commands/legacycfg.c:482 grub-core/commands/legacycfg.c:496
+#: grub-core/commands/legacycfg.c:516 grub-core/commands/legacycfg.c:533
 #: grub-core/commands/time.c:43 grub-core/script/function.c:109
-#: util/grub-fstest.c:53 util/grub-mount.c:64
+#: util/grub-file.c:100 util/grub-fstest.c:57 util/grub-mount.c:64
 #, c-format
 msgid "can't find command `%s'"
 msgstr "ϲαν'τ φινδ ϲομμανδ `%s'"
 
-#: grub-core/commands/legacycfg.c:768 grub-core/normal/auth.c:222
-#: util/grub-mkpasswd-pbkdf2.c:134
+#: grub-core/commands/legacycfg.c:781 grub-core/normal/auth.c:222
+#: util/grub-mkpasswd-pbkdf2.c:139
 msgid "Enter password: "
 msgstr "Εντερ πασσωορδ: "
 
 #. TRANSLATORS: "legacy config" means
 #. "config as used by grub-legacy".
-#: grub-core/commands/legacycfg.c:792
+#: grub-core/commands/legacycfg.c:805
 msgid "Parse legacy config in same context"
 msgstr "Παρσε λεγαϲϋ ϲονφιγ ιν σαμε ϲοντεξτ"
 
-#: grub-core/commands/legacycfg.c:797
+#: grub-core/commands/legacycfg.c:810
 msgid "Parse legacy config in new context"
 msgstr "Παρσε λεγαϲϋ ϲονφιγ ιν νεω ϲοντεξτ"
 
-#: grub-core/commands/legacycfg.c:802
+#: grub-core/commands/legacycfg.c:815
 msgid "Parse legacy config in same context taking only menu entries"
 msgstr "Παρσε λεγαϲϋ ϲονφιγ ιν σαμε ϲοντεξτ τακινγ ονλϋ μενυ εντριεσ"
 
-#: grub-core/commands/legacycfg.c:807
+#: grub-core/commands/legacycfg.c:820
 msgid "Parse legacy config in new context taking only menu entries"
 msgstr "Παρσε λεγαϲϋ ϲονφιγ ιν νεω ϲοντεξτ τακινγ ονλϋ μενυ εντριεσ"
 
-#: grub-core/commands/legacycfg.c:811
+#: grub-core/commands/legacycfg.c:824
 msgid "[--no-mem-option] [--type=TYPE] FILE [ARG ...]"
 msgstr "[--νο-μεμ-οπτιον] [--τϋπε=ΤΫΠΕ] ΦΙΛΕ [ΑΡΓ ...]"
 
-#: grub-core/commands/legacycfg.c:812
+#: grub-core/commands/legacycfg.c:825
 msgid "Simulate grub-legacy `kernel' command"
 msgstr "Σιμυλατε γρυϭ-λεγαϲϋ `κερνελ' ϲομμανδ"
 
-#: grub-core/commands/legacycfg.c:816 grub-core/commands/legacycfg.c:820
+#: grub-core/commands/legacycfg.c:829 grub-core/commands/legacycfg.c:833
 msgid "FILE [ARG ...]"
 msgstr "ΦΙΛΕ [ΑΡΓ ...]"
 
-#: grub-core/commands/legacycfg.c:817
+#: grub-core/commands/legacycfg.c:830
 msgid "Simulate grub-legacy `initrd' command"
 msgstr "Σιμυλατε γρυϭ-λεγαϲϋ `ινιτρδ' ϲομμανδ"
 
-#: grub-core/commands/legacycfg.c:821
+#: grub-core/commands/legacycfg.c:834
 msgid "Simulate grub-legacy `modulenounzip' command"
 msgstr "Σιμυλατε γρυϭ-λεγαϲϋ `μοδυλενουνζιπ' ϲομμανδ"
 
-#: grub-core/commands/legacycfg.c:825 grub-core/commands/legacycfg.c:830
+#: grub-core/commands/legacycfg.c:838 grub-core/commands/legacycfg.c:843
 msgid "[--md5] PASSWD [FILE]"
 msgstr "[--μδ5] ΠΑΣΣΩΔ [ΦΙΛΕ]"
 
-#: grub-core/commands/legacycfg.c:826
+#: grub-core/commands/legacycfg.c:839
 msgid "Simulate grub-legacy `password' command"
 msgstr "Σιμυλατε γρυϭ-λεγαϲϋ `πασσωορδ' ϲομμανδ"
 
-#: grub-core/commands/legacycfg.c:831
+#: grub-core/commands/legacycfg.c:844
 msgid "Simulate grub-legacy `password' command in menu entry mode"
 msgstr "Σιμυλατε γρυϭ-λεγαϲϋ `πασσωορδ' ϲομμανδ ιν μενυ εντρϋ μοδε"
 
@@ -1061,8 +1231,8 @@ msgid "Skip signature-checking of the environment file."
 msgstr "Σκιπ σιγνατυρε-ϲχεϲκινγ οφ τχε ενβιρονμεντ φιλε."
 
 #: grub-core/commands/loadenv.c:458
-msgid "[-f FILE] [-s|--skip-sig] [whitelisted_variable_name] [...]"
-msgstr "[-φ ΦΙΛΕ] [-σ|--σκιπ-σιγ] [ωχιτελιστεδ_βαριαϭλε_ναμε] [...]"
+msgid "[-f FILE] [-s|--skip-sig] [variable_name_to_whitelist] [...]"
+msgstr "[-φ ΦΙΛΕ] [-σ|--σκιπ-σιγ] [βαριαϭλε_ναμε_το_ωχιτελιστ] [...]"
 
 #: grub-core/commands/loadenv.c:459
 msgid "Load variables from environment block file."
@@ -1170,6 +1340,14 @@ msgstr "Λιστ μεμορϋ μαπ προβιδεδ ϭϋ φιρμωαρε."
 msgid "List PCI devices."
 msgstr "Λιστ ΠϲΙ δεβιϲεσ."
 
+#: grub-core/commands/macbless.c:225
+msgid "Bless FILE of HFS or HFS+ partition for intel macs."
+msgstr "Ϭλεσσ ΦΙΛΕ οφ ΧΦΣ ορ ΧΦΣ+ παρτιτιον φορ ιντελ μαϲσ."
+
+#: grub-core/commands/macbless.c:229
+msgid "Bless DIR of HFS or HFS+ partition for PPC macs."
+msgstr "Ϭλεσσ ΔΙΡ οφ ΧΦΣ ορ ΧΦΣ+ παρτιτιον φορ ΠΠϲ μαϲσ."
+
 #: grub-core/commands/memrw.c:125 grub-core/commands/memrw.c:129
 #: grub-core/commands/memrw.c:133
 msgid "ADDR"
@@ -1205,8 +1383,9 @@ msgstr "Μενυ εντρϋ τϋπε."
 
 #: grub-core/commands/menuentry.c:31 grub-core/commands/menuentry.c:38
 #: grub-core/commands/menuentry.c:39 grub-core/gettext/gettext.c:520
-#: util/grub-fstest.c:507 util/grub-mkrescue.c:107 util/grub-mkrescue.c:108
-#: util/grub-mount.c:454 util/grub-render-label.c:59
+#: util/grub-fstest.c:520 util/grub-install.c:292 util/grub-install.c:305
+#: util/grub-mknetdir.c:51 util/grub-mkrescue.c:108 util/grub-mkrescue.c:109
+#: util/grub-mount.c:454 util/grub-render-label.c:65
 msgid "STRING"
 msgstr "ΣΤΡΙΝΓ"
 
@@ -1260,36 +1439,36 @@ msgstr "Δεφινε α συϭμενυ."
 #. (how many modules or open descriptors use it).
 #. Dependencies are the other modules it uses.
 #.
-#: grub-core/commands/minicmd.c:153
+#: grub-core/commands/minicmd.c:159
 msgid "Name\tRef Count\tDependencies\n"
 msgstr "Ναμε\tΡεφ ϲουντ\tΔεπενδενϲιεσ\n"
 
-#: grub-core/commands/minicmd.c:192
+#: grub-core/commands/minicmd.c:198
 msgid "Show this message."
 msgstr "Σχοω τχισ μεσσαγε."
 
-#: grub-core/commands/minicmd.c:195
+#: grub-core/commands/minicmd.c:201
 msgid "ADDR [SIZE]"
 msgstr "ΑΔΔΡ [ΣΙΖΕ]"
 
-#: grub-core/commands/minicmd.c:195
+#: grub-core/commands/minicmd.c:201
 msgid "Show memory contents."
 msgstr "Σχοω μεμορϋ ϲοντεντσ."
 
-#: grub-core/commands/minicmd.c:198 grub-core/kern/corecmd.c:188
-#: util/grub-install.c:231
+#: grub-core/commands/minicmd.c:204 grub-core/kern/corecmd.c:188
+#: util/grub-install.c:276
 msgid "MODULE"
 msgstr "ΜΟΔΥΛΕ"
 
-#: grub-core/commands/minicmd.c:198
+#: grub-core/commands/minicmd.c:204
 msgid "Remove a module."
 msgstr "Ρεμοβε α μοδυλε."
 
-#: grub-core/commands/minicmd.c:201
+#: grub-core/commands/minicmd.c:207
 msgid "Show loaded modules."
 msgstr "Σχοω λοαδεδ μοδυλεσ."
 
-#: grub-core/commands/minicmd.c:204
+#: grub-core/commands/minicmd.c:210
 msgid "Exit from GRUB."
 msgstr "Εξιτ φρομ ΓΡΥϬ."
 
@@ -1346,7 +1525,7 @@ msgid "Print Memory information."
 msgstr "Πριντ Μεμορϋ ινφορματιον."
 
 #: grub-core/commands/nativedisk.c:114 grub-core/commands/probe.c:118
-#: grub-core/commands/probe.c:124 util/grub-probe.c:338
+#: grub-core/commands/probe.c:124 util/grub-probe.c:392
 #, c-format
 msgid "%s does not support UUIDs"
 msgstr "%s δοεσ νοτ συππορτ ΥΥΙΔσ"
@@ -1376,8 +1555,8 @@ msgid "=VAL"
 msgstr "=ΒΑΛ"
 
 #: grub-core/commands/parttool.c:136
-#, c-format
-msgid "Sorry no parttool is available for %s\n"
+#, fuzzy, c-format
+msgid "Sorry, no parttool is available for %s\n"
 msgstr "Σορρϋ νο παρττοολ ισ αβαιλαϭλε φορ %s\n"
 
 #: grub-core/commands/parttool.c:277 grub-core/lib/arg.c:285
@@ -1436,7 +1615,7 @@ msgstr "[ϭυσ]:[σλοτ][.φυνϲ]"
 
 #: grub-core/commands/pcidump.c:109 grub-core/commands/pcidump.c:138
 #: grub-core/commands/setpci.c:183 grub-core/commands/setpci.c:214
-#: grub-core/fs/zfs/zfs.c:3715 grub-core/kern/emu/hostdisk.c:458
+#: grub-core/fs/zfs/zfs.c:3719 grub-core/kern/emu/hostdisk.c:458
 #: grub-core/kern/emu/hostdisk.c:473 grub-core/kern/file.c:45
 #, c-format
 msgid "missing `%c' symbol"
@@ -1447,10 +1626,10 @@ msgid "[-s POSITION] [-d DEVICE]"
 msgstr "[-σ ΠΟΣΙΤΙΟΝ] [-δ ΔΕΒΙϲΕ]"
 
 #: grub-core/commands/pcidump.c:169
-msgid "Dump PCI configuration space."
-msgstr "Δυμπ ΠϲΙ ϲονφιγυρατιον σπαϲε."
+msgid "Show raw dump of the PCI configuration space."
+msgstr "Σχοω ραω δυμπ οφ τχε ΠϲΙ ϲονφιγυρατιον σπαϲε."
 
-#: grub-core/commands/probe.c:40
+#: grub-core/commands/probe.c:40 grub-core/commands/tr.c:32
 msgid "Set a variable to return value."
 msgstr "Σετ α βαριαϭλε το ρετυρν βαλυε."
 
@@ -1477,13 +1656,13 @@ msgid "Determine filesystem label."
 msgstr "Δετερμινε φιλεσϋστεμ λαϭελ."
 
 #: grub-core/commands/probe.c:139 grub-core/commands/probe.c:146
-#: util/grub-probe.c:350
+#: util/grub-probe.c:404
 #, c-format
 msgid "filesystem `%s' does not support labels"
 msgstr "φιλεσϋστεμ `%s' δοεσ νοτ συππορτ λαϭελσ"
 
 #: grub-core/commands/probe.c:165 grub-core/fs/zfs/zfsinfo.c:428
-#: grub-core/loader/i386/bsd.c:168 util/grub-setup.c:202
+#: grub-core/loader/i386/bsd.c:168 util/grub-setup.c:223
 msgid "DEVICE"
 msgstr "ΔΕΒΙϲΕ"
 
@@ -1674,6 +1853,48 @@ msgstr "ΝΥΜϬΕΡ_ΟΦ_ΣΕϲΟΝΔΣ"
 msgid "Wait for a specified number of seconds."
 msgstr "Ωαιτ φορ α σπεϲιφιεδ νυμϭερ οφ σεϲονδσ."
 
+#: grub-core/commands/syslinuxcfg.c:50 util/grub-syslinux2cfg.c:66
+msgid "root directory of the syslinux disk [default=/]."
+msgstr "ροοτ διρεϲτορϋ οφ τχε σϋσλινυξ δισκ [δεφαυλτ=/]."
+
+#: grub-core/commands/syslinuxcfg.c:53 util/grub-syslinux2cfg.c:72
+msgid ""
+"current directory of the syslinux [default is parent directory of input "
+"file]."
+msgstr ""
+"ϲυρρεντ διρεϲτορϋ οφ τχε σϋσλινυξ [δεφαυλτ ισ παρεντ διρεϲτορϋ οφ ινπυτ "
+"φιλε]."
+
+#: grub-core/commands/syslinuxcfg.c:55 util/grub-syslinux2cfg.c:75
+msgid "assume input is an isolinux configuration file."
+msgstr "ασσυμε ινπυτ ισ αν ισολινυξ ϲονφιγυρατιον φιλε."
+
+#: grub-core/commands/syslinuxcfg.c:56 util/grub-syslinux2cfg.c:76
+msgid "assume input is a pxelinux configuration file."
+msgstr "ασσυμε ινπυτ ισ α πξελινυξ ϲονφιγυρατιον φιλε."
+
+#: grub-core/commands/syslinuxcfg.c:57 util/grub-syslinux2cfg.c:77
+msgid "assume input is a syslinux configuration file."
+msgstr "ασσυμε ινπυτ ισ α σϋσλινυξ ϲονφιγυρατιον φιλε."
+
+#. TRANSLATORS: "syslinux config" means
+#. "config as used by syslinux".
+#: grub-core/commands/syslinuxcfg.c:186
+msgid "Execute syslinux config in same context"
+msgstr "Εξεϲυτε σϋσλινυξ ϲονφιγ ιν σαμε ϲοντεξτ"
+
+#: grub-core/commands/syslinuxcfg.c:192
+msgid "Execute syslinux config in new context"
+msgstr "Εξεϲυτε σϋσλινυξ ϲονφιγ ιν νεω ϲοντεξτ"
+
+#: grub-core/commands/syslinuxcfg.c:198
+msgid "Execute syslinux config in same context taking only menu entries"
+msgstr "Εξεϲυτε σϋσλινυξ ϲονφιγ ιν σαμε ϲοντεξτ τακινγ ονλϋ μενυ εντριεσ"
+
+#: grub-core/commands/syslinuxcfg.c:204
+msgid "Execute syslinux config in new context taking only menu entries"
+msgstr "Εξεϲυτε σϋσλινυξ ϲονφιγ ιν νεω ϲοντεξτ τακινγ ονλϋ μενυ εντριεσ"
+
 #: grub-core/commands/terminal.c:90
 msgid "no terminal specified"
 msgstr "νο τερμιναλ σπεϲιφιεδ"
@@ -1775,10 +1996,6 @@ msgstr "ϲΟΜΜΑΝΔ [ΑΡΓΣ]"
 msgid "Measure time used by COMMAND"
 msgstr "Μεασυρε τιμε υσεδ ϭϋ ϲΟΜΜΑΝΔ"
 
-#: grub-core/commands/tr.c:32
-msgid "Variable name to update."
-msgstr "Βαριαϭλε ναμε το υπδατε."
-
 #: grub-core/commands/tr.c:33
 msgid "Translate to upper case."
 msgstr "Τρανσλατε το υππερ ϲασε."
@@ -1810,8 +2027,8 @@ msgid "Test USB support."
 msgstr "Τεστ ΥΣϬ συππορτ."
 
 #: grub-core/commands/verify.c:44
-msgid "Skip signature-checking of the signature file."
-msgstr "Σκιπ σιγνατυρε-ϲχεϲκινγ οφ τχε σιγνατυρε φιλε."
+msgid "Skip signature-checking of the public key file."
+msgstr "Σκιπ σιγνατυρε-ϲχεϲκινγ οφ τχε πυϭλιϲ κεϋ φιλε."
 
 #. TRANSLATORS: it's about GNUPG signatures.
 #: grub-core/commands/verify.c:70 grub-core/commands/verify.c:80
@@ -1838,37 +2055,39 @@ msgstr "πυϭλιϲ κεϋ %08x νοτ φουνδ"
 
 #: grub-core/commands/verify.c:632 grub-core/disk/diskfilter.c:678
 #: grub-core/disk/diskfilter.c:688 grub-core/fs/ntfs.c:404
-#: grub-core/fs/zfs/zfs.c:1866 grub-core/normal/menu.c:428
+#: grub-core/fs/zfs/zfs.c:1870 grub-core/normal/menu.c:428
 #, c-format
 msgid "module `%s' isn't loaded"
 msgstr "μοδυλε `%s' ισν'τ λοαδεδ"
 
-#: grub-core/commands/verify.c:963
+#: grub-core/commands/verify.c:964
 msgid "[-s|--skip-sig] FILE SIGNATURE_FILE [PUBKEY_FILE]"
 msgstr "[-σ|--σκιπ-σιγ] ΦΙΛΕ ΣΙΓΝΑΤΥΡΕ_ΦΙΛΕ [ΠΥϬΚΕΫ_ΦΙΛΕ]"
 
-#: grub-core/commands/verify.c:964
+#: grub-core/commands/verify.c:965
 msgid "Verify detached signature."
 msgstr "Βεριφϋ δεταϲχεδ σιγνατυρε."
 
-#: grub-core/commands/verify.c:967
+#: grub-core/commands/verify.c:968
 msgid "[-s|--skip-sig] PUBKEY_FILE"
 msgstr "[-σ|--σκιπ-σιγ] ΠΥϬΚΕΫ_ΦΙΛΕ"
 
-#: grub-core/commands/verify.c:968
-msgid "Add PKFILE to trusted keys."
+#: grub-core/commands/verify.c:969
+#, fuzzy
+msgid "Add PUBKEY_FILE to trusted keys."
 msgstr "Αδδ ΠΚΦΙΛΕ το τρυστεδ κεϋσ."
 
-#: grub-core/commands/verify.c:972
-msgid "List trusted keys."
-msgstr "Λιστ τρυστεδ κεϋσ."
+#: grub-core/commands/verify.c:973
+msgid "Show the list of trusted keys."
+msgstr "Σχοω τχε λιστ οφ τρυστεδ κεϋσ."
 
-#: grub-core/commands/verify.c:974
+#: grub-core/commands/verify.c:975
 msgid "PUBKEY_ID"
 msgstr "ΠΥϬΚΕΫ_ΙΔ"
 
-#: grub-core/commands/verify.c:975
-msgid "Remove KEYID from trusted keys."
+#: grub-core/commands/verify.c:976
+#, fuzzy
+msgid "Remove PUBKEY_ID from trusted keys."
 msgstr "Ρεμοβε ΚΕΫΙΔ φρομ τρυστεδ κεϋσ."
 
 #: grub-core/commands/videoinfo.c:61
@@ -1999,8 +2218,13 @@ msgstr "Τεστ βιδεο συϭσϋστεμ ιν μοδε ΩξΧ."
 msgid "Test video subsystem."
 msgstr "Τεστ βιδεο συϭσϋστεμ."
 
+#: grub-core/commands/xen/lsxen.c:80 grub-core/commands/xen/lsxen.c:82
+msgid "[DIR]"
+msgstr "[ΔΙΡ]"
+
 #: grub-core/commands/xen/lsxen.c:81 grub-core/commands/xen/lsxen.c:83
-msgid "List XEN storage."
+#, fuzzy
+msgid "List Xen storage."
 msgstr "Λιστ ΞΕΝ στοραγε."
 
 #. TRANSLATORS: GRUBUUID stands for "filesystem
@@ -2017,14 +2241,14 @@ msgstr ""
 "Τρανσφορμ 64-ϭιτ ΥΥΙΔ το φορματ συιταϭλε φορ ΞΝΥ. Ιφ -λ ισ γιβεν κεεπ ιτ "
 "λοωερϲασε ασ δονε ϭϋ ϭλκιδ."
 
-#: grub-core/disk/arc/arcdisk.c:248 grub-core/disk/efi/efidisk.c:574
+#: grub-core/disk/arc/arcdisk.c:248 grub-core/disk/efi/efidisk.c:587
 #: grub-core/disk/i386/pc/biosdisk.c:483 grub-core/disk/i386/pc/biosdisk.c:528
 #: grub-core/disk/ieee1275/nand.c:193 grub-core/disk/ieee1275/ofdisk.c:491
 #, c-format
 msgid "failure reading sector 0x%llx from `%s'"
 msgstr "φαιλυρε ρεαδινγ σεϲτορ 0ξ%llx φρομ `%s'"
 
-#: grub-core/disk/arc/arcdisk.c:284 grub-core/disk/efi/efidisk.c:595
+#: grub-core/disk/arc/arcdisk.c:284 grub-core/disk/efi/efidisk.c:608
 #: grub-core/disk/i386/pc/biosdisk.c:533 grub-core/disk/ieee1275/ofdisk.c:511
 #, c-format
 msgid "failure writing sector 0x%llx to `%s'"
@@ -2050,31 +2274,34 @@ msgstr "Μουντ αλλ βολυμεσ ωιτχ `ϭοοτ' φλαγ σετ."
 #: grub-core/osdep/bsd/getroot.c:92 grub-core/osdep/bsd/getroot.c:168
 #: grub-core/osdep/hurd/getroot.c:68 grub-core/osdep/linux/blocklist.c:65
 #: grub-core/osdep/linux/getroot.c:144 grub-core/osdep/linux/hostdisk.c:194
-#: grub-core/osdep/linux/hostdisk.c:412 grub-core/osdep/linux/ofpath.c:318
+#: grub-core/osdep/linux/hostdisk.c:419 grub-core/osdep/linux/ofpath.c:318
 #: grub-core/osdep/linux/ofpath.c:323 grub-core/osdep/linux/ofpath.c:358
 #: grub-core/osdep/linux/ofpath.c:371 grub-core/osdep/sun/getroot.c:110
-#: grub-core/osdep/windows/blocklist.c:95 grub-core/tests/video_checksum.c:279
-#: util/editenv.c:45 util/glue-efi.c:115 util/glue-efi.c:120
-#: util/glue-efi.c:130 util/grub-editenv.c:129 util/grub-editenv.c:183
-#: util/grub-fstest.c:121 util/grub-fstest.c:555 util/grub-install-common.c:87
-#: util/grub-install-common.c:89 util/grub-install-common.c:96
-#: util/grub-install-common.c:512 util/grub-menulst2cfg.c:53
-#: util/grub-menulst2cfg.c:68 util/grub-mkimage.c:265 util/grub-mklayout.c:490
-#: util/grub-mklayout.c:502 util/grub-mknetdir.c:124 util/grub-mknetdir.c:142
-#: util/grub-mkrescue.c:510 util/grub-mkrescue.c:514 util/grub-mkrescue.c:728
-#: util/grub-mkrescue.c:732 util/grub-mkstandalone.c:248 util/grub-mount.c:499
-#: util/grub-render-label.c:156 util/grub-script-check.c:171 util/misc.c:86
-#: util/misc.c:111 util/misc.c:135 util/render-label.c:76
-#: util/render-label.c:163 util/render-label.c:178 util/resolve.c:246
-#: util/setup.c:683
+#: grub-core/osdep/windows/blocklist.c:98 grub-core/tests/video_checksum.c:279
+#: util/editenv.c:46 util/glue-efi.c:115 util/glue-efi.c:120
+#: util/glue-efi.c:130 util/grub-editenv.c:138 util/grub-editenv.c:192
+#: util/grub-file.c:83 util/grub-fstest.c:128 util/grub-fstest.c:568
+#: util/grub-install-common.c:91 util/grub-install-common.c:93
+#: util/grub-install-common.c:100 util/grub-install-common.c:516
+#: util/grub-menulst2cfg.c:53 util/grub-menulst2cfg.c:68
+#: util/grub-mkimage.c:275 util/grub-mklayout.c:497 util/grub-mklayout.c:509
+#: util/grub-mknetdir.c:130 util/grub-mknetdir.c:148 util/grub-mkrescue.c:531
+#: util/grub-mkrescue.c:535 util/grub-mkrescue.c:755 util/grub-mkrescue.c:759
+#: util/grub-mkstandalone.c:253 util/grub-mount.c:499
+#: util/grub-render-label.c:169 util/grub-script-check.c:175
+#: util/grub-syslinux2cfg.c:181 util/grub-syslinux2cfg.c:191
+#: util/grub-syslinux2cfg.c:212 util/grub-syslinux2cfg.c:228 util/misc.c:87
+#: util/misc.c:115 util/misc.c:139 util/render-label.c:76
+#: util/render-label.c:163 util/render-label.c:174 util/resolve.c:246
+#: util/setup.c:696
 #, c-format
 msgid "cannot open `%s': %s"
 msgstr "ϲαννοτ οπεν `%s': %s"
 
 #: grub-core/disk/cryptodisk.c:573 grub-core/disk/cryptodisk.c:618
 #: grub-core/kern/emu/hostdisk.c:270 grub-core/kern/emu/hostfs.c:143
-#: grub-core/osdep/linux/hostdisk.c:446 util/grub-editenv.c:134
-#: util/grub-editenv.c:140 util/grub-fstest.c:307 util/misc.c:152
+#: grub-core/osdep/linux/hostdisk.c:453 util/grub-editenv.c:143
+#: util/grub-editenv.c:149 util/grub-fstest.c:320 util/misc.c:157
 #, c-format
 msgid "cannot seek `%s': %s"
 msgstr "ϲαννοτ σεεκ `%s': %s"
@@ -2162,7 +2389,8 @@ msgstr ""
 #. "embedding zone") and this operation is
 #. called "embedding".
 #: grub-core/disk/ldm.c:1015
-msgid "your LDM embedding Partition is too small; embedding won't be possible"
+#, fuzzy
+msgid "your LDM Embedding Partition is too small; embedding won't be possible"
 msgstr "ϋουρ ΛΔΜ εμϭεδδινγ Παρτιτιον ισ τοο σμαλλ; εμϭεδδινγ ωον'τ ϭε ποσσιϭλε"
 
 #. TRANSLATORS: it's a partition for embedding,
@@ -2173,33 +2401,37 @@ msgstr "τχισ ΛΔΜ χασ νο Εμϭεδδινγ Παρτιτιον; εμ�
 
 #. TRANSLATORS: The disk is simply removed from the list of available ones,
 #. not wiped, avoid to scare user.
-#: grub-core/disk/loopback.c:43
+#: grub-core/disk/loopback.c:45
 msgid "Delete the specified loopback drive."
 msgstr "Δελετε τχε σπεϲιφιεδ λοοπϭαϲκ δριβε."
 
-#: grub-core/disk/loopback.c:233
+#: grub-core/disk/loopback.c:236
 msgid "[-d] DEVICENAME FILE."
 msgstr "[-δ] ΔΕΒΙϲΕΝΑΜΕ ΦΙΛΕ."
 
 #. TRANSLATORS: The file itself is not destroyed
 #. or transformed into drive.
-#: grub-core/disk/loopback.c:236
+#: grub-core/disk/loopback.c:239
 msgid "Make a virtual drive from a file."
 msgstr "Μακε α βιρτυαλ δριβε φρομ α φιλε."
 
 #: grub-core/efiemu/i386/loadcore32.c:111
-#: grub-core/efiemu/i386/loadcore64.c:124 grub-core/kern/arm/dl.c:240
+#: grub-core/efiemu/i386/loadcore64.c:124 grub-core/kern/arm/dl.c:236
 #: grub-core/kern/arm64/dl.c:159 grub-core/kern/i386/dl.c:75
-#: grub-core/kern/ia64/dl.c:122 grub-core/kern/mips/dl.c:253
-#: grub-core/kern/powerpc/dl.c:171 grub-core/kern/sparc64/dl.c:109
-#: grub-core/kern/x86_64/dl.c:102
+#: grub-core/kern/ia64/dl.c:136 grub-core/kern/mips/dl.c:253
+#: grub-core/kern/powerpc/dl.c:161 grub-core/kern/sparc64/dl.c:179
+#: grub-core/kern/x86_64/dl.c:109 util/grub-mkimagexx.c:567
+#: util/grub-mkimagexx.c:685 util/grub-mkimagexx.c:748
+#: util/grub-mkimagexx.c:824 util/grub-mkimagexx.c:852
+#: util/grub-mkimagexx.c:947 util/grub-mkimagexx.c:1179
+#: util/grub-mkimagexx.c:1204 util/grub-mkimagexx.c:1242
 #, c-format
 msgid "relocation 0x%x is not implemented yet"
 msgstr "ρελοϲατιον 0ξ%x ισ νοτ ιμπλεμεντεδ ϋετ"
 
 #: grub-core/efiemu/loadcore.c:197 grub-core/efiemu/loadcore.c:234
 #: grub-core/kern/dl.c:337 grub-core/loader/i386/bsdXX.c:310
-#: util/grub-mkimagexx.c:1539
+#: util/grub-mkimagexx.c:1581
 msgid "no symbol table"
 msgstr "νο σϋμϭολ ταϭλε"
 
@@ -2245,7 +2477,7 @@ msgid "List the loaded fonts."
 msgstr "Λιστ τχε λοαδεδ φοντσ."
 
 #: grub-core/fs/archelp.c:216 grub-core/fs/archelp.c:277
-#: grub-core/fs/bfs.c:771 grub-core/fs/btrfs.c:1377 grub-core/fs/fshelp.c:146
+#: grub-core/fs/bfs.c:771 grub-core/fs/btrfs.c:1387 grub-core/fs/fshelp.c:146
 #: grub-core/fs/jfs.c:729 grub-core/fs/minix.c:359 grub-core/fs/ufs.c:454
 msgid "too deep nesting of symlinks"
 msgstr "τοο δεεπ νεστινγ οφ σϋμλινκσ"
@@ -2254,28 +2486,28 @@ msgstr "τοο δεεπ νεστινγ οφ σϋμλινκσ"
 msgid "attempt to read past the end of file"
 msgstr "αττεμπτ το ρεαδ παστ τχε ενδ οφ φιλε"
 
-#: grub-core/fs/bfs.c:720 grub-core/fs/bfs.c:916 grub-core/fs/btrfs.c:1260
-#: grub-core/fs/btrfs.c:1519 grub-core/fs/fat.c:870 grub-core/fs/fat.c:1138
+#: grub-core/fs/bfs.c:720 grub-core/fs/bfs.c:916 grub-core/fs/btrfs.c:1270
+#: grub-core/fs/btrfs.c:1529 grub-core/fs/fat.c:870 grub-core/fs/fat.c:1138
 #: grub-core/fs/fshelp.c:117 grub-core/fs/fshelp.c:232 grub-core/fs/hfs.c:1151
-#: grub-core/fs/hfs.c:1273 grub-core/fs/jfs.c:431 grub-core/fs/minix.c:404
+#: grub-core/fs/hfs.c:1277 grub-core/fs/jfs.c:431 grub-core/fs/minix.c:404
 #: grub-core/fs/minix.c:546 grub-core/fs/reiserfs.c:732 grub-core/fs/ufs.c:525
-#: grub-core/fs/ufs.c:664 grub-core/fs/zfs/zfs.c:2762
-#: grub-core/fs/zfs/zfs.c:4157
+#: grub-core/fs/ufs.c:664 grub-core/fs/zfs/zfs.c:2766
+#: grub-core/fs/zfs/zfs.c:4161
 msgid "not a directory"
 msgstr "νοτ α διρεϲτορϋ"
 
-#: grub-core/fs/bfs.c:941 grub-core/fs/btrfs.c:1625 grub-core/fs/fat.c:1027
-#: grub-core/fs/fshelp.c:230 grub-core/fs/hfs.c:1309 grub-core/fs/jfs.c:828
-#: grub-core/fs/zfs/zfs.c:3722
+#: grub-core/fs/bfs.c:941 grub-core/fs/btrfs.c:1635 grub-core/fs/fat.c:1027
+#: grub-core/fs/fshelp.c:230 grub-core/fs/hfs.c:1313 grub-core/fs/jfs.c:828
+#: grub-core/fs/zfs/zfs.c:3726
 msgid "not a regular file"
 msgstr "νοτ α ρεγυλαρ φιλε"
 
-#: grub-core/fs/btrfs.c:584 grub-core/fs/zfs/zfs.c:1456
+#: grub-core/fs/btrfs.c:584 grub-core/fs/zfs/zfs.c:1460
 msgid "couldn't find a necessary member device of multi-device filesystem"
 msgstr "ϲουλδν'τ φινδ α νεϲεσσαρϋ μεμϭερ δεβιϲε οφ μυλτι-δεβιϲε φιλεσϋστεμ"
 
-#: grub-core/fs/btrfs.c:1719 grub-core/fs/zfs/zfs.c:4243
-#: grub-core/partmap/msdos.c:397
+#: grub-core/fs/btrfs.c:1729 grub-core/fs/zfs/zfs.c:4247
+#: grub-core/partmap/msdos.c:400
 msgid "your core.img is unusually large.  It won't fit in the embedding area"
 msgstr "ϋουρ ϲορε.ιμγ ισ υνυσυαλλϋ λαργε.  Ιτ ωον'τ φιτ ιν τχε εμϭεδδινγ αρεα"
 
@@ -2286,7 +2518,7 @@ msgstr "ϋουρ ϲορε.ιμγ ισ υνυσυαλλϋ λαργε.  Ιτ ωο�
 msgid "invalid file name `%s'"
 msgstr "ινβαλιδ φιλε ναμε `%s'"
 
-#: grub-core/fs/zfs/zfs.c:445
+#: grub-core/fs/zfs/zfs.c:449
 msgid "checksum verification failed"
 msgstr "ϲχεϲκσυμ βεριφιϲατιον φαιλεδ"
 
@@ -2310,7 +2542,7 @@ msgstr "Ασσυμε ινπυτ ισ χεξ."
 msgid "Assume input is passphrase."
 msgstr "Ασσυμε ινπυτ ισ πασσπχρασε."
 
-#: grub-core/fs/zfs/zfscrypt.c:430 util/grub-fstest.c:540
+#: grub-core/fs/zfs/zfscrypt.c:430 util/grub-fstest.c:553
 #: util/grub-mount.c:484
 msgid "Enter ZFS password: "
 msgstr "Εντερ ΖΦΣ πασσωορδ: "
@@ -2542,7 +2774,7 @@ msgstr "πρεματυρε ενδ οφ φιλε"
 msgid "Translates the string with the current settings."
 msgstr "Τρανσλατεσ τχε στρινγ ωιτχ τχε ϲυρρεντ σεττινγσ."
 
-#: grub-core/gfxmenu/gui_label.c:184 grub-core/normal/menu_text.c:184
+#: grub-core/gfxmenu/gui_label.c:186 grub-core/normal/menu_text.c:184
 msgid ""
 "Press enter to boot the selected OS, `e' to edit the commands before booting "
 "or `c' for a command-line. ESC to return previous menu."
@@ -2550,7 +2782,7 @@ msgstr ""
 "Πρεσσ εντερ το ϭοοτ τχε σελεϲτεδ ΟΣ, `ε' το εδιτ τχε ϲομμανδσ ϭεφορε ϭοοτινγ "
 "ορ `ϲ' φορ α ϲομμανδ-λινε. ΕΣϲ το ρετυρν πρεβιουσ μενυ."
 
-#: grub-core/gfxmenu/gui_label.c:188 grub-core/normal/menu_text.c:192
+#: grub-core/gfxmenu/gui_label.c:190 grub-core/normal/menu_text.c:192
 msgid ""
 "Press enter to boot the selected OS, `e' to edit the commands before booting "
 "or `c' for a command-line."
@@ -2558,11 +2790,11 @@ msgstr ""
 "Πρεσσ εντερ το ϭοοτ τχε σελεϲτεδ ΟΣ, `ε' το εδιτ τχε ϲομμανδσ ϭεφορε ϭοοτινγ "
 "ορ `ϲ' φορ α ϲομμανδ-λινε."
 
-#: grub-core/gfxmenu/gui_label.c:192
+#: grub-core/gfxmenu/gui_label.c:194
 msgid "enter: boot, `e': options, `c': cmd-line"
 msgstr "εντερ: ϭοοτ, `ε': οπτιονσ, `ϲ': ϲμδ-λινε"
 
-#: grub-core/gfxmenu/gui_progress_bar.c:329 grub-core/normal/menu_text.c:434
+#: grub-core/gfxmenu/gui_progress_bar.c:333 grub-core/normal/menu_text.c:443
 #, c-format
 msgid "The highlighted entry will be executed automatically in %ds."
 msgstr "Τχε χιγχλιγχτεδ εντρϋ ωιλλ ϭε εξεϲυτεδ αυτοματιϲαλλϋ ιν %dσ."
@@ -2570,7 +2802,7 @@ msgstr "Τχε χιγχλιγχτεδ εντρϋ ωιλλ ϭε εξεϲυτεδ 
 #. TRANSLATORS:  's' stands for seconds.
 #. It's a standalone timeout notification.
 #. Please use the short form in your language.
-#: grub-core/gfxmenu/gui_progress_bar.c:334
+#: grub-core/gfxmenu/gui_progress_bar.c:338
 #, c-format
 msgid "%ds remaining."
 msgstr "%dσ ρεμαινινγ."
@@ -2578,7 +2810,8 @@ msgstr "%dσ ρεμαινινγ."
 #. TRANSLATORS:  's' stands for seconds.
 #. It's a standalone timeout notification.
 #. Please use the shortest form available in you language.
-#: grub-core/gfxmenu/gui_progress_bar.c:339 grub-core/normal/menu_text.c:435
+#: grub-core/gfxmenu/gui_progress_bar.c:343 grub-core/normal/menu_text.c:441
+#: grub-core/normal/menu_text.c:459
 #, c-format
 msgid "%ds"
 msgstr "%dσ"
@@ -2841,12 +3074,8 @@ msgstr "λζοπ φιλε ϲορρυπτεδ"
 msgid "xz file corrupted or unsupported block options"
 msgstr "ξζ φιλε ϲορρυπτεδ ορ υνσυππορτεδ ϭλοϲκ οπτιονσ"
 
-#: grub-core/kern/arm/dl.c:215 util/mkimage.c:882 util/mkimage.c:910
-msgid "Relocation targeting wrong execution state"
-msgstr "Ρελοϲατιον ταργετινγ ωρονγ εξεϲυτιον στατε"
-
-#: grub-core/kern/arm/dl.c:261 grub-core/kern/arm64/dl.c:49
-#: grub-core/kern/i386/dl.c:36 grub-core/kern/ia64/dl.c:40
+#: grub-core/kern/arm/dl.c:257 grub-core/kern/arm64/dl.c:49
+#: grub-core/kern/i386/dl.c:36 grub-core/kern/ia64/dl.c:41
 #: grub-core/kern/mips/dl.c:48 grub-core/kern/powerpc/dl.c:36
 #: grub-core/kern/sparc64/dl.c:36 grub-core/kern/x86_64/dl.c:36
 #: grub-core/loader/i386/bsd.c:1430 grub-core/loader/i386/bsdXX.c:49
@@ -2856,10 +3085,6 @@ msgstr "Ρελοϲατιον ταργετινγ ωρονγ εξεϲυτιον σ
 #: grub-core/loader/sparc64/ieee1275/linux.c:331
 msgid "invalid arch-dependent ELF magic"
 msgstr "ινβαλιδ αρϲχ-δεπενδεντ ΕΛΦ μαγιϲ"
-
-#: grub-core/kern/arm64/dl.c:152
-msgid "Trampoline out of range"
-msgstr "Τραμπολινε ουτ οφ ρανγε"
 
 #: grub-core/kern/corecmd.c:178
 msgid "[ENVVAR=VALUE]"
@@ -2909,9 +3134,9 @@ msgstr "ινβαλιδ αρϲχ-ινδεπενδεντ ΕΛΦ μαγιϲ"
 msgid "device count exceeds limit"
 msgstr "δεβιϲε ϲουντ εξϲεεδσ λιμιτ"
 
-#: grub-core/kern/emu/hostdisk.c:342 util/editenv.c:53 util/grub-editenv.c:188
-#: util/grub-fstest.c:180 util/grub-mkfont.c:793 util/misc.c:155
-#: util/misc.c:170 util/setup.c:688
+#: grub-core/kern/emu/hostdisk.c:342 util/editenv.c:54 util/grub-editenv.c:197
+#: util/grub-fstest.c:191 util/grub-mkfont.c:793 util/misc.c:160
+#: util/misc.c:175 util/setup.c:701
 #, c-format
 msgid "cannot write to `%s': %s"
 msgstr "ϲαννοτ ωριτε το `%s': %s"
@@ -2953,32 +3178,33 @@ msgstr ""
 msgid "can't open `%s': %s"
 msgstr "ϲαν'τ οπεν `%s': %s"
 
-#: grub-core/kern/emu/main.c:90 util/grub-fstest.c:503 util/grub-mount.c:453
+#: grub-core/kern/emu/main.c:90 util/grub-fstest.c:516 util/grub-mount.c:453
 msgid "DEVICE_NAME"
 msgstr "ΔΕΒΙϲΕ_ΝΑΜΕ"
 
 #: grub-core/kern/emu/main.c:90 grub-core/loader/i386/bsd.c:135
-#: grub-core/loader/i386/bsd.c:168 util/grub-fstest.c:503
+#: grub-core/loader/i386/bsd.c:168 util/grub-fstest.c:516
 #: util/grub-mount.c:453
 msgid "Set root device."
 msgstr "Σετ ροοτ δεβιϲε."
 
 #. TRANSLATORS: There are many devices in device map.
-#: grub-core/kern/emu/main.c:93 util/grub-probe.c:657 util/grub-setup.c:75
+#: grub-core/kern/emu/main.c:93 util/grub-probe.c:711 util/grub-setup.c:85
 #, c-format
 msgid "use FILE as the device map [default=%s]"
 msgstr "υσε ΦΙΛΕ ασ τχε δεβιϲε μαπ [δεφαυλτ=%s]"
 
-#: grub-core/kern/emu/main.c:95 util/grub-setup.c:73
+#: grub-core/kern/emu/main.c:95 util/grub-setup.c:83
 #, c-format
 msgid "use GRUB files in the directory DIR [default=%s]"
 msgstr "υσε ΓΡΥϬ φιλεσ ιν τχε διρεϲτορϋ ΔΙΡ [δεφαυλτ=%s]"
 
-#: grub-core/kern/emu/main.c:96 util/grub-editenv.c:53 util/grub-fstest.c:512
-#: util/grub-glue-efi.c:53 util/grub-mkfont.c:959 util/grub-mkimage.c:77
-#: util/grub-mklayout.c:49 util/grub-mount.c:459 util/grub-probe.c:660
-#: util/grub-render-label.c:65 util/grub-script-check.c:48
-#: util/grub-setup.c:80
+#: grub-core/kern/emu/main.c:96 include/grub/util/install.h:65
+#: util/grub-editenv.c:58 util/grub-fstest.c:525 util/grub-glue-efi.c:58
+#: util/grub-macbless.c:102 util/grub-mkfont.c:959 util/grub-mkimage.c:83
+#: util/grub-mklayout.c:56 util/grub-mount.c:459 util/grub-probe.c:713
+#: util/grub-render-label.c:74 util/grub-script-check.c:52
+#: util/grub-setup.c:90 util/grub-syslinux2cfg.c:78
 msgid "print verbose messages."
 msgstr "πριντ βερϭοσε μεσσαγεσ."
 
@@ -2986,26 +3212,29 @@ msgstr "πριντ βερϭοσε μεσσαγεσ."
 msgid "wait until a debugger will attach"
 msgstr "ωαιτ υντιλ α δεϭυγγερ ωιλλ ατταϲχ"
 
-#: grub-core/kern/emu/main.c:151 util/grub-mkrelpath.c:57
-#: util/grub-probe.c:809 util/grub-script-check.c:71 util/grub-setup.c:182
+#: grub-core/kern/emu/main.c:155 util/grub-macbless.c:141
+#: util/grub-mkrelpath.c:61 util/grub-probe.c:848 util/grub-script-check.c:75
+#: util/grub-setup.c:203
 #, c-format
 msgid "Unknown extra argument `%s'."
 msgstr "Υνκνοων εξτρα αργυμεντ `%s'."
 
-#: grub-core/kern/emu/main.c:165
+#: grub-core/kern/emu/main.c:169
 msgid "GRUB emulator."
 msgstr "ΓΡΥϬ εμυλατορ."
 
-#: grub-core/kern/emu/main.c:189 util/grub-editenv.c:252
-#: util/grub-glue-efi.c:105 util/grub-mkfont.c:1174 util/grub-mkimage.c:248
-#: util/grub-mklayout.c:480 util/grub-mkpasswd-pbkdf2.c:127
-#: util/grub-mkrelpath.c:92 util/grub-probe.c:798 util/grub-render-label.c:139
-#: util/grub-script-check.c:156 util/grub-setup.c:240
+#: grub-core/kern/emu/main.c:193 util/grub-editenv.c:261
+#: util/grub-glue-efi.c:110 util/grub-macbless.c:171 util/grub-mkfont.c:1174
+#: util/grub-mkimage.c:258 util/grub-mklayout.c:487
+#: util/grub-mkpasswd-pbkdf2.c:132 util/grub-mkrelpath.c:96
+#: util/grub-probe.c:837 util/grub-render-label.c:152
+#: util/grub-script-check.c:160 util/grub-setup.c:262
+#: util/grub-syslinux2cfg.c:163
 msgid "Error in parsing command line arguments\n"
 msgstr "Ερρορ ιν παρσινγ ϲομμανδ λινε αργυμεντσ\n"
 
 #. TRANSLATORS: In this case GRUB tells user what he has to do.
-#: grub-core/kern/emu/main.c:197
+#: grub-core/kern/emu/main.c:201
 #, c-format
 msgid "Run `gdb %s %d', and set ARGS.HOLD to zero.\n"
 msgstr "Ρυν `γδϭ %s %d', ανδ σετ ΑΡΓΣ.ΧΟΛΔ το ζερο.\n"
@@ -3020,7 +3249,7 @@ msgstr "%s: ωαρνινγ:"
 msgid "%s: info:"
 msgstr "%s: ινφο:"
 
-#: grub-core/kern/emu/misc.c:78 util/grub-fstest.c:554 util/grub-fstest.c:562
+#: grub-core/kern/emu/misc.c:78 util/grub-fstest.c:567 util/grub-fstest.c:575
 #: util/grub-mount.c:498 util/grub-mount.c:506
 #, c-format
 msgid "%s: error:"
@@ -3030,7 +3259,7 @@ msgstr "%s: ερρορ:"
 msgid "unknown filesystem"
 msgstr "υνκνοων φιλεσϋστεμ"
 
-#: grub-core/kern/mips/arc/init.c:273 grub-core/kern/mips/loongson/init.c:285
+#: grub-core/kern/mips/arc/init.c:273 grub-core/kern/mips/loongson/init.c:301
 msgid "Shutdown failed"
 msgstr "Σχυτδοων φαιλεδ"
 
@@ -3038,8 +3267,8 @@ msgstr "Σχυτδοων φαιλεδ"
 msgid "Exit failed"
 msgstr "Εξιτ φαιλεδ"
 
-#: grub-core/kern/misc.c:380 grub-core/kern/misc.c:436 include/grub/misc.h:307
-#: include/grub/misc.h:316
+#: grub-core/kern/misc.c:380 grub-core/kern/misc.c:436 include/grub/misc.h:315
+#: include/grub/misc.h:324
 msgid "overflow is detected"
 msgstr "οβερφλοω ισ δετεϲτεδ"
 
@@ -3048,7 +3277,7 @@ msgstr "οβερφλοω ισ δετεϲτεδ"
 msgid "Discarding improperly nested partition (%s,%s,%s%d)"
 msgstr "Δισϲαρδινγ ιμπροπερλϋ νεστεδ παρτιτιον (%s,%s,%s%d)"
 
-#: grub-core/kern/rescue_parser.c:69 util/grub-editenv.c:282
+#: grub-core/kern/rescue_parser.c:69 util/grub-editenv.c:291
 #, c-format
 msgid "Unknown command `%s'.\n"
 msgstr "Υνκνοων ϲομμανδ `%s'.\n"
@@ -3088,69 +3317,73 @@ msgstr "Πριντ ϭαϲκτραϲε."
 msgid "GRUB doesn't know how to halt this machine yet!"
 msgstr "ΓΡΥϬ δοεσν'τ κνοω χοω το χαλτ τχισ μαϲχινε ϋετ!"
 
-#: grub-core/lib/legacy_parse.c:73
+#: grub-core/lib/legacy_parse.c:75
 msgid "Default server is ${net_default_server}"
 msgstr "Δεφαυλτ σερβερ ισ ${νετ_δεφαυλτ_σερβερ}"
 
-#: grub-core/lib/legacy_parse.c:841 grub-core/video/colors.c:296
+#: grub-core/lib/legacy_parse.c:843 grub-core/video/colors.c:296
 #: grub-core/video/colors.c:305 grub-core/video/colors.c:311
 #: grub-core/video/colors.c:327 util/render-label.c:84 util/render-label.c:98
 #, c-format
 msgid "invalid color specification `%s'"
 msgstr "ινβαλιδ ϲολορ σπεϲιφιϲατιον `%s'"
 
-#: grub-core/lib/mips/arc/reboot.c:32 grub-core/lib/mips/loongson/reboot.c:55
+#: grub-core/lib/mips/arc/reboot.c:32 grub-core/lib/mips/loongson/reboot.c:61
 msgid "Reboot failed"
 msgstr "Ρεϭοοτ φαιλεδ"
 
-#: grub-core/loader/arm/linux.c:134
-msgid "device tree must be supplied"
-msgstr "δεβιϲε τρεε μυστ ϭε συππλιεδ"
+#: grub-core/loader/arm/linux.c:242
+msgid "device tree must be supplied (see `devicetree' command)"
+msgstr "δεβιϲε τρεε μυστ ϭε συππλιεδ (σεε `δεβιϲετρεε' ϲομμανδ)"
 
-#: grub-core/loader/arm/linux.c:199
+#: grub-core/loader/arm/linux.c:330
 msgid "invalid zImage"
 msgstr "ινβαλιδ ζΙμαγε"
 
-#: grub-core/loader/arm/linux.c:288 grub-core/loader/arm/linux.c:353
-msgid "memory allocation failed"
-msgstr "μεμορϋ αλλοϲατιον φαιλεδ"
-
-#: grub-core/loader/arm/linux.c:322
+#: grub-core/loader/arm/linux.c:449 grub-core/loader/arm64/linux.c:224
 msgid "invalid device tree"
 msgstr "ινβαλιδ δεβιϲε τρεε"
 
-#: grub-core/loader/arm/linux.c:386 grub-core/loader/i386/linux.c:1139
-#: grub-core/loader/i386/pc/linux.c:474 grub-core/loader/ia64/efi/linux.c:627
-#: grub-core/loader/mips/linux.c:493
+#: grub-core/loader/arm/linux.c:513 grub-core/loader/arm64/linux.c:473
+#: grub-core/loader/i386/linux.c:1141 grub-core/loader/i386/pc/linux.c:474
+#: grub-core/loader/i386/xen.c:696 grub-core/loader/i386/xen.c:698
+#: grub-core/loader/ia64/efi/linux.c:627 grub-core/loader/mips/linux.c:493
 #: grub-core/loader/powerpc/ieee1275/linux.c:382
 #: grub-core/loader/sparc64/ieee1275/linux.c:510
 msgid "Load Linux."
 msgstr "Λοαδ Λινυξ."
 
-#: grub-core/loader/arm/linux.c:388 grub-core/loader/i386/linux.c:1141
-#: grub-core/loader/i386/pc/linux.c:477 grub-core/loader/i386/xen.c:700
-#: grub-core/loader/ia64/efi/linux.c:630 grub-core/loader/mips/linux.c:495
+#: grub-core/loader/arm/linux.c:515 grub-core/loader/arm64/linux.c:475
+#: grub-core/loader/i386/linux.c:1143 grub-core/loader/i386/pc/linux.c:477
+#: grub-core/loader/i386/xen.c:700 grub-core/loader/ia64/efi/linux.c:630
+#: grub-core/loader/mips/linux.c:495
 #: grub-core/loader/powerpc/ieee1275/linux.c:384
 #: grub-core/loader/sparc64/ieee1275/linux.c:512
 msgid "Load initrd."
 msgstr "Λοαδ ινιτρδ."
 
-#: grub-core/loader/arm/linux.c:390
+#. TRANSLATORS: DTB stands for device tree blob.
+#: grub-core/loader/arm/linux.c:518 grub-core/loader/arm64/linux.c:478
 msgid "Load DTB file."
 msgstr "Λοαδ ΔΤϬ φιλε."
 
-#: grub-core/loader/efi/appleloader.c:232
+#: grub-core/loader/arm64/linux.c:123
+msgid ""
+"plain Image kernel not supported - rebuild with CONFIG_(U)EFI_STUB enabled"
+msgstr ""
+
+#: grub-core/loader/efi/appleloader.c:231
 msgid "[OPTS]"
 msgstr "[ΟΠΤΣ]"
 
 #. TRANSLATORS: This command is used on EFI to
 #. switch to BIOS mode and boot the OS requiring
 #. BIOS.
-#: grub-core/loader/efi/appleloader.c:236
+#: grub-core/loader/efi/appleloader.c:235
 msgid "Boot BIOS-based system."
 msgstr "Ϭοοτ ϬΙΟΣ-ϭασεδ σϋστεμ."
 
-#: grub-core/loader/efi/chainloader.c:413
+#: grub-core/loader/efi/chainloader.c:410
 #: grub-core/loader/i386/pc/chainloader.c:287
 msgid "Load another boot loader."
 msgstr "Λοαδ ανοτχερ ϭοοτ λοαδερ."
@@ -3265,7 +3498,7 @@ msgstr "αδδρ"
 msgid "size"
 msgstr "σιζε"
 
-#: grub-core/loader/i386/bsd.c:1140 grub-core/loader/i386/linux.c:507
+#: grub-core/loader/i386/bsd.c:1140 grub-core/loader/i386/linux.c:509
 #: grub-core/loader/i386/xnu.c:984
 msgid "Booting in blind mode"
 msgstr "Ϭοοτινγ ιν ϭλινδ μοδε"
@@ -3316,12 +3549,12 @@ msgstr "Λοαδ κΟπενϬΣΔ ραμδισκ."
 msgid "Load another coreboot payload"
 msgstr "Λοαδ ανοτχερ ϲορεϭοοτ παϋλοαδ"
 
-#: grub-core/loader/i386/linux.c:899
+#: grub-core/loader/i386/linux.c:901
 msgid "Legacy `ask' parameter no longer supported."
 msgstr "Λεγαϲϋ `ασκ' παραμετερ νο λονγερ συππορτεδ."
 
-#: grub-core/loader/i386/linux.c:915 grub-core/loader/i386/linux.c:925
-#: grub-core/loader/i386/linux.c:955
+#: grub-core/loader/i386/linux.c:917 grub-core/loader/i386/linux.c:927
+#: grub-core/loader/i386/linux.c:957
 #, c-format
 msgid "%s is deprecated. Use set gfxpayload=%s before linux command instead.\n"
 msgstr ""
@@ -3329,7 +3562,7 @@ msgstr ""
 
 #. TRANSLATORS: "x" has to be entered in, like an identifier,
 #. so please don't use better Unicode codepoints.
-#: grub-core/loader/i386/linux.c:938
+#: grub-core/loader/i386/linux.c:940
 #, c-format
 msgid ""
 "%s is deprecated. VGA mode %d isn't recognized. Use set "
@@ -3342,7 +3575,7 @@ msgstr ""
 msgid "[--force|--bpb] FILE"
 msgstr "[--φορϲε|--ϭπϭ] ΦΙΛΕ"
 
-#: grub-core/loader/i386/pc/freedos.c:148 util/setup.c:291
+#: grub-core/loader/i386/pc/freedos.c:148 util/setup.c:292
 #, c-format
 msgid "the size of `%s' is too large"
 msgstr "τχε σιζε οφ `%s' ισ τοο λαργε"
@@ -3381,13 +3614,13 @@ msgstr "Λοαδ Πλαν9 κερνελ."
 msgid "Load a PXE image."
 msgstr "Λοαδ α ΠΞΕ ιμαγε."
 
+#: grub-core/loader/i386/pc/truecrypt.c:226
+msgid "Load Truecrypt ISO."
+msgstr "Λοαδ Τρυεϲρϋπτ ΙΣΟ."
+
 #: grub-core/loader/i386/xen.c:542 grub-core/loader/i386/xen.c:608
 msgid "initrd already loaded"
 msgstr "ινιτρδ αλρεαδϋ λοαδεδ"
-
-#: grub-core/loader/i386/xen.c:696 grub-core/loader/i386/xen.c:698
-msgid "Load linux."
-msgstr "Λοαδ λινυξ."
 
 #: grub-core/loader/i386/xen.c:702
 msgid "Load module."
@@ -3595,6 +3828,22 @@ msgstr "νο ΔΝΣ ρεϲορδ φουνδ"
 #: grub-core/net/dns.c:620
 msgid "no DNS reply received"
 msgstr "νο ΔΝΣ ρεπλϋ ρεϲειβεδ"
+
+#: grub-core/net/dns.c:676
+msgid "only ipv4"
+msgstr "ονλϋ ιπβ4"
+
+#: grub-core/net/dns.c:680
+msgid "only ipv6"
+msgstr "ονλϋ ιπβ6"
+
+#: grub-core/net/dns.c:684
+msgid "prefer ipv4"
+msgstr "πρεφερ ιπβ4"
+
+#: grub-core/net/dns.c:688
+msgid "prefer ipv6"
+msgstr "πρεφερ ιπβ6"
 
 #: grub-core/net/dns.c:721
 msgid "invalid argument"
@@ -3872,12 +4121,16 @@ msgstr "Σατυρδαϋ"
 msgid "module isn't loaded"
 msgstr "μοδυλε ισν'τ λοαδεδ"
 
-#: grub-core/normal/main.c:243
+#: grub-core/normal/main.c:203
 #, c-format
 msgid "GNU GRUB  version %s"
 msgstr "ΓΝΥ ΓΡΥϬ  βερσιον %s"
 
-#: grub-core/normal/main.c:399
+#: grub-core/normal/main.c:352
+msgid "ESC at any time exits."
+msgstr "ΕΣϲ ατ ανϋ τιμε εξιτσ."
+
+#: grub-core/normal/main.c:355
 #, c-format
 msgid ""
 "Minimal BASH-like line editing is supported. For the first word, TAB lists "
@@ -3888,29 +4141,25 @@ msgstr ""
 "ποσσιϭλε ϲομμανδ ϲομπλετιονσ. Ανϋωχερε ελσε ΤΑϬ λιστσ ποσσιϭλε δεβιϲε ορ "
 "φιλε ϲομπλετιονσ. %s"
 
-#: grub-core/normal/main.c:402
-msgid "ESC at any time exits."
-msgstr "ΕΣϲ ατ ανϋ τιμε εξιτσ."
-
 #. TRANSLATORS: it's command line prompt.
-#: grub-core/normal/main.c:434
+#: grub-core/normal/main.c:387
 msgid ">"
 msgstr ">"
 
 #. TRANSLATORS: it's command line prompt.
-#: grub-core/normal/main.c:437
+#: grub-core/normal/main.c:390
 msgid "grub>"
 msgstr "γρυϭ>"
 
-#: grub-core/normal/main.c:553
+#: grub-core/normal/main.c:506
 msgid "Clear the screen."
 msgstr "ϲλεαρ τχε σϲρεεν."
 
-#: grub-core/normal/main.c:562
+#: grub-core/normal/main.c:515
 msgid "Enter normal mode."
 msgstr "Εντερ νορμαλ μοδε."
 
-#: grub-core/normal/main.c:564
+#: grub-core/normal/main.c:517
 msgid "Exit from normal mode."
 msgstr "Εξιτ φρομ νορμαλ μοδε."
 
@@ -3946,7 +4195,7 @@ msgstr ""
 "ϲτρλ-ξ ορ Φ10 το ϭοοτ, ϲτρλ-ϲ ορ Φ2 φορ α ϲομμανδ-λινε ορ ΕΣϲ το δισϲαρδ "
 "εδιτσ ανδ ρετυρν το τχε ΓΡΥϬ μενυ."
 
-#: grub-core/normal/menu_text.c:168
+#: grub-core/normal/menu_text.c:170
 #, c-format
 msgid "Use the %C and %C keys to select which entry is highlighted."
 msgstr "Υσε τχε %C ανδ %C κεϋσ το σελεϲτ ωχιϲχ εντρϋ ισ χιγχλιγχτεδ."
@@ -4091,10 +4340,31 @@ msgstr "--ΜΟΡΕ--"
 #: grub-core/osdep/aros/config.c:92 grub-core/osdep/unix/config.c:137
 #: grub-core/osdep/windows/config.c:55
 #, c-format
-msgid "cannot open config file `%s': %s"
-msgstr "ϲαννοτ οπεν ϲονφιγ φιλε `%s': %s"
+msgid "cannot open configuration file `%s': %s"
+msgstr "ϲαννοτ οπεν ϲονφιγυρατιον φιλε `%s': %s"
 
-#: grub-core/osdep/basic/random.c:40
+#: grub-core/osdep/basic/compress.c:8 grub-core/osdep/basic/compress.c:14
+#: grub-core/osdep/basic/compress.c:20
+msgid "no compression is available for your platform"
+msgstr "νο ϲομπρεσσιον ισ αβαιλαϭλε φορ ϋουρ πλατφορμ"
+
+#: grub-core/osdep/basic/no_platform.c:30
+#: grub-core/osdep/windows/platform.c:416
+msgid "no IEEE1275 routines are available for your platform"
+msgstr "νο ΙΕΕΕ1275 ρουτινεσ αρε αβαιλαϭλε φορ ϋουρ πλατφορμ"
+
+#: grub-core/osdep/basic/no_platform.c:38
+msgid "no EFI routines are available for your platform"
+msgstr "νο ΕΦΙ ρουτινεσ αρε αβαιλαϭλε φορ ϋουρ πλατφορμ"
+
+#: grub-core/osdep/basic/no_platform.c:45
+#: grub-core/osdep/windows/platform.c:423
+msgid "no SGI routines are available for your platform"
+msgstr "νο ΣΓΙ ρουτινεσ αρε αβαιλαϭλε φορ ϋουρ πλατφορμ"
+
+#. TRANSLATORS: The OS itself may very well have a random
+#. number generator but GRUB doesn't know how to access it.
+#: grub-core/osdep/basic/random.c:42
 msgid "no random number generator is available for your OS"
 msgstr "νο ρανδομ νυμϭερ γενερατορ ισ αβαιλαϭλε φορ ϋουρ ΟΣ"
 
@@ -4194,8 +4464,8 @@ msgstr ""
 
 #: grub-core/osdep/hurd/hostdisk.c:73
 #, c-format
-msgid "Storage info for `%s' does not include type"
-msgstr "Στοραγε ινφο φορ `%s' δοεσ νοτ ινϲλυδε τϋπε"
+msgid "Storage information for `%s' does not include type"
+msgstr "Στοραγε ινφορματιον φορ `%s' δοεσ νοτ ινϲλυδε τϋπε"
 
 #: grub-core/osdep/hurd/hostdisk.c:75
 #, c-format
@@ -4205,9 +4475,11 @@ msgstr "`%s' ισ νοτ α λοϲαλ δισκ"
 #: grub-core/osdep/hurd/hostdisk.c:78
 #, c-format
 msgid ""
-"Storage info for `%s' does indicate neither plain partition nor plain disk"
+"Storage information for `%s' indicates neither a plain partition nor a plain "
+"disk"
 msgstr ""
-"Στοραγε ινφο φορ `%s' δοεσ ινδιϲατε νειτχερ πλαιν παρτιτιον νορ πλαιν δισκ"
+"Στοραγε ινφορματιον φορ `%s' ινδιϲατεσ νειτχερ α πλαιν παρτιτιον νορ α πλαιν "
+"δισκ"
 
 #: grub-core/osdep/linux/blocklist.c:81 grub-core/osdep/linux/blocklist.c:94
 #: grub-core/osdep/linux/blocklist.c:120
@@ -4219,7 +4491,7 @@ msgstr "ϲαν'τ ρετριεβε ϭλοϲκλιστσ: %s"
 msgid "blocksize is not divisible by 512"
 msgstr "ϭλοϲκσιζε ισ νοτ διβισιϭλε ϭϋ 512"
 
-#: grub-core/osdep/linux/blocklist.c:88 util/setup.c:646
+#: grub-core/osdep/linux/blocklist.c:88 util/setup.c:659
 msgid "can't retrieve blocklists"
 msgstr "ϲαν'τ ρετριεβε ϭλοϲκλιστσ"
 
@@ -4245,8 +4517,8 @@ msgstr "ιοϲτλ ΓΕΤ_ΔΙΣΚ_ΙΝΦΟ ερρορ: %s"
 
 #: grub-core/osdep/linux/getroot.c:573 grub-core/osdep/linux/getroot.c:643
 #: grub-core/osdep/linux/hostdisk.c:126 grub-core/osdep/unix/getroot.c:253
-#: grub-core/osdep/unix/getroot.c:629 grub-core/osdep/unix/platform.c:90
-#: grub-core/osdep/unix/platform.c:98
+#: grub-core/osdep/unix/getroot.c:630 grub-core/osdep/unix/platform.c:91
+#: grub-core/osdep/unix/platform.c:99
 #, c-format
 msgid "Unable to open stream from %s: %s"
 msgstr "Υναϭλε το οπεν στρεαμ φρομ %s: %s"
@@ -4261,9 +4533,9 @@ msgstr "υνκνοων κινδ οφ ΡΑΙΔ δεβιϲε `%s'"
 msgid "`obppath' not found in parent dirs of `%s', no IEEE1275 name discovery"
 msgstr "`οϭππατχ' νοτ φουνδ ιν παρεντ διρσ οφ `%s', νο ΙΕΕΕ1275 ναμε δισϲοβερϋ"
 
-#: grub-core/osdep/linux/ofpath.c:172 grub-core/osdep/unix/getroot.c:496
-#: grub-core/osdep/unix/getroot.c:520 grub-core/osdep/unix/relpath.c:49
-#: util/grub-install.c:830 util/grub-install.c:1083 util/grub-probe.c:212
+#: grub-core/osdep/linux/ofpath.c:172 grub-core/osdep/unix/getroot.c:497
+#: grub-core/osdep/unix/getroot.c:521 grub-core/osdep/unix/relpath.c:49
+#: util/grub-install.c:960 util/grub-install.c:1292 util/grub-probe.c:266
 #, c-format
 msgid "failed to get canonical path of `%s'"
 msgstr "φαιλεδ το γετ ϲανονιϲαλ πατχ οφ `%s'"
@@ -4278,57 +4550,71 @@ msgstr "υνκνοων δεβιϲε τϋπε %s\n"
 msgid "Usage: %s DEVICE\n"
 msgstr "Υσαγε: %s ΔΕΒΙϲΕ\n"
 
-#: grub-core/osdep/unix/exec.c:61 grub-core/osdep/unix/exec.c:117
-#: grub-core/osdep/unix/exec.c:176 grub-core/osdep/unix/exec.c:221
+#: grub-core/osdep/unix/exec.c:86 grub-core/osdep/unix/exec.c:172
+#: grub-core/osdep/unix/exec.c:217
 #, c-format
 msgid "Unable to fork: %s"
 msgstr "Υναϭλε το φορκ: %s"
 
-#: grub-core/osdep/unix/exec.c:170 grub-core/osdep/unix/exec.c:215
+#: grub-core/osdep/unix/exec.c:166 grub-core/osdep/unix/exec.c:211
 #, c-format
 msgid "Unable to create pipe: %s"
 msgstr "Υναϭλε το ϲρεατε πιπε: %s"
 
-#: grub-core/osdep/unix/getroot.c:418 grub-core/osdep/unix/getroot.c:471
-#: grub-core/osdep/unix/getroot.c:480
+#: grub-core/osdep/unix/getroot.c:418 grub-core/osdep/unix/getroot.c:472
+#: grub-core/osdep/unix/getroot.c:481
 msgid "cannot restore the original directory"
 msgstr "ϲαννοτ ρεστορε τχε οριγιναλ διρεϲτορϋ"
 
 #. TRANSLATORS: "stat" comes from the name of POSIX function.
-#: grub-core/osdep/unix/getroot.c:542 grub-core/osdep/unix/hostdisk.c:66
+#: grub-core/osdep/unix/getroot.c:543 grub-core/osdep/unix/hostdisk.c:66
 #: grub-core/osdep/unix/relpath.c:70 grub-core/osdep/unix/relpath.c:94
-#: util/getroot.c:154 util/getroot.c:156
+#: util/getroot.c:159 util/getroot.c:161 util/grub-install.c:758
+#: util/grub-macbless.c:70
 #, c-format
 msgid "cannot stat `%s': %s"
 msgstr "ϲαννοτ στατ `%s': %s"
 
-#: grub-core/osdep/unix/hostdisk.c:303
+#: grub-core/osdep/unix/hostdisk.c:307
 #, c-format
 msgid "cannot make temporary file: %s"
 msgstr "ϲαννοτ μακε τεμποραρϋ φιλε: %s"
 
-#: grub-core/osdep/unix/hostdisk.c:321
+#: grub-core/osdep/unix/hostdisk.c:325
 #, c-format
 msgid "cannot make temporary directory: %s"
 msgstr "ϲαννοτ μακε τεμποραρϋ διρεϲτορϋ: %s"
 
-#: grub-core/osdep/unix/platform.c:76
+#: grub-core/osdep/unix/platform.c:77
 #, c-format
 msgid ""
-"couldn't find IEEE1275 device tree path for %s.\n"
+"couldn't find IEEE1275 device path for %s.\n"
 "You will have to set `boot-device' variable manually"
 msgstr ""
-"ϲουλδν'τ φινδ ΙΕΕΕ1275 δεβιϲε τρεε πατχ φορ %s.\n"
+"ϲουλδν'τ φινδ ΙΕΕΕ1275 δεβιϲε πατχ φορ %s.\n"
 "Ϋου ωιλλ χαβε το σετ `ϭοοτ-δεβιϲε' βαριαϭλε μανυαλλϋ"
 
 #. TRANSLATORS: This message is shown when required executable `%s'
 #. isn't found.
-#: grub-core/osdep/unix/platform.c:140 grub-core/osdep/unix/platform.c:177
+#: grub-core/osdep/unix/platform.c:146 grub-core/osdep/unix/platform.c:183
 #, c-format
 msgid "%s: not found"
 msgstr "%s: νοτ φουνδ"
 
-#: grub-core/osdep/unix/platform.c:228
+#: grub-core/osdep/unix/platform.c:219
+#, c-format
+msgid ""
+"`nvsetenv' failed. \n"
+"You will have to set `boot-device' variable manually.  At the IEEE1275 "
+"prompt, type:\n"
+"  %s\n"
+msgstr ""
+"`νβσετενβ' φαιλεδ. \n"
+"Ϋου ωιλλ χαβε το σετ `ϭοοτ-δεβιϲε' βαριαϭλε μανυαλλϋ.  Ατ τχε ΙΕΕΕ1275 "
+"προμπτ, τϋπε:\n"
+"  %s\n"
+
+#: grub-core/osdep/unix/platform.c:234
 msgid "You will have to set `SystemPartition' and `OSLoader' manually."
 msgstr "Ϋου ωιλλ χαβε το σετ `ΣϋστεμΠαρτιτιον' ανδ `ΟΣΛοαδερ' μανυαλλϋ."
 
@@ -4340,17 +4626,30 @@ msgstr "Ϋου ωιλλ χαβε το σετ `ΣϋστεμΠαρτιτιον' α
 msgid "no `/' in canonical filename"
 msgstr "νο `/' ιν ϲανονιϲαλ φιλεναμε"
 
-#: grub-core/osdep/windows/dl.c:35
-msgid "too large alignment"
-msgstr "τοο λαργε αλιγνμεντ"
-
-#: grub-core/osdep/windows/hostdisk.c:105
+#: grub-core/osdep/windows/hostdisk.c:151
 msgid "cygwin_conv_path() failed"
 msgstr "ϲϋγωιν_ϲονβ_πατχ() φαιλεδ"
 
-#: grub-core/osdep/windows/hostdisk.c:455 util/grub-install.c:497
+#: grub-core/osdep/windows/hostdisk.c:489 util/grub-install.c:555
 msgid "couldn't retrieve random data"
 msgstr "ϲουλδν'τ ρετριεβε ρανδομ δατα"
+
+#: grub-core/osdep/windows/platform.c:97
+#, fuzzy
+msgid "Insufficient privileges to access firmware, assuming BIOS"
+msgstr "Ινσυφφιϲιεντ πριβιλεγιεσ το αϲϲεσσ φιρμωαρε, ασσυμινγ ϬΙΟΣ"
+
+#: grub-core/osdep/windows/platform.c:225
+msgid "no EFI routines are available when running in BIOS mode"
+msgstr "νο ΕΦΙ ρουτινεσ αρε αβαιλαϭλε ωχεν ρυννινγ ιν ϬΙΟΣ μοδε"
+
+#: grub-core/osdep/windows/platform.c:240
+msgid "unexpected EFI error"
+msgstr "υνεξπεϲτεδ ΕΦΙ ερρορ"
+
+#: grub-core/osdep/windows/platform.c:315
+msgid "Couldn't find a free BootNNNN slot"
+msgstr "ϲουλδν'τ φινδ α φρεε ϬοοτΝΝΝΝ σλοτ"
 
 #: grub-core/partmap/gpt.c:191
 msgid ""
@@ -4390,7 +4689,7 @@ msgstr ""
 "σοφτωαρε μαϋ ϲαυσε ϭοοτ ορ οτχερ προϭλεμσ ιν φυτυρε.  Πλεασε ασκ ιτσ αυτχορσ "
 "νοτ το στορε δατα ιν τχε ϭοοτ τραϲκ"
 
-#: grub-core/partmap/msdos.c:381
+#: grub-core/partmap/msdos.c:384
 msgid ""
 "other software is using the embedding area, and there is not enough room for "
 "core.img.  Such software is often trying to store data in a way that avoids "
@@ -4400,7 +4699,7 @@ msgstr ""
 "ϲορε.ιμγ.  Συϲχ σοφτωαρε ισ οφτεν τρϋινγ το στορε δατα ιν α ωαϋ τχατ αβοιδσ "
 "δετεϲτιον.  Ωε ρεϲομμενδ ϋου ινβεστιγατε"
 
-#: grub-core/partmap/msdos.c:392
+#: grub-core/partmap/msdos.c:395
 msgid ""
 "this msdos-style partition label has no post-MBR gap; embedding won't be "
 "possible"
@@ -4408,7 +4707,7 @@ msgstr ""
 "τχισ μσδοσ-στϋλε παρτιτιον λαϭελ χασ νο ποστ-ΜϬΡ γαπ; εμϭεδδινγ ωον'τ ϭε "
 "ποσσιϭλε"
 
-#: grub-core/partmap/msdos.c:401
+#: grub-core/partmap/msdos.c:404
 msgid "your embedding area is unusually small.  core.img won't fit in it."
 msgstr "ϋουρ εμϭεδδινγ αρεα ισ υνυσυαλλϋ σμαλλ.  ϲορε.ιμγ ωον'τ φιτ ιν ιτ."
 
@@ -4470,7 +4769,7 @@ msgstr "νοτ ιν φυνϲτιον ϭοδϋ"
 msgid "invalid variable name `%s'"
 msgstr "ινβαλιδ βαριαϭλε ναμε `%s'"
 
-#: grub-core/script/lexer.c:144 util/grub-fstest.c:317
+#: grub-core/script/lexer.c:144 util/grub-fstest.c:330
 msgid "unexpected end of file"
 msgstr "υνεξπεϲτεδ ενδ οφ φιλε"
 
@@ -4518,9 +4817,9 @@ msgstr "[-μ (στρετϲχ|νορμαλ)] ΦΙΛΕ"
 msgid "Load background image for active terminal."
 msgstr "Λοαδ ϭαϲκγρουνδ ιμαγε φορ αϲτιβε τερμιναλ."
 
-#: grub-core/term/gfxterm_background.c:182 util/grub-mkrescue.c:105
-#: util/grub-mkrescue.c:106 util/grub-render-label.c:55
-#: util/grub-render-label.c:57
+#: grub-core/term/gfxterm_background.c:182 util/grub-install.c:303
+#: util/grub-install.c:304 util/grub-mkrescue.c:106 util/grub-mkrescue.c:107
+#: util/grub-render-label.c:61 util/grub-render-label.c:63
 msgid "COLOR"
 msgstr "ϲΟΛΟΡ"
 
@@ -4557,7 +4856,8 @@ msgid "Set the serial port stop bits."
 msgstr "Σετ τχε σεριαλ πορτ στοπ ϭιτσ."
 
 #: grub-core/term/serial.c:63
-msgid "Set the base clock."
+#, fuzzy
+msgid "Set the base frequency."
 msgstr "Σετ τχε ϭασε ϲλοϲκ."
 
 #: grub-core/term/serial.c:64
@@ -4570,8 +4870,8 @@ msgid "serial port `%s' isn't found"
 msgstr "σεριαλ πορτ `%s' ισν'τ φουνδ"
 
 #: grub-core/term/serial.c:250
-msgid "unsupported serial port flow"
-msgstr "υνσυππορτεδ σεριαλ πορτ φλοω"
+msgid "unsupported serial port flow control"
+msgstr "υνσυππορτεδ σεριαλ πορτ φλοω ϲοντρολ"
 
 #: grub-core/term/serial.c:422
 msgid "[OPTIONS...]"
@@ -4676,7 +4976,7 @@ msgstr "              τοταλ μεμορϋ: %d ΚιϬ\n"
 msgid "no suitable video mode found"
 msgstr "νο συιταϭλε βιδεο μοδε φουνδ"
 
-#: include/grub/crypto.h:402
+#: include/grub/crypto.h:403
 msgid "access denied"
 msgstr "αϲϲεσσ δενιεδ"
 
@@ -4722,17 +5022,13 @@ msgstr "ινσταλλ ονλϋ ΛΟϲΑΛΕΣ [δεφαυλτ=αλλ]"
 msgid "compress GRUB files [optional]"
 msgstr "ϲομπρεσσ ΓΡΥϬ φιλεσ [οπτιοναλ]"
 
-#: include/grub/util/install.h:45 util/grub-mkstandalone.c:45
-msgid "xz|none|auto"
-msgstr "ξζ|νονε|αυτο"
-
-#: include/grub/util/install.h:46 util/grub-mkimage.c:76
+#: include/grub/util/install.h:46 util/grub-mkimage.c:82
 msgid "choose the compression to use for core image"
 msgstr "ϲχοοσε τχε ϲομπρεσσιον το υσε φορ ϲορε ιμαγε"
 
 #. TRANSLATORS: platform here isn't identifier. It can be translated.
 #: include/grub/util/install.h:49 include/grub/util/install.h:52
-#: util/grub-mkimage.c:60
+#: util/grub-mkimage.c:66
 #, c-format
 msgid "use images and modules under DIR [default=%s/<platform>]"
 msgstr "υσε ιμαγεσ ανδ μοδυλεσ υνδερ ΔΙΡ [δεφαυλτ=%s/<πλατφορμ>]"
@@ -4747,71 +5043,67 @@ msgstr "υσε τρανσλατιονσ υνδερ ΔΙΡ [δεφαυλτ=%s]"
 msgid "use themes under DIR [default=%s]"
 msgstr "υσε τχεμεσ υνδερ ΔΙΡ [δεφαυλτ=%s]"
 
-#: include/grub/util/install.h:63 util/grub-mkimage.c:71
+#: include/grub/util/install.h:63 util/grub-mkimage.c:77
 msgid "embed FILE as public key for signature checking"
 msgstr "εμϭεδ ΦΙΛΕ ασ πυϭλιϲ κεϋ φορ σιγνατυρε ϲχεϲκινγ"
 
-#: include/grub/util/install.h:65
-msgid "increase verbosity"
-msgstr "ινϲρεασε βερϭοσιτϋ"
-
-#: util/editenv.c:62
+#: util/editenv.c:63
 #, c-format
 msgid "cannot rename the file %s to %s"
 msgstr "ϲαννοτ ρεναμε τχε φιλε %s το %s"
 
-#: util/getroot.c:398
+#: util/getroot.c:404
 #, c-format
 msgid "disk does not exist, so falling back to partition device %s"
 msgstr "δισκ δοεσ νοτ εξιστ, σο φαλλινγ ϭαϲκ το παρτιτιον δεβιϲε %s"
 
-#: util/grub-editenv.c:40 util/grub-fstest.c:493
+#: util/grub-editenv.c:45 util/grub-fstest.c:506
 msgid "Commands:"
 msgstr "ϲομμανδσ:"
 
-#: util/grub-editenv.c:42
+#: util/grub-editenv.c:47
 msgid "Create a blank environment block file."
 msgstr "ϲρεατε α ϭλανκ ενβιρονμεντ ϭλοϲκ φιλε."
 
-#: util/grub-editenv.c:44
+#: util/grub-editenv.c:49
 msgid "List the current variables."
 msgstr "Λιστ τχε ϲυρρεντ βαριαϭλεσ."
 
 #. TRANSLATORS: "set" is a keyword. It's a summary of "set" subcommand.
-#: util/grub-editenv.c:46
+#: util/grub-editenv.c:51
 msgid "set [NAME=VALUE ...]"
 msgstr "σετ [ΝΑΜΕ=ΒΑΛΥΕ ...]"
 
-#: util/grub-editenv.c:47
+#: util/grub-editenv.c:52
 msgid "Set variables."
 msgstr "Σετ βαριαϭλεσ."
 
 #. TRANSLATORS: "unset" is a keyword. It's a summary of "unset" subcommand.
-#: util/grub-editenv.c:49
+#: util/grub-editenv.c:54
 msgid "unset [NAME ...]"
 msgstr "υνσετ [ΝΑΜΕ ...]"
 
-#: util/grub-editenv.c:50
+#: util/grub-editenv.c:55
 msgid "Delete variables."
 msgstr "Δελετε βαριαϭλεσ."
 
-#: util/grub-editenv.c:52
+#: util/grub-editenv.c:57
 msgid "Options:"
 msgstr "Οπτιονσ:"
 
-#: util/grub-editenv.c:79
+#: util/grub-editenv.c:84
 msgid "You need to specify at least one command.\n"
 msgstr "Ϋου νεεδ το σπεϲιφϋ ατ λεαστ ονε ϲομμανδ.\n"
 
-#: util/grub-editenv.c:104
+#: util/grub-editenv.c:113
 msgid "FILENAME COMMAND"
 msgstr "ΦΙΛΕΝΑΜΕ ϲΟΜΜΑΝΔ"
 
-#: util/grub-editenv.c:105
+#: util/grub-editenv.c:114
 msgid "Tool to edit environment block."
 msgstr "Τοολ το εδιτ ενβιρονμεντ ϭλοϲκ."
 
-#: util/grub-editenv.c:107
+#: util/grub-editenv.c:116
 #, c-format
 msgid ""
 "If FILENAME is `-', the default value %s is used.\n"
@@ -4824,293 +5116,309 @@ msgstr ""
 "Τχερε ισ νο `δελετε' ϲομμανδ; ιφ ϋου ωαντ το δελετε τχε ωχολε ενβιρονμεντ\n"
 "ϭλοϲκ, υσε `ρμ %s'."
 
-#: util/grub-editenv.c:153
+#: util/grub-editenv.c:162
 msgid "invalid environment block"
 msgstr "ινβαλιδ ενβιρονμεντ ϭλοϲκ"
 
-#: util/grub-editenv.c:207
+#: util/grub-editenv.c:216
 #, c-format
 msgid "invalid parameter %s"
 msgstr "ινβαλιδ παραμετερ %s"
 
-#: util/grub-editenv.c:212
+#: util/grub-editenv.c:221
 msgid "environment block too small"
 msgstr "ενβιρονμεντ ϭλοϲκ τοο σμαλλ"
 
-#: util/grub-fstest.c:102
+#: util/grub-fstest.c:107
 #, c-format
 msgid "disk read fails at offset %lld, length %lld"
 msgstr "δισκ ρεαδ φαιλσ ατ οφφσετ %lld, λενγτχ %lld"
 
-#: util/grub-fstest.c:130
+#: util/grub-fstest.c:138
 #, c-format
 msgid "invalid skip value %lld"
 msgstr "ινβαλιδ σκιπ βαλυε %lld"
 
-#: util/grub-fstest.c:150 util/grub-fstest.c:235
+#: util/grub-fstest.c:160 util/grub-fstest.c:246
 #, c-format
 msgid "read error at offset %llu: %s"
 msgstr "ρεαδ ερρορ ατ οφφσετ %llu: %s"
 
-#: util/grub-fstest.c:199
+#: util/grub-fstest.c:210
 #, c-format
 msgid "cannot open OS file `%s': %s"
 msgstr "ϲαννοτ οπεν ΟΣ φιλε `%s': %s"
 
-#: util/grub-fstest.c:214 util/misc.c:167
+#: util/grub-fstest.c:225 util/misc.c:172
 #, c-format
 msgid "cannot write to the stdout: %s"
 msgstr "ϲαννοτ ωριτε το τχε στδουτ: %s"
 
-#: util/grub-fstest.c:247
+#: util/grub-fstest.c:259
 #, c-format
 msgid "compare fail at offset %llu"
 msgstr "ϲομπαρε φαιλ ατ οφφσετ %llu"
 
-#: util/grub-fstest.c:267 util/grub-fstest.c:301
+#: util/grub-fstest.c:280 util/grub-fstest.c:314
 #, c-format
 msgid "OS file %s open error: %s"
 msgstr "ΟΣ φιλε %s οπεν ερρορ: %s"
 
-#: util/grub-fstest.c:389 util/grub-mount.c:393
+#: util/grub-fstest.c:402 util/grub-mount.c:393
 #, c-format
 msgid "`loopback' command fails: %s"
 msgstr "`λοοπϭαϲκ' ϲομμανδ φαιλσ: %s"
 
-#: util/grub-fstest.c:400 util/grub-mount.c:403
+#: util/grub-fstest.c:413 util/grub-mount.c:403
 #, c-format
 msgid "`cryptomount' command fails: %s"
 msgstr "`ϲρϋπτομουντ' ϲομμανδ φαιλσ: %s"
 
-#: util/grub-fstest.c:461 util/grub-fstest.c:465
+#: util/grub-fstest.c:474 util/grub-fstest.c:478
 msgid "couldn't retrieve UUID"
 msgstr "ϲουλδν'τ ρετριεβε ΥΥΙΔ"
 
-#: util/grub-fstest.c:494
+#: util/grub-fstest.c:507
 msgid "ls PATH"
 msgstr "λσ ΠΑΤΧ"
 
-#: util/grub-fstest.c:494
+#: util/grub-fstest.c:507
 msgid "List files in PATH."
 msgstr "Λιστ φιλεσ ιν ΠΑΤΧ."
 
-#: util/grub-fstest.c:495
+#: util/grub-fstest.c:508
 msgid "cp FILE LOCAL"
 msgstr "ϲπ ΦΙΛΕ ΛΟϲΑΛ"
 
-#: util/grub-fstest.c:495
+#: util/grub-fstest.c:508
 msgid "Copy FILE to local file LOCAL."
 msgstr "ϲοπϋ ΦΙΛΕ το λοϲαλ φιλε ΛΟϲΑΛ."
 
-#: util/grub-fstest.c:496
+#: util/grub-fstest.c:509
 msgid "cat FILE"
 msgstr "ϲατ ΦΙΛΕ"
 
-#: util/grub-fstest.c:496
+#: util/grub-fstest.c:509
 msgid "Copy FILE to standard output."
 msgstr "ϲοπϋ ΦΙΛΕ το στανδαρδ ουτπυτ."
 
-#: util/grub-fstest.c:497
+#: util/grub-fstest.c:510
 msgid "cmp FILE LOCAL"
 msgstr "ϲμπ ΦΙΛΕ ΛΟϲΑΛ"
 
-#: util/grub-fstest.c:497
+#: util/grub-fstest.c:510
 msgid "Compare FILE with local file LOCAL."
 msgstr "ϲομπαρε ΦΙΛΕ ωιτχ λοϲαλ φιλε ΛΟϲΑΛ."
 
-#: util/grub-fstest.c:498
+#: util/grub-fstest.c:511
 msgid "hex FILE"
 msgstr "χεξ ΦΙΛΕ"
 
-#: util/grub-fstest.c:498
+#: util/grub-fstest.c:511
 msgid "Show contents of FILE in hex."
 msgstr "Σχοω ϲοντεντσ οφ ΦΙΛΕ ιν χεξ."
 
-#: util/grub-fstest.c:499
+#: util/grub-fstest.c:512
 msgid "crc FILE"
 msgstr "ϲρϲ ΦΙΛΕ"
 
-#: util/grub-fstest.c:499
+#: util/grub-fstest.c:512
 msgid "Get crc32 checksum of FILE."
 msgstr "Γετ ϲρϲ32 ϲχεϲκσυμ οφ ΦΙΛΕ."
 
-#: util/grub-fstest.c:500
+#: util/grub-fstest.c:513
 msgid "blocklist FILE"
 msgstr "ϭλοϲκλιστ ΦΙΛΕ"
 
-#: util/grub-fstest.c:500
+#: util/grub-fstest.c:513
 msgid "Display blocklist of FILE."
 msgstr "Δισπλαϋ ϭλοϲκλιστ οφ ΦΙΛΕ."
 
-#: util/grub-fstest.c:501
+#: util/grub-fstest.c:514
 msgid "xnu_uuid DEVICE"
 msgstr "ξνυ_υυιδ ΔΕΒΙϲΕ"
 
-#: util/grub-fstest.c:501
+#: util/grub-fstest.c:514
 msgid "Compute XNU UUID of the device."
 msgstr "ϲομπυτε ΞΝΥ ΥΥΙΔ οφ τχε δεβιϲε."
 
 #. TRANSLATORS: bitmaps are images like e.g. in JPEG.
-#: util/grub-fstest.c:504 util/grub-fstest.c:505 util/grub-fstest.c:506
+#: util/grub-fstest.c:517 util/grub-fstest.c:518 util/grub-fstest.c:519
 #: util/grub-mkfont.c:935 util/grub-mkfont.c:948 util/grub-mkfont.c:949
-#: util/grub-mkpasswd-pbkdf2.c:41 util/grub-mkpasswd-pbkdf2.c:42
-#: util/grub-mkpasswd-pbkdf2.c:43
+#: util/grub-mkpasswd-pbkdf2.c:46 util/grub-mkpasswd-pbkdf2.c:47
+#: util/grub-mkpasswd-pbkdf2.c:48
 msgid "NUM"
 msgstr "ΝΥΜ"
 
-#: util/grub-fstest.c:504
+#: util/grub-fstest.c:517
 msgid "Skip N bytes from output file."
 msgstr "Σκιπ Ν ϭϋτεσ φρομ ουτπυτ φιλε."
 
-#: util/grub-fstest.c:505
+#: util/grub-fstest.c:518
 msgid "Handle N bytes in output file."
 msgstr "Χανδλε Ν ϭϋτεσ ιν ουτπυτ φιλε."
 
-#: util/grub-fstest.c:506
+#: util/grub-fstest.c:519
 msgid "Specify the number of input files."
 msgstr "Σπεϲιφϋ τχε νυμϭερ οφ ινπυτ φιλεσ."
 
-#: util/grub-fstest.c:507 util/grub-mount.c:454
+#: util/grub-fstest.c:520 util/grub-mount.c:454
 msgid "Set debug environment variable."
 msgstr "Σετ δεϭυγ ενβιρονμεντ βαριαϭλε."
 
-#: util/grub-fstest.c:508 util/grub-mount.c:455
+#: util/grub-fstest.c:521 util/grub-mount.c:455
 msgid "Mount crypto devices."
 msgstr "Μουντ ϲρϋπτο δεβιϲεσ."
 
 #. TRANSLATORS: "prompt" is a keyword.
-#: util/grub-fstest.c:511 util/grub-mount.c:458
+#: util/grub-fstest.c:524 util/grub-mount.c:458
 msgid "FILE|prompt"
 msgstr "ΦΙΛΕ|προμπτ"
 
-#: util/grub-fstest.c:511 util/grub-mount.c:458
+#: util/grub-fstest.c:524 util/grub-mount.c:458
 msgid "Load zfs crypto key."
 msgstr "Λοαδ ζφσ ϲρϋπτο κεϋ."
 
-#: util/grub-fstest.c:513
+#: util/grub-fstest.c:526
 msgid "Uncompress data."
 msgstr "Υνϲομπρεσσ δατα."
 
-#: util/grub-fstest.c:592
+#: util/grub-fstest.c:605
 msgid "Invalid disk count.\n"
 msgstr "Ινβαλιδ δισκ ϲουντ.\n"
 
 #. TRANSLATORS: disk count is optional but if it's there it must
 #. be before disk list. So please don't imply disk count as mandatory.
 #.
-#: util/grub-fstest.c:600
+#: util/grub-fstest.c:613
 msgid "Disk count must precede disks list.\n"
 msgstr "Δισκ ϲουντ μυστ πρεϲεδε δισκσ λιστ.\n"
 
-#: util/grub-fstest.c:620
+#: util/grub-fstest.c:633
 msgid "No command is specified.\n"
 msgstr "Νο ϲομμανδ ισ σπεϲιφιεδ.\n"
 
-#: util/grub-fstest.c:625
+#: util/grub-fstest.c:638
 msgid "Not enough parameters to command.\n"
 msgstr "Νοτ ενουγχ παραμετερσ το ϲομμανδ.\n"
 
-#: util/grub-fstest.c:698
+#: util/grub-fstest.c:711
 #, c-format
 msgid "Invalid command %s.\n"
 msgstr "Ινβαλιδ ϲομμανδ %s.\n"
 
-#: util/grub-fstest.c:711
+#: util/grub-fstest.c:724
 msgid "IMAGE_PATH COMMANDS"
 msgstr "ΙΜΑΓΕ_ΠΑΤΧ ϲΟΜΜΑΝΔΣ"
 
-#: util/grub-fstest.c:712 util/grub-mount.c:552
+#: util/grub-fstest.c:725 util/grub-mount.c:552
 msgid "Debug tool for filesystem driver."
 msgstr "Δεϭυγ τοολ φορ φιλεσϋστεμ δριβερ."
 
-#: util/grub-glue-efi.c:48
+#: util/grub-glue-efi.c:53
 msgid "set input filename for 32-bit part."
 msgstr "σετ ινπυτ φιλεναμε φορ 32-ϭιτ παρτ."
 
-#: util/grub-glue-efi.c:50
+#: util/grub-glue-efi.c:55
 msgid "set input filename for 64-bit part."
 msgstr "σετ ινπυτ φιλεναμε φορ 64-ϭιτ παρτ."
 
-#: util/grub-glue-efi.c:52 util/grub-mklayout.c:48 util/grub-render-label.c:62
+#: util/grub-glue-efi.c:57 util/grub-mklayout.c:55 util/grub-render-label.c:71
 msgid "set output filename. Default is STDOUT"
 msgstr "σετ ουτπυτ φιλεναμε. Δεφαυλτ ισ ΣΤΔΟΥΤ"
 
-#: util/grub-glue-efi.c:89 util/grub-mklayout.c:462
-#: util/grub-mkpasswd-pbkdf2.c:81 util/grub-render-label.c:122
+#: util/grub-glue-efi.c:94 util/grub-mklayout.c:469
+#: util/grub-mkpasswd-pbkdf2.c:86 util/grub-render-label.c:131
 msgid "[OPTIONS]"
 msgstr "[ΟΠΤΙΟΝΣ]"
 
-#: util/grub-glue-efi.c:90
-msgid "Glue 32-bit and 64-binary into Apple fat one."
+#: util/grub-glue-efi.c:95
+#, fuzzy
+msgid "Glue 32-bit and 64-bit binary into Apple universal one."
 msgstr "Γλυε 32-ϭιτ ανδ 64-ϭιναρϋ ιντο Αππλε φατ ονε."
 
-#: util/grub-glue-efi.c:111
+#: util/grub-glue-efi.c:116
 msgid "Missing input file\n"
 msgstr "Μισσινγ ινπυτ φιλε\n"
 
-#: util/grub-install-common.c:186 util/grub-install-common.c:534
-#: util/grub-install-common.c:561 util/grub-install-common.c:602
+#: util/grub-install-common.c:121 util/grub-install-common.c:145
+#, c-format
+msgid "cannot copy `%s' to `%s': %s"
+msgstr "ϲαννοτ ϲοπϋ `%s' το `%s': %s"
+
+#: util/grub-install-common.c:141
+#, c-format
+msgid "can't compress `%s' to `%s'"
+msgstr "ϲαν'τ ϲομπρεσσ `%s' το `%s'"
+
+#: util/grub-install-common.c:190 util/grub-install-common.c:538
+#: util/grub-install-common.c:565 util/grub-install-common.c:606
 #, c-format
 msgid "cannot open directory `%s': %s"
 msgstr "ϲαννοτ οπεν διρεϲτορϋ `%s': %s"
 
-#: util/grub-install-common.c:314 util/grub-mkimage.c:192
+#: util/grub-install-common.c:206
+#, c-format
+msgid "cannot delete `%s': %s"
+msgstr "ϲαννοτ δελετε `%s': %s"
+
+#: util/grub-install-common.c:318 util/grub-mkimage.c:202
 msgid "grub-mkimage is compiled without XZ support"
 msgstr "γρυϭ-μκιμαγε ισ ϲομπιλεδ ωιτχουτ ΞΖ συππορτ"
 
-#: util/grub-install-common.c:322 util/grub-mkimage.c:200
+#: util/grub-install-common.c:326 util/grub-mkimage.c:210
 #, c-format
 msgid "Unknown compression format %s"
 msgstr "Υνκνοων ϲομπρεσσιον φορματ %s"
 
-#: util/grub-install-common.c:385
+#: util/grub-install-common.c:389
 #, c-format
 msgid "Unrecognized compression `%s'"
 msgstr "Υνρεϲογνιζεδ ϲομπρεσσιον `%s'"
 
-#: util/grub-install-common.c:492 util/grub-mkimage.c:142
-#: util/grub-mkstandalone.c:91
+#: util/grub-install-common.c:496 util/grub-mkimage.c:152
+#: util/grub-mkstandalone.c:96
 #, c-format
 msgid "unknown target format %s\n"
 msgstr "υνκνοων ταργετ φορματ %s\n"
 
-#: util/grub-install-common.c:794
+#: util/grub-install-common.c:798
 #, c-format
 msgid "cannot find locale `%s'"
 msgstr "ϲαννοτ φινδ λοϲαλε `%s'"
 
-#: util/grub-install-common.c:877
+#: util/grub-install-common.c:881
 #, c-format
 msgid "%s doesn't exist. Please specify --target or --directory"
 msgstr "%s δοεσν'τ εξιστ. Πλεασε σπεϲιφϋ --ταργετ ορ --διρεϲτορϋ"
 
-#: util/grub-install-common.c:884 util/grub-install-common.c:887
+#: util/grub-install-common.c:888 util/grub-install-common.c:891
 #, c-format
 msgid "invalid modinfo file `%s'"
 msgstr "ινβαλιδ μοδινφο φιλε `%s'"
 
-#: util/grub-install-common.c:902
+#: util/grub-install-common.c:906
 #, c-format
 msgid "Unknown platform `%s-%s'"
 msgstr "Υνκνοων πλατφορμ `%s-%s'"
 
-#: util/grub-install.c:194
+#: util/grub-install.c:239
 msgid "More than one install device?"
 msgstr "Μορε τχαν ονε ινσταλλ δεβιϲε?"
 
-#: util/grub-install.c:207
+#: util/grub-install.c:252
 #, c-format
 msgid ""
 "install GRUB images under the directory DIR/%s instead of the %s directory"
 msgstr ""
 "ινσταλλ ΓΡΥϬ ιμαγεσ υνδερ τχε διρεϲτορϋ ΔΙΡ/%s ινστεαδ οφ τχε %s διρεϲτορϋ"
 
-#: util/grub-install.c:212
+#: util/grub-install.c:257 util/grub-probe.c:712
 msgid "TARGET"
 msgstr "ΤΑΡΓΕΤ"
 
 #. TRANSLATORS: "TARGET" as in "target platform".
-#: util/grub-install.c:214
+#: util/grub-install.c:259
 #, c-format
 msgid "install GRUB for TARGET platform [default=%s]"
 msgstr "ινσταλλ ΓΡΥϬ φορ ΤΑΡΓΕΤ πλατφορμ [δεφαυλτ=%s]"
@@ -5119,7 +5427,7 @@ msgstr "ινσταλλ ΓΡΥϬ φορ ΤΑΡΓΕΤ πλατφορμ [δεφαυ
 #. effect but that it will make the resulting install unbootable from HDD.
 #. TRANSLATORS: The potential breakage isn't limited to floppies but it's
 #. likely to make the install unbootable from HDD.
-#: util/grub-install.c:223 util/grub-setup.c:84
+#: util/grub-install.c:268 util/grub-setup.c:94
 msgid ""
 "make the drive also bootable as floppy (default for fdX devices). May break "
 "on some BIOSes."
@@ -5127,19 +5435,19 @@ msgstr ""
 "μακε τχε δριβε αλσο ϭοοταϭλε ασ φλοππϋ (δεφαυλτ φορ φδΞ δεβιϲεσ). Μαϋ ϭρεακ "
 "ον σομε ϬΙΟΣεσ."
 
-#: util/grub-install.c:226
+#: util/grub-install.c:271
 msgid "delete device map if it already exists"
 msgstr "δελετε δεβιϲε μαπ ιφ ιτ αλρεαδϋ εξιστσ"
 
-#: util/grub-install.c:228 util/grub-setup.c:77
+#: util/grub-install.c:273 util/grub-setup.c:87
 msgid "install even if problems are detected"
 msgstr "ινσταλλ εβεν ιφ προϭλεμσ αρε δετεϲτεδ"
 
-#: util/grub-install.c:230
+#: util/grub-install.c:275
 msgid "use identifier file even if UUID is available"
 msgstr "υσε ιδεντιφιερ φιλε εβεν ιφ ΥΥΙΔ ισ αβαιλαϭλε"
 
-#: util/grub-install.c:232
+#: util/grub-install.c:277
 msgid ""
 "disk module to use (biosdisk or native). This option is only available on "
 "BIOS target."
@@ -5147,7 +5455,7 @@ msgstr ""
 "δισκ μοδυλε το υσε (ϭιοσδισκ ορ νατιβε). Τχισ οπτιον ισ ονλϋ αβαιλαϭλε ον "
 "ϬΙΟΣ ταργετ."
 
-#: util/grub-install.c:235
+#: util/grub-install.c:280
 msgid ""
 "don't update the `boot-device'/`Boot*' NVRAM variables. This option is only "
 "available on EFI and IEEE1275 targets."
@@ -5155,41 +5463,69 @@ msgstr ""
 "δον'τ υπδατε τχε `ϭοοτ-δεβιϲε'/`Ϭοοτ*' ΝΒΡΑΜ βαριαϭλεσ. Τχισ οπτιον ισ ονλϋ "
 "αβαιλαϭλε ον ΕΦΙ ανδ ΙΕΕΕ1275 ταργετσ."
 
-#: util/grub-install.c:238 util/grub-setup.c:79
+#: util/grub-install.c:283 util/grub-setup.c:89
 msgid "do not probe for filesystems in DEVICE"
 msgstr "δο νοτ προϭε φορ φιλεσϋστεμσ ιν ΔΕΒΙϲΕ"
 
-#: util/grub-install.c:240
+#: util/grub-install.c:285
 msgid "do not install bootsector"
 msgstr "δο νοτ ινσταλλ ϭοοτσεϲτορ"
 
-#: util/grub-install.c:246
+#: util/grub-install.c:287 util/grub-setup.c:96
+msgid ""
+"Do not apply any reed-solomon codes when embedding core.img. This option is "
+"only available on x86 BIOS targets."
+msgstr ""
+"Δο νοτ αππλϋ ανϋ ρεεδ-σολομον ϲοδεσ ωχεν εμϭεδδινγ ϲορε.ιμγ. Τχισ οπτιον ισ "
+"ονλϋ αβαιλαϭλε ον ξ86 ϬΙΟΣ ταργετσ."
+
+#: util/grub-install.c:294
 msgid ""
 "the installation device is removable. This option is only available on EFI."
 msgstr ""
 "τχε ινσταλλατιον δεβιϲε ισ ρεμοβαϭλε. Τχισ οπτιον ισ ονλϋ αβαιλαϭλε ον ΕΦΙ."
 
-#: util/grub-install.c:248
+#: util/grub-install.c:296
 msgid "ID"
 msgstr "ΙΔ"
 
-#: util/grub-install.c:249
-msgid "the ID of bootloader. This option is only available on EFI."
-msgstr "τχε ΙΔ οφ ϭοοτλοαδερ. Τχισ οπτιον ισ ονλϋ αβαιλαϭλε ον ΕΦΙ."
+#: util/grub-install.c:297
+msgid "the ID of bootloader. This option is only available on EFI and Macs."
+msgstr "τχε ΙΔ οφ ϭοοτλοαδερ. Τχισ οπτιον ισ ονλϋ αβαιλαϭλε ον ΕΦΙ ανδ Μαϲσ."
 
-#: util/grub-install.c:251
+#: util/grub-install.c:299
 msgid "use DIR as the EFI System Partition root."
 msgstr "υσε ΔΙΡ ασ τχε ΕΦΙ Σϋστεμ Παρτιτιον ροοτ."
 
-#: util/grub-install.c:298
+#: util/grub-install.c:301
+msgid "use DIR for PPC MAC install."
+msgstr "υσε ΔΙΡ φορ ΠΠϲ ΜΑϲ ινσταλλ."
+
+#: util/grub-install.c:302 util/grub-mkrescue.c:105
+msgid "use FILE as font for label"
+msgstr "υσε ΦΙΛΕ ασ φοντ φορ λαϭελ"
+
+#: util/grub-install.c:303 util/grub-mkrescue.c:106
+msgid "use COLOR for label"
+msgstr "υσε ϲΟΛΟΡ φορ λαϭελ"
+
+#: util/grub-install.c:304 util/grub-mkrescue.c:107
+msgid "use COLOR for label background"
+msgstr "υσε ϲΟΛΟΡ φορ λαϭελ ϭαϲκγρουνδ"
+
+#: util/grub-install.c:305 util/grub-mkrescue.c:109
+msgid "use STRING as product version"
+msgstr "υσε ΣΤΡΙΝΓ ασ προδυϲτ βερσιον"
+
+#: util/grub-install.c:356
 msgid "[OPTION] [INSTALL_DEVICE]"
 msgstr "[ΟΠΤΙΟΝ] [ΙΝΣΤΑΛΛ_ΔΕΒΙϲΕ]"
 
-#: util/grub-install.c:299
+#: util/grub-install.c:357
 msgid "Install GRUB on your drive."
 msgstr "Ινσταλλ ΓΡΥϬ ον ϋουρ δριβε."
 
-#: util/grub-install.c:300
+#: util/grub-install.c:358
 #, c-format
 msgid ""
 "INSTALL_DEVICE must be system device filename.\n"
@@ -5200,66 +5536,126 @@ msgstr ""
 "%s ϲοπιεσ ΓΡΥϬ ιμαγεσ ιντο %s.  Ον σομε πλατφορμσ, ιτ μαϋ αλσο ινσταλλ ΓΡΥϬ "
 "ιντο τχε ϭοοτ σεϲτορ."
 
-#: util/grub-install.c:741
+#: util/grub-install.c:657
+#, c-format
+msgid "the drive %s is defined multiple times in the device map %s"
+msgstr "τχε δριβε %s ισ δεφινεδ μυλτιπλε τιμεσ ιν τχε δεβιϲε μαπ %s"
+
+#: util/grub-install.c:862
 msgid "Unable to determine your platform. Use --target."
 msgstr "Υναϭλε το δετερμινε ϋουρ πλατφορμ. Υσε --ταργετ."
 
-#: util/grub-install.c:792
+#: util/grub-install.c:875
+#, c-format
+msgid "Installing for %s platform.\n"
+msgstr "Ινσταλλινγ φορ %s πλατφορμ.\n"
+
+#: util/grub-install.c:919
 msgid "install device isn't specified"
 msgstr "ινσταλλ δεβιϲε ισν'τ σπεϲιφιεδ"
 
-#: util/grub-install.c:898
+#: util/grub-install.c:1031
 msgid "cannot find EFI directory"
 msgstr "ϲαννοτ φινδ ΕΦΙ διρεϲτορϋ"
 
-#: util/grub-install.c:901 util/grub-install.c:1007 util/grub-probe.c:218
+#: util/grub-install.c:1034 util/grub-install.c:1171 util/grub-install.c:1216
+#: util/grub-macbless.c:76 util/grub-probe.c:272
 #, c-format
 msgid "cannot find a device for %s (is /dev mounted?)"
 msgstr "ϲαννοτ φινδ α δεβιϲε φορ %s (ισ /δεβ μουντεδ?)"
 
-#: util/grub-install.c:910 util/grub-install.c:1023 util/grub-install.c:1117
-#: util/grub-probe.c:260
+#: util/grub-install.c:1043 util/grub-install.c:1179 util/grub-install.c:1232
+#: util/grub-install.c:1326 util/grub-macbless.c:80 util/grub-probe.c:314
 #, c-format
 msgid "cannot find a GRUB drive for %s.  Check your device.map"
 msgstr "ϲαννοτ φινδ α ΓΡΥϬ δριβε φορ %s.  ϲχεϲκ ϋουρ δεβιϲε.μαπ"
 
-#: util/grub-install.c:922
+#: util/grub-install.c:1061
 #, c-format
 msgid "%s doesn't look like an EFI partition.\n"
 msgstr "%s δοεσν'τ λοοκ λικε αν ΕΦΙ παρτιτιον.\n"
 
-#: util/grub-install.c:958 util/grub-install.c:1357
+#: util/grub-install.c:1097 util/grub-install.c:1566
 msgid "You've found a bug"
 msgstr "Ϋου'βε φουνδ α ϭυγ"
 
-#: util/grub-install.c:1052
+#: util/grub-install.c:1193
+#, c-format
+msgid "filesystem on %s is neither HFS nor HFS+"
+msgstr "φιλεσϋστεμ ον %s ισ νειτχερ ΧΦΣ νορ ΧΦΣ+"
+
+#: util/grub-install.c:1261
 #, c-format
 msgid ""
-"attempt to install to cryptodisk without cryptodisk enabled. Set `%s' in "
+"attempt to install to encrypted disk without cryptodisk enabled. Set `%s' in "
 "file `%s'."
 msgstr ""
-"αττεμπτ το ινσταλλ το ϲρϋπτοδισκ ωιτχουτ ϲρϋπτοδισκ εναϭλεδ. Σετ `%s' ιν "
+"αττεμπτ το ινσταλλ το ενϲρϋπτεδ δισκ ωιτχουτ ϲρϋπτοδισκ εναϭλεδ. Σετ `%s' ιν "
 "φιλε `%s'."
 
-#: util/grub-install.c:1239
+#: util/grub-install.c:1371 util/grub-install.c:1720 util/grub-install.c:1820
+#, c-format
+msgid "Can't create file: %s"
+msgstr "ϲαν'τ ϲρεατε φιλε: %s"
+
+#: util/grub-install.c:1448
 msgid "no hints available for your platform. Expect reduced performance"
 msgstr "νο χιντσ αβαιλαϭλε φορ ϋουρ πλατφορμ. Εξπεϲτ ρεδυϲεδ περφορμανϲε"
 
-#: util/grub-install.c:1490
+#. TRANSLATORS: This is a prefix in the log to indicate that usually
+#. a command would be executed but due to an option was skipped.
+#: util/grub-install.c:1650
+msgid "NOT RUNNING: "
+msgstr "ΝΟΤ ΡΥΝΝΙΝΓ: "
+
+#: util/grub-install.c:1754
 msgid "the chosen partition is not a PReP partition"
 msgstr "τχε ϲχοσεν παρτιτιον ισ νοτ α ΠΡεΠ παρτιτιον"
 
-#: util/grub-install.c:1495
+#: util/grub-install.c:1759
 msgid "failed to copy Grub to the PReP partition"
 msgstr "φαιλεδ το ϲοπϋ Γρυϭ το τχε ΠΡεΠ παρτιτιον"
 
-#: util/grub-install.c:1579
+#: util/grub-install.c:1764
+#, c-format
+msgid ""
+"the PReP partition is not empty. If you are sure you want to use it, run dd "
+"to clear it: `%s'"
+msgstr ""
+"τχε ΠΡεΠ παρτιτιον ισ νοτ εμπτϋ. Ιφ ϋου αρε συρε ϋου ωαντ το υσε ιτ, ρυν δδ "
+"το ϲλεαρ ιτ: `%s'"
+
+#: util/grub-install.c:1856
+msgid "EFI bootloader id isn't specified."
+msgstr "ΕΦΙ ϭοοτλοαδερ ιδ ισν'τ σπεϲιφιεδ."
+
+#: util/grub-install.c:1885
 msgid "WARNING: no platform-specific install was performed"
 msgstr "ΩΑΡΝΙΝΓ: νο πλατφορμ-σπεϲιφιϲ ινσταλλ ωασ περφορμεδ"
 
-#: util/grub-install.c:1586
+#: util/grub-install.c:1892
 msgid "Installation finished. No error reported."
 msgstr "Ινσταλλατιον φινισχεδ. Νο ερρορ ρεπορτεδ."
+
+#: util/grub-macbless.c:99
+msgid "bless for x86-based macs"
+msgstr "ϭλεσσ φορ ξ86-ϭασεδ μαϲσ"
+
+#: util/grub-macbless.c:101
+msgid "bless for ppc-based macs"
+msgstr "ϭλεσσ φορ ππϲ-ϭασεδ μαϲσ"
+
+#: util/grub-macbless.c:134 util/grub-probe.c:797
+msgid "No path or device is specified.\n"
+msgstr "Νο πατχ ορ δεβιϲε ισ σπεϲιφιεδ.\n"
+
+#: util/grub-macbless.c:155
+msgid "--ppc PATH|--x86 FILE"
+msgstr "--ππϲ ΠΑΤΧ|--ξ86 ΦΙΛΕ"
+
+#: util/grub-macbless.c:156
+msgid "Mac-style bless on HFS or HFS+"
+msgstr "Μαϲ-στϋλε ϭλεσσ ον ΧΦΣ ορ ΧΦΣ+"
 
 #: util/grub-menulst2cfg.c:44
 #, c-format
@@ -5337,7 +5733,7 @@ msgstr "ΩΑΡΝΙΝΓ: υνσυππορτεδ φοντ φεατυρε παρα�
 msgid "Unknown gsub font feature 0x%x (%s)\n"
 msgstr "Υνκνοων γσυϭ φοντ φεατυρε 0ξ%x (%s)\n"
 
-#: util/grub-mkfont.c:933 util/grub-mkrescue.c:96 util/grub-mkstandalone.c:43
+#: util/grub-mkfont.c:933 util/grub-mkrescue.c:97 util/grub-mkstandalone.c:48
 #: util/grub-kbdcomp.in:29
 msgid "save output in FILE [required]"
 msgstr "σαβε ουτπυτ ιν ΦΙΛΕ [ρεϗυιρεδ]"
@@ -5413,8 +5809,8 @@ msgstr "[ΟΠΤΙΟΝΣ] ΦΟΝΤ_ΦΙΛΕΣ"
 msgid "Convert common font file formats into PF2"
 msgstr "ϲονβερτ ϲομμον φοντ φιλε φορματσ ιντο ΠΦ2"
 
-#: util/grub-mkfont.c:1179 util/grub-mkrescue.c:379
-#: util/grub-mkstandalone.c:300 util/grub-kbdcomp.in:70
+#: util/grub-mkfont.c:1179 util/grub-mkrescue.c:393
+#: util/grub-mkstandalone.c:305 util/grub-kbdcomp.in:70
 msgid "output file must be specified"
 msgstr "ουτπυτ φιλε μυστ ϭε σπεϲιφιεδ"
 
@@ -5432,225 +5828,193 @@ msgstr "ϲαν'τ οπεν φιλε %s, ινδεξ %d: ερρορ %d"
 msgid "can't set %dx%d font size: Freetype error %d: %s"
 msgstr "ϲαν'τ σετ %dξ%d φοντ σιζε: Φρεετϋπε ερρορ %d: %s"
 
-#: util/grub-mkimage.c:61
+#: util/grub-mkimage.c:67
 #, c-format
 msgid "set prefix directory [default=%s]"
 msgstr "σετ πρεφιξ διρεϲτορϋ [δεφαυλτ=%s]"
 
 #. TRANSLATORS: "memdisk" here isn't an identifier, it can be translated.
 #. "embed" is a verb (command description).  "
-#: util/grub-mkimage.c:65
+#: util/grub-mkimage.c:71
 msgid ""
 "embed FILE as a memdisk image\n"
-"Implies `-p (memdisk)/boot/grub' but prefix can be overridden by later "
-"options"
+"Implies `-p (memdisk)/boot/grub' and overrides any prefix supplied "
+"previously, but the prefix itself can be overridden by later options"
 msgstr ""
 "εμϭεδ ΦΙΛΕ ασ α μεμδισκ ιμαγε\n"
-"Ιμπλιεσ `-π (μεμδισκ)/ϭοοτ/γρυϭ' ϭυτ πρεφιξ ϲαν ϭε οβερριδδεν ϭϋ λατερ "
-"οπτιονσ"
+"Ιμπλιεσ `-π (μεμδισκ)/ϭοοτ/γρυϭ' ανδ οβερριδεσ ανϋ πρεφιξ συππλιεδ "
+"πρεβιουσλϋ, ϭυτ τχε πρεφιξ ιτσελφ ϲαν ϭε οβερριδδεν ϭϋ λατερ οπτιονσ"
 
-#: util/grub-mkimage.c:69
+#: util/grub-mkimage.c:75
 msgid "embed FILE as an early config"
 msgstr "εμϭεδ ΦΙΛΕ ασ αν εαρλϋ ϲονφιγ"
 
 #. TRANSLATORS: NOTE is a name of segment.
-#: util/grub-mkimage.c:73
+#: util/grub-mkimage.c:79
 msgid "add NOTE segment for CHRP IEEE1275"
 msgstr "αδδ ΝΟΤΕ σεγμεντ φορ ϲΧΡΠ ΙΕΕΕ1275"
 
-#: util/grub-mkimage.c:74
+#: util/grub-mkimage.c:80
 msgid "output a generated image to FILE [default=stdout]"
 msgstr "ουτπυτ α γενερατεδ ιμαγε το ΦΙΛΕ [δεφαυλτ=στδουτ]"
 
-#: util/grub-mkimage.c:75
+#: util/grub-mkimage.c:81
 msgid "FORMAT"
 msgstr "ΦΟΡΜΑΤ"
 
-#: util/grub-mkimage.c:93 util/grub-mkstandalone.c:57
+#: util/grub-mkimage.c:101 util/grub-mkstandalone.c:62
 msgid "generate an image in FORMAT"
 msgstr "γενερατε αν ιμαγε ιν ΦΟΡΜΑΤ"
 
-#: util/grub-mkimage.c:94 util/grub-mkstandalone.c:58
+#: util/grub-mkimage.c:102 util/grub-mkstandalone.c:63
 msgid "available formats:"
 msgstr "αβαιλαϭλε φορματσ:"
 
-#: util/grub-mkimage.c:225
+#: util/grub-mkimage.c:235
 msgid "[OPTION]... [MODULES]"
 msgstr "[ΟΠΤΙΟΝ]... [ΜΟΔΥΛΕΣ]"
 
-#: util/grub-mkimage.c:226
+#: util/grub-mkimage.c:236
 msgid "Make a bootable image of GRUB."
 msgstr "Μακε α ϭοοταϭλε ιμαγε οφ ΓΡΥϬ."
 
-#: util/grub-mkimage.c:255 util/grub-mkstandalone.c:303
+#: util/grub-mkimage.c:265 util/grub-mkstandalone.c:308
 msgid "Target format not specified (use the -O option)."
 msgstr "Ταργετ φορματ νοτ σπεϲιφιεδ (υσε τχε -Ο οπτιον)."
 
-#: util/grub-mkimagexx.c:566 util/grub-mkimagexx.c:917
-#, c-format
-msgid "relocation 0x%x is not implemented yet!"
-msgstr "ρελοϲατιον 0ξ%x ισ νοτ ιμπλεμεντεδ ϋετ!"
+#: util/grub-mkimagexx.c:1382
+#, fuzzy, c-format
+msgid ""
+"`%s' is miscompiled: its start address is 0x%llx instead of 0x%llx: ld.gold "
+"bug?"
+msgstr ""
+"`%s' ισ μισϲομπιλεδ: ιτ'σ σταρτ αδδρεσσ ισ 0ξ%llx ινστεαδ οφ 0ξ%llx: λδ.γολδ "
+"ϭυγ?"
 
-#: util/grub-mkimagexx.c:679 util/grub-mkimagexx.c:724
-#: util/grub-mkimagexx.c:797 util/grub-mkimagexx.c:1145
-#, c-format
-msgid "relocation 0x%llx is not implemented yet"
-msgstr "ρελοϲατιον 0ξ%llx ισ νοτ ιμπλεμεντεδ ϋετ"
-
-#: util/grub-mkimagexx.c:818
-msgid "CALL26 Relocation out of range"
-msgstr "ϲΑΛΛ26 Ρελοϲατιον ουτ οφ ρανγε"
-
-#: util/grub-mkimagexx.c:825
-#, c-format
-msgid "relocation %d is not implemented yet"
-msgstr "ρελοϲατιον %d ισ νοτ ιμπλεμεντεδ ϋετ"
-
-#: util/grub-mkimagexx.c:1170
-#, c-format
-msgid "fixup for relocation %d is not implemented yet"
-msgstr "φιξυπ φορ ρελοϲατιον %d ισ νοτ ιμπλεμεντεδ ϋετ"
-
-#: util/grub-mkimagexx.c:1208
-#, c-format
-msgid "fixup for relocation 0x%x not implemented"
-msgstr "φιξυπ φορ ρελοϲατιον 0ξ%x νοτ ιμπλεμεντεδ"
-
-#: util/grub-mklayout.c:46
+#: util/grub-mklayout.c:53
 msgid "set input filename. Default is STDIN"
 msgstr "σετ ινπυτ φιλεναμε. Δεφαυλτ ισ ΣΤΔΙΝ"
 
 #. TRANSLATORS: scan identifier is keyboard key symbolic name.
-#: util/grub-mklayout.c:300
+#: util/grub-mklayout.c:307
 #, c-format
 msgid "Unknown keyboard scan identifier %s\n"
 msgstr "Υνκνοων κεϋϭοαρδ σϲαν ιδεντιφιερ %s\n"
 
 #. TRANSLATORS: scan code is keyboard key numeric identifier.
-#: util/grub-mklayout.c:404
+#: util/grub-mklayout.c:411
 #, c-format
 msgid "Unknown keyboard scan code 0x%02x\n"
 msgstr "Υνκνοων κεϋϭοαρδ σϲαν ϲοδε 0ξ%02x\n"
 
 #. TRANSLATORS: this error is triggered when input doesn't contain any
 #. key descriptions.
-#: util/grub-mklayout.c:424
+#: util/grub-mklayout.c:431
 msgid "ERROR: no valid keyboard layout found. Check the input.\n"
 msgstr "ΕΡΡΟΡ: νο βαλιδ κεϋϭοαρδ λαϋουτ φουνδ. ϲχεϲκ τχε ινπυτ.\n"
 
 #. TRANSLATORS: "one" is a shortcut for "keyboard layout".
-#: util/grub-mklayout.c:464
+#: util/grub-mklayout.c:471
 msgid "Generate GRUB keyboard layout from Linux console one."
 msgstr "Γενερατε ΓΡΥϬ κεϋϭοαρδ λαϋουτ φρομ Λινυξ ϲονσολε ονε."
 
-#: util/grub-mknetdir.c:42
+#: util/grub-mknetdir.c:47
 msgid "root directory of TFTP server"
 msgstr "ροοτ διρεϲτορϋ οφ ΤΦΤΠ σερβερ"
 
-#: util/grub-mknetdir.c:44
+#: util/grub-mknetdir.c:49
 msgid "relative subdirectory on network server"
 msgstr "ρελατιβε συϭδιρεϲτορϋ ον νετωορκ σερβερ"
 
-#: util/grub-mknetdir.c:82
-msgid "[OPTION]"
-msgstr "[ΟΠΤΙΟΝ]"
+#: util/grub-mknetdir.c:88
+msgid ""
+"Prepares GRUB network boot images at net_directory/subdir assuming "
+"net_directory being TFTP root."
+msgstr ""
+"Πρεπαρεσ ΓΡΥϬ νετωορκ ϭοοτ ιμαγεσ ατ νετ_διρεϲτορϋ/συϭδιρ ασσυμινγ "
+"νετ_διρεϲτορϋ ϭεινγ ΤΦΤΠ ροοτ."
 
-#: util/grub-mknetdir.c:83
-msgid "copies GRUB images into net_directory/subdir/target_cpu-platform."
-msgstr "ϲοπιεσ ΓΡΥϬ ιμαγεσ ιντο νετ_διρεϲτορϋ/συϭδιρ/ταργετ_ϲπυ-πλατφορμ."
+#: util/grub-mknetdir.c:143
+#, c-format
+msgid "unsupported platform %s\n"
+msgstr "υνσυππορτεδ πλατφορμ %s\n"
 
 #. TRANSLATORS: First %s is replaced by platform name. Second one by filename.
-#: util/grub-mknetdir.c:156
+#: util/grub-mknetdir.c:162
 #, c-format
 msgid ""
 "Netboot directory for %s created. Configure your DHCP server to point to %s\n"
 msgstr ""
 "Νετϭοοτ διρεϲτορϋ φορ %s ϲρεατεδ. ϲονφιγυρε ϋουρ ΔΧϲΠ σερβερ το ποιντ το %s\n"
 
-#: util/grub-mkpasswd-pbkdf2.c:41
+#: util/grub-mkpasswd-pbkdf2.c:46
 msgid "Number of PBKDF2 iterations"
 msgstr "Νυμϭερ οφ ΠϬΚΔΦ2 ιτερατιονσ"
 
-#: util/grub-mkpasswd-pbkdf2.c:42
+#: util/grub-mkpasswd-pbkdf2.c:47
 msgid "Length of generated hash"
 msgstr "Λενγτχ οφ γενερατεδ χασχ"
 
-#: util/grub-mkpasswd-pbkdf2.c:43
+#: util/grub-mkpasswd-pbkdf2.c:48
 msgid "Length of salt"
 msgstr "Λενγτχ οφ σαλτ"
 
-#: util/grub-mkpasswd-pbkdf2.c:82
+#: util/grub-mkpasswd-pbkdf2.c:87
 msgid "Generate PBKDF2 password hash."
 msgstr "Γενερατε ΠϬΚΔΦ2 πασσωορδ χασχ."
 
-#: util/grub-mkpasswd-pbkdf2.c:139 util/grub-mkpasswd-pbkdf2.c:146
+#: util/grub-mkpasswd-pbkdf2.c:144 util/grub-mkpasswd-pbkdf2.c:151
 msgid "failure to read password"
 msgstr "φαιλυρε το ρεαδ πασσωορδ"
 
-#: util/grub-mkpasswd-pbkdf2.c:141
+#: util/grub-mkpasswd-pbkdf2.c:146
 msgid "Reenter password: "
 msgstr "Ρεεντερ πασσωορδ: "
 
-#: util/grub-mkpasswd-pbkdf2.c:155
+#: util/grub-mkpasswd-pbkdf2.c:160
 msgid "passwords don't match"
 msgstr "πασσωορδσ δον'τ ματϲχ"
 
-#: util/grub-mkpasswd-pbkdf2.c:164
+#: util/grub-mkpasswd-pbkdf2.c:169
 msgid "couldn't retrieve random data for salt"
 msgstr "ϲουλδν'τ ρετριεβε ρανδομ δατα φορ σαλτ"
 
-#: util/grub-mkpasswd-pbkdf2.c:179
+#: util/grub-mkpasswd-pbkdf2.c:184
 #, c-format
 msgid "cryptographic error number %d"
 msgstr "ϲρϋπτογραπχιϲ ερρορ νυμϭερ %d"
 
-#: util/grub-mkpasswd-pbkdf2.c:198
+#: util/grub-mkpasswd-pbkdf2.c:203
 #, c-format
 msgid "PBKDF2 hash of your password is %s\n"
 msgstr "ΠϬΚΔΦ2 χασχ οφ ϋουρ πασσωορδ ισ %s\n"
 
-#: util/grub-mkrelpath.c:63
+#: util/grub-mkrelpath.c:67
 msgid "No path is specified.\n"
 msgstr "Νο πατχ ισ σπεϲιφιεδ.\n"
 
-#: util/grub-mkrelpath.c:74
+#: util/grub-mkrelpath.c:78
 msgid "PATH"
 msgstr "ΠΑΤΧ"
 
-#: util/grub-mkrelpath.c:75
+#: util/grub-mkrelpath.c:79
 msgid "Transform a system filename into GRUB one."
 msgstr "Τρανσφορμ α σϋστεμ φιλεναμε ιντο ΓΡΥϬ ονε."
 
-#: util/grub-mkrescue.c:98
+#: util/grub-mkrescue.c:99
 msgid "save ROM images in DIR [optional]"
 msgstr "σαβε ΡΟΜ ιμαγεσ ιν ΔΙΡ [οπτιοναλ]"
 
 #. TRANSLATORS: xorriso is a program for creating ISOs and burning CDs.
-#: util/grub-mkrescue.c:101
+#: util/grub-mkrescue.c:102
 msgid "use FILE as xorriso [optional]"
 msgstr "υσε ΦΙΛΕ ασ ξορρισο [οπτιοναλ]"
 
-#: util/grub-mkrescue.c:104
-msgid "use FILE as font for label"
-msgstr "υσε ΦΙΛΕ ασ φοντ φορ λαϭελ"
-
-#: util/grub-mkrescue.c:105
-msgid "use COLOR for label"
-msgstr "υσε ϲΟΛΟΡ φορ λαϭελ"
-
-#: util/grub-mkrescue.c:106
-msgid "use COLOR for label background"
-msgstr "υσε ϲΟΛΟΡ φορ λαϭελ ϭαϲκγρουνδ"
-
-#: util/grub-mkrescue.c:107
+#: util/grub-mkrescue.c:108
 msgid "use STRING as product name"
 msgstr "υσε ΣΤΡΙΝΓ ασ προδυϲτ ναμε"
 
-#: util/grub-mkrescue.c:108
-msgid "use STRING as product version"
-msgstr "υσε ΣΤΡΙΝΓ ασ προδυϲτ βερσιον"
-
-#: util/grub-mkrescue.c:109
+#: util/grub-mkrescue.c:110
 msgid ""
 "enable sparc boot. Disables HFS+, APM, ARCS and boot as disk image for i386-"
 "pc"
@@ -5658,7 +6022,7 @@ msgstr ""
 "εναϭλε σπαρϲ ϭοοτ. Δισαϭλεσ ΧΦΣ+, ΑΠΜ, ΑΡϲΣ ανδ ϭοοτ ασ δισκ ιμαγε φορ ι386-"
 "πϲ"
 
-#: util/grub-mkrescue.c:110
+#: util/grub-mkrescue.c:111
 msgid ""
 "enable ARCS (big-endian mips machines, mostly SGI) boot. Disables HFS+, APM, "
 "sparc64 and boot as disk image for i386-pc"
@@ -5666,38 +6030,44 @@ msgstr ""
 "εναϭλε ΑΡϲΣ (ϭιγ-ενδιαν μιπσ μαϲχινεσ, μοστλϋ ΣΓΙ) ϭοοτ. Δισαϭλεσ ΧΦΣ+, ΑΠΜ, "
 "σπαρϲ64 ανδ ϭοοτ ασ δισκ ιμαγε φορ ι386-πϲ"
 
-#: util/grub-mkrescue.c:211 util/grub-mkstandalone.c:109
-msgid "[OPTION] SOURCE..."
-msgstr "[ΟΠΤΙΟΝ] ΣΟΥΡϲΕ..."
-
 #. TRANSLATORS: it generates one single image which is bootable through any method.
-#: util/grub-mkrescue.c:213
+#: util/grub-mkrescue.c:124
 msgid "Make GRUB CD-ROM, disk, pendrive and floppy bootable image."
 msgstr "Μακε ΓΡΥϬ ϲΔ-ΡΟΜ, δισκ, πενδριβε ανδ φλοππϋ ϭοοταϭλε ιμαγε."
 
-#: util/grub-mkrescue.c:214
-#, c-format
+#: util/grub-mkrescue.c:129
+#, fuzzy, c-format
 msgid ""
-"Generates a bootable rescue image with specified source files, source "
-"directories, or mkisofs options listed by the output of `%s'.\n"
-"\n"
-"Option -- switches to native xorriso command mode.\n"
-"\n"
-"Mail xorriso support requests to <bug-xorriso@gnu.org>."
+"Generates a bootable CD/USB/floppy image.  Arguments other than options to "
+"this program are passed to xorriso, and indicate source files, source "
+"directories, or any of the mkisofs options listed by the output of `%s'."
 msgstr ""
-"Γενερατεσ α ϭοοταϭλε ρεσϲυε ιμαγε ωιτχ σπεϲιφιεδ σουρϲε φιλεσ, σουρϲε "
-"διρεϲτοριεσ, ορ μκισοφσ οπτιονσ λιστεδ ϭϋ τχε ουτπυτ οφ `%s'.\n"
+"Γενερατεσ α ϭοοταϭλε ϲΔ/ΥΣϬ στιϲκ/φλοππϋ ιμαγε ωιτχ σπεϲιφιεδ σουρϲε φιλεσ, "
+"σουρϲε διρεϲτοριεσ, ορ μκισοφσ οπτιονσ λιστεδ ϭϋ τχε ουτπυτ οφ `%s'.\n"
 "\n"
 "Οπτιον -- σωιτϲχεσ το νατιβε ξορρισο ϲομμανδ μοδε.\n"
 "\n"
 "Μαιλ ξορρισο συππορτ ρεϗυεστσ το <ϭυγ-ξορρισο@γνυ.οργ>."
 
-#: util/grub-mkrescue.c:252 util/grub-mkrescue.c:295 util/grub-mkrescue.c:471
+#: util/grub-mkrescue.c:133
+msgid "Option -- switches to native xorriso command mode."
+msgstr ""
+
+#: util/grub-mkrescue.c:134
+#, fuzzy
+msgid "Mail xorriso support requests to <bug-xorriso@gnu.org>."
+msgstr "Ρεπορτ ϭυγσ το <ϭυγ-γρυϭ@γνυ.οργ>."
+
+#: util/grub-mkrescue.c:230 util/grub-mkstandalone.c:114
+msgid "[OPTION] SOURCE..."
+msgstr "[ΟΠΤΙΟΝ] ΣΟΥΡϲΕ..."
+
+#: util/grub-mkrescue.c:266 util/grub-mkrescue.c:309 util/grub-mkrescue.c:492
 #, c-format
 msgid "enabling %s support ..."
 msgstr "εναϭλινγ %s συππορτ ..."
 
-#: util/grub-mkrescue.c:506
+#: util/grub-mkrescue.c:527
 msgid ""
 "Your xorriso doesn't support `--grub2-boot-info'. Some features are "
 "disabled. Please use xorriso 1.2.9 or later."
@@ -5705,7 +6075,7 @@ msgstr ""
 "Ϋουρ ξορρισο δοεσν'τ συππορτ `--γρυϭ2-ϭοοτ-ινφο'. Σομε φεατυρεσ αρε "
 "δισαϭλεδ. Πλεασε υσε ξορρισο 1.2.9 ορ λατερ."
 
-#: util/grub-mkrescue.c:533
+#: util/grub-mkrescue.c:554
 msgid ""
 "Your xorriso doesn't support `--grub2-boot-info'. Your core image is too "
 "big. Boot as disk is disabled. Please use xorriso 1.2.9 or later."
@@ -5713,13 +6083,13 @@ msgstr ""
 "Ϋουρ ξορρισο δοεσν'τ συππορτ `--γρυϭ2-ϭοοτ-ινφο'. Ϋουρ ϲορε ιμαγε ισ τοο "
 "ϭιγ. Ϭοοτ ασ δισκ ισ δισαϭλεδ. Πλεασε υσε ξορρισο 1.2.9 ορ λατερ."
 
-#: util/grub-mkstandalone.c:110
+#: util/grub-mkstandalone.c:115
 msgid ""
 "Generate a standalone image (containing all modules) in the selected format"
 msgstr ""
 "Γενερατε α στανδαλονε ιμαγε (ϲονταινινγ αλλ μοδυλεσ) ιν τχε σελεϲτεδ φορματ"
 
-#: util/grub-mkstandalone.c:110
+#: util/grub-mkstandalone.c:115
 msgid "Graft point syntax (E.g. /boot/grub/grub.cfg=./grub.cfg) is accepted"
 msgstr "Γραφτ ποιντ σϋνταξ (Ε.γ. /ϭοοτ/γρυϭ/γρυϭ.ϲφγ=./γρυϭ.ϲφγ) ισ αϲϲεπτεδ"
 
@@ -5731,27 +6101,25 @@ msgstr "ΙΜΑΓΕ1 [ΙΜΑΓΕ2 ...] ΜΟΥΝΤΠΟΙΝΤ"
 msgid "need an image and mountpoint"
 msgstr "νεεδ αν ιμαγε ανδ μουντποιντ"
 
-#: util/grub-probe.c:655
+#: util/grub-probe.c:709
 msgid "given argument is a system device, not a path"
 msgstr "γιβεν αργυμεντ ισ α σϋστεμ δεβιϲε, νοτ α πατχ"
 
-#: util/grub-probe.c:659
-msgid ""
-"print filesystem module, GRUB drive, system device, partition map module, "
-"abstraction module or cryptographic container UUID [default=fs]"
-msgstr ""
-"πριντ φιλεσϋστεμ μοδυλε, ΓΡΥϬ δριβε, σϋστεμ δεβιϲε, παρτιτιον μαπ μοδυλε, "
-"αϭστραϲτιον μοδυλε ορ ϲρϋπτογραπχιϲ ϲονταινερ ΥΥΙΔ [δεφαυλτ=φσ]"
+#: util/grub-probe.c:731
+#, fuzzy
+msgid "print TARGET"
+msgstr "ΤΑΡΓΕΤ"
 
-#: util/grub-probe.c:758
-msgid "No path or device is specified.\n"
-msgstr "Νο πατχ ορ δεβιϲε ισ σπεϲιφιεδ.\n"
+#: util/grub-probe.c:732
+#, fuzzy
+msgid "available targets:"
+msgstr "αβαιλαϭλε φορματσ:"
 
-#: util/grub-probe.c:774
+#: util/grub-probe.c:813
 msgid "[OPTION]... [PATH|DEVICE]"
 msgstr "[ΟΠΤΙΟΝ]... [ΠΑΤΧ|ΔΕΒΙϲΕ]"
 
-#: util/grub-probe.c:775
+#: util/grub-probe.c:814
 msgid ""
 "Probe device information for a given path (or device, if the -d option is "
 "given)."
@@ -5759,67 +6127,74 @@ msgstr ""
 "Προϭε δεβιϲε ινφορματιον φορ α γιβεν πατχ (ορ δεβιϲε, ιφ τχε -δ οπτιον ισ "
 "γιβεν)."
 
-#: util/grub-render-label.c:54
+#: util/grub-render-label.c:60
 msgid "read text from FILE."
 msgstr "ρεαδ τεξτ φρομ ΦΙΛΕ."
 
-#: util/grub-render-label.c:56
+#: util/grub-render-label.c:62
 msgid "use COLOR for text"
 msgstr "υσε ϲΟΛΟΡ φορ τεξτ"
 
-#: util/grub-render-label.c:58
+#: util/grub-render-label.c:64
 msgid "use COLOR for background"
 msgstr "υσε ϲΟΛΟΡ φορ ϭαϲκγρουνδ"
 
-#: util/grub-render-label.c:60
-msgid "set the label to render."
-msgstr "σετ τχε λαϭελ το ρενδερ."
+#. TRANSLATORS: The result is always stored to file and
+#. never shown directly, so don't use "show" as synonym for render. Use "create" if
+#. "render" doesn't translate directly.
+#: util/grub-render-label.c:69
+msgid "set the label to render"
+msgstr "σετ τχε λαϭελ το ρενδερ"
 
-#: util/grub-render-label.c:64
+#: util/grub-render-label.c:73
 msgid "use FILE as font (PF2)."
 msgstr "υσε ΦΙΛΕ ασ φοντ (ΠΦ2)."
 
-#: util/grub-render-label.c:123
+#. TRANSLATORS: This file takes a text and creates a graphical representation of it,
+#. putting the result into .disk_label file. The result is always stored to file and
+#. never shown directly, so don't use "show" as synonym for render. Use "create" if
+#. "render" doesn't translate directly.
+#: util/grub-render-label.c:136
 msgid "Render Apple .disk_label."
 msgstr "Ρενδερ Αππλε .δισκ_λαϭελ."
 
-#: util/grub-render-label.c:145
+#: util/grub-render-label.c:158 util/grub-syslinux2cfg.c:169
 msgid "Missing arguments\n"
 msgstr "Μισσινγ αργυμεντσ\n"
 
-#: util/grub-script-check.c:83
+#: util/grub-script-check.c:87
 msgid "[PATH]"
 msgstr "[ΠΑΤΧ]"
 
-#: util/grub-script-check.c:84
+#: util/grub-script-check.c:88
 msgid "Checks GRUB script configuration file for syntax errors."
 msgstr "ϲχεϲκσ ΓΡΥϬ σϲριπτ ϲονφιγυρατιον φιλε φορ σϋνταξ ερρορσ."
 
-#: util/grub-script-check.c:203
+#: util/grub-script-check.c:207
 #, c-format
 msgid "Syntax error at line %u\n"
 msgstr "Σϋνταξ ερρορ ατ λινε %u\n"
 
-#: util/grub-script-check.c:208
+#: util/grub-script-check.c:212
 #, c-format
 msgid "Script `%s' contains no commands and will do nothing\n"
 msgstr "Σϲριπτ `%s' ϲονταινσ νο ϲομμανδσ ανδ ωιλλ δο νοτχινγ\n"
 
-#: util/grub-setup.c:69
+#: util/grub-setup.c:79
 #, c-format
 msgid "use FILE as the boot image [default=%s]"
 msgstr "υσε ΦΙΛΕ ασ τχε ϭοοτ ιμαγε [δεφαυλτ=%s]"
 
-#: util/grub-setup.c:71
+#: util/grub-setup.c:81
 #, c-format
 msgid "use FILE as the core image [default=%s]"
 msgstr "υσε ΦΙΛΕ ασ τχε ϲορε ιμαγε [δεφαυλτ=%s]"
 
-#: util/grub-setup.c:189
+#: util/grub-setup.c:210
 msgid "No device is specified.\n"
 msgstr "Νο δεβιϲε ισ σπεϲιφιεδ.\n"
 
-#: util/grub-setup.c:203
+#: util/grub-setup.c:224
 msgid ""
 "Set up images to boot from DEVICE.\n"
 "\n"
@@ -5829,62 +6204,75 @@ msgstr ""
 "\n"
 "Ϋου σχουλδ νοτ νορμαλλϋ ρυν τχισ προγραμ διρεϲτλϋ.  Υσε γρυϭ-ινσταλλ ινστεαδ."
 
-#: util/grub-setup.c:207
+#: util/grub-setup.c:228
 msgid "DEVICE must be an OS device (e.g. /dev/sda)."
 msgstr "ΔΕΒΙϲΕ μυστ ϭε αν ΟΣ δεβιϲε (ε.γ. /δεβ/σδα)."
 
-#: util/grub-setup.c:275
+#: util/grub-setup.c:297
 #, c-format
 msgid "Invalid device `%s'.\n"
 msgstr "Ινβαλιδ δεβιϲε `%s'.\n"
+
+#: util/grub-syslinux2cfg.c:64
+msgid "root directory as it will be seen on runtime [default=/]."
+msgstr "ροοτ διρεϲτορϋ ασ ιτ ωιλλ ϭε σεεν ον ρυντιμε [δεφαυλτ=/]."
+
+#: util/grub-syslinux2cfg.c:69
+msgid ""
+"current directory of the syslinux as it will be seen on runtime  [default is "
+"parent directory of input file]."
+msgstr ""
+"ϲυρρεντ διρεϲτορϋ οφ τχε σϋσλινυξ ασ ιτ ωιλλ ϭε σεεν ον ρυντιμε  [δεφαυλτ ισ "
+"παρεντ διρεϲτορϋ οφ ινπυτ φιλε]."
+
+#: util/grub-syslinux2cfg.c:74
+msgid "write output to FILE [default=stdout]."
+msgstr "ωριτε ουτπυτ το ΦΙΛΕ [δεφαυλτ=στδουτ]."
+
+#: util/grub-syslinux2cfg.c:148
+msgid "Transform syslinux config into GRUB one."
+msgstr "Τρανσφορμ σϋσλινυξ ϲονφιγ ιντο ΓΡΥϬ ονε."
+
+#: util/misc.c:93
+#, fuzzy, c-format
+msgid "file `%s' is too big"
+msgstr "φιρμωαρε ιμαγε ισ τοο ϭιγ"
 
 #: util/mkimage.c:745 util/mkimage.c:774 util/mkimage.c:791
 msgid "cannot compress the kernel image"
 msgstr "ϲαννοτ ϲομπρεσσ τχε κερνελ ιμαγε"
 
-#: util/mkimage.c:823 util/mkimage.c:1231
+#: util/mkimage.c:823 util/mkimage.c:1234
 #, c-format
 msgid "unknown compression %d\n"
 msgstr "υνκνοων ϲομπρεσσιον %d\n"
 
-#: util/mkimage.c:862
-msgid "THM_CALL Relocation out of range."
-msgstr "ΤΧΜ_ϲΑΛΛ Ρελοϲατιον ουτ οφ ρανγε."
-
-#: util/mkimage.c:891
-msgid "THM_JUMP19 Relocation out of range."
-msgstr "ΤΧΜ_ΪΥΜΠ19 Ρελοϲατιον ουτ οφ ρανγε."
-
-#: util/mkimage.c:917
-msgid "JUMP24 Relocation out of range."
-msgstr "ΪΥΜΠ24 Ρελοϲατιον ουτ οφ ρανγε."
-
-#: util/mkimage.c:1242
+#: util/mkimage.c:1245
 msgid "Decompressor is too big"
 msgstr "Δεϲομπρεσσορ ισ τοο ϭιγ"
 
-#: util/mkimage.c:1288
+#: util/mkimage.c:1291
 #, c-format
 msgid "core image is too big (0x%x > 0x%x)"
 msgstr "ϲορε ιμαγε ισ τοο ϭιγ (0ξ%x > 0ξ%x)"
 
-#: util/mkimage.c:1295
+#: util/mkimage.c:1298
 #, c-format
 msgid "kernel image is too big (0x%x > 0x%x)"
 msgstr "κερνελ ιμαγε ισ τοο ϭιγ (0ξ%x > 0ξ%x)"
 
-#: util/mkimage.c:1374 util/mkimage.c:1653
+#: util/mkimage.c:1377 util/mkimage.c:1656
 #, c-format
 msgid "diskboot.img size must be %u bytes"
 msgstr "δισκϭοοτ.ιμγ σιζε μυστ ϭε %u ϭϋτεσ"
 
-#: util/mkimage.c:1723
+#: util/mkimage.c:1726
 msgid ""
 "fwstart.img doesn't match the known good version. proceed at your own risk"
 msgstr ""
 "φωσταρτ.ιμγ δοεσν'τ ματϲχ τχε κνοων γοοδ βερσιον. προϲεεδ ατ ϋουρ οων ρισκ"
 
-#: util/mkimage.c:1727 util/mkimage.c:1751
+#: util/mkimage.c:1730 util/mkimage.c:1754
 msgid "firmware image is too big"
 msgstr "φιρμωαρε ιμαγε ισ τοο ϭιγ"
 
@@ -5905,17 +6293,17 @@ msgstr "νον-σεϲτορ-αλιγνεδ δατα ισ φουνδ ιν τχε 
 msgid "the sectors of the core file are too fragmented"
 msgstr "τχε σεϲτορσ οφ τχε ϲορε φιλε αρε τοο φραγμεντεδ"
 
-#: util/setup.c:276
+#: util/setup.c:277
 #, c-format
 msgid "the size of `%s' is not %u"
 msgstr "τχε σιζε οφ `%s' ισ νοτ %u"
 
-#: util/setup.c:288
+#: util/setup.c:289
 #, c-format
 msgid "the size of `%s' is too small"
 msgstr "τχε σιζε οφ `%s' ισ τοο σμαλλ"
 
-#: util/setup.c:414
+#: util/setup.c:415
 msgid ""
 "Attempting to install GRUB to a disk with multiple partition labels or both "
 "partition label and filesystem.  This is not supported yet."
@@ -5923,13 +6311,13 @@ msgstr ""
 "Αττεμπτινγ το ινσταλλ ΓΡΥϬ το α δισκ ωιτχ μυλτιπλε παρτιτιον λαϭελσ ορ ϭοτχ "
 "παρτιτιον λαϭελ ανδ φιλεσϋστεμ.  Τχισ ισ νοτ συππορτεδ ϋετ."
 
-#: util/setup.c:427
+#: util/setup.c:428
 #, c-format
 msgid "unable to identify a filesystem in %s; safety check can't be performed"
 msgstr "υναϭλε το ιδεντιφϋ α φιλεσϋστεμ ιν %s; σαφετϋ ϲχεϲκ ϲαν'τ ϭε περφορμεδ"
 
 #. TRANSLATORS: Filesystem may reserve the space just GRUB isn't sure about it.
-#: util/setup.c:431
+#: util/setup.c:432
 #, c-format
 msgid ""
 "%s appears to contain a %s filesystem which isn't known to reserve space for "
@@ -5943,7 +6331,7 @@ msgstr ""
 "δισαϭλεσ τχισ ϲχεϲκ, υσε ατ ϋουρ οων ρισκ)"
 
 #. TRANSLATORS: Partition map may reserve the space just GRUB isn't sure about it.
-#: util/setup.c:444
+#: util/setup.c:445
 #, c-format
 msgid ""
 "%s appears to contain a %s partition map which isn't known to reserve space "
@@ -5956,7 +6344,7 @@ msgstr ""
 "ΔΕΣΤΡΥϲΤΙΟΝ ιφ βαλυαϭλε δατα ισ οβερωριττεν ϭϋ γρυϭ-σετυπ (--σκιπ-φσ-προϭε "
 "δισαϭλεσ τχισ ϲχεϲκ, υσε ατ ϋουρ οων ρισκ)"
 
-#: util/setup.c:451
+#: util/setup.c:452
 #, c-format
 msgid ""
 "%s appears to contain a %s partition map and LDM which isn't known to be a "
@@ -5969,7 +6357,7 @@ msgstr ""
 "ΔΕΣΤΡΥϲΤΙΟΝ ιφ βαλυαϭλε δατα ισ οβερωριττεν ϭϋ γρυϭ-σετυπ (--σκιπ-φσ-προϭε "
 "δισαϭλεσ τχισ ϲχεϲκ, υσε ατ ϋουρ οων ρισκ)"
 
-#: util/setup.c:464
+#: util/setup.c:465
 msgid ""
 "Attempting to install GRUB to a partitionless disk or to a partition.  This "
 "is a BAD idea."
@@ -5977,7 +6365,7 @@ msgstr ""
 "Αττεμπτινγ το ινσταλλ ΓΡΥϬ το α παρτιτιονλεσσ δισκ ορ το α παρτιτιον.  Τχισ "
 "ισ α ϬΑΔ ιδεα."
 
-#: util/setup.c:469
+#: util/setup.c:470
 msgid ""
 "Attempting to install GRUB to a disk with multiple partition labels.  This "
 "is not supported yet."
@@ -5985,51 +6373,51 @@ msgstr ""
 "Αττεμπτινγ το ινσταλλ ΓΡΥϬ το α δισκ ωιτχ μυλτιπλε παρτιτιον λαϭελσ.  Τχισ "
 "ισ νοτ συππορτεδ ϋετ."
 
-#: util/setup.c:475
+#: util/setup.c:476
 #, c-format
 msgid "Partition style `%s' doesn't support embedding"
 msgstr "Παρτιτιον στϋλε `%s' δοεσν'τ συππορτ εμϭεδδινγ"
 
-#: util/setup.c:482
+#: util/setup.c:483
 #, c-format
 msgid "File system `%s' doesn't support embedding"
 msgstr "Φιλε σϋστεμ `%s' δοεσν'τ συππορτ εμϭεδδινγ"
 
-#: util/setup.c:507
+#: util/setup.c:512
 msgid "Your embedding area is unusually small.  core.img won't fit in it."
 msgstr "Ϋουρ εμϭεδδινγ αρεα ισ υνυσυαλλϋ σμαλλ.  ϲορε.ιμγ ωον'τ φιτ ιν ιτ."
 
-#: util/setup.c:529 util/setup.c:637 util/setup.c:739
+#: util/setup.c:534 util/setup.c:650 util/setup.c:752
 msgid "no terminator in the core image"
 msgstr "νο τερμινατορ ιν τχε ϲορε ιμαγε"
 
-#: util/setup.c:561
+#: util/setup.c:567
 msgid "core.img version mismatch"
 msgstr "ϲορε.ιμγ βερσιον μισματϲχ"
 
-#: util/setup.c:587
+#: util/setup.c:600
 msgid ""
 "embedding is not possible, but this is required for RAID and LVM install"
 msgstr ""
 "εμϭεδδινγ ισ νοτ ποσσιϭλε, ϭυτ τχισ ισ ρεϗυιρεδ φορ ΡΑΙΔ ανδ ΛΒΜ ινσταλλ"
 
-#: util/setup.c:594
+#: util/setup.c:607
 #, c-format
 msgid "can't determine filesystem on %s"
 msgstr "ϲαν'τ δετερμινε φιλεσϋστεμ ον %s"
 
-#: util/setup.c:597
+#: util/setup.c:610
 #, c-format
 msgid "filesystem `%s' doesn't support blocklists"
 msgstr "φιλεσϋστεμ `%s' δοεσν'τ συππορτ ϭλοϲκλιστσ"
 
 #. TRANSLATORS: cross-disk refers to /boot being on one disk
 #. but MBR on another.
-#: util/setup.c:606
+#: util/setup.c:619
 msgid "embedding is not possible, but this is required for cross-disk install"
 msgstr "εμϭεδδινγ ισ νοτ ποσσιϭλε, ϭυτ τχισ ισ ρεϗυιρεδ φορ ϲροσσ-δισκ ινσταλλ"
 
-#: util/setup.c:612
+#: util/setup.c:625
 msgid ""
 "Embedding is not possible.  GRUB can only be installed in this setup by "
 "using blocklists.  However, blocklists are UNRELIABLE and their use is "
@@ -6040,15 +6428,15 @@ msgstr ""
 "δισϲουραγεδ."
 
 #. TRANSLATORS: Here GRUB refuses to continue with blocklist install.
-#: util/setup.c:617
+#: util/setup.c:630
 msgid "will not proceed with blocklists"
 msgstr "ωιλλ νοτ προϲεεδ ωιτχ ϭλοϲκλιστσ"
 
-#: util/setup.c:712 util/setup.c:732
+#: util/setup.c:725 util/setup.c:745
 msgid "blocklists are invalid"
 msgstr "ϭλοϲκλιστσ αρε ινβαλιδ"
 
-#: util/setup.c:742
+#: util/setup.c:755
 msgid "blocklists are incomplete"
 msgstr "ϭλοϲκλιστσ αρε ινϲομπλετε"
 
@@ -6060,12 +6448,12 @@ msgstr "Υσαγε: %s -ο ΟΥΤΠΥΤ ϲΚϬΜΑΠ_ΑΡΓΥΜΕΝΤΣ...\\ν"
 msgid "Make GRUB keyboard layout file."
 msgstr "Μακε ΓΡΥϬ κεϋϭοαρδ λαϋουτ φιλε."
 
-#: util/grub-kbdcomp.in:27 util/grub-mkconfig.in:57 util/grub-reboot.in:49
+#: util/grub-kbdcomp.in:27 util/grub-mkconfig.in:58 util/grub-reboot.in:49
 #: util/grub-set-default.in:51
 msgid "print this message and exit"
 msgstr "πριντ τχισ μεσσαγε ανδ εξιτ"
 
-#: util/grub-kbdcomp.in:28 util/grub-mkconfig.in:58 util/grub-reboot.in:50
+#: util/grub-kbdcomp.in:28 util/grub-mkconfig.in:59 util/grub-reboot.in:50
 #: util/grub-set-default.in:52
 msgid "print the version information and exit"
 msgstr "πριντ τχε βερσιον ινφορματιον ανδ εξιτ"
@@ -6074,43 +6462,43 @@ msgstr "πριντ τχε βερσιον ινφορματιον ανδ εξιτ"
 msgid "%s generates a keyboard layout for GRUB using ckbcomp\\n"
 msgstr "%s γενερατεσ α κεϋϭοαρδ λαϋουτ φορ ΓΡΥϬ υσινγ ϲκϭϲομπ\\ν"
 
-#: util/grub-kbdcomp.in:33 util/grub-mkconfig.in:60 util/grub-reboot.in:60
+#: util/grub-kbdcomp.in:33 util/grub-mkconfig.in:61 util/grub-reboot.in:60
 #: util/grub-set-default.in:58
 msgid "Report bugs to <bug-grub@gnu.org>."
 msgstr "Ρεπορτ ϭυγσ το <ϭυγ-γρυϭ@γνυ.οργ>."
 
-#: util/grub-kbdcomp.in:41 util/grub-mkconfig.in:68 util/grub-reboot.in:68
+#: util/grub-kbdcomp.in:41 util/grub-mkconfig.in:69 util/grub-reboot.in:68
 #: util/grub-set-default.in:66
 msgid "%s: option requires an argument -- `%s'\\n"
 msgstr "%s: οπτιον ρεϗυιρεσ αν αργυμεντ -- `%s'\\ν"
 
-#: util/grub-mkconfig.in:53
+#: util/grub-mkconfig.in:54
 msgid "Usage: %s [OPTION]\\n"
 msgstr "Υσαγε: %s [ΟΠΤΙΟΝ]\\ν"
 
-#: util/grub-mkconfig.in:54
+#: util/grub-mkconfig.in:55
 msgid "Generate a grub config file"
 msgstr "Γενερατε α γρυϭ ϲονφιγ φιλε"
 
-#: util/grub-mkconfig.in:56
+#: util/grub-mkconfig.in:57
 msgid "output generated config to FILE [default=stdout]"
 msgstr "ουτπυτ γενερατεδ ϲονφιγ το ΦΙΛΕ [δεφαυλτ=στδουτ]"
 
-#: util/grub-mkconfig.in:93 util/grub-reboot.in:100
+#: util/grub-mkconfig.in:94 util/grub-reboot.in:100
 #: util/grub-set-default.in:98
 msgid "Unrecognized option `%s'\\n"
 msgstr "Υνρεϲογνιζεδ οπτιον `%s'\\ν"
 
-#: util/grub-mkconfig.in:117
+#: util/grub-mkconfig.in:118
 msgid "%s: You must run this as root\\n"
 msgstr "%s: Ϋου μυστ ρυν τχισ ασ ροοτ\\ν"
 
-#: util/grub-mkconfig.in:234
+#: util/grub-mkconfig.in:235
 msgid "Generating grub configuration file ..."
 msgstr "Γενερατινγ γρυϭ ϲονφιγυρατιον φιλε ..."
 
 #. TRANSLATORS: %s is replaced by filename
-#: util/grub-mkconfig.in:266
+#: util/grub-mkconfig.in:268
 msgid ""
 "Syntax errors are detected in generated GRUB config file.\n"
 "Ensure that there are no errors in /etc/default/grub\n"
@@ -6122,11 +6510,11 @@ msgstr ""
 "ανδ /ετϲ/γρυϭ.δ/* φιλεσ ορ πλεασε φιλε α ϭυγ ρεπορτ ωιτχ\n"
 "%s φιλε ατταϲχεδ."
 
-#: util/grub-mkconfig.in:276
+#: util/grub-mkconfig.in:279
 msgid "done"
 msgstr "δονε"
 
-#: util/grub-mkconfig_lib.in:44
+#: util/grub-mkconfig_lib.in:47
 msgid "Warning:"
 msgstr "Ωαρνινγ:"
 
@@ -6185,7 +6573,6 @@ msgid "MENU_ENTRY is a number, a menu item title or a menu item identifier."
 msgstr "ΜΕΝΥ_ΕΝΤΡΫ ισ α νυμϭερ, α μενυ ιτεμ τιτλε ορ α μενυ ιτεμ ιδεντιφιερ."
 
 #: util/grub.d/00_header.in:141
-#, c-format
 msgid ""
 "Requested serial terminal but GRUB_SERIAL_COMMAND is unspecified. Default "
 "parameters will be used."
@@ -6194,22 +6581,18 @@ msgstr ""
 "παραμετερσ ωιλλ ϭε υσεδ."
 
 #: util/grub.d/00_header.in:232
-#, c-format
 msgid "Found theme: %s\\n"
 msgstr "Φουνδ τχεμε: %s\\ν"
 
 #: util/grub.d/00_header.in:268
-#, c-format
 msgid "Found background: %s\\n"
 msgstr "Φουνδ ϭαϲκγρουνδ: %s\\ν"
 
 #: util/grub.d/00_header.in:273
-#, c-format
 msgid "Unsupported image format"
 msgstr "Υνσυππορτεδ ιμαγε φορματ"
 
-#: util/grub.d/00_header.in:293
-#, c-format
+#: util/grub.d/00_header.in:292
 msgid ""
 "Setting GRUB_TIMEOUT to a non-zero value when GRUB_HIDDEN_TIMEOUT is set is "
 "no longer supported."
@@ -6218,34 +6601,28 @@ msgstr ""
 "νο λονγερ συππορτεδ."
 
 #: util/grub.d/10_hurd.in:48
-#, c-format
 msgid "Found GNU Mach: %s"
 msgstr "Φουνδ ΓΝΥ Μαϲχ: %s"
 
 #: util/grub.d/10_hurd.in:63
-#, c-format
 msgid "Found Hurd module: %s"
 msgstr "Φουνδ Χυρδ μοδυλε: %s"
 
 #: util/grub.d/10_hurd.in:77
-#, c-format
 msgid "Some Hurd stuff found, but not enough to boot."
 msgstr "Σομε Χυρδ στυφφ φουνδ, ϭυτ νοτ ενουγχ το ϭοοτ."
 
 #: util/grub.d/10_hurd.in:91
-#, c-format
 msgid "%s, with Hurd %s (recovery mode)"
 msgstr "%s, ωιτχ Χυρδ %s (ρεϲοβερϋ μοδε)"
 
 #: util/grub.d/10_hurd.in:94
-#, c-format
 msgid "%s, with Hurd %s"
 msgstr "%s, ωιτχ Χυρδ %s"
 
 #: util/grub.d/10_hurd.in:100 util/grub.d/10_kfreebsd.in:87
 #: util/grub.d/10_linux.in:91 util/grub.d/10_netbsd.in:113
 #: util/grub.d/20_linux_xen.in:99 util/grub.d/30_os-prober.in:271
-#, c-format
 msgid ""
 "Please don't use old title `%s' for GRUB_DEFAULT, use `%s' (for versions "
 "before 2.00) or `%s' (for 2.00 or later)"
@@ -6254,12 +6631,10 @@ msgstr ""
 "ϭεφορε 2.00) ορ `%s' (φορ 2.00 ορ λατερ)"
 
 #: util/grub.d/10_hurd.in:112
-#, c-format
 msgid "Loading GNU Mach ..."
 msgstr "Λοαδινγ ΓΝΥ Μαϲχ ..."
 
 #: util/grub.d/10_hurd.in:128
-#, c-format
 msgid "Loading the Hurd ..."
 msgstr "Λοαδινγ τχε Χυρδ ..."
 
@@ -6267,110 +6642,89 @@ msgstr "Λοαδινγ τχε Χυρδ ..."
 #: util/grub.d/10_hurd.in:164 util/grub.d/10_kfreebsd.in:222
 #: util/grub.d/10_linux.in:233 util/grub.d/10_netbsd.in:168
 #: util/grub.d/30_os-prober.in:247
-#, c-format
 msgid "Advanced options for %s"
 msgstr "Αδβανϲεδ οπτιονσ φορ %s"
 
 #: util/grub.d/10_illumos.in:40
-#, c-format
 msgid "Loading kernel of Illumos ..."
 msgstr "Λοαδινγ κερνελ οφ Ιλλυμοσ ..."
 
 #: util/grub.d/10_kfreebsd.in:79
-#, c-format
 msgid "%s, with kFreeBSD %s (recovery mode)"
 msgstr "%s, ωιτχ κΦρεεϬΣΔ %s (ρεϲοβερϋ μοδε)"
 
 #: util/grub.d/10_kfreebsd.in:81
-#, c-format
 msgid "%s, with kFreeBSD %s"
 msgstr "%s, ωιτχ κΦρεεϬΣΔ %s"
 
 #: util/grub.d/10_kfreebsd.in:101
-#, c-format
 msgid "Loading kernel of FreeBSD %s ..."
 msgstr "Λοαδινγ κερνελ οφ ΦρεεϬΣΔ %s ..."
 
 #: util/grub.d/10_kfreebsd.in:161
-#, c-format
 msgid "Found kernel of FreeBSD: %s\\n"
 msgstr "Φουνδ κερνελ οφ ΦρεεϬΣΔ: %s\\ν"
 
 #: util/grub.d/10_kfreebsd.in:210
-#, c-format
 msgid "Found kernel module directory: %s\\n"
 msgstr "Φουνδ κερνελ μοδυλε διρεϲτορϋ: %s\\ν"
 
 #: util/grub.d/10_linux.in:83
-#, c-format
 msgid "%s, with Linux %s (recovery mode)"
 msgstr "%s, ωιτχ Λινυξ %s (ρεϲοβερϋ μοδε)"
 
 #: util/grub.d/10_linux.in:85
-#, c-format
 msgid "%s, with Linux %s"
 msgstr "%s, ωιτχ Λινυξ %s"
 
 #: util/grub.d/10_linux.in:129 util/grub.d/20_linux_xen.in:115
-#, c-format
 msgid "Loading Linux %s ..."
 msgstr "Λοαδινγ Λινυξ %s ..."
 
 #. TRANSLATORS: ramdisk isn't identifier. Should be translated.
 #: util/grub.d/10_linux.in:136 util/grub.d/20_linux_xen.in:129
-#, c-format
 msgid "Loading initial ramdisk ..."
 msgstr "Λοαδινγ ινιτιαλ ραμδισκ ..."
 
 #: util/grub.d/10_linux.in:179 util/grub.d/20_linux_xen.in:207
-#, c-format
 msgid "Found linux image: %s\\n"
 msgstr "Φουνδ λινυξ ιμαγε: %s\\ν"
 
 #: util/grub.d/10_linux.in:216 util/grub.d/20_linux_xen.in:230
-#, c-format
 msgid "Found initrd image: %s\\n"
 msgstr "Φουνδ ινιτρδ ιμαγε: %s\\ν"
 
 #: util/grub.d/10_netbsd.in:105
-#, c-format
 msgid "%s, with kernel %s (via %s, recovery mode)"
 msgstr "%s, ωιτχ κερνελ %s (βια %s, ρεϲοβερϋ μοδε)"
 
 #: util/grub.d/10_netbsd.in:107
-#, c-format
 msgid "%s, with kernel %s (via %s)"
 msgstr "%s, ωιτχ κερνελ %s (βια %s)"
 
 #: util/grub.d/10_netbsd.in:158
-#, c-format
 msgid "Found NetBSD kernel: %s\\n"
 msgstr "Φουνδ ΝετϬΣΔ κερνελ: %s\\ν"
 
 #: util/grub.d/10_windows.in:70
-#, c-format
 msgid "Windows Vista/7 (loader)"
 msgstr "Ωινδοωσ Βιστα/7 (λοαδερ)"
 
 #: util/grub.d/10_windows.in:74
-#, c-format
 msgid "Windows NT/2000/XP (loader)"
 msgstr "Ωινδοωσ ΝΤ/2000/ΞΠ (λοαδερ)"
 
 #: util/grub.d/10_windows.in:85
-#, c-format
 msgid "Found %s on %s (%s)\\n"
 msgstr "Φουνδ %s ον %s (%s)\\ν"
 
 #. TRANSLATORS: it refers to kernel architecture (32-bit)
 #: util/grub.d/10_xnu.in:32 util/grub.d/30_os-prober.in:47
-#, c-format
 msgid "(32-bit)"
 msgstr "(32-ϭιτ)"
 
 #. TRANSLATORS: it refers to kernel architecture (64-bit)
 #: util/grub.d/10_xnu.in:35 util/grub.d/30_os-prober.in:50
-#, c-format
 msgid "(64-bit)"
 msgstr "(64-ϭιτ)"
 
@@ -6378,48 +6732,49 @@ msgstr "(64-ϭιτ)"
 #: util/grub.d/10_xnu.in:38 util/grub.d/30_os-prober.in:53
 #: util/grub.d/30_os-prober.in:142 util/grub.d/30_os-prober.in:174
 #: util/grub.d/30_os-prober.in:215 util/grub.d/30_os-prober.in:285
-#, c-format
 msgid "(on %s)"
 msgstr "(ον %s)"
 
 #: util/grub.d/20_linux_xen.in:91
-#, c-format
 msgid "%s, with Xen %s and Linux %s (recovery mode)"
 msgstr "%s, ωιτχ Ξεν %s ανδ Λινυξ %s (ρεϲοβερϋ μοδε)"
 
 #: util/grub.d/20_linux_xen.in:93
-#, c-format
 msgid "%s, with Xen %s and Linux %s"
 msgstr "%s, ωιτχ Ξεν %s ανδ Λινυξ %s"
 
 #: util/grub.d/20_linux_xen.in:103
-#, c-format
 msgid "%s, with Xen hypervisor"
 msgstr "%s, ωιτχ Ξεν χϋπερβισορ"
 
 #: util/grub.d/20_linux_xen.in:114
-#, c-format
 msgid "Loading Xen %s ..."
 msgstr "Λοαδινγ Ξεν %s ..."
 
 #: util/grub.d/20_linux_xen.in:203 util/grub.d/20_linux_xen.in:247
-#, c-format
 msgid "Xen hypervisor, version %s"
 msgstr "Ξεν χϋπερβισορ, βερσιον %s"
 
 #. TRANSLATORS: %s is replaced with an OS name
 #: util/grub.d/20_linux_xen.in:246
-#, c-format
 msgid "Advanced options for %s (with Xen hypervisor)"
 msgstr "Αδβανϲεδ οπτιονσ φορ %s (ωιτχ Ξεν χϋπερβισορ)"
 
 #: util/grub.d/30_os-prober.in:137
-#, c-format
 msgid "Found %s on %s\\n"
 msgstr "Φουνδ %s ον %s\\ν"
 
 #. TRANSLATORS: %s is replaced by OS name.
 #: util/grub.d/30_os-prober.in:324
-#, c-format
 msgid "%s is not yet supported by grub-mkconfig.\\n"
 msgstr "%s ισ νοτ ϋετ συππορτεδ ϭϋ γρυϭ-μκϲονφιγ.\\ν"
+
+#~ msgid ""
+#~ "print filesystem module, GRUB drive, system device, partition map module, "
+#~ "abstraction module or cryptographic container UUID [default=fs]"
+#~ msgstr ""
+#~ "πριντ φιλεσϋστεμ μοδυλε, ΓΡΥϬ δριβε, σϋστεμ δεβιϲε, παρτιτιον μαπ μοδυλε, "
+#~ "αϭστραϲτιον μοδυλε ορ ϲρϋπτογραπχιϲ ϲονταινερ ΥΥΙΔ [δεφαυλτ=φσ]"
+
+#~ msgid "use DIR as root directory [default=/]"
+#~ msgstr "υσε ΔΙΡ ασ ροοτ διρεϲτορϋ [δεφαυλτ=/]"
