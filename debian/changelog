@@ -1,3 +1,17 @@
+grub2 (2.02~beta2-2) experimental; urgency=medium
+
+  * Convert patch handling to git-dpm.
+  * Add bi-endian support to ELF parser (Tomohiro B Berry).
+  * Adjust restore_mkdevicemap.patch to mark get_kfreebsd_version as static,
+    to appease "gcc -Werror=missing-prototypes".
+  * Cherry-pick from upstream:
+    - Change grub-macbless' manual page section to 8.
+  * Install grub-glue-efi, grub-macbless, grub-render-label, and
+    grub-syslinux2cfg.
+  * grub-shell: Pass -no-pad to xorriso when building floppy images.
+
+ -- Colin Watson <cjwatson@debian.org>  Thu, 16 Jan 2014 15:18:04 +0000
+
 grub2 (2.02~beta2-1) experimental; urgency=low
 
   * New upstream beta release.
