@@ -30,6 +30,7 @@
 #include <limits.h>
 
 #include <grub/emu/misc.h>
+#include <grub/emu/hostdisk.h>
 #include <grub/util/misc.h>
 #include <grub/util/deviceiter.h>
 #include <grub/env.h>
@@ -40,34 +41,45 @@
 
 #include "progname.h"
 
+/* Context for make_device_map.  */
+struct make_device_map_ctx
+{
+  FILE *fp;
+  int num_fd;
+  int num_hd;
+};
+
+/* Helper for make_device_map.  */
+static int
+process_device (const char *name, int is_floppy, void *data)
+{
+  struct make_device_map_ctx *ctx = data;
+
+  grub_util_emit_devicemap_entry (ctx->fp, (char *) name,
+				  is_floppy, &ctx->num_fd, &ctx->num_hd);
+  return 0;
+}
+
 static void
 make_device_map (const char *device_map, int floppy_disks)
 {
-  int num_hd = 0;
-  int num_fd = 0;
-  FILE *fp;
-
-  auto int NESTED_FUNC_ATTR process_device (const char *name, int is_floppy);
-
-  int NESTED_FUNC_ATTR process_device (const char *name, int is_floppy)
-  {
-    grub_util_emit_devicemap_entry (fp, (char *) name,
-				    is_floppy, &num_fd, &num_hd);
-    return 0;
-  }
+  struct make_device_map_ctx ctx = {
+    .num_fd = 0,
+    .num_hd = 0
+  };
 
   if (strcmp (device_map, "-") == 0)
-    fp = stdout;
+    ctx.fp = stdout;
   else
-    fp = fopen (device_map, "w");
+    ctx.fp = fopen (device_map, "w");
 
-  if (! fp)
+  if (! ctx.fp)
     grub_util_error (_("cannot open %s"), device_map);
 
-  grub_util_iterate_devices (process_device, floppy_disks);
+  grub_util_iterate_devices (process_device, &ctx, floppy_disks);
 
-  if (fp != stdout)
-    fclose (fp);
+  if (ctx.fp != stdout)
+    fclose (ctx.fp);
 }
 
 static struct option options[] =
@@ -113,9 +125,7 @@ main (int argc, char *argv[])
   char *dev_map = 0;
   int floppy_disks = 1;
 
-  set_program_name (argv[0]);
-
-  grub_util_init_nls ();
+  grub_util_host_init (&argc, &argv);
 
   /* Check for options.  */
   while (1)

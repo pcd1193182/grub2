@@ -14,21 +14,24 @@
 # You should have received a copy of the GNU General Public License
 # along with GRUB.  If not, see <http://www.gnu.org/licenses/>.
 
-transform="@program_transform_name@"
-
 prefix="@prefix@"
 exec_prefix="@exec_prefix@"
 datarootdir="@datarootdir@"
 datadir="@datadir@"
 bindir="@bindir@"
 sbindir="@sbindir@"
-pkgdatadir="${datadir}/@PACKAGE@"
+if [ "x$pkgdatadir" = x ]; then
+    pkgdatadir="${datadir}/@PACKAGE@"
+fi
 
 if test "x$grub_probe" = x; then
-  grub_probe="${sbindir}/`echo grub-probe | sed "${transform}"`"
+  grub_probe="${sbindir}/@grub_probe@"
+fi
+if test "x$grub_file" = x; then
+  grub_file="${bindir}/@grub_file@"
 fi
 if test "x$grub_mkrelpath" = x; then
-  grub_mkrelpath="${bindir}/`echo grub-mkrelpath | sed "${transform}"`"
+  grub_mkrelpath="${bindir}/@grub_mkrelpath@"
 fi
 
 if which gettext >/dev/null 2>/dev/null; then
@@ -71,7 +74,7 @@ is_path_readable_by_grub ()
     return 1
   fi
 
-  if [ x$GRUB_CRYPTODISK_ENABLE = xy ]; then
+  if [ x$GRUB_ENABLE_CRYPTODISK = xy ]; then
       return 0
   fi
   
@@ -117,9 +120,10 @@ EOF
 
 prepare_grub_to_access_device ()
 {
-  device="$1"
-
-  partmap="`"${grub_probe}" --device "${device}" --target=partmap`"
+  old_ifs="$IFS"
+  IFS='
+'
+  partmap="`"${grub_probe}" --device $@ --target=partmap`"
   for module in ${partmap} ; do
     case "${module}" in
       netbsd | openbsd)
@@ -130,60 +134,53 @@ prepare_grub_to_access_device ()
   done
 
   loop_file=
-  case ${device} in
+  case $1 in
     /dev/loop/*|/dev/loop[0-9])
-      grub_loop_device="${device#/dev/}"
-      loop_file=`losetup "${device}" | sed -e "s/^[^(]*(\([^)]\+\)).*/\1/"`
+      grub_loop_device="${1#/dev/}"
+      loop_file=`losetup "$1" | sed -e "s/^[^(]*(\([^)]\+\)).*/\1/"`
       case $loop_file in
         /dev/*) ;;
         *)
-          loop_device="${device}"
-          device=`"${grub_probe}" --target=device "${loop_file}"` || return 0
+          loop_device="$1"
+          shift
+          set -- `"${grub_probe}" --target=device "${loop_file}"` "$@" || return 0
         ;;
       esac
     ;;
   esac
 
-  if dmsetup status $device 2>/dev/null | grep -q 'crypt[[:space:]]$'; then
-    grub_warn \
-      "$device is a crypto device, which GRUB cannot read directly.  Some" \
-      "necessary modules may be missing from /boot/grub/grub.cfg.  You may" \
-      "need to list them in GRUB_PRELOAD_MODULES in /etc/default/grub.  See" \
-      "http://bugs.debian.org/542165 for details."
-    return 0
-  fi
-
   # Abstraction modules aren't auto-loaded.
-  abstraction="`"${grub_probe}" --device "${device}" --target=abstraction`"
+  abstraction="`"${grub_probe}" --device $@ --target=abstraction`"
   for module in ${abstraction} ; do
     echo "insmod ${module}"
   done
 
-  fs="`"${grub_probe}" --device "${device}" --target=fs`"
+  fs="`"${grub_probe}" --device $@ --target=fs`"
   for module in ${fs} ; do
     echo "insmod ${module}"
   done
 
-  if [ x$GRUB_CRYPTODISK_ENABLE = xy ]; then
-      for uuid in "`"${grub_probe}" --device "${device}" --target=cryptodisk_uuid`"; do
+  if [ x$GRUB_ENABLE_CRYPTODISK = xy ]; then
+      for uuid in "`"${grub_probe}" --device $@ --target=cryptodisk_uuid`"; do
 	  echo "cryptomount -u $uuid"
       done
   fi
 
   # If there's a filesystem UUID that GRUB is capable of identifying, use it;
   # otherwise set root as per value in device.map.
-  fs_hint="`"${grub_probe}" --device "${device}" --target=compatibility_hint`"
+  fs_hint="`"${grub_probe}" --device $@ --target=compatibility_hint`"
   if [ "x$fs_hint" != x ]; then
     echo "set root='$fs_hint'"
   fi
-  if fs_uuid="`"${grub_probe}" --device "${device}" --target=fs_uuid 2> /dev/null`" ; then
-    hints="`"${grub_probe}" --device "${device}" --target=hints_string 2> /dev/null`" || hints=
+  if fs_uuid="`"${grub_probe}" --device $@ --target=fs_uuid 2> /dev/null`" ; then
+    hints="`"${grub_probe}" --device $@ --target=hints_string 2> /dev/null`" || hints=
     echo "if [ x\$feature_platform_search_hint = xy ]; then"
     echo "  search --no-floppy --fs-uuid --set=root ${hints} ${fs_uuid}"
     echo "else"
     echo "  search --no-floppy --fs-uuid --set=root ${fs_uuid}"
     echo "fi"
   fi
+  IFS="$old_ifs"
 
   if [ "x${loop_file}" != x ]; then
     loop_mountpoint="$(awk '"'${loop_file}'" ~ "^"$2 && $2 != "/" { print $2 }' /proc/mounts | tail -n1)"
@@ -196,12 +193,16 @@ prepare_grub_to_access_device ()
 
 grub_get_device_id ()
 {
+  old_ifs="$IFS"
+  IFS='
+'
   device="$1"
-  if fs_uuid="`"${grub_probe}" --device "${device}" --target=fs_uuid 2> /dev/null`" ; then
+  if fs_uuid="`"${grub_probe}" --device ${device} --target=fs_uuid 2> /dev/null`" ; then
     echo "$fs_uuid";
   else
-    echo "$device"
+    echo $device |sed 's, ,_,g'
   fi
+  IFS="$old_ifs"
 }
 
 grub_file_is_not_garbage ()
@@ -288,10 +289,8 @@ version_find_latest ()
   echo "$version_find_latest_a"
 }
 
-# One layer of quotation is eaten by "" and the second by
-# sed; so this turns ' into \'.  Note that you must use the output of
-# this function in a printf format string.
-
+# One layer of quotation is eaten by "" and the second by sed; so this turns
+# ' into \'.
 grub_quote () {
   sed "s/'/'\\\\''/g"
 }
@@ -311,13 +310,18 @@ gettext_printf () {
 
 uses_abstraction () {
   device="$1"
+  old_ifs="$IFS"
+  IFS='
+'
 
-  abstraction="`"${grub_probe}" --device "${device}" --target=abstraction`"
+  abstraction="`"${grub_probe}" --device ${device} --target=abstraction`"
   for module in ${abstraction}; do
     if test "x${module}" = "x$2"; then
+      IFS="$old_ifs"
       return 0
     fi
   done
+  IFS="$old_ifs"
   return 1
 }
 
@@ -382,3 +386,10 @@ grub_fmt () {
       cat
   fi
 }
+
+grub_tab="	"
+
+grub_add_tab () {
+  sed -e "s/^/$grub_tab/"
+}
+
