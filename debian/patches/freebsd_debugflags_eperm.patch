@@ -1,4 +1,4 @@
-From 15088fe98e7317f9bb28f671bac6892cc245fee0 Mon Sep 17 00:00:00 2001
+From d745c136fb0d268d843236c810a8c5b5b0dd4048 Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@debian.org>
 Date: Fri, 17 Jan 2014 02:55:58 +0000
 Subject: Ignore EPERM when modifying kern.geom.debugflags
