@@ -1,4 +1,4 @@
-From 6eb5ae244be7e5ed12631cf066dffaaf153805b3 Mon Sep 17 00:00:00 2001
+From 4c565aaad13c96c1b3525cbdc836892a2b3eabc1 Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Wed, 8 Jan 2014 11:05:20 +0000
 Subject: * Makefile.util.def (grub-macbless): Change mansection to 8.
