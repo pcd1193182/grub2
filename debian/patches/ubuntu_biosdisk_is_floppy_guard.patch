@@ -1,0 +1,21 @@
+Description: Avoid grub_util_biosdisk_is_floppy crash on other disk types
+Author: Vladimir Serbinenko <phcoder@gmail.com>
+Origin: upstream, http://git.savannah.gnu.org/gitweb/?p=grub.git;a=commitdiff;h=69915030942771f6813ebc238e86e05b5112f3b5
+Bug-Ubuntu: https://bugs.launchpad.net/bugs/1336946
+Forwarded: not-needed
+Last-Update: 2014-07-03
+
+Index: b/grub-core/kern/emu/hostdisk.c
+===================================================================
+--- a/grub-core/kern/emu/hostdisk.c
++++ b/grub-core/kern/emu/hostdisk.c
+@@ -2090,6 +2090,9 @@
+   struct stat st;
+   int fd;
+ 
++  if (disk->dev != &grub_util_biosdisk_dev)
++    return 0;
++
+   fd = open (map[disk->id].device, O_RDONLY);
+   /* Shouldn't happen.  */
+   if (fd == -1)
