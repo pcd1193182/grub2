@@ -137,14 +137,9 @@ debian/stamps/configure-grub-common: debian/stamps/configure-grub-$(COMMON_PLATF
 
 debian/stamps/build-grub-common: debian/stamps/build-grub-$(COMMON_PLATFORM)
 
-debian/stamps/configure-grub-pc debian/stamps/configure-grub-coreboot debian/stamps/configure-grub-emu debian/stamps/configure-grub-uboot debian/stamps/configure-grub-yeeloong: debian/stamps/autogen
+debian/stamps/configure-grub-pc debian/stamps/configure-grub-ieee1275 debian/stamps/configure-grub-coreboot debian/stamps/configure-grub-emu debian/stamps/configure-grub-uboot debian/stamps/configure-grub-yeeloong: debian/stamps/autogen
 	mkdir -p debian/stamps obj/$(package)
 	dh_auto_configure -- $(confflags) --with-platform=$(subst grub-,,$(package))
-	touch $@
-
-debian/stamps/configure-grub-ieee1275: debian/stamps/autogen
-	mkdir -p debian/stamps obj/$(package)
-	dh_auto_configure -- $(confflags) --with-platform=$(subst grub-,,$(package)) $(if $(filter ppc64el,$(DEB_HOST_ARCH_CPU)),--target=powerpc-linux-gnu TARGET_CC=powerpc-linux-gnu-gcc-4.9)
 	touch $@
 
 # This name scheme leaves room for things like amd32 someday
@@ -296,7 +291,8 @@ install/grub-pc install/grub-efi-ia32 install/grub-efi-amd64 install/grub-efi-ia
 		| sed -e "s%.*%$(package_bin): unstripped-binary-or-object &%g" \
 	>> $(CURDIR)/debian/$(package_bin)/usr/share/lintian/overrides/$(package_bin)
 	if ([ "$@" = "install/grub-efi-amd64" ] && [ "$(DEB_HOST_ARCH_CPU)" = "i386" ]) || \
-	   [ "$@" = "install/grub-xen" ] ; then \
+	   ([ "$@" != "install/grub-emu" ] && [ "$(DEB_HOST_ARCH_CPU):$(DEB_HOST_ARCH_BITS)" = "amd64:32" ]) || \
+	   [ "$@" = "install/grub-xen" ]; then \
 		echo "$(package_bin): binary-from-other-architecture *.mod" \
 			>> debian/$(package_bin)/usr/share/lintian/overrides/$(package_bin) ; \
 		cd debian/tmp-$(package) && find usr/lib/grub -name kernel.img \
@@ -309,7 +305,7 @@ install/grub-pc install/grub-efi-ia32 install/grub-efi-amd64 install/grub-efi-ia
 	    [ "$@" = "install/grub-xen" ] || \
 	    [ "$@" = "install/grub-emu" ]) && \
 	   [ "$(DEB_HOST_ARCH_OS)" = "linux" ] && \
-	   [ "$(DEB_HOST_ARCH_CPU)" = "i386" ] ; then \
+	   [ "$(DEB_HOST_ARCH_CPU):$(DEB_HOST_ARCH_BITS)" != "amd64:64" ] ; then \
 		echo "$(package_bin): binary-from-other-architecture *efiemu64.o" \
 			>> debian/$(package_bin)/usr/share/lintian/overrides/$(package_bin) ; \
 	fi
@@ -323,6 +319,7 @@ install/grub-pc install/grub-efi-ia32 install/grub-efi-amd64 install/grub-efi-ia
 		| sed -e "s%.*%$(package_dbg): statically-linked-binary &%g" \
 	>> $(CURDIR)/debian/$(package_dbg)/usr/share/lintian/overrides/$(package_dbg)
 	if ([ "$@" = "install/grub-efi-amd64" ] && [ "$(DEB_HOST_ARCH_CPU)" = "i386" ]) || \
+	   ([ "$@" != "install/grub-emu" ] && [ "$(DEB_HOST_ARCH_CPU):$(DEB_HOST_ARCH_BITS)" = "amd64:32" ]) || \
 	   [ "$@" = "install/grub-xen" ] ; then \
 		echo "$(package_dbg): binary-from-other-architecture *.module" \
 			>> debian/$(package_dbg)/usr/share/lintian/overrides/$(package_dbg) ; \

@@ -1,3 +1,25 @@
+grub2 (2.02~beta2-12) unstable; urgency=medium
+
+  [ Colin Watson ]
+  * Point Vcs-* fields back at master.
+  * Support grub-emu on x32 (closes: #760428).
+  * Adjust packaging for x32:
+    - Build-depend on cpio on x32 as well.
+    - Make grub-efi-ia32-bin and grub-efi-amd64-bin depend on efibootmgr on
+      any Linux architecture for which they are built (in practice, adding
+      x32).
+    - Build grub-mount-udeb on x32 as well.
+    - Add Lintian binary-from-other-architecture overrides where
+      appropriate.
+  * Apply patches from Paulo Flabiano Smorigo to allow building a 32-bit
+    big-endian loader on ppc64el using -m32 -mbig-endian, replacing the
+    cross-compiler hack.
+
+  [ Ian Campbell ]
+  * Add dependency on efibootmgr to grub-efi-{arm,arm64}-bin.
+
+ -- Colin Watson <cjwatson@debian.org>  Fri, 19 Sep 2014 15:19:26 +0100
+
 grub2 (2.02~beta2-11) unstable; urgency=medium
 
   * Force grub-pc/mixed_legacy_and_grub2 to be reshown, rather than failing
