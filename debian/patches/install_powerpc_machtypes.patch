@@ -1,23 +1,28 @@
-From 02439d727af555ba60aec5ea8e0aa4d3000286c6 Mon Sep 17 00:00:00 2001
+From 2256ca4482615037f1420845fa3066be1133d92d Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@debian.org>
 Date: Tue, 28 Jan 2014 14:40:02 +0000
 Subject: Port yaboot logic for various powerpc machine types
 
-Some powerpc machines require not updating the NVRAM, and some require
-adding a CHRP note.  This can be handled by existing grub-install
-command-line options, but it's friendlier to detect this automatically.
+Some powerpc machines require not updating the NVRAM.  This can be handled
+by existing grub-install command-line options, but it's friendlier to detect
+this automatically.
+
+On chrp_ibm machines, use the nvram utility rather than nvsetenv.  (This
+is possibly suitable for other machines too, but that needs to be
+verified.)
 
 Forwarded: no
-Last-Update: 2014-01-28
+Last-Update: 2014-09-26
 
 Patch-Name: install_powerpc_machtypes.patch
 ---
  grub-core/osdep/basic/platform.c   |  5 +++
  grub-core/osdep/linux/platform.c   | 64 ++++++++++++++++++++++++++++++++++++++
+ grub-core/osdep/unix/platform.c    | 28 +++++++++++++----
  grub-core/osdep/windows/platform.c |  6 ++++
  include/grub/util/install.h        |  3 ++
- util/grub-install.c                | 17 +++++++++-
- 5 files changed, 94 insertions(+), 1 deletion(-)
+ util/grub-install.c                |  9 ++++++
+ 6 files changed, 109 insertions(+), 6 deletions(-)
 
 diff --git a/grub-core/osdep/basic/platform.c b/grub-core/osdep/basic/platform.c
 index 4b5502a..2ab9079 100644
@@ -111,6 +116,46 @@ index 175da72..185f971 100644
 +  fclose (fp);
 +  return machtype;
 +}
+diff --git a/grub-core/osdep/unix/platform.c b/grub-core/osdep/unix/platform.c
+index a3fcfca..28cb37e 100644
+--- a/grub-core/osdep/unix/platform.c
++++ b/grub-core/osdep/unix/platform.c
+@@ -212,13 +212,29 @@ grub_install_register_ieee1275 (int is_prep, const char *install_device,
+   else
+     boot_device = get_ofpathname (install_device);
+ 
+-  if (grub_util_exec ((const char * []){ "nvsetenv", "boot-device",
+-	  boot_device, NULL }))
++  if (strcmp (grub_install_get_default_powerpc_machtype (), "chrp_ibm") == 0)
+     {
+-      char *cmd = xasprintf ("setenv boot-device %s", boot_device);
+-      grub_util_error (_("`nvsetenv' failed. \nYou will have to set `boot-device' variable manually.  At the IEEE1275 prompt, type:\n  %s\n"),
+-		       cmd);
+-      free (cmd);
++      char *arg = xasprintf ("boot-device=%s", boot_device);
++      if (grub_util_exec ((const char * []){ "nvram",
++	  "--update-config", arg, NULL }))
++	{
++	  char *cmd = xasprintf ("setenv boot-device %s", boot_device);
++	  grub_util_error (_("`nvram' failed. \nYou will have to set `boot-device' variable manually.  At the IEEE1275 prompt, type:\n  %s\n"),
++			   cmd);
++	  free (cmd);
++	}
++      free (arg);
++    }
++  else
++    {
++      if (grub_util_exec ((const char * []){ "nvsetenv", "boot-device",
++	      boot_device, NULL }))
++	{
++	  char *cmd = xasprintf ("setenv boot-device %s", boot_device);
++	  grub_util_error (_("`nvsetenv' failed. \nYou will have to set `boot-device' variable manually.  At the IEEE1275 prompt, type:\n  %s\n"),
++			   cmd);
++	  free (cmd);
++	}
+     }
+ 
+   free (boot_device);
 diff --git a/grub-core/osdep/windows/platform.c b/grub-core/osdep/windows/platform.c
 index f2b9d71..cf2e39c 100644
 --- a/grub-core/osdep/windows/platform.c
@@ -143,18 +188,10 @@ index bc987aa..2de6c90 100644
  grub_install_register_efi (grub_device_t efidir_grub_dev,
  			   const char *efifile_path,
 diff --git a/util/grub-install.c b/util/grub-install.c
-index 1f27b65..01170d3 100644
+index 1f27b65..505af9e 100644
 --- a/util/grub-install.c
 +++ b/util/grub-install.c
-@@ -58,6 +58,7 @@ static char *target;
- static int removable = 0;
- static int recheck = 0;
- static int update_nvram = 1;
-+static int chrp_note = 0;
- static char *install_device = NULL;
- static char *debug_image = NULL;
- static char *rootdir = NULL;
-@@ -1143,7 +1144,21 @@ main (int argc, char *argv[])
+@@ -1143,7 +1143,16 @@ main (int argc, char *argv[])
  
    if (platform == GRUB_INSTALL_PLATFORM_POWERPC_IEEE1275)
      {
@@ -163,11 +200,6 @@ index 1f27b65..01170d3 100644
 +
 +      if (strcmp (machtype, "pmac_oldworld") == 0)
 +	update_nvram = 0;
-+      else if (strcmp (machtype, "chrp_ibm") == 0)
-+	{
-+	  update_nvram = 0;
-+	  chrp_note = 1;
-+	}
 +      else if (strcmp (machtype, "cell") == 0)
 +	update_nvram = 0;
 +      else if (strcmp (machtype, "generic") == 0)
@@ -176,12 +208,3 @@ index 1f27b65..01170d3 100644
        if (!macppcdir)
  	{
  	  char *d;
-@@ -1613,7 +1628,7 @@ main (int argc, char *argv[])
- 				/* output */ imgfile,
- 				/* memdisk */ NULL,
- 				have_load_cfg ? load_cfg : NULL,
--				/* image target */ mkimage_target, 0);
-+				/* image target */ mkimage_target, chrp_note);
-   /* Backward-compatibility kludges.  */
-   switch (platform)
-     {
