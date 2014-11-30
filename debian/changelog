@@ -1,3 +1,20 @@
+grub2 (2.02~beta2-17) unstable; urgency=medium
+
+  [ Colin Watson ]
+  * Fix up some pointer-to-integer casts in linuxefi so that it can build on
+    i386-efi.
+  * Backport from upstream:
+    - Fix typo (gettext_print instead of gettext_printf) (LP: #1390766).
+
+  [ Ian Campbell ]
+  * Correct syntax error in grub-xen-host bootstrap configuration file.
+  * Log failure when grub-install fails in postinst, rather than failing the
+    entire postinst. (Closes: #770412)
+  * Arrange to insmod xzio and lzopio when booting a kernel as a Xen guest.
+    (Closes: #755256)
+
+ -- Ian Campbell <ijc@debian.org>  Sun, 30 Nov 2014 17:15:21 +0000
+
 grub2 (2.02~beta2-16) unstable; urgency=medium
 
   [ Ian Campbell ]
