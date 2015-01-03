@@ -1,3 +1,18 @@
+grub2 (2.02~beta2-20) unstable; urgency=medium
+
+  [ Colin Watson ]
+  * Generate alternative init entries in advanced menu (closes: #757298,
+    #773173).
+  * When configuring grub-pc, copy unicode.pf2 to /boot/grub/ even if
+    /boot/grub/grub.cfg does not exist yet; this matches the behaviour of
+    grub-efi-* (thanks, Luca Capello; closes: #617196).
+
+  [ Debconf translations ]
+  * [fi] Finnish (Timo Jyrinki; closes: #774060).
+  * [mr] Marathi (sampada nakhare; closes: #773901).
+
+ -- Colin Watson <cjwatson@debian.org>  Sat, 03 Jan 2015 12:39:52 +0000
+
 grub2 (2.02~beta2-19) unstable; urgency=medium
 
   [ Steve McIntyre ]
@@ -19,7 +34,7 @@ grub2 (2.02~beta2-19) unstable; urgency=medium
   * [cs] Czech (Miroslav Kure, Closes: #772924)
   * [nl] Dutch (Frans Spiesschaert, Closes: 773637)
   * [eo] Esperanto (Felipe Castro, Closes: #773096)
-  * [fi] Finish (Timo Jyrinki, Closes: #772921)
+  * [fi] Finnish (Timo Jyrinki, Closes: #772921)
   * [fr] French (Christian PERRIER, Closes: #772771)
   * [de] German (Martin Eberhard Schauer, Closes: #773664)
   * [el] Greek (Panagiotis Georgakopoulos, Closes: #773068)
