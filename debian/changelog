@@ -1,3 +1,25 @@
+grub2 (2.02~beta2-23) unstable; urgency=medium
+
+  [ Debconf translations ]
+  * [da] Danish (Joe Dalton; closes: #781333).
+
+  [ Felix Zielcke ]
+  * Run the tests with LC_MESSAGES=C.UTF-8. Some tests fail with non
+    english locale. (Closes: #782580)
+
+  [ Mathieu Trudel-Lapierre ]
+  * Backport from upstream:
+    - arp, icmp: Fix handling in case of oversized or invalid packets.
+      (LP: #1428005)
+
+  [ Robie Basak ]
+  * Change the default GRUB_RECORDFAIL_TIMEOUT to 30, so interactive users
+    still get the opporunity to intervene after a real boot failure, but
+    headless users will not end up stuck after boot failures that were
+    really power failures (closes: #782552, LP: #1443735).
+
+ -- Colin Watson <cjwatson@debian.org>  Thu, 14 May 2015 16:18:33 +0100
+
 grub2 (2.02~beta2-22) unstable; urgency=medium
 
   * Make grub-common's Suggests on grub-emu architecture-specific, to
