@@ -1,3 +1,11 @@
+grub2 (2.02~beta2-15ubuntu0.1) utopic; urgency=medium
+
+  * Do not hang headless servers indefinitely on boot after edge case power
+    failure timing (LP: #1443735). Instead, time out after 30 seconds and boot
+    anyway, including on non-headless systems.
+
+ -- Robie Basak <robie.basak@ubuntu.com>  Tue, 19 May 2015 13:44:35 +0100
+
 grub2 (2.02~beta2-15) unstable; urgency=medium
 
   * Disable nvram installation again on chrp_ibm machines that are emulated
