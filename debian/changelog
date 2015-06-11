@@ -1,3 +1,23 @@
+grub2 (2.02~beta2-24) unstable; urgency=medium
+
+  [ Mathieu Trudel-Lapierre ]
+  * Fix handling of --disk-module option (cherry-pick from fa335308).
+    (Closes: #746596, LP: #1309735)
+  * Fix double-free of LV names for mdraid (cherry-pick from fc535b32).
+    (LP: #1330963)
+
+  [ dann frazier ]
+  * Build image tarball on arm64
+  * Only include linuxefi module in images for amd64. This module doesn't
+    exist on other platforms like arm64, where GRUB chainloads to the kernel
+    EFI stub.
+
+  [ Paulo Flabiano Smorigo ]
+  * powerpc: Add a flag to avoid unnecessary optimizations (like vsx)
+    (LP: #1459706).
+
+ -- Colin Watson <cjwatson@debian.org>  Thu, 11 Jun 2015 17:08:09 +0100
+
 grub2 (2.02~beta2-23) unstable; urgency=medium
 
   [ Debconf translations ]
