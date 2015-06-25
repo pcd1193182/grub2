@@ -1,3 +1,11 @@
+grub2 (2.02~beta2-26ubuntu2) wily; urgency=medium
+
+  * debian/build-efi-images: fix my typos from last upload: properly escape
+    the variables meant for grub.cfg rather than for expansion by the build
+    script.
+
+ -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Thu, 25 Jun 2015 15:37:53 -0400
+
 grub2 (2.02~beta2-26ubuntu1) wily; urgency=medium
 
   * debian/build-efi-images: look for grub.cfg in $cmdpath too in gcdx64.efi,
