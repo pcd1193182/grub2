@@ -1,3 +1,13 @@
+grub2 (2.02~beta2-26ubuntu3) wily; urgency=medium
+
+  * debian/patches/uefi_firmware_setup.patch: take into account that the UEFI
+    variable OsIndicationsSupported is a bit field, and as such should be
+    compared as hex values in 30_uefi-firmware.in. (LP: #1456911)
+  * Update quick boot logic to handle abstractions for which there is no
+    write support. (LP: #1274320)
+
+ -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Mon, 06 Jul 2015 16:32:11 -0400
+
 grub2 (2.02~beta2-26ubuntu2) wily; urgency=medium
 
   * debian/build-efi-images: fix my typos from last upload: properly escape
