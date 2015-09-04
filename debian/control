@@ -2,28 +2,27 @@ Source: grub2
 Section: admin
 Priority: extra
 Maintainer: GRUB Maintainers <pkg-grub-devel@lists.alioth.debian.org>
-Uploaders: Robert Millan <rmh@debian.org>, Felix Zielcke <fzielcke@z-51.de>, Jordi Mallach <jordi@debian.org>, Colin Watson <cjwatson@debian.org>, Ian Campbell <ijc@debian.org>
+Uploaders: Felix Zielcke <fzielcke@z-51.de>, Jordi Mallach <jordi@debian.org>, Colin Watson <cjwatson@debian.org>, Ian Campbell <ijc@debian.org>
 Build-Depends: debhelper (>= 7.4.2~),
- dpkg-dev (>= 1.15.1~),
  patchutils,
  dh-autoreconf,
- automake (>= 1.10.1),
+ automake,
  python,
- flex (>= 2.5.35),
+ flex,
  bison,
  po-debconf,
  help2man,
  texinfo,
- gcc-4.9-multilib [i386 kopensolaris-i386 any-amd64 any-ppc64 any-sparc],
- gcc-4.9,
+ gcc-5,
+ gcc-5-multilib [i386 kopensolaris-i386 any-amd64 any-ppc64 any-sparc],
  xfonts-unifont,
  libfreetype6-dev,
  gettext,
  libusb-dev [!hurd-any],
- libdevmapper-dev (>= 2:1.02.34) [linux-any],
- libgeom-dev (>= 8.2+ds1-1) [kfreebsd-any] | libgeom-dev (<< 8.2) [kfreebsd-any],
+ libdevmapper-dev [linux-any],
+ libgeom-dev (>= 8.2+ds1-1~) [kfreebsd-any] | libgeom-dev (<< 8.2) [kfreebsd-any],
  libsdl1.2-dev [!hurd-any],
- xorriso (>= 0.5.6.pl00),
+ xorriso,
  qemu-system [i386 kfreebsd-i386 kopensolaris-i386 any-amd64],
  cpio [i386 kopensolaris-i386 amd64 x32],
  parted [!hurd-any],
@@ -36,10 +35,10 @@ Build-Depends: debhelper (>= 7.4.2~),
  libxen-dev [i386 amd64],
  libparted-dev [any-ppc64el],
 Build-Conflicts: autoconf2.13, libzfs-dev, libnvpair-dev
-Standards-Version: 3.8.4
+Standards-Version: 3.9.6
 Homepage: http://www.gnu.org/software/grub/
 Vcs-Git: git://anonscm.debian.org/pkg-grub/grub.git
-Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-grub/grub.git
+Vcs-Browser: https://anonscm.debian.org/cgit/pkg-grub/grub.git
 
 Package: grub2
 Section: oldlibs
@@ -708,7 +707,7 @@ Description: GRand Unified Bootloader, version 2 (starfield theme)
  This is the default theme for GRUB's graphical menu.
 
 Package: grub-mount-udeb
-XC-Package-Type: udeb
+Package-Type: udeb
 Section: debian-installer
 Architecture: linux-any kfreebsd-any
 Depends: ${shlibs:Depends}, ${misc:Depends}
