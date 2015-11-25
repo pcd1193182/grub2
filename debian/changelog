@@ -1,3 +1,16 @@
+grub2 (2.02~beta2-22ubuntu1.3) vivid; urgency=medium
+
+  * d/p/arm64-set-correct-length-of-device-path-end-entry.patch: Fixes
+    booting arm64 kernels on certain UEFI implementations. (LP: #1476882)
+  * progress: avoid NULL dereference for net files. (LP: #1459872)
+  * arm64/setjmp: Add missing license macro. (LP: #1459871)
+  * Cherry-pick patch to add SAS disks to the device list from the ofdisk
+    module. (LP: #1517586)
+  * Cherry-pick patch to open Simple Network Protocol exclusively.
+    (LP: #1508893)
+
+ -- dann frazier <dannf@ubuntu.com>  Wed, 25 Nov 2015 13:02:19 -0700
+
 grub2 (2.02~beta2-22ubuntu1.2) vivid-proposed; urgency=low
 
   [ Mathieu Trudel-Lapierre ]
