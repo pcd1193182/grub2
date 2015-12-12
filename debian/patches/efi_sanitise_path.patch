@@ -15,11 +15,9 @@ Patch-Name: efi_sanitise_path.patch
  grub-core/kern/efi/efi.c | 25 +++++++++++++++++--------
  1 file changed, 17 insertions(+), 8 deletions(-)
 
-diff --git a/grub-core/kern/efi/efi.c b/grub-core/kern/efi/efi.c
-index db0fd2d..3b6cf26 100644
 --- a/grub-core/kern/efi/efi.c
 +++ b/grub-core/kern/efi/efi.c
-@@ -337,7 +337,7 @@ grub_efi_modules_addr (void)
+@@ -337,7 +337,7 @@
  char *
  grub_efi_get_filename (grub_efi_device_path_t *dp0)
  {
@@ -28,7 +26,7 @@ index db0fd2d..3b6cf26 100644
    grub_size_t filesize = 0;
    grub_efi_device_path_t *dp;
  
-@@ -356,7 +356,7 @@ grub_efi_get_filename (grub_efi_device_path_t *dp0)
+@@ -356,7 +356,7 @@
  	  grub_efi_uint16_t len;
  	  len = ((GRUB_EFI_DEVICE_PATH_LENGTH (dp) - 4)
  		 / sizeof (grub_efi_char16_t));
@@ -37,7 +35,7 @@ index db0fd2d..3b6cf26 100644
  	}
  
        dp = GRUB_EFI_NEXT_DEVICE_PATH (dp);
-@@ -384,12 +384,12 @@ grub_efi_get_filename (grub_efi_device_path_t *dp0)
+@@ -384,12 +384,12 @@
  	  grub_efi_file_path_device_path_t *fp;
  	  grub_efi_uint16_t len;
  
@@ -52,7 +50,7 @@ index db0fd2d..3b6cf26 100644
  	  p = (char *) grub_utf16_to_utf8 ((unsigned char *) p, fp->path_name, len);
  	}
  
-@@ -398,10 +398,19 @@ grub_efi_get_filename (grub_efi_device_path_t *dp0)
+@@ -398,10 +398,19 @@
  
    *p = '\0';
  

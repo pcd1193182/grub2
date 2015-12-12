@@ -1,3 +1,11 @@
+grub2 (2.02~beta2-22+deb8u1) jessie-security; urgency=high
+
+  * Non-maintainer upload.
+  * Fix CVE-2015-8370: buffer overflow when checking password entered during
+    bootup (Closes: #807614).
+
+ -- Santiago Ruano Rincón <santiagorr@riseup.net>  Sat, 12 Dec 2015 20:18:02 +0100
+
 grub2 (2.02~beta2-22) unstable; urgency=medium
 
   * Make grub-common's Suggests on grub-emu architecture-specific, to
