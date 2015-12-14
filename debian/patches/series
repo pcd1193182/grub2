@@ -48,3 +48,4 @@ gettext_error_handling.patch
 l10n_fi.patch
 os_prober_efi.patch
 kfreebsd_9.1.patch
+CVE-2015-8370.patch

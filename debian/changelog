@@ -1,3 +1,11 @@
+grub2 (1.99-27+deb7u3) wheezy-security; urgency=high
+
+  * Non-maintainer upload.
+  * Fix CVE-2015-8370: buffer overflow when checking password entered
+    during bootup (Closes: #807614).
+
+ -- Santiago Ruano Rincón <santiagorr@riseup.net>  Mon, 14 Dec 2015 13:40:29 +0100
+
 grub2 (1.99-27+deb7u2) stable; urgency=low
 
   * Backport from upstream:
