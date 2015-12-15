@@ -1,3 +1,15 @@
+grub2 (2.02~beta2-29ubuntu0.2) wily-security; urgency=medium
+
+  * SECURITY UPDATE: password bypass via backspace key buffer overflow
+    - debian/patches/CVE-2015-8370.patch: check length before accepting a
+      backspace character in grub-core/lib/crypto.c,
+      grub-core/normal/auth.c.
+    - CVE-2015-8370
+  * This package does _not_ contain the changes from
+    2.02~beta2-29ubuntu0.1 in wily-proposed.
+
+ -- Marc Deslauriers <marc.deslauriers@ubuntu.com>  Tue, 15 Dec 2015 08:45:37 -0500
+
 grub2 (2.02~beta2-29) unstable; urgency=medium
 
   [ Linn Crosetto ]
