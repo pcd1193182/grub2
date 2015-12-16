@@ -75,3 +75,9 @@ ppc64el-avoid_unnecessary_optimizations.patch
 arm64-set-correct-length-of-device-path-end-entry.patch
 progress_avoid_null_deref.patch
 CVE-2015-8370.patch
+arm64-setjmp-Add-missing-license-macro.patch
+ofdisk_add_sas_disks.patch
+efinet-open-Simple-Network-Protocol-exclusively.patch
+efidisk-device-path-helpers-for-efinet.patch
+efinet-skip-virtual-devices-on-enumeration.patch
+efinet-enable-hardware-filters-on-interface.patch
