@@ -1,3 +1,20 @@
+grub2 (2.02~beta2-33) unstable; urgency=high
+
+  [ Mathieu Trudel-Lapierre ]
+  * Cherry-picks to better handle TFTP timeouts on some arches: (LP: #1521612)
+    - (7b386b7) efidisk: move device path helpers in core for efinet
+    - (c52ae40) efinet: skip virtual IP devices when enumerating cards
+    - (f348aee) efinet: enable hardware filters when opening interface
+
+  [ Lee Trager ]
+  * Add raid5rec and raid6rec to signed EFI images (closes: #807385).
+
+  [ Colin Watson ]
+  * CVE-2015-8370: Fix authentication bypass via backspace integer underflow
+    (closes: #808122).
+
+ -- Colin Watson <cjwatson@debian.org>  Wed, 16 Dec 2015 09:46:22 +0000
+
 grub2 (2.02~beta2-32) unstable; urgency=medium
 
   [ Mathieu Trudel-Lapierre ]
