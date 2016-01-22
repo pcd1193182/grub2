@@ -22,6 +22,14 @@ export HOST_CFLAGS
 export HOST_LDFLAGS
 export TARGET_CPPFLAGS := -Wno-unused-but-set-variable
 
+ifeq ($(DEB_HOST_ARCH),arm64)
+# Work around unsupported relocations as reported in
+# https://lists.gnu.org/archive/html/grub-devel/2015-12/msg00092.html; see
+# also:
+# https://bugs.launchpad.net/bugs/1533009
+export TARGET_CFLAGS := -Os -mpc-relative-literal-loads
+endif
+
 ifeq (,$(shell which qemu-system-i386 2>/dev/null))
 with_check := no
 else
@@ -30,7 +38,11 @@ endif
 
 CC := gcc-5
 
-confflags = PACKAGE_VERSION="$(deb_version)" PACKAGE_STRING="GRUB $(deb_version)" CC=$(CC) TARGET_CC=$(CC) --enable-grub-mkfont
+confflags = \
+	PACKAGE_VERSION="$(deb_version)" PACKAGE_STRING="GRUB $(deb_version)" \
+	CC=$(CC) TARGET_CC=$(CC) \
+	--enable-grub-mkfont \
+	--disable-grub-emu-usb
 substvars =
 
 AUTOGEN_DEB_FILES = config templates preinst postinst postrm dirs install links maintscript
@@ -466,14 +478,13 @@ override_dh_shlibdeps:
 	dh_shlibdeps -X.module
 
 ifeq (yes,$(shell dpkg-vendor --derives-from Ubuntu && echo yes))
-LEGACY_DOC_CONFLICTS := grub-doc (<< 0.97-29ubuntu60), grub-legacy-doc (<< 0.97-29ubuntu60)
+LEGACY_DOC_BR := grub-doc (<< 0.97-29ubuntu60), grub-legacy-doc (<< 0.97-29ubuntu60)
 else
-LEGACY_DOC_CONFLICTS := grub-doc (<< 0.97-32), grub-legacy-doc (<< 0.97-59)
+LEGACY_DOC_BR := grub-doc (<< 0.97-32), grub-legacy-doc (<< 0.97-59)
 endif
 
 override_dh_gencontrol:
-	dh_gencontrol -- \
-		-Vlegacy-doc-conflicts="$(LEGACY_DOC_CONFLICTS)" $(substvars)
+	dh_gencontrol -- -Vlegacy-doc-br="$(LEGACY_DOC_BR)" $(substvars)
 
 TARNAME := grub2_$(deb_version)_$(DEB_HOST_ARCH).tar.gz
 
