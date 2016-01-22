@@ -1,3 +1,30 @@
+grub2 (2.02~beta2-34) unstable; urgency=medium
+
+  [ Colin Watson ]
+  * Remove duplicate Replaces on grub-ieee1275 (<< 2.00-4) from
+    grub2-common.
+  * Refer to /usr/share/common-licenses/GPL-3 rather than
+    /usr/share/common-licenses/GPL.
+  * Cherry-pick upstream patches to add more ACPI opcodes to acpihalt
+    (closes: #766853, LP: #1530648).
+  * Drop build-dependency on libusb-dev, since it was currently unused in
+    any case; also explicitly configure with --disable-grub-emu-usb to avoid
+    possible future ambiguity (closes: #810421).
+  * Use dpkg-maintscript-helper to convert directories to symlinks in
+    various upgrade cases, in place of hand-coded equivalents.
+  * Change versioned Conflicts from grub-common and grub2-common into Breaks
+    or Breaks+Replaces as appropriate.
+  * Remove pragmas related to -Wunreachable-code (closes: #812047).
+  * Temporarily work around arm64 build failure with gcc-5 >= 5.3.1-4 using
+    -mpc-relative-literal-loads.
+  * Backport various ZFS improvements from trunk (closes: #706415, #772797;
+    LP: #1451476, #1530457).
+
+  [ Didier Roche ]
+  * Use new plymouth theme path to set grub theme configuration.
+
+ -- Colin Watson <cjwatson@debian.org>  Fri, 22 Jan 2016 10:03:00 +0000
+
 grub2 (2.02~beta2-33) unstable; urgency=high
 
   [ Mathieu Trudel-Lapierre ]
