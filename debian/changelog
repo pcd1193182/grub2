@@ -1,3 +1,10 @@
+grub2 (2.02~beta2-36ubuntu4) yakkety; urgency=medium
+
+  * debian/rules: disable pie builds for grub modules by adding
+    -no-pie to TARGET_LDFLAGS
+
+ -- Steve Beattie <sbeattie@ubuntu.com>  Mon, 25 Apr 2016 10:07:38 -0700
+
 grub2 (2.02~beta2-36ubuntu3) xenial; urgency=medium
 
   * No-change rebuild to correctly build our unicode font against libfreetype6.
