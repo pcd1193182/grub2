@@ -1,0 +1,19 @@
+Description: zfs-initramfs currently provides extraneous, undesired symlinks to
+  devices directly underneath /dev/ to satisfy zpool's historical output of
+  unqualified device names. By including this environment variable to signal
+  our intent to zpool, zfs-linux packages can drop the symlink behavior when
+  updating to its upstream or backported output behavior.
+Author: Chad MILLER <chad.miller@canonical.com>
+Bug-Ubuntu: https://bugs.launchpad.net/bugs/1527727
+Bug: https://savannah.gnu.org/bugs/?43653
+
+--- a/grub-core/osdep/unix/getroot.c
++++ b/grub-core/osdep/unix/getroot.c
+@@ -243,6 +243,7 @@ grub_util_find_root_devices_from_poolnam
+   argv[2] = poolname;
+   argv[3] = NULL;
+ 
++  setenv("ZPOOL_VDEV_NAME_PATH", "YES", 1);
+   pid = grub_util_exec_pipe (argv, &fd);
+   if (!pid)
+     return NULL;

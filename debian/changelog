@@ -1,3 +1,10 @@
+grub2 (2.02~beta2-36ubuntu5) yakkety; urgency=medium
+
+  * debian/patches/zpool_full_device_name.patch: Signal to zpool that
+    it should emit full names of constituent devices.
+
+ -- Chad MILLER <chad.miller@canonical.com>  Tue, 10 May 2016 11:45:42 -0500
+
 grub2 (2.02~beta2-36ubuntu4) yakkety; urgency=medium
 
   * debian/rules: disable pie builds for grub modules by adding
