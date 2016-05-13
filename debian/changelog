@@ -1,3 +1,13 @@
+grub2 (2.02~beta2-36ubuntu6) yakkety; urgency=medium
+
+  * Fix booting on Hyper-V gen 2 VMs due to the lack of PIT there; we can deal
+    with this by using other timers when PIT aren't available. (LP: #1519836)
+    - debian/patches/git_tsc_use_alt_delay_sources_d43a5ee6.patch
+    - debian/patches/git_split_pmtimer_wait_tsc_d9a3bfea.patch
+    - debian/patches/git_fix_tsc_calibration_pit_a03c1034.patch
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Fri, 13 May 2016 12:28:38 -0400
+
 grub2 (2.02~beta2-36ubuntu5) yakkety; urgency=medium
 
   * debian/patches/zpool_full_device_name.patch: Signal to zpool that
