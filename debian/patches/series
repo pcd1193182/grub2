@@ -99,3 +99,6 @@ zfs-extensible-dataset-large-blocks.patch
 0099-Work-around-unsupported-relocations-on-arm64.patch
 arm-efi-Reduce-timer-event-frequency-by-10.patch
 zpool_full_device_name.patch
+git_tsc_use_alt_delay_sources_d43a5ee6.patch
+git_split_pmtimer_wait_tsc_d9a3bfea.patch
+git_fix_tsc_calibration_pit_a03c1034.patch
