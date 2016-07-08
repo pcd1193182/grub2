@@ -1,3 +1,11 @@
+grub2 (1.99-21ubuntu3.20) precise; urgency=medium
+
+  * debian/patches/install_mokmanager.patch: also install MokManager if we
+    got to install shim; so as to be able to control shim options.
+    (LP: #1600320)
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Fri, 08 Jul 2016 14:13:09 -0400
+
 grub2 (1.99-21ubuntu3.19) precise-security; urgency=medium
 
   * SECURITY UPDATE: password bypass via backspace key buffer overflow
