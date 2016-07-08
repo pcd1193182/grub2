@@ -1,0 +1,28 @@
+From: Mathieu Trudel-Lapierre <mathieu.trudel-lapierre@canonical.com>
+Subject: We usually also need MokManager to go along with shim.
+
+---
+ util/grub-install.in |    4 ++++
+ 1 file changed, 4 insertions(+)
+
+Index: b/util/grub-install.in
+===================================================================
+--- a/util/grub-install.in
++++ b/util/grub-install.in
+@@ -631,12 +631,16 @@ elif [ x"$platform" = xefi ]; then
+     fi
+     if [ "$uefi_secure_boot" = yes ] && [ -e "$efi_signed" ]; then
+ 	shim_signed=/usr/lib/shim/shim.efi.signed
++	mokmanager_signed=/usr/lib/shim/MokManager.efi.signed
+ 	if [ -e "$shim_signed" ]; then
+ 	    if [ "$removable" != yes ]; then
+ 		efi_file="shim$efi_suffix.efi"
+ 	    fi
+ 	    cp "$shim_signed" "${efidir}/${efi_file}"
+ 	    cp "$efi_signed" "${efidir}/grub$efi_suffix.efi"
++	    if [ -e "$mokmanager_signed" ]; then
++		cp "$mokmanager_signed" "${efidir}/MokManager.efi"
++	    fi
+ 	else
+ 	    cp "$efi_signed" "${efidir}/${efi_file}"
+ 	fi
