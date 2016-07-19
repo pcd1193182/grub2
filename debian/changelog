@@ -1,3 +1,9 @@
+grub2 (2.02~beta2-36ubuntu9) yakkety; urgency=medium
+
+  * Add loopback and squash4 modules to the signed EFI images.  LP: #1604499.
+
+ -- Steve Langasek <steve.langasek@ubuntu.com>  Tue, 19 Jul 2016 11:43:28 -0700
+
 grub2 (2.02~beta2-36ubuntu8) yakkety; urgency=medium
 
   * debian/grub-common.init: Don't source /lib/init/vars.sh, we don't depend
