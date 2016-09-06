@@ -29,8 +29,6 @@ else
 with_check := yes
 endif
 
-CC := gcc-5
-
 confflags = \
 	PACKAGE_VERSION="$(deb_version)" PACKAGE_STRING="GRUB $(deb_version)" \
 	CC=$(CC) TARGET_CC=$(CC) \
