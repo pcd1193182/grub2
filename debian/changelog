@@ -1,3 +1,23 @@
+grub2 (2.02~beta2-36ubuntu11) yakkety; urgency=medium
+
+  * debian/control: don't force building with GCC 5 when 6 is now the default.
+  * support_module_without_symbol_table.patch: fix checks for modules without
+    a symbol table to be allowed, since binutils' 'strip --stripunneeded' no
+    longer leaves a symbols section around after stripping.
+  * Fix support for IPv6 PXE booting under UEFI:
+    - grub_add_grub_env_set_net_property.patch: add grub_env_set_net_property.
+    - misc-fix-invalid-char-strtol.patch: fix strto*l methods invalid chars.
+    - net_read_bracketed_ipv6_addr.patch: read bracketed IPv6 addresses.
+    - bootp_new_net_bootp6_command.patch: add new bootp6 commands.
+    - efinet_uefi_ipv6_pxe_support.patch: teach efinet to allow bootp6.
+    - bootp_process_dhcpack_http_boot.patch: process DHCPACK, support HTTP.
+    - efinet_set_network_from_uefi_devpath.patch: configure network from the
+      devpath provided by the UEFI firmware.
+    - efinet_set_dns_from_uefi_proto.patch: set DNS nameservers and search
+      domains from the UEFI protocol.
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Tue, 06 Sep 2016 10:10:02 -0400
+
 grub2 (2.02~beta2-36ubuntu10) yakkety; urgency=medium
 
   * debian/patches/ip6_send_router_solicitation_7c4b6b7b.patch: handle long
