@@ -1,6 +1,6 @@
-This is grub.info, produced by makeinfo version 5.2 from grub.texi.
+This is grub.info, produced by makeinfo version 6.1 from grub.texi.
 
-This manual is for GNU GRUB (version 2.02~beta2, 24 December 2013).
+This manual is for GNU GRUB (version 2.02~beta3, 12 February 2016).
 
    Copyright (C)
 1999,2000,2001,2002,2004,2006,2008,2009,2010,2011,2012,2013 Free
@@ -33,9 +33,9 @@ This is the documentation of GNU GRUB, the GRand Unified Bootloader, a
 flexible and powerful boot loader program for a wide range of
 architectures.
 
-   This edition documents version 2.02~beta2.
+   This edition documents version 2.02~beta3.
 
-   This manual is for GNU GRUB (version 2.02~beta2, 24 December 2013).
+   This manual is for GNU GRUB (version 2.02~beta3, 12 February 2016).
 
    Copyright (C)
 1999,2000,2001,2002,2004,2006,2008,2009,2010,2011,2012,2013 Free
@@ -2472,6 +2472,8 @@ model-specific.  Values known to the GRUB team are:
      85:3
 <Asus EeePC 1005PE>
      84:1 (unconfirmed)
+<LENOVO ThinkPad T410s (2912W1C)>
+     101:3
 
    To take full advantage of this function, install GRUB into the MBR
 (*note Installing GRUB using grub-install::).
@@ -2982,6 +2984,8 @@ These variables have special meaning to GRUB.
 * cmdpath::
 * color_highlight::
 * color_normal::
+* config_directory::
+* config_file::
 * debug::
 * default::
 * fallback::
@@ -3080,7 +3084,7 @@ color_normal::.
    The default is 'black/light-gray'.
 
 
-File: grub.info,  Node: color_normal,  Next: debug,  Prev: color_highlight,  Up: Special environment variables
+File: grub.info,  Node: color_normal,  Next: config_directory,  Prev: color_highlight,  Up: Special environment variables
 
 15.1.6 color_normal
 -------------------
@@ -3133,9 +3137,29 @@ extendable to support whole rgb24 palette but currently there is no
 compelling reason to go beyond the current 16 colors.
 
 
-File: grub.info,  Node: debug,  Next: default,  Prev: color_normal,  Up: Special environment variables
+File: grub.info,  Node: config_directory,  Next: config_file,  Prev: color_normal,  Up: Special environment variables
 
-15.1.7 debug
+15.1.7 config_directory
+-----------------------
+
+This variable is automatically set by GRUB to the directory part of
+current configuration file name (*note config_file::).
+
+
+File: grub.info,  Node: config_file,  Next: debug,  Prev: config_directory,  Up: Special environment variables
+
+15.1.8 config_file
+------------------
+
+This variable is automatically set by GRUB to the name of configuration
+file that is being processed by commands 'configfile' (*note
+configfile::) or 'normal' (*note normal::).  It is restored to the
+previous value when command completes.
+
+
+File: grub.info,  Node: debug,  Next: default,  Prev: config_file,  Up: Special environment variables
+
+15.1.9 debug
 ------------
 
 This variable may be set to enable debugging output from various
@@ -3147,8 +3171,8 @@ grub_dprintf.  Consult source for more details.
 
 File: grub.info,  Node: default,  Next: fallback,  Prev: debug,  Up: Special environment variables
 
-15.1.8 default
---------------
+15.1.10 default
+---------------
 
 If this variable is set, it identifies a menu entry that should be
 selected by default, possibly after a timeout (*note timeout::).  The
@@ -3187,8 +3211,8 @@ configuration::), 'grub-set-default', or 'grub-reboot'.
 
 File: grub.info,  Node: fallback,  Next: gfxmode,  Prev: default,  Up: Special environment variables
 
-15.1.9 fallback
----------------
+15.1.11 fallback
+----------------
 
 If this variable is set, it identifies a menu entry that should be
 selected if the default menu entry fails to boot.  Entries are
@@ -3197,7 +3221,7 @@ identified in the same way as for 'default' (*note default::).
 
 File: grub.info,  Node: gfxmode,  Next: gfxpayload,  Prev: fallback,  Up: Special environment variables
 
-15.1.10 gfxmode
+15.1.12 gfxmode
 ---------------
 
 If this variable is set, it sets the resolution used on the 'gfxterm'
@@ -3216,7 +3240,7 @@ turn until one is found.  Each mode should be either 'auto',
 
 File: grub.info,  Node: gfxpayload,  Next: gfxterm_font,  Prev: gfxmode,  Up: Special environment variables
 
-15.1.11 gfxpayload
+15.1.13 gfxpayload
 ------------------
 
 If this variable is set, it controls the video mode in which the Linux
@@ -3242,7 +3266,7 @@ configuration::).
 
 File: grub.info,  Node: gfxterm_font,  Next: grub_cpu,  Prev: gfxpayload,  Up: Special environment variables
 
-15.1.12 gfxterm_font
+15.1.14 gfxterm_font
 --------------------
 
 If this variable is set, it names a font to use for text on the
@@ -3252,7 +3276,7 @@ available font.
 
 File: grub.info,  Node: grub_cpu,  Next: grub_platform,  Prev: gfxterm_font,  Up: Special environment variables
 
-15.1.13 grub_cpu
+15.1.15 grub_cpu
 ----------------
 
 In normal mode (*note normal::), GRUB sets the 'grub_cpu' variable to
@@ -3261,7 +3285,7 @@ the CPU type for which GRUB was built (e.g.  'i386' or 'powerpc').
 
 File: grub.info,  Node: grub_platform,  Next: icondir,  Prev: grub_cpu,  Up: Special environment variables
 
-15.1.14 grub_platform
+15.1.16 grub_platform
 ---------------------
 
 In normal mode (*note normal::), GRUB sets the 'grub_platform' variable
@@ -3270,7 +3294,7 @@ to the platform for which GRUB was built (e.g.  'pc' or 'efi').
 
 File: grub.info,  Node: icondir,  Next: lang,  Prev: grub_platform,  Up: Special environment variables
 
-15.1.15 icondir
+15.1.17 icondir
 ---------------
 
 If this variable is set, it names a directory in which the GRUB
@@ -3280,7 +3304,7 @@ graphical menu should look for icons after looking in the theme's
 
 File: grub.info,  Node: lang,  Next: locale_dir,  Prev: icondir,  Up: Special environment variables
 
-15.1.16 lang
+15.1.18 lang
 ------------
 
 If this variable is set, it names the language code that the 'gettext'
@@ -3293,7 +3317,7 @@ reasonable default for this variable based on the system locale.
 
 File: grub.info,  Node: locale_dir,  Next: menu_color_highlight,  Prev: lang,  Up: Special environment variables
 
-15.1.17 locale_dir
+15.1.19 locale_dir
 ------------------
 
 If this variable is set, it names the directory where translation files
@@ -3307,7 +3331,7 @@ translation files are available.
 
 File: grub.info,  Node: menu_color_highlight,  Next: menu_color_normal,  Prev: locale_dir,  Up: Special environment variables
 
-15.1.18 menu_color_highlight
+15.1.20 menu_color_highlight
 ----------------------------
 
 This variable contains the foreground and background colors to be used
@@ -3321,7 +3345,7 @@ color_highlight::).
 
 File: grub.info,  Node: menu_color_normal,  Next: net_<INTERFACE>_boot_file,  Prev: menu_color_highlight,  Up: Special environment variables
 
-15.1.19 menu_color_normal
+15.1.21 menu_color_normal
 -------------------------
 
 This variable contains the foreground and background colors to be used
@@ -3334,7 +3358,7 @@ this variable changes those colors.  For the available color names,
 
 File: grub.info,  Node: net_<INTERFACE>_boot_file,  Next: net_<INTERFACE>_dhcp_server_name,  Prev: menu_color_normal,  Up: Special environment variables
 
-15.1.20 net_<INTERFACE>_boot_file
+15.1.22 net_<INTERFACE>_boot_file
 ---------------------------------
 
 *Note Network::.
@@ -3342,7 +3366,7 @@ File: grub.info,  Node: net_<INTERFACE>_boot_file,  Next: net_<INTERFACE>_dhcp_s
 
 File: grub.info,  Node: net_<INTERFACE>_dhcp_server_name,  Next: net_<INTERFACE>_domain,  Prev: net_<INTERFACE>_boot_file,  Up: Special environment variables
 
-15.1.21 net_<INTERFACE>_dhcp_server_name
+15.1.23 net_<INTERFACE>_dhcp_server_name
 ----------------------------------------
 
 *Note Network::.
@@ -3350,7 +3374,7 @@ File: grub.info,  Node: net_<INTERFACE>_dhcp_server_name,  Next: net_<INTERFACE>
 
 File: grub.info,  Node: net_<INTERFACE>_domain,  Next: net_<INTERFACE>_extensionspath,  Prev: net_<INTERFACE>_dhcp_server_name,  Up: Special environment variables
 
-15.1.22 net_<INTERFACE>_domain
+15.1.24 net_<INTERFACE>_domain
 ------------------------------
 
 *Note Network::.
@@ -3358,7 +3382,7 @@ File: grub.info,  Node: net_<INTERFACE>_domain,  Next: net_<INTERFACE>_extension
 
 File: grub.info,  Node: net_<INTERFACE>_extensionspath,  Next: net_<INTERFACE>_hostname,  Prev: net_<INTERFACE>_domain,  Up: Special environment variables
 
-15.1.23 net_<INTERFACE>_extensionspath
+15.1.25 net_<INTERFACE>_extensionspath
 --------------------------------------
 
 *Note Network::.
@@ -3366,7 +3390,7 @@ File: grub.info,  Node: net_<INTERFACE>_extensionspath,  Next: net_<INTERFACE>_h
 
 File: grub.info,  Node: net_<INTERFACE>_hostname,  Next: net_<INTERFACE>_ip,  Prev: net_<INTERFACE>_extensionspath,  Up: Special environment variables
 
-15.1.24 net_<INTERFACE>_hostname
+15.1.26 net_<INTERFACE>_hostname
 --------------------------------
 
 *Note Network::.
@@ -3374,7 +3398,7 @@ File: grub.info,  Node: net_<INTERFACE>_hostname,  Next: net_<INTERFACE>_ip,  Pr
 
 File: grub.info,  Node: net_<INTERFACE>_ip,  Next: net_<INTERFACE>_mac,  Prev: net_<INTERFACE>_hostname,  Up: Special environment variables
 
-15.1.25 net_<INTERFACE>_ip
+15.1.27 net_<INTERFACE>_ip
 --------------------------
 
 *Note Network::.
@@ -3382,7 +3406,7 @@ File: grub.info,  Node: net_<INTERFACE>_ip,  Next: net_<INTERFACE>_mac,  Prev: n
 
 File: grub.info,  Node: net_<INTERFACE>_mac,  Next: net_<INTERFACE>_rootpath,  Prev: net_<INTERFACE>_ip,  Up: Special environment variables
 
-15.1.26 net_<INTERFACE>_mac
+15.1.28 net_<INTERFACE>_mac
 ---------------------------
 
 *Note Network::.
@@ -3390,7 +3414,7 @@ File: grub.info,  Node: net_<INTERFACE>_mac,  Next: net_<INTERFACE>_rootpath,  P
 
 File: grub.info,  Node: net_<INTERFACE>_rootpath,  Next: net_default_interface,  Prev: net_<INTERFACE>_mac,  Up: Special environment variables
 
-15.1.27 net_<INTERFACE>_rootpath
+15.1.29 net_<INTERFACE>_rootpath
 --------------------------------
 
 *Note Network::.
@@ -3398,7 +3422,7 @@ File: grub.info,  Node: net_<INTERFACE>_rootpath,  Next: net_default_interface, 
 
 File: grub.info,  Node: net_default_interface,  Next: net_default_ip,  Prev: net_<INTERFACE>_rootpath,  Up: Special environment variables
 
-15.1.28 net_default_interface
+15.1.30 net_default_interface
 -----------------------------
 
 *Note Network::.
@@ -3406,7 +3430,7 @@ File: grub.info,  Node: net_default_interface,  Next: net_default_ip,  Prev: net
 
 File: grub.info,  Node: net_default_ip,  Next: net_default_mac,  Prev: net_default_interface,  Up: Special environment variables
 
-15.1.29 net_default_ip
+15.1.31 net_default_ip
 ----------------------
 
 *Note Network::.
@@ -3414,7 +3438,7 @@ File: grub.info,  Node: net_default_ip,  Next: net_default_mac,  Prev: net_defau
 
 File: grub.info,  Node: net_default_mac,  Next: net_default_server,  Prev: net_default_ip,  Up: Special environment variables
 
-15.1.30 net_default_mac
+15.1.32 net_default_mac
 -----------------------
 
 *Note Network::.
@@ -3422,7 +3446,7 @@ File: grub.info,  Node: net_default_mac,  Next: net_default_server,  Prev: net_d
 
 File: grub.info,  Node: net_default_server,  Next: pager,  Prev: net_default_mac,  Up: Special environment variables
 
-15.1.31 net_default_server
+15.1.33 net_default_server
 --------------------------
 
 *Note Network::.
@@ -3430,7 +3454,7 @@ File: grub.info,  Node: net_default_server,  Next: pager,  Prev: net_default_mac
 
 File: grub.info,  Node: pager,  Next: prefix,  Prev: net_default_server,  Up: Special environment variables
 
-15.1.32 pager
+15.1.34 pager
 -------------
 
 If set to '1', pause output after each screenful and wait for keyboard
@@ -3439,7 +3463,7 @@ input.  The default is not to pause output.
 
 File: grub.info,  Node: prefix,  Next: pxe_blksize,  Prev: pager,  Up: Special environment variables
 
-15.1.33 prefix
+15.1.35 prefix
 --------------
 
 The location of the '/boot/grub' directory as an absolute file name
@@ -3451,7 +3475,7 @@ order for many parts of GRUB to work.
 
 File: grub.info,  Node: pxe_blksize,  Next: pxe_default_gateway,  Prev: prefix,  Up: Special environment variables
 
-15.1.34 pxe_blksize
+15.1.36 pxe_blksize
 -------------------
 
 *Note Network::.
@@ -3459,7 +3483,7 @@ File: grub.info,  Node: pxe_blksize,  Next: pxe_default_gateway,  Prev: prefix, 
 
 File: grub.info,  Node: pxe_default_gateway,  Next: pxe_default_server,  Prev: pxe_blksize,  Up: Special environment variables
 
-15.1.35 pxe_default_gateway
+15.1.37 pxe_default_gateway
 ---------------------------
 
 *Note Network::.
@@ -3467,7 +3491,7 @@ File: grub.info,  Node: pxe_default_gateway,  Next: pxe_default_server,  Prev: p
 
 File: grub.info,  Node: pxe_default_server,  Next: root,  Prev: pxe_default_gateway,  Up: Special environment variables
 
-15.1.36 pxe_default_server
+15.1.38 pxe_default_server
 --------------------------
 
 *Note Network::.
@@ -3475,7 +3499,7 @@ File: grub.info,  Node: pxe_default_server,  Next: root,  Prev: pxe_default_gate
 
 File: grub.info,  Node: root,  Next: superusers,  Prev: pxe_default_server,  Up: Special environment variables
 
-15.1.37 root
+15.1.39 root
 ------------
 
 The root device name (*note Device syntax::).  Any file names that do
@@ -3490,7 +3514,7 @@ and 'root' to 'hd0,msdos1'.
 
 File: grub.info,  Node: superusers,  Next: theme,  Prev: root,  Up: Special environment variables
 
-15.1.38 superusers
+15.1.40 superusers
 ------------------
 
 This variable may be set to a list of superuser names to enable
@@ -3499,7 +3523,7 @@ authentication support.  *Note Security::.
 
 File: grub.info,  Node: theme,  Next: timeout,  Prev: superusers,  Up: Special environment variables
 
-15.1.39 theme
+15.1.41 theme
 -------------
 
 This variable may be set to a directory containing a GRUB graphical menu
@@ -3511,7 +3535,7 @@ configuration::).
 
 File: grub.info,  Node: timeout,  Next: timeout_style,  Prev: theme,  Up: Special environment variables
 
-15.1.40 timeout
+15.1.42 timeout
 ---------------
 
 If this variable is set, it specifies the time in seconds to wait for
@@ -3528,7 +3552,7 @@ configuration::).
 
 File: grub.info,  Node: timeout_style,  Prev: timeout,  Up: Special environment variables
 
-15.1.41 timeout_style
+15.1.43 timeout_style
 ---------------------
 
 This variable may be set to 'menu', 'countdown', or 'hidden' to control
@@ -3864,6 +3888,10 @@ you forget a command, you can run the command 'help' (*note help::).
 * uppermem::                    Set the upper memory size
 * verify_detached::             Verify detached digital signature
 * videoinfo::                   List available video modes
+* xen_hypervisor::              Load xen hypervisor binary
+* xen_linux::                   Load dom0 kernel for xen hypervisor
+* xen_initrd::                  Load dom0 initrd for dom0 kernel
+* xen_xsm::                     Load xen security module for xen hypervisor
 
 
 File: grub.info,  Node: [,  Next: acpi,  Up: Command-line and menu entry commands
@@ -4092,12 +4120,15 @@ File: grub.info,  Node: cpuid,  Next: crc,  Prev: configfile,  Up: Command-line 
 16.3.17 cpuid
 -------------
 
- -- Command: cpuid [-l]
+ -- Command: cpuid [-l] [-p]
      Check for CPU features.  This command is only available on x86
      systems.
 
      With the '-l' option, return true if the CPU supports long mode
      (64-bit).
+
+     With the '-p' option, return true if the CPU supports Physical
+     Address Extension (PAE).
 
      If invoked without options, this command currently behaves as if it
      had been invoked with '-l'.  This may change in the future.
@@ -5125,6 +5156,9 @@ File: grub.info,  Node: test,  Next: true,  Prev: source,  Up: Command-line and 
           EXPRESSION is false
      EXPRESSION1 '-a' EXPRESSION2
           both EXPRESSION1 and EXPRESSION2 are true
+     EXPRESSION1 EXPRESSION2
+          both EXPRESSION1 and EXPRESSION2 are true.  This syntax is not
+          POSIX-compliant and is not recommended.
      EXPRESSION1 '-o' EXPRESSION2
           either EXPRESSION1 or EXPRESSION2 is true
 
@@ -5195,7 +5229,7 @@ File: grub.info,  Node: verify_detached,  Next: videoinfo,  Prev: uppermem,  Up:
      digital signatures::, for more information.
 
 
-File: grub.info,  Node: videoinfo,  Prev: verify_detached,  Up: Command-line and menu entry commands
+File: grub.info,  Node: videoinfo,  Next: xen_hypervisor,  Prev: verify_detached,  Up: Command-line and menu entry commands
 
 16.3.78 videoinfo
 -----------------
@@ -5203,6 +5237,48 @@ File: grub.info,  Node: videoinfo,  Prev: verify_detached,  Up: Command-line and
  -- Command: videoinfo [[WxH]xD]
      List available video modes.  If resolution is given, show only
      matching modes.
+
+
+File: grub.info,  Node: xen_hypervisor,  Next: xen_linux,  Prev: videoinfo,  Up: Command-line and menu entry commands
+
+16.3.79 xen_hypervisor
+----------------------
+
+ -- Command: xen_hypervisor file [arguments] ...
+     Load a Xen hypervisor binary from FILE.  The rest of the line is
+     passed verbatim as the "kernel command-line".  Any other binaries
+     must be reloaded after using this command.
+
+
+File: grub.info,  Node: xen_linux,  Next: xen_initrd,  Prev: xen_hypervisor,  Up: Command-line and menu entry commands
+
+16.3.80 xen_linux
+-----------------
+
+ -- Command: xen_linux file [arguments]
+     Load a dom0 kernel image for xen hypervisor at the booting process
+     of xen.  The rest of the line is passed verbatim as the module
+     command line.
+
+
+File: grub.info,  Node: xen_initrd,  Next: xen_xsm,  Prev: xen_linux,  Up: Command-line and menu entry commands
+
+16.3.81 xen_initrd
+------------------
+
+ -- Command: xen_initrd file
+     Load a initrd image for dom0 kernel at the booting process of xen.
+
+
+File: grub.info,  Node: xen_xsm,  Prev: xen_initrd,  Up: Command-line and menu entry commands
+
+16.3.82 xen_xsm
+---------------
+
+ -- Command: xen_xsm file
+     Load a xen security module for xen hypervisor at the booting
+     process of xen.  See <http://wiki.xen.org/wiki/XSM> for more
+     detail.
 
 
 File: grub.info,  Node: Networking commands,  Prev: Command-line and menu entry commands,  Up: Commands
@@ -5274,10 +5350,8 @@ File: grub.info,  Node: net_bootp,  Next: net_del_addr,  Prev: net_add_route,  U
      Perform configuration of CARD using DHCP protocol.  If no card name
      is specified, try to configure all existing cards.  If
      configuration was successful, interface with name CARD':dhcp' and
-     configured address is added to CARD.  If server provided gateway
-     information in DHCP ACK packet, it is added as route entry with the
-     name CARD':dhcp:gw'.  Additionally the following DHCP options are
-     recognized and processed:
+     configured address is added to CARD.  Additionally the following
+     DHCP options are recognized and processed:
 
      '1 (Subnet Mask)'
           Used to calculate network local routing entry for interface
@@ -5579,11 +5653,13 @@ grub-mkpasswd-pbkdf2::) to generate password hashes.
 environment variable must be set to a list of usernames, separated by
 any of spaces, commas, semicolons, pipes, or ampersands.  Superusers are
 permitted to use the GRUB command line, edit menu entries, and execute
-any menu entry.  If 'superusers' is set, then use of the command line is
-automatically restricted to superusers.
+any menu entry.  If 'superusers' is set, then use of the command line
+and editing of menu entries are automatically restricted to superusers.
+Setting 'superusers' to empty string effectively disables both access to
+CLI and editing of menu entries.
 
-   Other users may be given access to specific menu entries by giving a
-list of usernames (as above) using the '--users' option to the
+   Other users may be allowed to execute specific menu entries by giving
+a list of usernames (as above) using the '--users' option to the
 'menuentry' command (*note menuentry::).  If the '--unrestricted' option
 is used for a menu entry, then that entry is unrestricted.  If the
 '--users' option is not used for a menu entry, then that only superusers
@@ -5746,6 +5822,16 @@ a failure
 protocol limitations mips-loongson (with Linux protocol) and
 mips-qemu_mips can use only memory up to first hole.
 
+   Bootlocation is ability of GRUB to automatically detect where it
+boots from.  "disk" means the detection is limited to detecting the disk
+with partition being discovered on install time.  "partition" means that
+disk and partiton can be automatically discovered.  "file" means that
+boot image file name as well as disk and partition can be discovered.
+For consistency default install ignores partition and relies solely on
+disk detection.  If no bootlocation discovery is available or boot and
+grub-root disks are different, UUID is used instead.  On ARC if no
+device to install to is specified, UUID is used instead as well.
+
                BIOS           Coreboot       Multiboot      Qemu
 video          yes            yes            yes            yes
 console        CP437          CP437          CP437          CP437
@@ -5762,6 +5848,7 @@ PCI            yes            yes            yes            yes
 badram         yes            yes            yes            yes
 compression    always         pointless      no             no
 exit           yes            no             no             no
+bootlocation   disk           no             no             no
 
                ia32 EFI       amd64 EFI      ia32           Itanium
                                              IEEE1275
@@ -5780,6 +5867,8 @@ PCI            yes            yes            yes            no
 badram         yes            yes            no             yes
 compression    no             no             no             no
 exit           yes            yes            yes            yes
+bootlocation   file           file           file,          file
+                                             ignored
 
                Loongson       sparc64        Powerpc        ARC
 video          yes            no             yes            no
@@ -5797,23 +5886,25 @@ PCI            yes            no             no             no
 badram         yes (*)        no             no             no
 compression    configurable   no             no             configurable
 exit           no             yes            yes            yes
+bootlocation   no             partition      file           file (*)
 
-               MIPS qemu      emu
-video          no             yes
-console        CP437          Unicode (*)
+               MIPS qemu      emu            xen
+video          no             yes            no
+console        CP437          Unicode (*)    ASCII
 charset
-network        no             yes
-ATA/AHCI       yes            no
-AT keyboard    yes            no
-Speaker        no             no
-USB            N/A            yes
-chainloader    yes            no
-cpuid          no             no
-hints          guess          no
-PCI            no             no
-badram         yes (*)        no
-compression    configurable   no
-exit           no             yes
+network        no             yes            no
+ATA/AHCI       yes            no             no
+AT keyboard    yes            no             no
+Speaker        no             no             no
+USB            N/A            yes            no
+chainloader    yes            no             yes
+cpuid          no             no             yes
+hints          guess          no             no
+PCI            no             no             no
+badram         yes (*)        no             no
+compression    configurable   no             no
+exit           no             yes            no
+bootlocation   no             file           no
 
 
 File: grub.info,  Node: Platform-specific operations,  Next: Supported kernels,  Prev: Platform limitations,  Up: Top
@@ -5986,7 +6077,7 @@ protocols.
    Following variables must be defined:
 
 GRUB_PAYLOADS_DIR      directory containing the required kernels
-GRUB_CBFSTOOL          cbfstoll from Coreboot package (for coreboot
+GRUB_CBFSTOOL          cbfstool from Coreboot package (for coreboot
                        platform only)
 GRUB_COREBOOT_ROM      empty Coreboot ROM
 GRUB_QEMU_OPTS         additional options to be supplied to QEMU
@@ -6466,20 +6557,20 @@ Appendix A How to obtain and build GRUB
 
    GRUB is available from the GNU alpha archive site
 <ftp://ftp.gnu.org/gnu/grub> or any of its mirrors.  The file will be
-named grub-version.tar.gz.  The current version is 2.02~beta2, so the
+named grub-version.tar.gz.  The current version is 2.02~beta3, so the
 file you should grab is:
 
-   <ftp://ftp.gnu.org/gnu/grub/grub-2.02~beta2.tar.gz>
+   <ftp://ftp.gnu.org/gnu/grub/grub-2.02~beta3.tar.gz>
 
    To unbundle GRUB use the instruction:
 
-     zcat grub-2.02~beta2.tar.gz | tar xvf -
+     zcat grub-2.02~beta3.tar.gz | tar xvf -
 
-   which will create a directory called 'grub-2.02~beta2' with all the
+   which will create a directory called 'grub-2.02~beta3' with all the
 sources.  You can look at the file 'INSTALL' for detailed instructions
 on how to build and install GRUB, but you should be able to just do:
 
-     cd grub-2.02~beta2
+     cd grub-2.02~beta3
      ./configure
      make install
 
@@ -7008,7 +7099,7 @@ Index
  [index ]
 * Menu:
 
-* '[':                                   [.                     (line 6)
+* [:                                     [.                     (line 6)
 * acpi:                                  acpi.                  (line 6)
 * authenticate:                          authenticate.          (line 6)
 * background_color:                      background_color.      (line 6)
@@ -7107,6 +7198,10 @@ Index
 * unset:                                 unset.                 (line 6)
 * verify_detached:                       verify_detached.       (line 6)
 * videoinfo:                             videoinfo.             (line 6)
+* xen_hypervisor:                        xen_hypervisor.        (line 6)
+* xen_initrd:                            xen_initrd.            (line 6)
+* xen_linux:                             xen_linux.             (line 6)
+* xen_xsm:                               xen_xsm.               (line 6)
 
 
 
@@ -7159,187 +7254,193 @@ Ref: An example of the slices (in red) used for a terminal window. This drawing 
 Node: Network100396
 Node: Serial terminal103003
 Node: Vendor power-on keys105240
-Node: Images107130
-Node: Core image size limitation112105
-Node: Filesystem114669
-Node: Device syntax115378
-Node: File name syntax118079
-Node: Block list syntax119125
-Node: Interface119859
-Node: Command-line interface120683
-Node: Command-line interface-Footnotes122627
-Ref: Command-line interface-Footnote-1122716
-Node: Menu interface122811
-Node: Menu entry editor123823
-Node: Environment124561
-Node: Special environment variables125264
-Node: biosnum126249
-Node: check_signatures126773
-Node: chosen127060
-Node: cmdpath127503
-Node: color_highlight127930
-Node: color_normal128342
-Node: debug129994
-Node: default130434
-Node: fallback131560
-Node: gfxmode131891
-Node: gfxpayload132689
-Node: gfxterm_font133843
-Node: grub_cpu134143
-Node: grub_platform134431
-Node: icondir134723
-Node: lang135040
-Node: locale_dir135509
-Node: menu_color_highlight136018
-Node: menu_color_normal136514
-Node: net_<INTERFACE>_boot_file137015
-Node: net_<INTERFACE>_dhcp_server_name137258
-Node: net_<INTERFACE>_domain137520
-Node: net_<INTERFACE>_extensionspath137767
-Node: net_<INTERFACE>_hostname138022
-Node: net_<INTERFACE>_ip138261
-Node: net_<INTERFACE>_mac138477
-Node: net_<INTERFACE>_rootpath138695
-Node: net_default_interface138926
-Node: net_default_ip139146
-Node: net_default_mac139343
-Node: net_default_server139539
-Node: pager139732
-Node: prefix139988
-Node: pxe_blksize140437
-Node: pxe_default_gateway140614
-Node: pxe_default_server140819
-Node: root141015
-Node: superusers141556
-Node: theme141804
-Node: timeout142125
-Node: timeout_style142762
-Node: Environment block143147
-Node: Commands144579
-Node: Menu-specific commands145449
-Node: menuentry146177
-Node: submenu147728
-Node: General commands148277
-Node: serial148773
-Node: terminal_input149824
-Node: terminal_output150490
-Node: terminfo151157
-Node: Command-line and menu entry commands152292
-Node: [157307
-Node: acpi157493
-Node: authenticate158550
-Node: background_color158977
-Node: background_image159650
-Node: badram160200
-Node: blocklist161253
-Node: boot161487
-Node: cat161809
-Node: chainloader162445
-Node: clear163073
-Node: cmosclean163259
-Node: cmosdump163563
-Node: cmostest163858
-Node: cmp164216
-Node: configfile164767
-Node: cpuid165192
-Node: crc165659
-Node: cryptomount165933
-Node: date166680
-Node: devicetree167229
-Node: distrust167626
-Node: drivemap168407
-Node: echo169214
-Node: eval170157
-Node: export170440
-Node: false170751
-Node: gettext171047
-Node: gptsync171494
-Node: halt172439
-Node: hashsum172770
-Node: help173996
-Node: initrd174463
-Node: initrd16174875
-Node: insmod175380
-Node: keystatus175602
-Node: linux176241
-Node: linux16177144
-Node: list_env177858
-Node: list_trusted178224
-Node: load_env178807
-Node: loadfont180480
-Node: loopback180851
-Node: ls181299
-Node: lsfonts181841
-Node: lsmod182023
-Node: md5sum182213
-Node: module182492
-Node: multiboot182804
-Node: nativedisk183912
-Node: normal184311
-Node: normal_exit185078
-Node: parttool185400
-Node: password186907
-Node: password_pbkdf2187189
-Node: play187597
-Node: probe188345
-Node: pxe_unload188727
-Node: read189007
-Node: reboot189356
-Node: regexp189539
-Node: rmmod190076
-Node: save_env190269
-Node: search191291
-Node: sendkey192069
-Node: set198495
-Node: sha1sum198797
-Node: sha256sum199082
-Node: sha512sum199381
-Node: sleep199678
-Node: source200135
-Node: test200687
-Node: true203304
-Node: trust203590
-Node: unset204382
-Node: uppermem204589
-Node: verify_detached204814
-Node: videoinfo205862
-Node: Networking commands206126
-Node: net_add_addr207078
-Node: net_add_dns207598
-Node: net_add_route207874
-Node: net_bootp208404
-Node: net_del_addr210120
-Node: net_del_dns210360
-Node: net_del_route210607
-Node: net_get_dhcp_option210852
-Node: net_ipv6_autoconf211338
-Node: net_ls_addr211757
-Node: net_ls_cards212005
-Node: net_ls_dns212241
-Node: net_ls_routes212472
-Node: net_nslookup212679
-Node: Internationalisation212963
-Node: Security219790
-Node: Authentication and authorisation220058
-Node: Using digital signatures222904
-Node: Platform limitations225984
-Node: Platform-specific operations231944
-Node: Supported kernels233009
-Node: Troubleshooting240646
-Node: GRUB only offers a rescue shell240872
-Node: Invoking grub-install243833
-Node: Invoking grub-mkconfig246003
-Node: Invoking grub-mkpasswd-pbkdf2246640
-Node: Invoking grub-mkrelpath247299
-Node: Invoking grub-mkrescue248072
-Node: Invoking grub-mount249821
-Node: Invoking grub-probe252870
-Node: Invoking grub-script-check255464
-Node: Obtaining and Building GRUB256208
-Node: Reporting bugs257481
-Node: Future260297
-Node: Copying This Manual260697
-Node: GNU Free Documentation License260925
-Node: Index283314
+Node: Images107175
+Node: Core image size limitation112150
+Node: Filesystem114714
+Node: Device syntax115423
+Node: File name syntax118124
+Node: Block list syntax119170
+Node: Interface119904
+Node: Command-line interface120728
+Node: Command-line interface-Footnotes122672
+Ref: Command-line interface-Footnote-1122761
+Node: Menu interface122856
+Node: Menu entry editor123868
+Node: Environment124606
+Node: Special environment variables125309
+Node: biosnum126331
+Node: check_signatures126855
+Node: chosen127142
+Node: cmdpath127585
+Node: color_highlight128012
+Node: color_normal128424
+Node: config_directory130087
+Node: config_file130381
+Node: debug130774
+Node: default131213
+Node: fallback132341
+Node: gfxmode132674
+Node: gfxpayload133472
+Node: gfxterm_font134626
+Node: grub_cpu134926
+Node: grub_platform135214
+Node: icondir135506
+Node: lang135823
+Node: locale_dir136292
+Node: menu_color_highlight136801
+Node: menu_color_normal137297
+Node: net_<INTERFACE>_boot_file137798
+Node: net_<INTERFACE>_dhcp_server_name138041
+Node: net_<INTERFACE>_domain138303
+Node: net_<INTERFACE>_extensionspath138550
+Node: net_<INTERFACE>_hostname138805
+Node: net_<INTERFACE>_ip139044
+Node: net_<INTERFACE>_mac139260
+Node: net_<INTERFACE>_rootpath139478
+Node: net_default_interface139709
+Node: net_default_ip139929
+Node: net_default_mac140126
+Node: net_default_server140322
+Node: pager140515
+Node: prefix140771
+Node: pxe_blksize141220
+Node: pxe_default_gateway141397
+Node: pxe_default_server141602
+Node: root141798
+Node: superusers142339
+Node: theme142587
+Node: timeout142908
+Node: timeout_style143545
+Node: Environment block143930
+Node: Commands145362
+Node: Menu-specific commands146232
+Node: menuentry146960
+Node: submenu148511
+Node: General commands149060
+Node: serial149556
+Node: terminal_input150607
+Node: terminal_output151273
+Node: terminfo151940
+Node: Command-line and menu entry commands153075
+Node: [158358
+Node: acpi158544
+Node: authenticate159601
+Node: background_color160028
+Node: background_image160701
+Node: badram161251
+Node: blocklist162304
+Node: boot162538
+Node: cat162860
+Node: chainloader163496
+Node: clear164124
+Node: cmosclean164310
+Node: cmosdump164614
+Node: cmostest164909
+Node: cmp165267
+Node: configfile165818
+Node: cpuid166243
+Node: crc166814
+Node: cryptomount167088
+Node: date167835
+Node: devicetree168384
+Node: distrust168781
+Node: drivemap169562
+Node: echo170369
+Node: eval171312
+Node: export171595
+Node: false171906
+Node: gettext172202
+Node: gptsync172649
+Node: halt173594
+Node: hashsum173925
+Node: help175151
+Node: initrd175618
+Node: initrd16176030
+Node: insmod176535
+Node: keystatus176757
+Node: linux177396
+Node: linux16178299
+Node: list_env179013
+Node: list_trusted179379
+Node: load_env179962
+Node: loadfont181635
+Node: loopback182006
+Node: ls182454
+Node: lsfonts182996
+Node: lsmod183178
+Node: md5sum183368
+Node: module183647
+Node: multiboot183959
+Node: nativedisk185067
+Node: normal185466
+Node: normal_exit186233
+Node: parttool186555
+Node: password188062
+Node: password_pbkdf2188344
+Node: play188752
+Node: probe189500
+Node: pxe_unload189882
+Node: read190162
+Node: reboot190511
+Node: regexp190694
+Node: rmmod191231
+Node: save_env191424
+Node: search192446
+Node: sendkey193224
+Node: set199650
+Node: sha1sum199952
+Node: sha256sum200237
+Node: sha512sum200536
+Node: sleep200833
+Node: source201290
+Node: test201842
+Node: true204611
+Node: trust204897
+Node: unset205689
+Node: uppermem205896
+Node: verify_detached206121
+Node: videoinfo207169
+Node: xen_hypervisor207456
+Node: xen_linux207863
+Node: xen_initrd208222
+Node: xen_xsm208478
+Node: Networking commands208780
+Node: net_add_addr209732
+Node: net_add_dns210252
+Node: net_add_route210528
+Node: net_bootp211058
+Node: net_del_addr212647
+Node: net_del_dns212887
+Node: net_del_route213134
+Node: net_get_dhcp_option213379
+Node: net_ipv6_autoconf213865
+Node: net_ls_addr214284
+Node: net_ls_cards214532
+Node: net_ls_dns214768
+Node: net_ls_routes214999
+Node: net_nslookup215206
+Node: Internationalisation215490
+Node: Security222317
+Node: Authentication and authorisation222585
+Node: Using digital signatures225569
+Node: Platform limitations228649
+Node: Platform-specific operations235753
+Node: Supported kernels236818
+Node: Troubleshooting244455
+Node: GRUB only offers a rescue shell244681
+Node: Invoking grub-install247642
+Node: Invoking grub-mkconfig249812
+Node: Invoking grub-mkpasswd-pbkdf2250449
+Node: Invoking grub-mkrelpath251108
+Node: Invoking grub-mkrescue251881
+Node: Invoking grub-mount253630
+Node: Invoking grub-probe256679
+Node: Invoking grub-script-check259273
+Node: Obtaining and Building GRUB260017
+Node: Reporting bugs261290
+Node: Future264106
+Node: Copying This Manual264506
+Node: GNU Free Documentation License264734
+Node: Index287123
 
 End Tag Table
