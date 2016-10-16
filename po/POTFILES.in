@@ -7,7 +7,6 @@
 ./grub-core/bus/i386/ieee1275/pci.c
 ./grub-core/bus/pci.c
 ./grub-core/bus/usb/ehci.c
-./grub-core/bus/usb/emu/usb.c
 ./grub-core/bus/usb/ohci.c
 ./grub-core/bus/usb/serial/common.c
 ./grub-core/bus/usb/serial/ftdi.c
@@ -29,7 +28,6 @@
 ./grub-core/commands/configfile.c
 ./grub-core/commands/date.c
 ./grub-core/commands/echo.c
-./grub-core/commands/efi/acpi.c
 ./grub-core/commands/efi/efifwsetup.c
 ./grub-core/commands/efi/fixvideo.c
 ./grub-core/commands/efi/loadbios.c
@@ -54,7 +52,6 @@
 ./grub-core/commands/i386/coreboot/cb_timestamps.c
 ./grub-core/commands/i386/coreboot/cbls.c
 ./grub-core/commands/i386/cpuid.c
-./grub-core/commands/i386/pc/acpi.c
 ./grub-core/commands/i386/pc/drivemap.c
 ./grub-core/commands/i386/pc/halt.c
 ./grub-core/commands/i386/pc/lsapm.c
@@ -219,7 +216,6 @@
 ./grub-core/gfxmenu/gui_string_util.c
 ./grub-core/gfxmenu/gui_util.c
 ./grub-core/gfxmenu/icon_manager.c
-./grub-core/gfxmenu/model.c
 ./grub-core/gfxmenu/theme_loader.c
 ./grub-core/gfxmenu/view.c
 ./grub-core/gfxmenu/widget-box.c
@@ -346,6 +342,7 @@
 ./grub-core/io/lzopio.c
 ./grub-core/io/offset.c
 ./grub-core/io/xzio.c
+./grub-core/kern/acpi.c
 ./grub-core/kern/arm/cache.c
 ./grub-core/kern/arm/dl.c
 ./grub-core/kern/arm/dl_helper.c
@@ -354,12 +351,15 @@
 ./grub-core/kern/arm64/cache.c
 ./grub-core/kern/arm64/dl.c
 ./grub-core/kern/arm64/dl_helper.c
+./grub-core/kern/arm64/efi/init.c
 ./grub-core/kern/command.c
+./grub-core/kern/compiler-rt.c
 ./grub-core/kern/corecmd.c
 ./grub-core/kern/device.c
 ./grub-core/kern/disk.c
 ./grub-core/kern/disk_common.c
 ./grub-core/kern/dl.c
+./grub-core/kern/efi/acpi.c
 ./grub-core/kern/efi/efi.c
 ./grub-core/kern/efi/init.c
 ./grub-core/kern/efi/mm.c
@@ -386,12 +386,17 @@
 ./grub-core/kern/i386/coreboot/mmap.c
 ./grub-core/kern/i386/dl.c
 ./grub-core/kern/i386/efi/init.c
+./grub-core/kern/i386/efi/tsc.c
 ./grub-core/kern/i386/multiboot_mmap.c
+./grub-core/kern/i386/pc/acpi.c
 ./grub-core/kern/i386/pc/init.c
 ./grub-core/kern/i386/pc/mmap.c
 ./grub-core/kern/i386/qemu/init.c
 ./grub-core/kern/i386/qemu/mmap.c
 ./grub-core/kern/i386/tsc.c
+./grub-core/kern/i386/tsc_pit.c
+./grub-core/kern/i386/tsc_pmtimer.c
+./grub-core/kern/i386/xen/tsc.c
 ./grub-core/kern/ia64/cache.c
 ./grub-core/kern/ia64/dl.c
 ./grub-core/kern/ia64/dl_helper.c
@@ -438,6 +443,7 @@
 ./grub-core/lib/crc64.c
 ./grub-core/lib/crypto.c
 ./grub-core/lib/disk.c
+./grub-core/lib/division.c
 ./grub-core/lib/efi/datetime.c
 ./grub-core/lib/efi/halt.c
 ./grub-core/lib/efi/reboot.c
@@ -452,6 +458,7 @@
 ./grub-core/lib/i386/halt.c
 ./grub-core/lib/i386/pc/biosnum.c
 ./grub-core/lib/i386/pc/vesa_modes_table.c
+./grub-core/lib/i386/random.c
 ./grub-core/lib/i386/reboot.c
 ./grub-core/lib/i386/relocator.c
 ./grub-core/lib/i386/relocator_common_c.c
@@ -587,6 +594,7 @@
 ./grub-core/lib/powerpc/relocator.c
 ./grub-core/lib/priority_queue.c
 ./grub-core/lib/progress.c
+./grub-core/lib/random.c
 ./grub-core/lib/reed_solomon.c
 ./grub-core/lib/relocator.c
 ./grub-core/lib/syslinux_parse.c
@@ -607,7 +615,9 @@
 ./grub-core/lib/xzembed/xz_stream.h
 ./grub-core/loader/aout.c
 ./grub-core/loader/arm/linux.c
+./grub-core/loader/arm64/fdt.c
 ./grub-core/loader/arm64/linux.c
+./grub-core/loader/arm64/xen_boot.c
 ./grub-core/loader/efi/appleloader.c
 ./grub-core/loader/efi/chainloader.c
 ./grub-core/loader/i386/bsd.c
@@ -805,8 +815,11 @@
 ./grub-core/term/uboot/console.c
 ./grub-core/term/usb_keyboard.c
 ./grub-core/term/xen/console.c
+./grub-core/tests/bswap_test.c
 ./grub-core/tests/checksums.h
 ./grub-core/tests/cmdline_cat_test.c
+./grub-core/tests/cmp_test.c
+./grub-core/tests/ctz_test.c
 ./grub-core/tests/div_test.c
 ./grub-core/tests/example_functional_test.c
 ./grub-core/tests/fake_input.c
@@ -814,8 +827,10 @@
 ./grub-core/tests/legacy_password_test.c
 ./grub-core/tests/lib/functional_test.c
 ./grub-core/tests/lib/test.c
+./grub-core/tests/mul_test.c
 ./grub-core/tests/pbkdf2_test.c
 ./grub-core/tests/setjmp_test.c
+./grub-core/tests/shift_test.c
 ./grub-core/tests/signature_test.c
 ./grub-core/tests/signatures.h
 ./grub-core/tests/sleep_test.c
@@ -867,6 +882,7 @@
 ./include/grub/arm/types.h
 ./include/grub/arm/uboot/kernel.h
 ./include/grub/arm64/efi/memory.h
+./include/grub/arm64/fdtload.h
 ./include/grub/arm64/linux.h
 ./include/grub/arm64/reloc.h
 ./include/grub/arm64/setjmp.h
@@ -889,6 +905,9 @@
 ./include/grub/cmos.h
 ./include/grub/color.h
 ./include/grub/command.h
+./include/grub/compiler-rt-emu.h
+./include/grub/compiler-rt.h
+./include/grub/compiler.h
 ./include/grub/crypto.h
 ./include/grub/cryptodisk.h
 ./include/grub/cs5536.h
@@ -1004,6 +1023,7 @@
 ./include/grub/i386/pc/vesa_modes_table.h
 ./include/grub/i386/pci.h
 ./include/grub/i386/pit.h
+./include/grub/i386/pmtimer.h
 ./include/grub/i386/qemu/boot.h
 ./include/grub/i386/qemu/console.h
 ./include/grub/i386/qemu/kernel.h
@@ -1044,9 +1064,7 @@
 ./include/grub/lib/crc.h
 ./include/grub/lib/envblk.h
 ./include/grub/lib/hexdump.h
-./include/grub/libgcc.h
 ./include/grub/libpciaccess.h
-./include/grub/libusb.h
 ./include/grub/linux.h
 ./include/grub/list.h
 ./include/grub/loader.h
@@ -1059,6 +1077,7 @@
 ./include/grub/mips/arc/kernel.h
 ./include/grub/mips/arc/memory.h
 ./include/grub/mips/arc/time.h
+./include/grub/mips/asm.h
 ./include/grub/mips/at_keyboard.h
 ./include/grub/mips/cmos.h
 ./include/grub/mips/io.h
@@ -1091,6 +1110,7 @@
 ./include/grub/misc.h
 ./include/grub/mm.h
 ./include/grub/mm_private.h
+./include/grub/module_verifier.h
 ./include/grub/msdos_partition.h
 ./include/grub/multiboot.h
 ./include/grub/multiboot_loader.h
@@ -1124,6 +1144,7 @@
 ./include/grub/priority_queue.h
 ./include/grub/procfs.h
 ./include/grub/pubkey.h
+./include/grub/random.h
 ./include/grub/reader.h
 ./include/grub/reed_solomon.h
 ./include/grub/relocator.h
@@ -1167,6 +1188,7 @@
 ./include/grub/util/libnvpair.h
 ./include/grub/util/libzfs.h
 ./include/grub/util/misc.h
+./include/grub/util/mkimage.h
 ./include/grub/util/ofpath.h
 ./include/grub/util/resolve.h
 ./include/grub/util/windows.h
@@ -1214,6 +1236,20 @@
 ./include/grub/zfs/zio_checksum.h
 ./include/multiboot.h
 ./include/multiboot2.h
+./include/xen/arch-x86/xen-x86_32.h
+./include/xen/arch-x86/xen-x86_64.h
+./include/xen/arch-x86/xen.h
+./include/xen/event_channel.h
+./include/xen/grant_table.h
+./include/xen/io/blkif.h
+./include/xen/io/console.h
+./include/xen/io/protocols.h
+./include/xen/io/ring.h
+./include/xen/io/xenbus.h
+./include/xen/io/xs_wire.h
+./include/xen/sched.h
+./include/xen/xen-compat.h
+./include/xen/xen.h
 ./tests/cmp_unit_test.c
 ./tests/date_unit_test.c
 ./tests/example_unit_test.c
@@ -1236,6 +1272,8 @@
 ./util/grub-menulst2cfg.c
 ./util/grub-mkfont.c
 ./util/grub-mkimage.c
+./util/grub-mkimage32.c
+./util/grub-mkimage64.c
 ./util/grub-mkimagexx.c
 ./util/grub-mklayout.c
 ./util/grub-mknetdir.c
@@ -1243,6 +1281,10 @@
 ./util/grub-mkrelpath.c
 ./util/grub-mkrescue.c
 ./util/grub-mkstandalone.c
+./util/grub-module-verifier.c
+./util/grub-module-verifier32.c
+./util/grub-module-verifier64.c
+./util/grub-module-verifierXX.c
 ./util/grub-mount.c
 ./util/grub-pe2elf.c
 ./util/grub-probe.c

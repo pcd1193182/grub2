@@ -1,3 +1,30 @@
+grub2 (2.02~beta3-1) unstable; urgency=medium
+
+  [ Colin Watson ]
+  * New upstream beta release.
+  * syslinux_test: Fix out-of-tree build handling.
+  * Drop "grub-shell: Pass -no-pad to xorriso when building floppy images".
+    The floppy images built by grub-shell are no longer over the floppy
+    limit, and this patch now itself causes fddboot_test failures.
+  * Build with GCC 6 (closes: #835964).
+  * linuxefi.patch: Adjust for libgcc removal.
+  * Apply openSUSE patch to accept empty modules for now so that Xen builds
+    work.
+
+  [ Debconf translations ]
+  * [ja] Japanese (Takuma Yamada; closes: #815203, #817084).
+
+  [ Martin Pitt ]
+  * debian/grub-common.init: Don't source /lib/init/vars.sh, we don't depend
+    on initscripts (and don't want to). There is no reason why we would not
+    use the LSB log_action_msg in non-verbose (default) mode, most other
+    packages use it unconditionally (closes: #824875, LP: #1584134).
+
+  [ Steve Beattie ]
+  * debian/rules: Disable PIE builds for GRUB modules (closes: #837493).
+
+ -- Colin Watson <cjwatson@debian.org>  Sun, 16 Oct 2016 10:46:46 +0100
+
 grub2 (2.02~beta2-36) unstable; urgency=medium
 
   [ Colin Watson ]

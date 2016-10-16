@@ -461,8 +461,8 @@
 /* Define if opendisk() in -lutil can be used */
 #undef HAVE_OPENDISK
 
-/* Define to 1 if you have the <pci/pci.h> header file. */
-#undef HAVE_PCI_PCI_H
+/* Define to 1 if you have the <pciaccess.h> header file. */
+#undef HAVE_PCIACCESS_H
 
 /* Define to 1 if you have the `posix_memalign' function. */
 #undef HAVE_POSIX_MEMALIGN
@@ -1068,9 +1068,6 @@
 /* Define to 1 if the system has the type 'unsigned long long int'. */
 #undef HAVE_UNSIGNED_LONG_LONG_INT
 
-/* Define to 1 if you have the <usb.h> header file. */
-#undef HAVE_USB_H
-
 /* Define to 1 if you have the `vasnprintf' function. */
 #undef HAVE_VASNPRINTF
 
@@ -1134,6 +1131,54 @@
 /* Define to 1 if you have the `_set_invalid_parameter_handler' function. */
 #undef HAVE__SET_INVALID_PARAMETER_HANDLER
 
+/* Define to 1 if you have the `__aeabi_idiv' function. */
+#undef HAVE___AEABI_IDIV
+
+/* Define to 1 if you have the `__aeabi_idivmod' function. */
+#undef HAVE___AEABI_IDIVMOD
+
+/* Define to 1 if you have the `__aeabi_lasr' function. */
+#undef HAVE___AEABI_LASR
+
+/* Define to 1 if you have the `__aeabi_llsl' function. */
+#undef HAVE___AEABI_LLSL
+
+/* Define to 1 if you have the `__aeabi_llsr' function. */
+#undef HAVE___AEABI_LLSR
+
+/* Define to 1 if you have the `__aeabi_lmul' function. */
+#undef HAVE___AEABI_LMUL
+
+/* Define to 1 if you have the `__aeabi_memclr' function. */
+#undef HAVE___AEABI_MEMCLR
+
+/* Define to 1 if you have the `__aeabi_memclr4' function. */
+#undef HAVE___AEABI_MEMCLR4
+
+/* Define to 1 if you have the `__aeabi_memclr8' function. */
+#undef HAVE___AEABI_MEMCLR8
+
+/* Define to 1 if you have the `__aeabi_memcpy' function. */
+#undef HAVE___AEABI_MEMCPY
+
+/* Define to 1 if you have the `__aeabi_memcpy4' function. */
+#undef HAVE___AEABI_MEMCPY4
+
+/* Define to 1 if you have the `__aeabi_memcpy8' function. */
+#undef HAVE___AEABI_MEMCPY8
+
+/* Define to 1 if you have the `__aeabi_memset' function. */
+#undef HAVE___AEABI_MEMSET
+
+/* Define to 1 if you have the `__aeabi_uidiv' function. */
+#undef HAVE___AEABI_UIDIV
+
+/* Define to 1 if you have the `__aeabi_uidivmod' function. */
+#undef HAVE___AEABI_UIDIVMOD
+
+/* Define to 1 if you have the `__aeabi_ulcmp' function. */
+#undef HAVE___AEABI_ULCMP
+
 /* Define to 1 if you have the `__ashldi3' function. */
 #undef HAVE___ASHLDI3
 
@@ -1146,11 +1191,59 @@
 /* Define to 1 if you have the `__bswapsi2' function. */
 #undef HAVE___BSWAPSI2
 
+/* Define to 1 if you have the `__bzero' function. */
+#undef HAVE___BZERO
+
+/* Define to 1 if you have the `__chkstk_ms' function. */
+#undef HAVE___CHKSTK_MS
+
+/* Define to 1 if you have the `__ctzdi2' function. */
+#undef HAVE___CTZDI2
+
+/* Define to 1 if you have the `__ctzsi2' function. */
+#undef HAVE___CTZSI2
+
+/* Define to 1 if you have the `__deregister_frame_info' function. */
+#undef HAVE___DEREGISTER_FRAME_INFO
+
+/* Define to 1 if you have the `__divdi3' function. */
+#undef HAVE___DIVDI3
+
+/* Define to 1 if you have the `__divsi3' function. */
+#undef HAVE___DIVSI3
+
 /* Define to 1 if you have the `__lshrdi3' function. */
 #undef HAVE___LSHRDI3
 
+/* Define to 1 if you have the `__moddi3' function. */
+#undef HAVE___MODDI3
+
+/* Define to 1 if you have the `__modsi3' function. */
+#undef HAVE___MODSI3
+
+/* Define to 1 if you have the `__muldi3' function. */
+#undef HAVE___MULDI3
+
+/* Define to 1 if you have the `__register_frame_info' function. */
+#undef HAVE___REGISTER_FRAME_INFO
+
 /* Define to 1 if you have the `__ucmpdi2' function. */
 #undef HAVE___UCMPDI2
+
+/* Define to 1 if you have the `__udivdi3' function. */
+#undef HAVE___UDIVDI3
+
+/* Define to 1 if you have the `__udivsi3' function. */
+#undef HAVE___UDIVSI3
+
+/* Define to 1 if you have the `__umoddi3' function. */
+#undef HAVE___UMODDI3
+
+/* Define to 1 if you have the `__umodsi3' function. */
+#undef HAVE___UMODSI3
+
+/* Define to 1 if you have the `___chkstk_ms' function. */
+#undef HAVE____CHKSTK_MS
 
 /* Locale dir */
 #undef LOCALEDIR
@@ -1216,6 +1309,9 @@
 
 /* The size of `long', as computed by sizeof. */
 #undef SIZEOF_LONG
+
+/* The size of `off_t', as computed by sizeof. */
+#undef SIZEOF_OFF_T
 
 /* The size of `TCHAR', as computed by sizeof. */
 #undef SIZEOF_TCHAR
@@ -1361,42 +1457,77 @@
    used. */
 #undef __GETOPT_PREFIX
 
-/* _GL_INLINE is a portable alternative to ISO C99 plain 'inline'.
-   _GL_EXTERN_INLINE is a portable alternative to 'extern inline'.
-   _GL_INLINE_HEADER_BEGIN contains useful stuff to put
-     in an include file, before uses of _GL_INLINE.
-     It suppresses GCC's bogus "no previous prototype for 'FOO'" diagnostic,
-     when FOO is an inline function in the header; see
-     <http://gcc.gnu.org/bugzilla/show_bug.cgi?id=54113>.
-   _GL_INLINE_HEADER_END contains useful stuff to put
-     in the same include file, after uses of _GL_INLINE.
+/* Please see the Gnulib manual for how to use these macros.
 
    Suppress extern inline with HP-UX cc, as it appears to be broken; see
    <http://lists.gnu.org/archive/html/bug-texinfo/2013-02/msg00030.html>.
 
-   Suppress the use of extern inline on Apple's platforms,
-   as Libc-825.25 (2012-09-19) is incompatible with it; see
-   <http://lists.gnu.org/archive/html/bug-gnulib/2012-12/msg00023.html>.
-   Perhaps Apple will fix this some day.  */
+   Suppress extern inline with Sun C in standards-conformance mode, as it
+   mishandles inline functions that call each other.  E.g., for 'inline void f
+   (void) { } inline void g (void) { f (); }', c99 incorrectly complains
+   'reference to static identifier "f" in extern inline function'.
+   This bug was observed with Sun C 5.12 SunOS_i386 2011/11/16.
+
+   Suppress extern inline (with or without __attribute__ ((__gnu_inline__)))
+   on configurations that mistakenly use 'static inline' to implement
+   functions or macros in standard C headers like <ctype.h>.  For example,
+   if isdigit is mistakenly implemented via a static inline function,
+   a program containing an extern inline function that calls isdigit
+   may not work since the C standard prohibits extern inline functions
+   from calling static functions.  This bug is known to occur on:
+
+     OS X 10.8 and earlier; see:
+     http://lists.gnu.org/archive/html/bug-gnulib/2012-12/msg00023.html
+
+     DragonFly; see
+     http://muscles.dragonflybsd.org/bulk/bleeding-edge-potential/latest-per-pkg/ah-tty-0.3.12.log
+
+     FreeBSD; see:
+     http://lists.gnu.org/archive/html/bug-gnulib/2014-07/msg00104.html
+
+   OS X 10.9 has a macro __header_inline indicating the bug is fixed for C and
+   for clang but remains for g++; see <http://trac.macports.org/ticket/41033>.
+   Assume DragonFly and FreeBSD will be similar.  */
+#if (((defined __APPLE__ && defined __MACH__) \
+      || defined __DragonFly__ || defined __FreeBSD__) \
+     && (defined __header_inline \
+         ? (defined __cplusplus && defined __GNUC_STDC_INLINE__ \
+            && ! defined __clang__) \
+         : ((! defined _DONT_USE_CTYPE_INLINE_ \
+             && (defined __GNUC__ || defined __cplusplus)) \
+            || (defined _FORTIFY_SOURCE && 0 < _FORTIFY_SOURCE \
+                && defined __GNUC__ && ! defined __cplusplus))))
+# define _GL_EXTERN_INLINE_STDHEADER_BUG
+#endif
 #if ((__GNUC__ \
       ? defined __GNUC_STDC_INLINE__ && __GNUC_STDC_INLINE__ \
-      : 199901L <= __STDC_VERSION__ && !defined __HP_cc) \
-     && !defined __APPLE__)
+      : (199901L <= __STDC_VERSION__ \
+         && !defined __HP_cc \
+         && !(defined __SUNPRO_C && __STDC__))) \
+     && !defined _GL_EXTERN_INLINE_STDHEADER_BUG)
 # define _GL_INLINE inline
 # define _GL_EXTERN_INLINE extern inline
-#elif 2 < __GNUC__ + (7 <= __GNUC_MINOR__) && !defined __APPLE__
-# if __GNUC_GNU_INLINE__
+# define _GL_EXTERN_INLINE_IN_USE
+#elif (2 < __GNUC__ + (7 <= __GNUC_MINOR__) && !defined __STRICT_ANSI__ \
+       && !defined _GL_EXTERN_INLINE_STDHEADER_BUG)
+# if defined __GNUC_GNU_INLINE__ && __GNUC_GNU_INLINE__
    /* __gnu_inline__ suppresses a GCC 4.2 diagnostic.  */
 #  define _GL_INLINE extern inline __attribute__ ((__gnu_inline__))
 # else
 #  define _GL_INLINE extern inline
 # endif
 # define _GL_EXTERN_INLINE extern
+# define _GL_EXTERN_INLINE_IN_USE
 #else
 # define _GL_INLINE static _GL_UNUSED
 # define _GL_EXTERN_INLINE static _GL_UNUSED
 #endif
 
+/* In GCC, suppress bogus "no previous prototype for 'FOO'"
+   and "no previous declaration for 'FOO'" diagnostics,
+   when FOO is an inline function in the header; see
+   <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=54113> and
+   <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63877>.  */
 #if 4 < __GNUC__ + (6 <= __GNUC_MINOR__)
 # if defined __GNUC_STDC_INLINE__ && __GNUC_STDC_INLINE__
 #  define _GL_INLINE_HEADER_CONST_PRAGMA
