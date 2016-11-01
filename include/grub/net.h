@@ -191,6 +191,18 @@ typedef struct grub_net_network_level_netaddress
   };
 } grub_net_network_level_netaddress_t;
 
+struct grub_net_route
+{
+  struct grub_net_route *next;
+  struct grub_net_route **prev;
+  grub_net_network_level_netaddress_t target;
+  char *name;
+  struct grub_net_network_level_protocol *prot;
+  int is_gateway;
+  struct grub_net_network_level_interface *interface;
+  grub_net_network_level_address_t gw;
+};
+
 #define FOR_PACKETS(cont,var) for (var = (cont).first; var; var = var->next)
 
 static inline grub_err_t
@@ -258,6 +270,7 @@ typedef struct grub_net
 {
   char *server;
   char *name;
+  int port;
   grub_net_app_level_t protocol;
   grub_net_packets_t packs;
   grub_off_t offset;
@@ -367,6 +380,16 @@ grub_net_card_unregister (struct grub_net_card *card);
 #define FOR_NET_CARDS_SAFE(var, next) for (var = grub_net_cards, next = (var ? var->next : 0); var; var = next, next = (var ? var->next : 0))
 
 
+extern struct grub_net_route *grub_net_routes;
+
+static inline void
+grub_net_route_register (struct grub_net_route *route)
+{
+  grub_list_push (GRUB_AS_LIST_P (&grub_net_routes),
+		  GRUB_AS_LIST (route));
+}
+
+#define FOR_NET_ROUTES(var) for (var = grub_net_routes; var; var = var->next)
 struct grub_net_session *
 grub_net_open_tcp (char *address, grub_uint16_t port);
 
@@ -392,7 +415,8 @@ grub_net_add_route (const char *name,
 grub_err_t
 grub_net_add_route_gw (const char *name,
 		       grub_net_network_level_netaddress_t target,
-		       grub_net_network_level_address_t gw);
+		       grub_net_network_level_address_t gw,
+		       struct grub_net_network_level_interface *inter);
 
 
 #define GRUB_NET_BOOTP_MAC_ADDR_LEN	16
@@ -418,6 +442,66 @@ struct grub_net_bootp_packet
   grub_uint8_t vendor[0];
 } GRUB_PACKED;
 
+struct grub_net_dhcp6_packet
+{
+  grub_uint32_t message_type:8;
+  grub_uint32_t transaction_id:24;
+  grub_uint8_t dhcp_options[0];
+} GRUB_PACKED;
+
+struct grub_net_dhcp6_option {
+  grub_uint16_t code;
+  grub_uint16_t len;
+  grub_uint8_t data[0];
+} GRUB_PACKED;
+
+struct grub_net_dhcp6_option_iana {
+  grub_uint32_t iaid;
+  grub_uint32_t t1;
+  grub_uint32_t t2;
+  grub_uint8_t data[0];
+} GRUB_PACKED;
+
+struct grub_net_dhcp6_option_iaaddr {
+  grub_uint8_t addr[16];
+  grub_uint32_t preferred_lifetime;
+  grub_uint32_t valid_lifetime;
+  grub_uint8_t data[0];
+} GRUB_PACKED;
+
+struct grub_net_dhcp6_option_duid_ll
+{
+  grub_uint16_t type;
+  grub_uint16_t hw_type;
+  grub_uint8_t hwaddr[6];
+} GRUB_PACKED;
+
+enum
+  {
+    GRUB_NET_DHCP6_SOLICIT = 1,
+    GRUB_NET_DHCP6_ADVERTISE = 2,
+    GRUB_NET_DHCP6_REQUEST = 3,
+    GRUB_NET_DHCP6_REPLY = 7
+  };
+
+enum
+  {
+    DHCP6_CLIENT_PORT = 546,
+    DHCP6_SERVER_PORT = 547
+  };
+
+enum
+  {
+    GRUB_NET_DHCP6_OPTION_CLIENTID = 1,
+    GRUB_NET_DHCP6_OPTION_SERVERID = 2,
+    GRUB_NET_DHCP6_OPTION_IA_NA = 3,
+    GRUB_NET_DHCP6_OPTION_IAADDR = 5,
+    GRUB_NET_DHCP6_OPTION_ORO = 6,
+    GRUB_NET_DHCP6_OPTION_ELAPSED_TIME = 8,
+    GRUB_NET_DHCP6_OPTION_DNS_SERVERS = 23,
+    GRUB_NET_DHCP6_OPTION_BOOTFILE_URL = 59
+  };
+
 #define	GRUB_NET_BOOTP_RFC1048_MAGIC_0	0x63
 #define	GRUB_NET_BOOTP_RFC1048_MAGIC_1	0x82
 #define	GRUB_NET_BOOTP_RFC1048_MAGIC_2	0x53
@@ -433,6 +517,7 @@ enum
     GRUB_NET_BOOTP_DOMAIN = 0x0f,
     GRUB_NET_BOOTP_ROOT_PATH = 0x11,
     GRUB_NET_BOOTP_EXTENSIONS_PATH = 0x12,
+    GRUB_NET_BOOTP_VENDOR_CLASS_IDENTIFIER = 0x3C,
     GRUB_NET_BOOTP_END = 0xff
   };
 
@@ -444,6 +529,14 @@ grub_net_configure_by_dhcp_ack (const char *name,
 				grub_size_t size,
 				int is_def, char **device, char **path);
 
+struct grub_net_network_level_interface *
+grub_net_configure_by_dhcpv6_reply (const char *name,
+				    struct grub_net_card *card,
+				    grub_net_interface_flags_t flags,
+				    const struct grub_net_dhcp6_packet *v6,
+				    grub_size_t size,
+				    int is_def, char **device, char **path);
+
 grub_err_t
 grub_net_add_ipv4_local (struct grub_net_network_level_interface *inf,
 			 int mask);
@@ -451,6 +544,10 @@ grub_net_add_ipv4_local (struct grub_net_network_level_interface *inf,
 void
 grub_net_process_dhcp (struct grub_net_buff *nb,
 		       struct grub_net_card *card);
+
+grub_err_t
+grub_net_process_dhcp6 (struct grub_net_buff *nb,
+			struct grub_net_card *card);
 
 int
 grub_net_hwaddr_cmp (const grub_net_link_level_address_t *a,
@@ -479,6 +576,10 @@ grub_net_addr_to_str (const grub_net_network_level_address_t *target,
 		      char *buf);
 void
 grub_net_hwaddr_to_str (const grub_net_link_level_address_t *addr, char *str);
+
+grub_err_t
+grub_env_set_net_property (const char *intername, const char *suffix,
+                           const char *value, grub_size_t len);
 
 void
 grub_net_poll_cards (unsigned time, int *stop_condition);

@@ -191,15 +191,18 @@ grub_net_send_ip4_packet (struct grub_net_network_level_interface *inf,
 			  grub_net_ip_protocol_t proto)
 {
   struct iphdr *iph;
+  grub_err_t err;
 
   COMPILE_TIME_ASSERT (GRUB_NET_OUR_IPV4_HEADER_SIZE == sizeof (*iph));
 
   if (nb->tail - nb->data + sizeof (struct iphdr) > inf->card->mtu)
     return send_fragmented (inf, target, nb, proto, *ll_target_addr);
 
-  grub_netbuff_push (nb, sizeof (*iph));
-  iph = (struct iphdr *) nb->data;
+  err = grub_netbuff_push (nb, sizeof (*iph));
+  if (err)
+    return err;
 
+  iph = (struct iphdr *) nb->data;
   iph->verhdrlen = ((4 << 4) | 5);
   iph->service = 0;
   iph->len = grub_cpu_to_be16 (nb->tail - nb->data);
@@ -235,6 +238,45 @@ handle_dgram (struct grub_net_buff *nb,
   {
     struct udphdr *udph;
     udph = (struct udphdr *) nb->data;
+
+    if (proto == GRUB_NET_IP_UDP && udph->dst == grub_cpu_to_be16_compile_time (DHCP6_CLIENT_PORT))
+      {
+	if (udph->chksum)
+	  {
+	    grub_uint16_t chk, expected;
+	    chk = udph->chksum;
+	    udph->chksum = 0;
+	    expected = grub_net_ip_transport_checksum (nb,
+						       GRUB_NET_IP_UDP,
+						       source,
+						       dest);
+	    if (expected != chk)
+	      {
+		grub_dprintf ("net", "Invalid UDP checksum. "
+			      "Expected %x, got %x\n",
+			      grub_be_to_cpu16 (expected),
+			      grub_be_to_cpu16 (chk));
+		grub_netbuff_free (nb);
+		return GRUB_ERR_NONE;
+	      }
+	    udph->chksum = chk;
+	  }
+
+	err = grub_netbuff_pull (nb, sizeof (*udph));
+	if (err)
+	  {
+	    grub_netbuff_free (nb);
+	    return err;
+	  }
+
+	err = grub_net_process_dhcp6 (nb, card);
+	if (err)
+	  grub_print_error ();
+
+	grub_netbuff_free (nb);
+	return GRUB_ERR_NONE;
+      }
+
     if (proto == GRUB_NET_IP_UDP && grub_be_to_cpu16 (udph->dst) == 68)
       {
 	const struct grub_net_bootp_packet *bootp;
@@ -602,16 +644,19 @@ grub_net_send_ip6_packet (struct grub_net_network_level_interface *inf,
 			  grub_net_ip_protocol_t proto)
 {
   struct ip6hdr *iph;
+  grub_err_t err;
 
   COMPILE_TIME_ASSERT (GRUB_NET_OUR_IPV6_HEADER_SIZE == sizeof (*iph));
 
   if (nb->tail - nb->data + sizeof (struct iphdr) > inf->card->mtu)
     return grub_error (GRUB_ERR_NET_PACKET_TOO_BIG, "packet too big");
 
-  grub_netbuff_push (nb, sizeof (*iph));
-  iph = (struct ip6hdr *) nb->data;
+  err = grub_netbuff_push (nb, sizeof (*iph));
+  if (err)
+    return err;
 
-  iph->version_class_flow = grub_cpu_to_be32 ((6 << 28));
+  iph = (struct ip6hdr *) nb->data;
+  iph->version_class_flow = grub_cpu_to_be32_compile_time ((6 << 28));
   iph->len = grub_cpu_to_be16 (nb->tail - nb->data - sizeof (*iph));
   iph->protocol = proto;
   iph->ttl = 0xff;
