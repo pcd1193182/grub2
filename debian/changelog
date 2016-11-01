@@ -1,3 +1,31 @@
+grub2 (2.02~beta3-3) unstable; urgency=medium
+
+  [ Chad MILLER ]
+  * Signal to zpool that it should emit full names of constituent devices
+    (closes: #824974, LP: #1527727).
+
+  [ Mathieu Trudel-Lapierre ]
+  * Fix support for IPv6 PXE booting under UEFI (LP: #1229458):
+    - misc-fix-invalid-char-strtol.patch: fix strto*l methods invalid chars.
+    - net_read_bracketed_ipv6_addr.patch: read bracketed IPv6 addresses.
+    - bootp_new_net_bootp6_command.patch: add new bootp6 commands.
+    - efinet_uefi_ipv6_pxe_support.patch: teach efinet to allow bootp6.
+    - bootp_process_dhcpack_http_boot.patch: process DHCPACK, support HTTP.
+    - efinet_set_network_from_uefi_devpath.patch: configure network from the
+      devpath provided by the UEFI firmware.
+    - efinet_set_dns_from_uefi_proto.patch: set DNS nameservers and search
+      domains from the UEFI protocol.
+  * debian/patches/install_signed.patch: update patch for the new names of
+    the EFI binaries from shim.
+  * debian/control: Breaks shim (<< 0.9+1474479173.6c180c6-0ubuntu1~) due to
+    the renamed binaries in the new shim.
+  * debian/postinst.in: call on to update-secureboot-policy on configure to
+    make sure users can disable shim validation if necessary. 
+  * debian/build-efi-images: add loopback and squash4 modules to the signed
+    EFI images.
+
+ -- Colin Watson <cjwatson@debian.org>  Tue, 01 Nov 2016 11:10:52 +0000
+
 grub2 (2.02~beta3-2) unstable; urgency=medium
 
   * debian/watch: Switch URL scheme to HTTP.
