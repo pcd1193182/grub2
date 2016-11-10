@@ -1,7 +1,8 @@
 Source: grub2
 Section: admin
 Priority: extra
-Maintainer: GRUB Maintainers <pkg-grub-devel@lists.alioth.debian.org>
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+XSBC-Original-Maintainer: GRUB Maintainers <pkg-grub-devel@lists.alioth.debian.org>
 Uploaders: Felix Zielcke <fzielcke@z-51.de>, Jordi Mallach <jordi@debian.org>, Colin Watson <cjwatson@debian.org>, Ian Campbell <ijc@debian.org>
 Build-Depends: debhelper (>= 7.4.2~),
  patchutils,
@@ -31,7 +32,6 @@ Build-Depends: debhelper (>= 7.4.2~),
  dosfstools [amd64 arm64],
  mtools [amd64 arm64],
  wamerican,
- libxen-dev [i386 amd64],
  libparted-dev [any-ppc64el],
 Build-Conflicts: autoconf2.13, libzfs-dev, libnvpair-dev
 Standards-Version: 3.9.6
