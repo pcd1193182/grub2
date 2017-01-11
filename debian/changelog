@@ -1,3 +1,11 @@
+grub2 (2.02~beta3-3ubuntu2) zesty; urgency=medium
+
+  [ Mauricio Faria de Oliveira ]
+  * Disable os-prober for ppc64el on the PowerNV platform, to reduce the
+    number of entries/clutter from other OSes in Petitboot (LP: #1447500)
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Wed, 11 Jan 2017 11:25:21 -0500
+
 grub2 (2.02~beta3-3ubuntu1) zesty; urgency=medium
 
   [ Colin Watson ]
