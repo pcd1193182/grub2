@@ -1,3 +1,43 @@
+grub2 (2.02~beta3-4) unstable; urgency=medium
+
+  [ Colin Watson ]
+  * Drop build-dependency on libxen-dev, unnecessary now that upstream has
+    taken a copy of the necessary public headers.
+  * Ensure that build-efi-images has a suitable PATH for running mkfs.msdos
+    (thanks, Luca Boccassi; closes: #852001).
+
+  [ dann frazier ]
+  * Add grub2/update_nvram template to allow users to disable NVRAM
+    updates during package upgrades (LP: #1642298).
+
+  [ Debconf translations ]
+  * [ro] Romanian (Andrei POPESCU).
+  * [kk] Kazakh (Baurzhan Muftakhidinov).
+  * [lt] Lithuanian (Rimas Kudelis).
+  * [th] Thai (Theppitak Karoonboonyanan).
+  * [sl] Slovenian (Vanja Cvelbar).
+  * [pl] Polish (Łukasz Dulny).
+  * [eu] Basque (Iñaki Larrañaga Murgoitio; closes: #851981).
+  * [bg] Bulgarian (Damyan Ivanov; closes: #852024).
+  * [de] German (Helge Kreutzmann; closes: #852027).
+  * [vi] Vietnamese (Trần Ngọc Quân).
+  * [ko] Korean (Changwoo Ryu; closes: #852061).
+  * [ru] Russian (Yuri Kozlov; closes: #852064).
+  * [tr] Turkish (Mert Dirik).
+  * [it] Italian (Luca Monducci; closes: #852073).
+  * [cs] Czech (Miroslav Kure; closes: #852189).
+  * [be] Belarusian (Viktar Siarheichyk; closes: #852286).
+  * [eo] Esperanto (Felipe Castro).
+  * [uk] Ukrainian (Yatsenko Alexandr).
+  * [pt_BR] Brazilian Portuguese (Adriano Rafael Gomes; closes: #852325).
+  * [hr] Croatian (Tomislav Krznar).
+  * [ca] Catalan (Innocent De Marchi; closes: #852331).
+  * [fr] French (Baptiste Jammet; closes: #852341).
+  * [da] Danish (Joe Hansen; closes: #852349).
+  * [nl] Dutch (Frans Spiesschaert; closes: #852403).
+
+ -- Colin Watson <cjwatson@debian.org>  Tue, 24 Jan 2017 11:39:45 +0000
+
 grub2 (2.02~beta3-3) unstable; urgency=medium
 
   [ Chad MILLER ]
