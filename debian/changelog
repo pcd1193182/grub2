@@ -1,3 +1,13 @@
+grub2 (2.02~beta3-4ubuntu1) zesty; urgency=medium
+
+  * Merge with Debian; remaining changes:
+    - debian/patches/support_initrd-less_boot.patch: Added knobs to allow
+      non-initrd boot config. (LP: #1640878)
+    - Disable os-prober for ppc64el on the PowerNV platform, to reduce the
+      number of entries/clutter from other OSes in Petitboot (LP: #1447500)
+
+ -- dann frazier <dannf@ubuntu.com>  Thu, 09 Feb 2017 10:06:57 -0700
+
 grub2 (2.02~beta3-4) unstable; urgency=medium
 
   [ Colin Watson ]
@@ -37,6 +47,26 @@ grub2 (2.02~beta3-4) unstable; urgency=medium
   * [nl] Dutch (Frans Spiesschaert; closes: #852403).
 
  -- Colin Watson <cjwatson@debian.org>  Tue, 24 Jan 2017 11:39:45 +0000
+
+grub2 (2.02~beta3-3ubuntu2) zesty; urgency=medium
+
+  [ Mauricio Faria de Oliveira ]
+  * Disable os-prober for ppc64el on the PowerNV platform, to reduce the
+    number of entries/clutter from other OSes in Petitboot (LP: #1447500)
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Wed, 11 Jan 2017 11:25:21 -0500
+
+grub2 (2.02~beta3-3ubuntu1) zesty; urgency=medium
+
+  [ Colin Watson ]
+  * Drop build-dependency on libxen-dev, unnecessary now that upstream has
+    taken a copy of the necessary public headers.
+
+  [ Chris Glass ]
+  * debian/patches/support_initrd-less_boot.patch: Added knobs to allow
+    non-initrd boot config. (LP: #1640878)
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Thu, 10 Nov 2016 14:30:45 -0500
 
 grub2 (2.02~beta3-3) unstable; urgency=medium
 
