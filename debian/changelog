@@ -1,3 +1,13 @@
+grub2 (2.02~beta3-4ubuntu2) zesty; urgency=medium
+
+  * debian/build-efi-images: provide a new grub EFI image which enforces that
+    loaded kernels are signed for Secure Boot: build gsb$arch.efi; which is
+    the same as grub$arch.efi minus the 'linux' module. Without fallback to
+    'linux' for unsigned loading, this makes it effectively enforce having a
+    signed kernel. (LP: #1401532)
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Thu, 30 Mar 2017 17:45:23 -0400
+
 grub2 (2.02~beta3-4ubuntu1) zesty; urgency=medium
 
   * Merge with Debian; remaining changes:
