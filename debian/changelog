@@ -1,3 +1,18 @@
+grub2 (2.02~beta3-4ubuntu3) artful; urgency=medium
+
+  * debian/patches/install_signed.patch, grub-install-extra-removable.patch:
+    - Make sure if we install shim; it should also be exported as the default
+      bootloader to install later to a removable path, if we do.
+    - Rework grub-install-extra-removable.patch to reverse its logic: in the
+      default case, install the bootloader to /EFI/BOOT, unless we're trying
+      to install on a removable device, or explicitly telling grub *not* to
+      do it.
+    - Move installing fb$arch.efi to --no-extra-removable; as we don't want
+      fallback to be installed unless we're also installing to /EFI/BOOT.
+      (LP: #1684341)
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Wed, 26 Apr 2017 21:08:22 -0400
+
 grub2 (2.02~beta3-4ubuntu2) zesty; urgency=medium
 
   * debian/build-efi-images: provide a new grub EFI image which enforces that
