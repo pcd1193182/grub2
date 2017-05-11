@@ -1,3 +1,28 @@
+grub2 (2.02~beta3-4ubuntu4) artful; urgency=medium
+
+  * debian/patches: Rework linuxefi/SecureBoot support and sync with upstream
+    SB patch set:
+    - linuxefi_arm_sb_support.patch: add Secure Boot support for arm for its
+      chainloader.
+    - linuxefi_fix_validation_race.patch: Fix a race in validating images.
+    - linuxefi_chainloader_path.patch: honor the starting path for grub, so
+      images do not need to be started from $root.
+    - linuxefi_chainloader_sb.patch: Fix some more issues in chainloader use
+      when Secure Boot is enabled.
+    - linuxefi_loaders_enforce_sb.patch: Enforce Secure Boot policy for all
+      loaders: don't load the commands when Secure Boot is enabled.
+    - linuxefi_re-enable_linux_cmd.patch: Since we rely on the linux and
+      initrd commands to automatically hand-off to linuxefi/initrdefi; re-
+      enable the linux loader.
+    - linuxefi_chainloader_pe_fixes.patch: PE parsing fixes for chainloading
+      "special" PE images, such as Windows'.
+    - linuxefi_rework_non-sb_cases.patch: rework cases where Secure Boot is
+      disabled or shim validation is disabled so loading works as EFI binaries
+      when it is supposed to.
+    - Removed linuxefi_require_shim.patch; superseded by the above.
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Thu, 11 May 2017 17:05:04 -0400
+
 grub2 (2.02~beta3-4ubuntu3) artful; urgency=medium
 
   * debian/patches/install_signed.patch, grub-install-extra-removable.patch:
