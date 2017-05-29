@@ -82,7 +82,7 @@ Index: b/grub-core/loader/arm64/linux.c
 ===================================================================
 --- a/grub-core/loader/arm64/linux.c
 +++ b/grub-core/loader/arm64/linux.c
-@@ -251,6 +251,7 @@ grub_cmd_linux (grub_command_t cmd __att
+@@ -253,6 +253,7 @@ grub_cmd_linux (grub_command_t cmd __att
    grub_file_t file = 0;
    struct grub_arm64_linux_kernel_header lh;
    struct grub_arm64_linux_pe_header *pe;
@@ -90,7 +90,7 @@ Index: b/grub-core/loader/arm64/linux.c
  
    grub_dl_ref (my_mod);
  
-@@ -295,7 +296,8 @@ grub_cmd_linux (grub_command_t cmd __att
+@@ -297,7 +298,8 @@ grub_cmd_linux (grub_command_t cmd __att
  
    grub_dprintf ("linux", "kernel @ %p\n", kernel_addr);
  
@@ -362,7 +362,7 @@ Index: b/grub-core/loader/i386/efi/linux.c
 +  if (rc < 0)
      {
        grub_error (GRUB_ERR_INVALID_COMMAND, N_("%s has invalid signature"), argv[0]);
-       grub_free (kernel);
+       goto fail;
 Index: b/include/grub/efi/linux.h
 ===================================================================
 --- a/include/grub/efi/linux.h
