@@ -1,3 +1,12 @@
+grub2 (2.02~beta3-4ubuntu5) artful; urgency=medium
+
+  * debian/patches/linuxefi.patch: fix double-free caused by an extra
+    grub_free() call in this patch (which the previous upload didn't change).
+  * debian/patches/linuxefi_rework_non-sb_cases.patch,
+    debian/patches/linuxefi_non_sb_fallback.patch: refreshed.
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Mon, 29 May 2017 16:28:41 -0400
+
 grub2 (2.02~beta3-4ubuntu4) artful; urgency=medium
 
   * debian/patches: Rework linuxefi/SecureBoot support and sync with upstream

@@ -23,9 +23,9 @@ Index: b/grub-core/loader/i386/efi/linux.c
      {
 -      grub_error (GRUB_ERR_INVALID_COMMAND, N_("%s has invalid signature"), argv[0]);
 +      grub_error (GRUB_ERR_ACCESS_DENIED, N_("%s has invalid signature"), argv[0]);
-       grub_free (kernel);
        goto fail;
      }
+ 
 Index: b/grub-core/loader/i386/linux.c
 ===================================================================
 --- a/grub-core/loader/i386/linux.c
