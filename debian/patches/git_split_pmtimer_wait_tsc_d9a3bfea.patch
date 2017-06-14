@@ -14,7 +14,7 @@ Index: b/grub-core/Makefile.am
 ===================================================================
 --- a/grub-core/Makefile.am
 +++ b/grub-core/Makefile.am
-@@ -100,6 +100,7 @@ KERNEL_HEADER_FILES += $(top_srcdir)/inc
+@@ -101,6 +101,7 @@ KERNEL_HEADER_FILES += $(top_srcdir)/inc
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/i386/tsc.h
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/acpi.h
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/pci.h
@@ -22,7 +22,7 @@ Index: b/grub-core/Makefile.am
  endif
  
  if COND_i386_coreboot
-@@ -155,6 +156,7 @@ KERNEL_HEADER_FILES += $(top_srcdir)/inc
+@@ -156,6 +157,7 @@ KERNEL_HEADER_FILES += $(top_srcdir)/inc
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/i386/tsc.h
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/pci.h
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/acpi.h

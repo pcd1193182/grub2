@@ -17,19 +17,19 @@ Based on patch by Michael Chang.
  grub-core/kern/efi/acpi.c         |   59 ++++++++++++++
  grub-core/kern/i386/efi/tsc.c     |   40 +++++++++
  grub-core/kern/i386/pc/acpi.c     |   83 +++++++++++++++++++
- grub-core/kern/i386/tsc.c         |   94 ++++++++++++++++++++++
+ grub-core/kern/i386/tsc.c         |  121 ++++++----------------------
  grub-core/kern/i386/tsc_pit.c     |   84 +++++++++++++++++++
  grub-core/kern/i386/tsc_pmtimer.c |  160 ++++++++++++++++++++++++++++++++++++++
  grub-core/kern/i386/xen/tsc.c     |   40 +++++++++
  include/grub/acpi.h               |   17 ++--
- include/grub/i386/tsc.h           |   54 ++++++++++++
- 13 files changed, 682 insertions(+), 21 deletions(-)
+ include/grub/i386/tsc.h           |   26 ++++++
+ 13 files changed, 589 insertions(+), 113 deletions(-)
 
 Index: b/grub-core/Makefile.am
 ===================================================================
 --- a/grub-core/Makefile.am
 +++ b/grub-core/Makefile.am
-@@ -98,6 +98,7 @@ if COND_i386_efi
+@@ -99,6 +99,7 @@ if COND_i386_efi
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/efi/efi.h
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/efi/disk.h
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/i386/tsc.h
@@ -37,7 +37,7 @@ Index: b/grub-core/Makefile.am
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/pci.h
  endif
  
-@@ -109,10 +110,12 @@ KERNEL_HEADER_FILES += $(top_srcdir)/inc
+@@ -110,10 +111,12 @@ KERNEL_HEADER_FILES += $(top_srcdir)/inc
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/gfxterm.h
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/font.h
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/bufio.h
@@ -50,7 +50,7 @@ Index: b/grub-core/Makefile.am
  endif
  
  if COND_i386_qemu
-@@ -151,11 +154,13 @@ KERNEL_HEADER_FILES += $(top_srcdir)/inc
+@@ -152,11 +155,13 @@ KERNEL_HEADER_FILES += $(top_srcdir)/inc
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/efi/disk.h
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/i386/tsc.h
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/pci.h
@@ -64,7 +64,7 @@ Index: b/grub-core/Makefile.am
  endif
  
  if COND_mips
-@@ -230,11 +235,13 @@ KERNEL_HEADER_FILES += $(top_srcdir)/inc
+@@ -231,11 +236,13 @@ KERNEL_HEADER_FILES += $(top_srcdir)/inc
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/efi/efi.h
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/efi/disk.h
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/arm/system.h
@@ -82,7 +82,7 @@ Index: b/grub-core/Makefile.core.def
 ===================================================================
 --- a/grub-core/Makefile.core.def
 +++ b/grub-core/Makefile.core.def
-@@ -174,8 +174,20 @@ kernel = {
+@@ -174,9 +174,21 @@ kernel = {
    efi = kern/efi/init.c;
    efi = kern/efi/mm.c;
    efi = term/efi/console.c;
@@ -92,6 +92,7 @@ Index: b/grub-core/Makefile.core.def
 +  i386_multiboot = kern/i386/pc/acpi.c;
 +  i386_coreboot = kern/acpi.c;
 +  i386_multiboot = kern/acpi.c;
+   common = kern/efi/sb.c;
  
    x86 = kern/i386/tsc.c;
 +  x86 = kern/i386/tsc_pit.c;
@@ -103,7 +104,7 @@ Index: b/grub-core/Makefile.core.def
  
    i386_efi = kern/i386/efi/init.c;
    i386_efi = bus/pci.c;
-@@ -187,6 +199,7 @@ kernel = {
+@@ -188,6 +200,7 @@ kernel = {
    x86_64_efi = bus/pci.c;
  
    xen = kern/i386/tsc.c;
@@ -111,7 +112,7 @@ Index: b/grub-core/Makefile.core.def
    x86_64_xen = kern/x86_64/xen/hypercall.S;
    i386_xen = kern/i386/xen/hypercall.S;
    xen = kern/xen/init.c;
-@@ -685,10 +698,8 @@ module = {
+@@ -686,10 +699,8 @@ module = {
    name = acpi;
  
    common = commands/acpi.c;
@@ -724,6 +725,8 @@ Index: b/include/grub/acpi.h
 +grub_acpi_find_fadt (void);
 +
  #endif /* ! GRUB_ACPI_HEADER */
+Index: b/include/grub/i386/tsc.h
+===================================================================
 --- a/include/grub/i386/tsc.h
 +++ b/include/grub/i386/tsc.h
 @@ -20,9 +20,35 @@
@@ -762,9 +765,10 @@ Index: b/include/grub/acpi.h
 +}
  
  #endif /* ! KERNEL_CPU_TSC_HEADER */
-
---- a/grub-core/kern/i386/tsc.c	2013-12-24 11:29:27.000000000 -0500
-+++ b/grub-core/kern/i386/tsc.c	2016-05-13 11:35:39.943480805 -0400
+Index: b/grub-core/kern/i386/tsc.c
+===================================================================
+--- a/grub-core/kern/i386/tsc.c
++++ b/grub-core/kern/i386/tsc.c
 @@ -1,7 +1,6 @@
  /* kern/i386/tsc.c - x86 TSC time source implementation
   * Requires Pentium or better x86 CPU that supports the RDTSC instruction.
@@ -787,7 +791,7 @@ Index: b/include/grub/acpi.h
  
  /* This defines the value TSC had at the epoch (that is, when we calibrated it). */
  static grub_uint64_t tsc_boot_time;
-@@ -40,26 +33,20 @@
+@@ -40,26 +33,20 @@ static grub_uint64_t tsc_boot_time;
     in 32-bit.  */
  grub_uint32_t grub_tsc_rate;
  
@@ -822,7 +826,7 @@ Index: b/include/grub/acpi.h
    grub_uint32_t a,b,c,d;
    if (! grub_cpu_is_cpuid_supported ())
      return 0;
-@@ -67,91 +54,41 @@
+@@ -67,91 +54,41 @@ grub_cpu_is_tsc_supported (void)
    grub_cpuid(1,a,b,c,d);
  
    return (d & (1 << 4)) != 0;
