@@ -36,7 +36,7 @@ Index: b/grub-core/kern/dl.c
 ===================================================================
 --- a/grub-core/kern/dl.c
 +++ b/grub-core/kern/dl.c
-@@ -337,8 +337,11 @@ grub_dl_resolve_symbols (grub_dl_t mod,
+@@ -338,8 +338,11 @@ grub_dl_resolve_symbols (grub_dl_t mod,
      if (s->sh_type == SHT_SYMTAB)
        break;
  
@@ -49,7 +49,7 @@ Index: b/grub-core/kern/dl.c
  
  #ifdef GRUB_MODULES_MACHINE_READONLY
    mod->symtab = grub_malloc (s->sh_size);
-@@ -580,6 +583,9 @@ grub_dl_relocate_symbols (grub_dl_t mod,
+@@ -581,6 +584,9 @@ grub_dl_relocate_symbols (grub_dl_t mod,
  
  	if (seg)
  	  {
