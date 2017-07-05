@@ -1,3 +1,11 @@
+grub2 (2.02~beta3-4ubuntu6) artful; urgency=medium
+
+  * debian/patches/mount-ext4-fs-with-crypto-enabled.patch: Allow grub to
+    mount an EXT4 partition that has the 'encrypt' feature enabled
+    (closes: 840204)
+
+ -- Tyler Hicks <tyhicks@canonical.com>  Wed, 05 Jul 2017 22:23:03 +0000
+
 grub2 (2.02~beta3-4ubuntu5) artful; urgency=medium
 
   * debian/patches/linuxefi.patch: fix double-free caused by an extra
