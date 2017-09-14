@@ -1,3 +1,10 @@
+grub2 (2.02~beta2-36ubuntu3.14) xenial; urgency=medium
+
+  * Add grub2/update_nvram template to allow users to disable NVRAM
+    updates during package upgrades (LP: #1642298).
+
+ -- dann frazier <dannf@ubuntu.com>  Thu, 14 Sep 2017 16:13:39 -0600
+
 grub2 (2.02~beta2-36ubuntu3.13) xenial; urgency=medium
 
   * Fix EFIPersistentMemory (PMEM) support; incorrectly handled as "standard"
