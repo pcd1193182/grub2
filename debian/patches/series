@@ -65,3 +65,5 @@ efinet_set_network_from_uefi_devpath.patch
 efinet_set_dns_from_uefi_proto.patch
 support_initrd-less_boot.patch
 mount-ext4-fs-with-crypto-enabled.patch
+headers_for_device_macros.patch
+fix_check_for_sys_macros.patch
