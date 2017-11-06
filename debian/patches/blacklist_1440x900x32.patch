@@ -1,4 +1,4 @@
-From 6028197c25a10f5836cc8015ae6085edacf90dff Mon Sep 17 00:00:00 2001
+From 5ddc1ba27f1dd87fae059f7f395d0e8e78f334db Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Mon, 13 Jan 2014 12:13:11 +0000
 Subject: Blacklist 1440x900x32 from VBE preferred mode handling

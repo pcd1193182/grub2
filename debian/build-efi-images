@@ -162,5 +162,7 @@ NET_MODULES="$CD_MODULES
 "$grub_mkimage" -O "$platform" -o "$outdir/grubnet$efi_name.efi" \
 	-d "$grub_core" -c "$workdir/grub-bootstrap.cfg" \
 	-m "$workdir/memdisk-netboot.fat" -p /grub $NET_MODULES
+"$grub_mkimage" -O "$platform" -o "$outdir/gsb$efi_name.efi" \
+	-d "$grub_core" -p /EFI/ubuntu $(echo $GRUB_MODULES | sed -e 's/linux //')
 
 exit 0

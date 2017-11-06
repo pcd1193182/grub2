@@ -56,7 +56,7 @@
 
 static char *target;
 static int removable = 0;
-static int force_extra_removable = 0;
+static int no_extra_removable = 0;
 static int recheck = 0;
 static int update_nvram = 1;
 static char *install_device = NULL;
@@ -115,7 +115,7 @@ enum
     OPTION_PRODUCT_VERSION,
     OPTION_UEFI_SECURE_BOOT,
     OPTION_NO_UEFI_SECURE_BOOT,
-    OPTION_FORCE_EXTRA_REMOVABLE
+    OPTION_NO_EXTRA_REMOVABLE
   };
 
 static int fs_probe = 1;
@@ -218,8 +218,8 @@ argp_parser (int key, char *arg, struct argp_state *state)
       removable = 1;
       return 0;
 
-    case OPTION_FORCE_EXTRA_REMOVABLE:
-      force_extra_removable = 1;
+    case OPTION_NO_EXTRA_REMOVABLE:
+      no_extra_removable = 1;
       return 0;
 
     case OPTION_ALLOW_FLOPPY:
@@ -328,8 +328,8 @@ static struct argp_option options[] = {
    N_("do not install an image usable with UEFI Secure Boot, even if the "
       "system was currently started using it. "
       "This option is only available on EFI."), 2},
-  {"force-extra-removable", OPTION_FORCE_EXTRA_REMOVABLE, 0, 0,
-   N_("force installation to the removable media path also. "
+  {"no-extra-removable", OPTION_NO_EXTRA_REMOVABLE, 0, 0,
+   N_("Do not install bootloader code to the removable media path. "
       "This option is only available on EFI."), 2},
   {0, 0, 0, 0, 0, 0}
 };
@@ -879,16 +879,25 @@ check_component_exists(const char *dir,
 static void
 also_install_removable(const char *src,
 		       const char *base_efidir,
+		       const char *efi_suffix,
 		       const char *efi_suffix_upper)
 {
   char *efi_file = NULL;
   char *dst = NULL;
   char *cur = NULL;
   char *found = NULL;
+  char *fb_signed = NULL;
+  char *fb_file = NULL;
+  char *generic_efidir = NULL;
 
+  if (!efi_suffix)
+    grub_util_error ("%s", _("efi_suffix not set"));
   if (!efi_suffix_upper)
     grub_util_error ("%s", _("efi_suffix_upper not set"));
+
   efi_file = xasprintf ("BOOT%s.EFI", efi_suffix_upper);
+  fb_signed = xasprintf ("fb%s.efi.signed", efi_suffix);
+  fb_file = xasprintf ("fb%s.efi", efi_suffix);
 
   /* We need to install in $base_efidir/EFI/BOOT/$efi_file, but we
    * need to cope with case-insensitive stuff here. Build the path one
@@ -910,23 +919,32 @@ also_install_removable(const char *src,
   if (found == NULL)
     found = xstrdup("BOOT");
   dst = grub_util_path_concat (2, cur, found);
-  cur = xstrdup (dst);
-  free (dst);
+  free (cur);
   free (found);
-  grub_install_mkdir_p (cur);
+  grub_install_mkdir_p (dst);
+  generic_efidir = xstrdup (dst);
+  free (dst);
 
   /* Now $efi_file */
-  found = check_component_exists(cur, efi_file);
+  found = check_component_exists(generic_efidir, efi_file);
   if (found == NULL)
     found = xstrdup(efi_file);
-  dst = grub_util_path_concat (2, cur, found);
-  cur = xstrdup (dst);
-  free (dst);
+  dst = grub_util_path_concat (2, generic_efidir, found);
   free (found);
-  grub_install_copy_file (src, cur, 1);
-
-  free (cur);
+  grub_install_copy_file (src, dst, 1);
   free (efi_file);
+  free (dst);
+
+  /* Now try to also install fallback */
+  efi_file = grub_util_path_concat (2, "/usr/lib/shim/", fb_signed);
+  dst = grub_util_path_concat (2, generic_efidir, fb_file);
+  free (generic_efidir);
+  grub_install_copy_file (efi_file, dst, 0);
+  free (efi_file);
+  free (dst);
+
+  free (fb_file);
+  free (fb_signed);
 }
 
 int
@@ -979,8 +997,8 @@ main (int argc, char *argv[])
       bootloader_id = xstrdup ("grub");
     }
 
-  if (removable && force_extra_removable)
-    grub_util_error (_("Invalid to use both --removable and --force_extra_removable"));
+  if (removable && no_extra_removable)
+    grub_util_error (_("Invalid to use both --removable and --no_extra_removable"));
 
   if (!grub_install_source_directory)
     {
@@ -2026,20 +2044,28 @@ main (int argc, char *argv[])
 	  {
 	    char *shim_signed = NULL;
 	    char *mok_signed = NULL, *mok_file = NULL;
-	    char *fb_signed = NULL, *fb_file = NULL;
+	    char *bootcsv = NULL;
 	    char *config_dst;
 	    FILE *config_dst_f;
 
 	    shim_signed = xasprintf ("/usr/lib/shim/shim%s.efi.signed", efi_suffix);
 	    mok_signed = xasprintf ("mm%s.efi.signed", efi_suffix);
 	    mok_file = xasprintf ("mm%s.efi", efi_suffix);
-	    fb_signed = xasprintf ("fb%s.efi.signed", efi_suffix);
-	    fb_file = xasprintf ("fb%s.efi", efi_suffix);
+	    bootcsv = xasprintf ("BOOT%s.CSV", efi_suffix_upper);
 
 	    if (grub_util_is_regular (shim_signed))
 	      {
 		char *chained_base, *chained_dst;
-		char *mok_src, *mok_dst, *fb_src, *fb_dst;
+		char *mok_src, *mok_dst, *bootcsv_src, *bootcsv_dst;
+
+		/* Install grub as our chained bootloader */
+		chained_base = xasprintf ("grub%s.efi", efi_suffix);
+		chained_dst = grub_util_path_concat (2, efidir, chained_base);
+		grub_install_copy_file (efi_signed, chained_dst, 1);
+		free (chained_dst);
+		free (chained_base);
+
+		/* Now handle shim, and make this our new "default" loader. */
 		if (!removable)
 		  {
 		    free (efi_file);
@@ -2048,15 +2074,12 @@ main (int argc, char *argv[])
 		    dst = grub_util_path_concat (2, efidir, efi_file);
 		  }
 		grub_install_copy_file (shim_signed, dst, 1);
-		chained_base = xasprintf ("grub%s.efi", efi_suffix);
-		chained_dst = grub_util_path_concat (2, efidir, chained_base);
-		grub_install_copy_file (efi_signed, chained_dst, 1);
-		free (chained_dst);
-		free (chained_base);
+		free (efi_signed);
+		efi_signed = xstrdup (shim_signed);
 
-		/* Not critical, so not an error if they are not present (as it
-		   won't be for older releases); but if we have them, make
-		   sure they are installed.  */
+		/* Not critical, so not an error if it is not present (as it
+		   won't be for older releases); but if we have MokManager,
+		   make sure it gets installed.  */
 		mok_src = grub_util_path_concat (2, "/usr/lib/shim/",
 						    mok_signed);
 		mok_dst = grub_util_path_concat (2, efidir,
@@ -2066,14 +2089,13 @@ main (int argc, char *argv[])
 		free (mok_src);
 		free (mok_dst);
 
-		fb_src = grub_util_path_concat (2, "/usr/lib/shim/",
-						    fb_signed);
-		fb_dst = grub_util_path_concat (2, efidir,
-						    fb_file);
-		grub_install_copy_file (fb_src,
-					fb_dst, 0);
-		free (fb_src);
-		free (fb_dst);
+		/* Also try to install boot.csv for fallback */
+		bootcsv_src = grub_util_path_concat (2, "/usr/lib/shim/",
+							bootcsv);
+		bootcsv_dst = grub_util_path_concat (2, efidir, bootcsv);
+		grub_install_copy_file (bootcsv_src, bootcsv_dst, 0);
+		free (bootcsv_src);
+		free (bootcsv_dst);
 	      }
 	    else
 	      grub_install_copy_file (efi_signed, dst, 1);
@@ -2084,14 +2106,14 @@ main (int argc, char *argv[])
 	    fprintf (config_dst_f, "configfile $prefix/grub.cfg\n");
 	    fclose (config_dst_f);
 	    free (config_dst);
-	    if (force_extra_removable)
-	      also_install_removable(efi_signed, base_efidir, efi_suffix_upper);
+	    if (!removable && !no_extra_removable)
+	      also_install_removable(efi_signed, base_efidir, efi_suffix, efi_suffix_upper);
 	  }
 	else
 	  {
 	    grub_install_copy_file (imgfile, dst, 1);
-	    if (force_extra_removable)
-	      also_install_removable(imgfile, base_efidir, efi_suffix_upper);
+	    if (!removable && !no_extra_removable)
+	      also_install_removable(imgfile, base_efidir, efi_suffix, efi_suffix_upper);
 	  }
 	free (dst);
       }
