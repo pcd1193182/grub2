@@ -1,30 +1,31 @@
-From 5cd20151112bfde11cf3ed8b9920797d7cabe325 Mon Sep 17 00:00:00 2001
+From dcdb222cf4b007d1850a746074a6b5d1cac6c517 Mon Sep 17 00:00:00 2001
 From: Matthew Garrett <mjg@redhat.com>
 Date: Mon, 13 Jan 2014 12:13:15 +0000
 Subject: Add "linuxefi" loader which avoids ExitBootServices
 
-Origin: vendor, http://pkgs.fedoraproject.org/cgit/grub2.git/tree/grub2-linuxefi.patch
+Origin: vendor, https://github.com/rhboot/grub2/commit/6510d5b51950e9245ff88882127e596dc6e5d39f
 Forwarded: no
-Last-Update: 2016-09-19
+Last-Update: 2017-11-01
 
 Patch-Name: linuxefi.patch
 ---
- grub-core/Makefile.core.def       |    8 
- grub-core/kern/efi/mm.c           |   32 +++
- grub-core/loader/i386/efi/linux.c |  370 ++++++++++++++++++++++++++++++++++++++
- include/grub/efi/efi.h            |    3 
- include/grub/i386/linux.h         |    1 
- 5 files changed, 414 insertions(+)
+ grub-core/Makefile.core.def       |   8 +
+ grub-core/kern/efi/mm.c           |  32 ++++
+ grub-core/loader/i386/efi/linux.c | 371 ++++++++++++++++++++++++++++++++++++++
+ include/grub/efi/efi.h            |   3 +
+ include/grub/i386/linux.h         |   1 +
+ 5 files changed, 415 insertions(+)
  create mode 100644 grub-core/loader/i386/efi/linux.c
 
-Index: b/grub-core/Makefile.core.def
-===================================================================
+diff --git a/grub-core/Makefile.core.def b/grub-core/Makefile.core.def
+index 2dfa22a92..68e47a727 100644
 --- a/grub-core/Makefile.core.def
 +++ b/grub-core/Makefile.core.def
-@@ -1731,6 +1731,14 @@ module = {
+@@ -1733,6 +1733,14 @@ module = {
+   enable = x86_64_efi;
  };
  
- module = {
++module = {
 +  name = linuxefi;
 +  efi = loader/i386/efi/linux.c;
 +  efi = lib/cmdline.c;
@@ -32,15 +33,14 @@ Index: b/grub-core/Makefile.core.def
 +  enable = x86_64_efi;
 +};
 +
-+module = {
+ module = {
    name = chain;
    efi = loader/efi/chainloader.c;
-   i386_pc = loader/i386/pc/chainloader.c;
-Index: b/grub-core/kern/efi/mm.c
-===================================================================
+diff --git a/grub-core/kern/efi/mm.c b/grub-core/kern/efi/mm.c
+index 20a47aaf5..efb15cc1b 100644
 --- a/grub-core/kern/efi/mm.c
 +++ b/grub-core/kern/efi/mm.c
-@@ -49,6 +49,38 @@ static grub_efi_uintn_t finish_desc_size
+@@ -49,6 +49,38 @@ static grub_efi_uintn_t finish_desc_size;
  static grub_efi_uint32_t finish_desc_version;
  int grub_efi_is_finished = 0;
  
@@ -79,11 +79,12 @@ Index: b/grub-core/kern/efi/mm.c
  /* Allocate pages. Return the pointer to the first of allocated pages.  */
  void *
  grub_efi_allocate_pages (grub_efi_physical_address_t address,
-Index: b/grub-core/loader/i386/efi/linux.c
-===================================================================
+diff --git a/grub-core/loader/i386/efi/linux.c b/grub-core/loader/i386/efi/linux.c
+new file mode 100644
+index 000000000..6afa13d41
 --- /dev/null
 +++ b/grub-core/loader/i386/efi/linux.c
-@@ -0,0 +1,370 @@
+@@ -0,0 +1,371 @@
 +/*
 + *  GRUB  --  GRand Unified Bootloader
 + *  Copyright (C) 2012  Free Software Foundation, Inc.
@@ -180,13 +181,13 @@ Index: b/grub-core/loader/i386/efi/linux.c
 +  grub_dl_unref (my_mod);
 +  loaded = 0;
 +  if (initrd_mem)
-+    grub_efi_free_pages((grub_efi_physical_address_t)(grub_addr_t)initrd_mem, BYTES_TO_PAGES(params->ramdisk_size));
++    grub_efi_free_pages((grub_efi_physical_address_t)initrd_mem, BYTES_TO_PAGES(params->ramdisk_size));
 +  if (linux_cmdline)
-+    grub_efi_free_pages((grub_efi_physical_address_t)(grub_addr_t)linux_cmdline, BYTES_TO_PAGES(params->cmdline_size + 1));
++    grub_efi_free_pages((grub_efi_physical_address_t)linux_cmdline, BYTES_TO_PAGES(params->cmdline_size + 1));
 +  if (kernel_mem)
-+    grub_efi_free_pages((grub_efi_physical_address_t)(grub_addr_t)kernel_mem, BYTES_TO_PAGES(kernel_size));
++    grub_efi_free_pages((grub_efi_physical_address_t)kernel_mem, BYTES_TO_PAGES(kernel_size));
 +  if (params)
-+    grub_efi_free_pages((grub_efi_physical_address_t)(grub_addr_t)params, BYTES_TO_PAGES(16384));
++    grub_efi_free_pages((grub_efi_physical_address_t)params, BYTES_TO_PAGES(16384));
 +  return GRUB_ERR_NONE;
 +}
 +
@@ -234,7 +235,7 @@ Index: b/grub-core/loader/i386/efi/linux.c
 +    }
 +
 +  params->ramdisk_size = size;
-+  params->ramdisk_image = (grub_uint32_t)(grub_addr_t) initrd_mem;
++  params->ramdisk_image = (grub_uint32_t)(grub_uint64_t) initrd_mem;
 +
 +  ptr = initrd_mem;
 +
@@ -261,7 +262,7 @@ Index: b/grub-core/loader/i386/efi/linux.c
 +  grub_free (files);
 +
 +  if (initrd_mem && grub_errno)
-+    grub_efi_free_pages((grub_efi_physical_address_t)(grub_addr_t)initrd_mem, BYTES_TO_PAGES(size));
++    grub_efi_free_pages((grub_efi_physical_address_t)initrd_mem, BYTES_TO_PAGES(size));
 +
 +  return grub_errno;
 +}
@@ -305,7 +306,8 @@ Index: b/grub-core/loader/i386/efi/linux.c
 +
 +  if (! grub_linuxefi_secure_validate (kernel, filelen))
 +    {
-+      grub_error (GRUB_ERR_INVALID_COMMAND, N_("%s has invalid signature"), argv[0]);
++      grub_error (GRUB_ERR_INVALID_COMMAND, N_("%s has invalid signature"),
++		  argv[0]);
 +      goto fail;
 +    }
 +
@@ -321,7 +323,7 @@ Index: b/grub-core/loader/i386/efi/linux.c
 +      goto fail;
 +    }
 +
-+  grub_memset (params, 0, 16384);
++  memset (params, 0, 16384);
 +
 +  if (grub_file_read (file, &lh, sizeof (lh)) != sizeof (lh))
 +    {
@@ -369,7 +371,7 @@ Index: b/grub-core/loader/i386/efi/linux.c
 +                              linux_cmdline + sizeof (LINUX_IMAGE) - 1,
 +			      lh.cmdline_size - (sizeof (LINUX_IMAGE) - 1));
 +
-+  lh.cmd_line_ptr = (grub_uint32_t)(grub_addr_t)linux_cmdline;
++  lh.cmd_line_ptr = (grub_uint32_t)(grub_uint64_t)linux_cmdline;
 +
 +  handover_offset = lh.handover_offset;
 +
@@ -406,10 +408,10 @@ Index: b/grub-core/loader/i386/efi/linux.c
 +    {
 +      grub_loader_set (grub_linuxefi_boot, grub_linuxefi_unload, 0);
 +      loaded = 1;
-+      lh.code32_start = (grub_uint32_t)(grub_addr_t) kernel_mem;
++      lh.code32_start = (grub_uint32_t)(grub_uint64_t) kernel_mem;
 +    }
 +
-+  grub_memcpy (params, &lh, 2 * 512);
++  memcpy(params, &lh, 2 * 512);
 +
 +  params->type_of_loader = 0x21;
 +
@@ -425,13 +427,13 @@ Index: b/grub-core/loader/i386/efi/linux.c
 +    }
 +
 +  if (linux_cmdline && !loaded)
-+    grub_efi_free_pages((grub_efi_physical_address_t)(grub_addr_t)linux_cmdline, BYTES_TO_PAGES(lh.cmdline_size + 1));
++    grub_efi_free_pages((grub_efi_physical_address_t)linux_cmdline, BYTES_TO_PAGES(lh.cmdline_size + 1));
 +
 +  if (kernel_mem && !loaded)
-+    grub_efi_free_pages((grub_efi_physical_address_t)(grub_addr_t)kernel_mem, BYTES_TO_PAGES(kernel_size));
++    grub_efi_free_pages((grub_efi_physical_address_t)kernel_mem, BYTES_TO_PAGES(kernel_size));
 +
 +  if (params && !loaded)
-+    grub_efi_free_pages((grub_efi_physical_address_t)(grub_addr_t)params, BYTES_TO_PAGES(16384));
++    grub_efi_free_pages((grub_efi_physical_address_t)params, BYTES_TO_PAGES(16384));
 +
 +  return grub_errno;
 +}
@@ -454,11 +456,11 @@ Index: b/grub-core/loader/i386/efi/linux.c
 +  grub_unregister_command (cmd_linux);
 +  grub_unregister_command (cmd_initrd);
 +}
-Index: b/include/grub/efi/efi.h
-===================================================================
+diff --git a/include/grub/efi/efi.h b/include/grub/efi/efi.h
+index e9c601f34..764cd11f5 100644
 --- a/include/grub/efi/efi.h
 +++ b/include/grub/efi/efi.h
-@@ -40,6 +40,9 @@ void EXPORT_FUNC(grub_efi_stall) (grub_e
+@@ -40,6 +40,9 @@ void EXPORT_FUNC(grub_efi_stall) (grub_efi_uintn_t microseconds);
  void *
  EXPORT_FUNC(grub_efi_allocate_pages) (grub_efi_physical_address_t address,
  				      grub_efi_uintn_t pages);
@@ -468,8 +470,8 @@ Index: b/include/grub/efi/efi.h
  void EXPORT_FUNC(grub_efi_free_pages) (grub_efi_physical_address_t address,
  				       grub_efi_uintn_t pages);
  int
-Index: b/include/grub/i386/linux.h
-===================================================================
+diff --git a/include/grub/i386/linux.h b/include/grub/i386/linux.h
+index da0ca3b83..fc36bdaf3 100644
 --- a/include/grub/i386/linux.h
 +++ b/include/grub/i386/linux.h
 @@ -139,6 +139,7 @@ struct linux_kernel_header

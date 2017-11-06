@@ -329,7 +329,7 @@ static struct argp_option options[] = {
       "system was currently started using it. "
       "This option is only available on EFI."), 2},
   {"no-extra-removable", OPTION_NO_EXTRA_REMOVABLE, 0, 0,
-   N_("Do not install bootloader code to the removable path. "
+   N_("Do not install bootloader code to the removable media path. "
       "This option is only available on EFI."), 2},
   {0, 0, 0, 0, 0, 0}
 };
@@ -879,7 +879,7 @@ check_component_exists(const char *dir,
 static void
 also_install_removable(const char *src,
 		       const char *base_efidir,
-                       const char *efi_suffix,
+		       const char *efi_suffix,
 		       const char *efi_suffix_upper)
 {
   char *efi_file = NULL;
@@ -923,6 +923,7 @@ also_install_removable(const char *src,
   free (found);
   grub_install_mkdir_p (dst);
   generic_efidir = xstrdup (dst);
+  free (dst);
 
   /* Now $efi_file */
   found = check_component_exists(generic_efidir, efi_file);
@@ -932,15 +933,18 @@ also_install_removable(const char *src,
   free (found);
   grub_install_copy_file (src, dst, 1);
   free (efi_file);
+  free (dst);
 
   /* Now try to also install fallback */
   efi_file = grub_util_path_concat (2, "/usr/lib/shim/", fb_signed);
   dst = grub_util_path_concat (2, generic_efidir, fb_file);
+  free (generic_efidir);
   grub_install_copy_file (efi_file, dst, 0);
   free (efi_file);
+  free (dst);
+
   free (fb_file);
   free (fb_signed);
-  free (dst);
 }
 
 int
@@ -994,7 +998,7 @@ main (int argc, char *argv[])
     }
 
   if (removable && no_extra_removable)
-    grub_util_error (_("Invalid use of both --removable and --no_extra_removable"));
+    grub_util_error (_("Invalid to use both --removable and --no_extra_removable"));
 
   if (!grub_install_source_directory)
     {
@@ -2016,9 +2020,13 @@ main (int argc, char *argv[])
 	  if (!removable && update_nvram)
 	    {
 	      /* Try to make this image bootable using the EFI Boot Manager, if available.  */
-	      grub_install_register_efi (efidir_grub_dev,
+	      int error = 0;
+	      error = grub_install_register_efi (efidir_grub_dev,
 					 "\\System\\Library\\CoreServices",
 					 efi_distributor);
+	      if (error)
+	        grub_util_error (_("efibootmgr failed to register the boot entry: %s"),
+				 strerror (error));
 	    }
 
 	  grub_device_close (ins_dev);
@@ -2026,6 +2034,7 @@ main (int argc, char *argv[])
 	  free (mach_kernel);
 	  break;
 	}
+      /* FALLTHROUGH */
     case GRUB_INSTALL_PLATFORM_ARM_EFI:
     case GRUB_INSTALL_PLATFORM_ARM64_EFI:
     case GRUB_INSTALL_PLATFORM_IA64_EFI:
@@ -2035,7 +2044,7 @@ main (int argc, char *argv[])
 	  {
 	    char *shim_signed = NULL;
 	    char *mok_signed = NULL, *mok_file = NULL;
-            char *bootcsv = NULL;
+	    char *bootcsv = NULL;
 	    char *config_dst;
 	    FILE *config_dst_f;
 
@@ -2065,8 +2074,8 @@ main (int argc, char *argv[])
 		    dst = grub_util_path_concat (2, efidir, efi_file);
 		  }
 		grub_install_copy_file (shim_signed, dst, 1);
-		free(efi_signed);
-		efi_signed = xstrdup(shim_signed);
+		free (efi_signed);
+		efi_signed = xstrdup (shim_signed);
 
 		/* Not critical, so not an error if it is not present (as it
 		   won't be for older releases); but if we have MokManager,
@@ -2112,6 +2121,7 @@ main (int argc, char *argv[])
 	{
 	  char * efifile_path;
 	  char * part;
+	  int error = 0;
 
 	  /* Try to make this image bootable using the EFI Boot Manager, if available.  */
 	  if (!efi_distributor || efi_distributor[0] == '\0')
@@ -2128,8 +2138,11 @@ main (int argc, char *argv[])
 			  efidir_grub_dev->disk->name,
 			  (part ? ",": ""), (part ? : ""));
 	  grub_free (part);
-	  grub_install_register_efi (efidir_grub_dev,
-				     efifile_path, efi_distributor);
+	  error = grub_install_register_efi (efidir_grub_dev,
+					     efifile_path, efi_distributor);
+	  if (error)
+	    grub_util_error (_("efibootmgr failed to register the boot entry: %s"),
+			     strerror (error));
 	}
       break;
 

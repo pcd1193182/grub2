@@ -1,6 +1,6 @@
 /*
  *  GRUB  --  GRand Unified Bootloader
- *  Copyright (C) 2008  Free Software Foundation, Inc.
+ *  Copyright (C) 2013  Free Software Foundation, Inc.
  *
  *  GRUB is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,4 +16,7 @@
  *  along with GRUB.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* sb.c (via dl.c) requires grub/cpu/linux.h */
+#ifndef GRUB_LINUX_CPU_HEADER
+#define GRUB_LINUX_CPU_HEADER 1
+
+#endif /* ! GRUB_LINUX_CPU_HEADER */

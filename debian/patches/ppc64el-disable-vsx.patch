@@ -1,4 +1,4 @@
-From 56ed94226a871f6d177342208403f2f4da2f5e2e Mon Sep 17 00:00:00 2001
+From 3fbaa0f501261a15e53bc97a15c034d058c4668b Mon Sep 17 00:00:00 2001
 From: Paulo Flabiano Smorigo <pfsmorigo@linux.vnet.ibm.com>
 Date: Thu, 25 Sep 2014 19:33:39 -0300
 Subject: Disable VSX instruction
@@ -21,7 +21,7 @@ Patch-Name: ppc64el-disable-vsx.patch
  1 file changed, 12 insertions(+)
 
 diff --git a/grub-core/kern/powerpc/ieee1275/startup.S b/grub-core/kern/powerpc/ieee1275/startup.S
-index 21c884b..de9a960 100644
+index 21c884b43..de9a9601a 100644
 --- a/grub-core/kern/powerpc/ieee1275/startup.S
 +++ b/grub-core/kern/powerpc/ieee1275/startup.S
 @@ -20,6 +20,8 @@

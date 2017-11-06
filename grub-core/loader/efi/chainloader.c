@@ -131,6 +131,8 @@ copy_file_path (grub_efi_file_path_device_path_t *fp,
     if (*p == '/')
       *p = '\\';
 
+  /* File Path is NULL terminated */
+  fp->path_name[size++] = '\0';
   fp->header.length = size * sizeof (grub_efi_char16_t) + sizeof (*fp);
 }
 
@@ -165,8 +167,10 @@ make_file_path (grub_efi_device_path_t *dp, const char *filename)
       d = GRUB_EFI_NEXT_DEVICE_PATH (d);
     }
 
+  /* File Path is NULL terminated. Allocate space for 2 extra characters */
+  /* FIXME why we split path in two components? */
   file_path = grub_malloc (size
-			   + ((grub_strlen (dir_start) + 1)
+			   + ((grub_strlen (dir_start) + 2)
 			      * GRUB_MAX_UTF16_PER_UTF8
 			      * sizeof (grub_efi_char16_t))
 			   + sizeof (grub_efi_file_path_device_path_t) * 2);
@@ -375,7 +379,7 @@ relocate_coff (pe_coff_loader_image_context_t *context,
       return GRUB_EFI_UNSUPPORTED;
     }
 
-  adjust = (grub_uint64_t)(unsigned long)data - context->image_address;
+  adjust = (grub_uint64_t)data - context->image_address;
   if (adjust == 0)
     return GRUB_EFI_SUCCESS;
 
@@ -552,7 +556,7 @@ handle_image (void *data, grub_efi_uint32_t datasize)
 	       context.image_size, datasize);
 
   efi_status = efi_call_3 (b->allocate_pool, GRUB_EFI_LOADER_DATA,
-			   buffer_size, (void **) &buffer);
+			   buffer_size, (void**) &buffer);
 
   if (efi_status != GRUB_EFI_SUCCESS)
     {
@@ -581,7 +585,7 @@ handle_image (void *data, grub_efi_uint32_t datasize)
 
   char *reloc_base, *reloc_base_end;
   grub_dprintf ("chain", "reloc_dir: %p reloc_size: 0x%08x\n",
-		context.reloc_dir->rva,
+		(void *)(unsigned long long)context.reloc_dir->rva,
 		context.reloc_dir->size);
   reloc_base = image_address (buffer_aligned, context.image_size,
 			      context.reloc_dir->rva);
@@ -1023,7 +1027,7 @@ grub_cmd_chainloader (grub_command_t cmd __attribute__ ((unused)),
     }
 #endif
 
-  rc = grub_linuxefi_secure_validate((void *)(grub_addr_t)address, fsize);
+  rc = grub_linuxefi_secure_validate((void *)address, fsize);
   grub_dprintf ("chain", "linuxefi_secure_validate: %d\n", rc);
   if (rc > 0)
     {

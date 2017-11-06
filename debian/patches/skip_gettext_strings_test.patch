@@ -1,4 +1,4 @@
-From a9f38d1eca4f43e587f377e1669acbab4d51bfab Mon Sep 17 00:00:00 2001
+From a1efefe88ada06e8b82fc7ed41e42bf36783417a Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Mon, 13 Jan 2014 12:13:34 +0000
 Subject: Don't run gettext_strings_test
@@ -14,7 +14,7 @@ Patch-Name: skip_gettext_strings_test.patch
  1 file changed, 3 insertions(+)
 
 diff --git a/tests/gettext_strings_test.in b/tests/gettext_strings_test.in
-index 5c305e7..15405cf 100644
+index 5c305e75b..15405cfcd 100644
 --- a/tests/gettext_strings_test.in
 +++ b/tests/gettext_strings_test.in
 @@ -1,5 +1,8 @@

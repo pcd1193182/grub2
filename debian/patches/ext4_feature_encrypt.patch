@@ -1,4 +1,4 @@
-From 734668238fcc0ef691a080839e04f33854fa133a Mon Sep 17 00:00:00 2001
+From 47a39db1b92abd0030b6be6c3a809bd9e4f39def Mon Sep 17 00:00:00 2001
 From: Eric Biggers <ebiggers@google.com>
 Date: Thu, 29 Jun 2017 13:27:49 +0000
 Subject: Allow GRUB to mount ext2/3/4 filesystems that have the encryption
@@ -24,8 +24,11 @@ ext4_encrypt'; note that this requires e2fsprogs v1.43+ and Linux v4.1+.
 
 Signed-off-by: Eric Biggers <ebiggers@google.com>
 
-Origin: backport, http://git.savannah.gnu.org/cgit/grub.git/commit/?id=734668238fcc0ef691a080839e04f33854fa133a
+Origin: upstream, https://git.savannah.gnu.org/cgit/grub.git/commit/?id=734668238fcc0ef691a080839e04f33854fa133a
 Bug-Debian: https://bugs.debian.org/840204
+Last-Update: 2017-07-06
+
+Patch-Name: ext4_feature_encrypt.patch
 ---
  grub-core/fs/ext2.c          | 23 ++++++++++++++++++++++-
  tests/ext234_test.in         |  1 +
@@ -33,7 +36,7 @@ Bug-Debian: https://bugs.debian.org/840204
  3 files changed, 33 insertions(+), 1 deletion(-)
 
 diff --git a/grub-core/fs/ext2.c b/grub-core/fs/ext2.c
-index cdce63b..b8ad75a 100644
+index cdce63bcc..b8ad75a0f 100644
 --- a/grub-core/fs/ext2.c
 +++ b/grub-core/fs/ext2.c
 @@ -102,6 +102,7 @@ GRUB_MOD_LICENSE ("GPLv3+");
@@ -102,7 +105,7 @@ index cdce63b..b8ad75a 100644
    grub_free (fdiro);
  
 diff --git a/tests/ext234_test.in b/tests/ext234_test.in
-index 892b99c..4f1eb52 100644
+index c986960a8..5f4553607 100644
 --- a/tests/ext234_test.in
 +++ b/tests/ext234_test.in
 @@ -30,3 +30,4 @@ fi
@@ -111,10 +114,10 @@ index 892b99c..4f1eb52 100644
  "@builddir@/grub-fs-tester" ext4_metabg
 +"@builddir@/grub-fs-tester" ext4_encrypt
 diff --git a/tests/util/grub-fs-tester.in b/tests/util/grub-fs-tester.in
-index 88cbe73..fd7e0f1 100644
+index 2337771a1..5219aa8b4 100644
 --- a/tests/util/grub-fs-tester.in
 +++ b/tests/util/grub-fs-tester.in
-@@ -132,6 +132,12 @@ for LOGSECSIZE in $(range "$MINLOGSECSIZE" "$MAXLOGSECSIZE" 1); do
+@@ -135,6 +135,12 @@ for ((LOGSECSIZE=MINLOGSECSIZE;LOGSECSIZE<=MAXLOGSECSIZE;LOGSECSIZE=LOGSECSIZE +
  		# Could go further but what's the point?
  	    MAXBLKSIZE=$((65536*1024))
  	    ;;
@@ -127,17 +130,14 @@ index 88cbe73..fd7e0f1 100644
  	xext*)
  	    MINBLKSIZE=1024
  	    if [ $MINBLKSIZE -lt $SECSIZE ]; then
-@@ -763,6 +769,10 @@ for LOGSECSIZE in $(range "$MINLOGSECSIZE" "$MAXLOGSECSIZE" 1); do
+@@ -766,6 +772,10 @@ for ((LOGSECSIZE=MINLOGSECSIZE;LOGSECSIZE<=MAXLOGSECSIZE;LOGSECSIZE=LOGSECSIZE +
  		    MKE2FS_DEVICE_SECTSIZE=$SECSIZE "mkfs.ext4" -O meta_bg,^resize_inode -b $BLKSIZE -L "$FSLABEL" -q "${LODEVICES[0]}"
  		    MOUNTFS=ext4
  		    ;;
 +               xext4_encrypt)
-+                   MKE2FS_DEVICE_SECTSIZE=$SECSIZE "mkfs.ext4" -O encrypt -b $BLKSIZE -L "$FSLABEL" -q "${LODEVICES[0]}"
++                   MKE2FS_DEVICE_SECTSIZE=$SECSIZE "mkfs.ext4" -O encrypt -b $BLKSIZE -L "$FSLABEL" -q "${MOUNTDEVICE}"
 +                   MOUNTFS=ext4
 +                   ;;
  		xext*)
  		    MKE2FS_DEVICE_SECTSIZE=$SECSIZE "mkfs.$fs" -b $BLKSIZE -L "$FSLABEL" -q "${LODEVICES[0]}" ;;
  		xxfs)
--- 
-cgit v1.0-41-gc330
-

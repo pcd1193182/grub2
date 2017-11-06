@@ -1,4 +1,4 @@
-From 2ab7163936ead20f940be9bd7a9ad3280b8367d9 Mon Sep 17 00:00:00 2001
+From 3a95a8bc9cabe580c68830315bc7c0faa9689570 Mon Sep 17 00:00:00 2001
 From: Chris Glass <chris.glass@canonical.com>
 Date: Thu, 10 Nov 2016 13:44:25 -0500
 Subject: Added knobs to allow non-initrd boot config
@@ -18,7 +18,7 @@ Patch-Name: support_initrd-less_boot.patch
  4 files changed, 38 insertions(+), 4 deletions(-)
 
 diff --git a/docs/grub.info b/docs/grub.info
-index 7a4cbee..6bf3e22 100644
+index 954cc9a27..b850016a0 100644
 --- a/docs/grub.info
 +++ b/docs/grub.info
 @@ -1404,6 +1404,19 @@ it must be quoted.  For example:
@@ -42,7 +42,7 @@ index 7a4cbee..6bf3e22 100644
  existing configurations, but have better replacements:
  
 diff --git a/docs/grub.texi b/docs/grub.texi
-index 82cf7bb..4080a97 100644
+index f1216d19d..e5dbc6375 100644
 --- a/docs/grub.texi
 +++ b/docs/grub.texi
 @@ -1509,6 +1509,19 @@ This option sets the English text of the string that will be displayed in
@@ -66,7 +66,7 @@ index 82cf7bb..4080a97 100644
  
  The following options are still accepted for compatibility with existing
 diff --git a/util/grub-mkconfig.in b/util/grub-mkconfig.in
-index c3ea64d..da041b1 100644
+index ad716384b..9fca8cd7e 100644
 --- a/util/grub-mkconfig.in
 +++ b/util/grub-mkconfig.in
 @@ -245,7 +245,9 @@ export GRUB_DEFAULT \
@@ -81,7 +81,7 @@ index c3ea64d..da041b1 100644
  if test "x${grub_cfg}" != "x"; then
    rm -f "${grub_cfg}.new"
 diff --git a/util/grub.d/10_linux.in b/util/grub.d/10_linux.in
-index f7de2e1..32c801a 100644
+index 4cf321c54..0fc0b7a35 100644
 --- a/util/grub.d/10_linux.in
 +++ b/util/grub.d/10_linux.in
 @@ -179,11 +179,17 @@ EOF

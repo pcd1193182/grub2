@@ -1,4 +1,4 @@
-From f00d3163dfde3fb528aee59912748d9d25282a69 Mon Sep 17 00:00:00 2001
+From ac079bf1e853233680cb1c6742864bea8d7a4f5d Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Sun, 18 Sep 2016 17:26:00 +0100
 Subject: syslinux_test: Fix out-of-tree build handling
@@ -24,10 +24,10 @@ Patch-Name: syslinux-test-out-of-tree.patch
  3 files changed, 25 insertions(+), 25 deletions(-)
 
 diff --git a/Makefile.am b/Makefile.am
-index 00a9663..bc90303 100644
+index 7795baeb6..f0ab1adc3 100644
 --- a/Makefile.am
 +++ b/Makefile.am
-@@ -460,9 +460,3 @@ ChangeLog: FORCE
+@@ -473,9 +473,3 @@ ChangeLog: FORCE
  	fi
  
  EXTRA_DIST += ChangeLog ChangeLog-2015
@@ -38,7 +38,7 @@ index 00a9663..bc90303 100644
 -	(for x in tests/syslinux/ubuntu10.04_grub.cfg.in ; do cat $(srcdir)/"$$x"; done) | $(top_builddir)/config.status --file=$@:-
 -CLEANFILES += tests/syslinux/ubuntu10.04_grub.cfg
 diff --git a/tests/syslinux/ubuntu10.04_grub.cfg.in b/tests/syslinux/ubuntu10.04_grub.cfg.in
-index 846e4ac..f285afb 100644
+index 846e4acf0..f285afb1e 100644
 --- a/tests/syslinux/ubuntu10.04_grub.cfg.in
 +++ b/tests/syslinux/ubuntu10.04_grub.cfg.in
 @@ -1,4 +1,4 @@
@@ -142,7 +142,7 @@ index 846e4ac..f285afb 100644
  }
  }
 diff --git a/tests/syslinux_test.in b/tests/syslinux_test.in
-index fc4edd8..4ba94c5 100644
+index fc4edd8ef..4ba94c576 100644
 --- a/tests/syslinux_test.in
 +++ b/tests/syslinux_test.in
 @@ -2,15 +2,21 @@

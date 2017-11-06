@@ -1,4 +1,4 @@
-From fd99a933c3e74ae10034446ef5ee54749c4b06d0 Mon Sep 17 00:00:00 2001
+From 2a07511e55684ce70732f66ecbed6019a2f050c1 Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Mon, 13 Jan 2014 12:13:05 +0000
 Subject: Fall back to i386-pc if booted using EFI but -efi is missing
@@ -17,7 +17,7 @@ Patch-Name: install_efi_fallback.patch
  1 file changed, 17 insertions(+), 2 deletions(-)
 
 diff --git a/grub-core/osdep/linux/platform.c b/grub-core/osdep/linux/platform.c
-index 775b6c0..35f1bcc 100644
+index 775b6c031..35f1bcc0e 100644
 --- a/grub-core/osdep/linux/platform.c
 +++ b/grub-core/osdep/linux/platform.c
 @@ -19,10 +19,12 @@

@@ -1,4 +1,4 @@
-From 2102091743e048ef927bcbc91868d601620b0e8e Mon Sep 17 00:00:00 2001
+From 0c58db5d40a48dff1dbc87bb964a4b34abab3017 Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Mon, 13 Jan 2014 12:13:22 +0000
 Subject: Install signed images if UEFI Secure Boot is enabled
@@ -15,11 +15,11 @@ Last-Update: 2016-11-01
 
 Patch-Name: install_signed.patch
 ---
- util/grub-install.c |  196 +++++++++++++++++++++++++++++++++++++++-------------
+ util/grub-install.c | 196 +++++++++++++++++++++++++++++++++++++++-------------
  1 file changed, 149 insertions(+), 47 deletions(-)
 
-Index: b/util/grub-install.c
-===================================================================
+diff --git a/util/grub-install.c b/util/grub-install.c
+index 0e1303ee5..4f092afe7 100644
 --- a/util/grub-install.c
 +++ b/util/grub-install.c
 @@ -80,6 +80,7 @@ static char *label_color;
@@ -41,7 +41,7 @@ Index: b/util/grub-install.c
    };
  
  static int fs_probe = 1;
-@@ -234,6 +237,14 @@ argp_parser (int key, char *arg, struct
+@@ -234,6 +237,14 @@ argp_parser (int key, char *arg, struct argp_state *state)
        bootloader_id = xstrdup (arg);
        return 0;
  
@@ -216,7 +216,7 @@ Index: b/util/grub-install.c
  	{
  	  char *uuid = NULL;
  	  /*  generic method (used on coreboot and ata mod).  */
-@@ -1870,7 +1904,75 @@ main (int argc, char *argv[])
+@@ -1871,7 +1905,75 @@ main (int argc, char *argv[])
      case GRUB_INSTALL_PLATFORM_IA64_EFI:
        {
  	char *dst = grub_util_path_concat (2, efidir, efi_file);
@@ -225,7 +225,7 @@ Index: b/util/grub-install.c
 +	  {
 +	    char *shim_signed = NULL;
 +	    char *mok_signed = NULL, *mok_file = NULL;
-+            char *bootcsv = NULL;
++	    char *bootcsv = NULL;
 +	    char *config_dst;
 +	    FILE *config_dst_f;
 +
@@ -255,8 +255,8 @@ Index: b/util/grub-install.c
 +		    dst = grub_util_path_concat (2, efidir, efi_file);
 +		  }
 +		grub_install_copy_file (shim_signed, dst, 1);
-+		free(efi_signed);
-+		efi_signed = xstrdup(shim_signed);
++		free (efi_signed);
++		efi_signed = xstrdup (shim_signed);
 +
 +		/* Not critical, so not an error if it is not present (as it
 +		   won't be for older releases); but if we have MokManager,

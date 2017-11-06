@@ -1,17 +1,22 @@
-From 93ff3333a3fbd26e07cd425166b7d7fb243f033f Mon Sep 17 00:00:00 2001
+From 362fc9a67cb29de09ce2ec12890d3b4d37281665 Mon Sep 17 00:00:00 2001
 From: Matthew Garrett <mjg59@coreos.com>
 Date: Tue, 14 Jul 2015 16:58:51 -0700
-Subject: [PATCH] Fix race in EFI validation
+Subject: Fix race in EFI validation
 
+Origin: vendor, https://github.com/rhboot/grub2/commit/57414c73c4e80baedcb96ff35be9306fb0599a09
+Forwarded: no
+Last-Update: 2017-11-01
+
+Patch-Name: linuxefi_fix_efi_validation_race.patch
 ---
- grub-core/loader/i386/efi/linux.c |   40 ++++++++------------------------------
- 1 file changed, 9 insertions(+), 31 deletions(-)
+ grub-core/loader/i386/efi/linux.c | 44 ++++++++++-----------------------------
+ 1 file changed, 11 insertions(+), 33 deletions(-)
 
-Index: b/grub-core/loader/i386/efi/linux.c
-===================================================================
+diff --git a/grub-core/loader/i386/efi/linux.c b/grub-core/loader/i386/efi/linux.c
+index ddd50dbf1..9a3cc1819 100644
 --- a/grub-core/loader/i386/efi/linux.c
 +++ b/grub-core/loader/i386/efi/linux.c
-@@ -154,7 +154,7 @@ grub_cmd_linux (grub_command_t cmd __att
+@@ -154,7 +154,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
    grub_file_t file = 0;
    struct linux_kernel_header lh;
    grub_ssize_t len, start, filelen;
@@ -20,7 +25,7 @@ Index: b/grub-core/loader/i386/efi/linux.c
  
    grub_dl_ref (my_mod);
  
-@@ -191,10 +191,6 @@ grub_cmd_linux (grub_command_t cmd __att
+@@ -191,10 +191,6 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
        goto fail;
      }
  
@@ -31,9 +36,12 @@ Index: b/grub-core/loader/i386/efi/linux.c
    params = grub_efi_allocate_pages_max (0x3fffffff, BYTES_TO_PAGES(16384));
  
    if (! params)
-@@ -205,13 +201,7 @@ grub_cmd_linux (grub_command_t cmd __att
+@@ -203,15 +199,9 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+       goto fail;
+     }
  
-   grub_memset (params, 0, 16384);
+-  memset (params, 0, 16384);
++  grub_memset (params, 0, 16384);
  
 -  if (grub_file_read (file, &lh, sizeof (lh)) != sizeof (lh))
 -    {
@@ -46,7 +54,7 @@ Index: b/grub-core/loader/i386/efi/linux.c
  
    if (lh.boot_flag != grub_cpu_to_le16 (0xaa55))
      {
-@@ -271,26 +261,11 @@ grub_cmd_linux (grub_command_t cmd __att
+@@ -271,27 +261,12 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
        goto fail;
      }
  
@@ -56,7 +64,10 @@ Index: b/grub-core/loader/i386/efi/linux.c
 -		  argv[0]);
 -      goto fail;
 -    }
--
++  grub_memcpy (kernel_mem, (char *)kernel + start, len);
++  grub_loader_set (grub_linuxefi_boot, grub_linuxefi_unload, 0);
++  loaded=1;
+ 
 -  if (grub_file_read (file, kernel_mem, len) != len && !grub_errno)
 -    {
 -      grub_error (GRUB_ERR_BAD_OS, N_("premature end of file %s"),
@@ -67,17 +78,16 @@ Index: b/grub-core/loader/i386/efi/linux.c
 -    {
 -      grub_loader_set (grub_linuxefi_boot, grub_linuxefi_unload, 0);
 -      loaded = 1;
--      lh.code32_start = (grub_uint32_t)(grub_addr_t) kernel_mem;
+-      lh.code32_start = (grub_uint32_t)(grub_uint64_t) kernel_mem;
 -    }
-+  grub_memcpy (kernel_mem, (char *)kernel + start, len);
-+  grub_loader_set (grub_linuxefi_boot, grub_linuxefi_unload, 0);
-+  loaded=1;
- 
+-
+-  memcpy(params, &lh, 2 * 512);
 +  lh.code32_start = (grub_uint32_t)(grub_uint64_t) kernel_mem;
-   grub_memcpy (params, &lh, 2 * 512);
++  grub_memcpy (params, &lh, 2 * 512);
  
    params->type_of_loader = 0x21;
-@@ -300,6 +275,9 @@ grub_cmd_linux (grub_command_t cmd __att
+ 
+@@ -300,6 +275,9 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
    if (file)
      grub_file_close (file);
  

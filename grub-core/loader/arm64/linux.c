@@ -26,8 +26,8 @@
 #include <grub/mm.h>
 #include <grub/types.h>
 #include <grub/cpu/linux.h>
-#include <grub/cpu/fdtload.h>
 #include <grub/efi/efi.h>
+#include <grub/efi/fdtload.h>
 #include <grub/efi/linux.h>
 #include <grub/efi/pe32.h>
 #include <grub/i18n.h>
@@ -150,7 +150,9 @@ free_params (void)
 }
 
 grub_err_t
-grub_arm64_uefi_boot_image (grub_addr_t addr, grub_size_t size, char *args)
+grub_arm64_uefi_boot_image (grub_addr_t addr __attribute__ ((unused)),
+			    grub_size_t size __attribute__ ((unused)),
+			    char *args)
 {
   grub_err_t retval;
 
@@ -159,8 +161,6 @@ grub_arm64_uefi_boot_image (grub_addr_t addr, grub_size_t size, char *args)
     return grub_errno;
 
   grub_dprintf ("linux", "linux command line: '%s'\n", args);
-  grub_dprintf ("linux", "using kernel addr %p (was 0x%08lx); offset 0x%08x (size %zd)",
-                kernel_addr, addr, handover_offset, size);
 
   retval = grub_efi_linux_boot ((char *)kernel_addr, handover_offset,
 				kernel_addr);

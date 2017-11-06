@@ -1,7 +1,7 @@
-From a741a53e352513787aadb6c933bf1e3bc1dbe83c Mon Sep 17 00:00:00 2001
+From 903ae8b9aae3856017c40c1a34bf3d182e7023a8 Mon Sep 17 00:00:00 2001
 From: Peter Jones <pjones@redhat.com>
 Date: Fri, 10 Jun 2016 14:06:15 -0400
-Subject: [PATCH] Rework even more of efi chainload so non-sb cases work right.
+Subject: Rework even more of efi chainload so non-sb cases work right.
 
 This ensures that if shim protocol is not loaded, or is loaded but shim
 is disabled, we will fall back to a correct load method for the efi
@@ -40,17 +40,23 @@ nosb + grub + win                   success     success
 Resolves: rhbz#1344512
 
 Signed-off-by: Peter Jones <pjones@redhat.com>
+
+Origin: vendor, https://github.com/rhboot/grub2/commit/149cdec4f9e5fd039a698ef20530bad588b6aeeb
+Forwarded: no
+Last-Update: 2017-11-01
+
+Patch-Name: linuxefi_rework_non-sb_efi_chainload.patch
 ---
- grub-core/kern/efi/sb.c            |   14 +++-
- grub-core/loader/arm64/linux.c     |    4 -
- grub-core/loader/efi/chainloader.c |  115 ++++++++++++++++++++++---------------
- grub-core/loader/efi/linux.c       |   13 ++--
- grub-core/loader/i386/efi/linux.c  |    7 +-
- include/grub/efi/linux.h           |    2 
+ grub-core/kern/efi/sb.c            |  14 +++--
+ grub-core/loader/arm64/linux.c     |   4 +-
+ grub-core/loader/efi/chainloader.c | 115 ++++++++++++++++++++++---------------
+ grub-core/loader/efi/linux.c       |  13 +++--
+ grub-core/loader/i386/efi/linux.c  |   7 ++-
+ include/grub/efi/linux.h           |   2 +-
  6 files changed, 97 insertions(+), 58 deletions(-)
 
-Index: b/grub-core/kern/efi/sb.c
-===================================================================
+diff --git a/grub-core/kern/efi/sb.c b/grub-core/kern/efi/sb.c
+index a41b6c5b8..d74778b0c 100644
 --- a/grub-core/kern/efi/sb.c
 +++ b/grub-core/kern/efi/sb.c
 @@ -36,14 +36,20 @@ grub_efi_secure_boot (void)
@@ -78,11 +84,11 @@ Index: b/grub-core/kern/efi/sb.c
  
    if (*secure_boot && !*setup_mode)
      ret = 1;
-Index: b/grub-core/loader/arm64/linux.c
-===================================================================
+diff --git a/grub-core/loader/arm64/linux.c b/grub-core/loader/arm64/linux.c
+index bc7ebb699..456523b52 100644
 --- a/grub-core/loader/arm64/linux.c
 +++ b/grub-core/loader/arm64/linux.c
-@@ -253,6 +253,7 @@ grub_cmd_linux (grub_command_t cmd __att
+@@ -253,6 +253,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
    grub_file_t file = 0;
    struct grub_arm64_linux_kernel_header lh;
    struct grub_arm64_linux_pe_header *pe;
@@ -90,7 +96,7 @@ Index: b/grub-core/loader/arm64/linux.c
  
    grub_dl_ref (my_mod);
  
-@@ -297,7 +298,8 @@ grub_cmd_linux (grub_command_t cmd __att
+@@ -297,7 +298,8 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
  
    grub_dprintf ("linux", "kernel @ %p\n", kernel_addr);
  
@@ -100,11 +106,11 @@ Index: b/grub-core/loader/arm64/linux.c
      {
        grub_error (GRUB_ERR_INVALID_COMMAND, N_("%s has invalid signature"), argv[0]);
        goto fail;
-Index: b/grub-core/loader/efi/chainloader.c
-===================================================================
+diff --git a/grub-core/loader/efi/chainloader.c b/grub-core/loader/efi/chainloader.c
+index 505d883ef..a2e2d1b6f 100644
 --- a/grub-core/loader/efi/chainloader.c
 +++ b/grub-core/loader/efi/chainloader.c
-@@ -178,7 +178,6 @@ make_file_path (grub_efi_device_path_t *
+@@ -182,7 +182,6 @@ make_file_path (grub_efi_device_path_t *dp, const char *filename)
    /* Fill the file path for the directory.  */
    d = (grub_efi_device_path_t *) ((char *) file_path
  				  + ((char *) d - (char *) dp));
@@ -112,7 +118,7 @@ Index: b/grub-core/loader/efi/chainloader.c
    copy_file_path ((grub_efi_file_path_device_path_t *) d,
  		  dir_start, dir_end - dir_start);
  
-@@ -248,10 +247,9 @@ read_header (void *data, grub_efi_uint32
+@@ -252,10 +251,9 @@ read_header (void *data, grub_efi_uint32_t size,
    grub_efi_status_t status;
  
    shim_lock = grub_efi_locate_protocol (&guid, NULL);
@@ -124,7 +130,7 @@ Index: b/grub-core/loader/efi/chainloader.c
        return 0;
      }
  
-@@ -276,7 +274,7 @@ read_header (void *data, grub_efi_uint32
+@@ -280,7 +278,7 @@ read_header (void *data, grub_efi_uint32_t size,
        break;
      }
  
@@ -133,7 +139,7 @@ Index: b/grub-core/loader/efi/chainloader.c
  }
  
  static void*
-@@ -510,17 +508,24 @@ handle_image (void *data, grub_efi_uint3
+@@ -514,17 +512,24 @@ handle_image (void *data, grub_efi_uint32_t datasize)
    grub_uint32_t section_alignment;
    grub_uint32_t buffer_size;
    int found_entry_point = 0;
@@ -162,10 +168,11 @@ Index: b/grub-core/loader/efi/chainloader.c
      }
  
    /*
-@@ -793,9 +798,55 @@ grub_secureboot_chainloader_unload (void
+@@ -796,10 +801,56 @@ grub_secureboot_chainloader_unload (void)
+   return GRUB_ERR_NONE;
  }
  
- static grub_err_t
++static grub_err_t
 +grub_load_and_start_image(void *boot_image)
 +{
 +  grub_efi_boot_services_t *b;
@@ -205,7 +212,7 @@ Index: b/grub-core/loader/efi/chainloader.c
 +  return 0;
 +}
 +
-+static grub_err_t
+ static grub_err_t
  grub_secureboot_chainloader_boot (void)
  {
 -  handle_image ((void *)address, fsize);
@@ -219,7 +226,7 @@ Index: b/grub-core/loader/efi/chainloader.c
    grub_loader_unset ();
    return grub_errno;
  }
-@@ -809,9 +860,9 @@ grub_cmd_chainloader (grub_command_t cmd
+@@ -813,9 +864,9 @@ grub_cmd_chainloader (grub_command_t cmd __attribute__ ((unused)),
    grub_efi_boot_services_t *b;
    grub_device_t dev = 0;
    grub_efi_device_path_t *dp = 0;
@@ -230,7 +237,7 @@ Index: b/grub-core/loader/efi/chainloader.c
  
    if (argc == 0)
      return grub_error (GRUB_ERR_BAD_ARGUMENT, N_("filename expected"));
-@@ -898,9 +949,6 @@ grub_cmd_chainloader (grub_command_t cmd
+@@ -902,9 +953,6 @@ grub_cmd_chainloader (grub_command_t cmd __attribute__ ((unused)),
    if (! file_path)
      goto fail;
  
@@ -240,12 +247,12 @@ Index: b/grub-core/loader/efi/chainloader.c
    fsize = grub_file_size (file);
    if (!fsize)
      {
-@@ -975,51 +1023,28 @@ grub_cmd_chainloader (grub_command_t cmd
+@@ -979,51 +1027,28 @@ grub_cmd_chainloader (grub_command_t cmd __attribute__ ((unused)),
      }
  #endif
  
 -  if (grub_linuxefi_secure_validate((void *)address, fsize))
-+  rc = grub_linuxefi_secure_validate((void *)(grub_addr_t)address, fsize);
++  rc = grub_linuxefi_secure_validate((void *)address, fsize);
 +  grub_dprintf ("chain", "linuxefi_secure_validate: %d\n", rc);
 +  if (rc > 0)
      {
@@ -301,8 +308,8 @@ Index: b/grub-core/loader/efi/chainloader.c
    if (dev)
      grub_device_close (dev);
  
-Index: b/grub-core/loader/efi/linux.c
-===================================================================
+diff --git a/grub-core/loader/efi/linux.c b/grub-core/loader/efi/linux.c
+index aea378adf..8890bdf05 100644
 --- a/grub-core/loader/efi/linux.c
 +++ b/grub-core/loader/efi/linux.c
 @@ -33,21 +33,24 @@ struct grub_efi_shim_lock
@@ -335,11 +342,11 @@ Index: b/grub-core/loader/efi/linux.c
  }
  
  typedef void (*handover_func) (void *, grub_efi_system_table_t *, void *);
-Index: b/grub-core/loader/i386/efi/linux.c
-===================================================================
+diff --git a/grub-core/loader/i386/efi/linux.c b/grub-core/loader/i386/efi/linux.c
+index 9a3cc1819..010bf982d 100644
 --- a/grub-core/loader/i386/efi/linux.c
 +++ b/grub-core/loader/i386/efi/linux.c
-@@ -155,6 +155,7 @@ grub_cmd_linux (grub_command_t cmd __att
+@@ -155,6 +155,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
    struct linux_kernel_header lh;
    grub_ssize_t len, start, filelen;
    void *kernel = NULL;
@@ -347,7 +354,7 @@ Index: b/grub-core/loader/i386/efi/linux.c
  
    grub_dl_ref (my_mod);
  
-@@ -180,11 +181,13 @@ grub_cmd_linux (grub_command_t cmd __att
+@@ -180,11 +181,13 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
  
    if (grub_file_read (file, kernel, filelen) != filelen)
      {
@@ -361,10 +368,10 @@ Index: b/grub-core/loader/i386/efi/linux.c
 +  rc = grub_linuxefi_secure_validate (kernel, filelen);
 +  if (rc < 0)
      {
-       grub_error (GRUB_ERR_INVALID_COMMAND, N_("%s has invalid signature"), argv[0]);
-       goto fail;
-Index: b/include/grub/efi/linux.h
-===================================================================
+       grub_error (GRUB_ERR_INVALID_COMMAND, N_("%s has invalid signature"),
+ 		  argv[0]);
+diff --git a/include/grub/efi/linux.h b/include/grub/efi/linux.h
+index d9ede3677..0033d9305 100644
 --- a/include/grub/efi/linux.h
 +++ b/include/grub/efi/linux.h
 @@ -22,7 +22,7 @@

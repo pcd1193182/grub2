@@ -1,21 +1,27 @@
-From 8170e902e9c48cee1dc727445656a1c4b802b70e Mon Sep 17 00:00:00 2001
+From ab09a982d2fa084a0b205fdef5b8a099a2d65cee Mon Sep 17 00:00:00 2001
 From: Peter Jones <pjones@redhat.com>
 Date: Thu, 9 Jun 2016 12:22:29 -0400
-Subject: [PATCH] Re-work some intricacies of PE loading.
+Subject: Re-work some intricacies of PE loading.
 
 The PE spec is not a well written document, and awesomely every place
 where there's an ambiguous way to read something, Windows' bootmgfw.efi
 takes a different read than either of them.
+
+Origin: vendor, https://github.com/rhboot/grub2/commit/3f023d25a1ceb6d23c1bb17b754fbc1f8321427d
+Forwarded: no
+Last-Update: 2017-11-01
+
+Patch-Name: linuxefi_rework_pe_loading.patch
 ---
- grub-core/loader/efi/chainloader.c |  156 +++++++++++++++++++++++++++++--------
- include/grub/efi/pe32.h            |   32 ++++++-
+ grub-core/loader/efi/chainloader.c | 156 +++++++++++++++++++++++++++++--------
+ include/grub/efi/pe32.h            |  32 +++++++-
  2 files changed, 152 insertions(+), 36 deletions(-)
 
-Index: b/grub-core/loader/efi/chainloader.c
-===================================================================
+diff --git a/grub-core/loader/efi/chainloader.c b/grub-core/loader/efi/chainloader.c
+index 83e191460..505d883ef 100644
 --- a/grub-core/loader/efi/chainloader.c
 +++ b/grub-core/loader/efi/chainloader.c
-@@ -297,7 +297,7 @@ image_is_64_bit (grub_pe_header_t *pe_hd
+@@ -301,7 +301,7 @@ image_is_64_bit (grub_pe_header_t *pe_hdr)
    return 0;
  }
  
@@ -24,7 +30,7 @@ Index: b/grub-core/loader/efi/chainloader.c
  #if defined(__x86_64__)
    GRUB_PE32_MACHINE_X86_64;
  #elif defined(__aarch64__)
-@@ -363,10 +363,10 @@ relocate_coff (pe_coff_loader_image_cont
+@@ -367,10 +367,10 @@ relocate_coff (pe_coff_loader_image_context_t *context,
  
    reloc_base = image_address (orig, size, section->raw_data_offset);
    reloc_base_end = image_address (orig, size, section->raw_data_offset
@@ -38,7 +44,7 @@ Index: b/grub-core/loader/efi/chainloader.c
  
    if (!reloc_base && !reloc_base_end)
      return GRUB_EFI_SUCCESS;
-@@ -503,12 +503,13 @@ handle_image (void *data, grub_efi_uint3
+@@ -507,12 +507,13 @@ handle_image (void *data, grub_efi_uint32_t datasize)
    grub_efi_status_t efi_status;
    char *buffer = NULL;
    char *buffer_aligned = NULL;
@@ -53,7 +59,7 @@ Index: b/grub-core/loader/efi/chainloader.c
  
    b = grub_efi_system_table->boot_services;
  
-@@ -522,8 +523,28 @@ handle_image (void *data, grub_efi_uint3
+@@ -526,8 +527,28 @@ handle_image (void *data, grub_efi_uint32_t datasize)
        goto error_exit;
      }
  
@@ -81,8 +87,8 @@ Index: b/grub-core/loader/efi/chainloader.c
 +	       context.image_size, datasize);
  
    efi_status = efi_call_3 (b->allocate_pool, GRUB_EFI_LOADER_DATA,
- 			   buffer_size, (void **) &buffer);
-@@ -535,7 +556,6 @@ handle_image (void *data, grub_efi_uint3
+ 			   buffer_size, (void**) &buffer);
+@@ -539,7 +560,6 @@ handle_image (void *data, grub_efi_uint32_t datasize)
      }
  
    buffer_aligned = (char *)ALIGN_UP ((grub_addr_t)buffer, section_alignment);
@@ -90,7 +96,7 @@ Index: b/grub-core/loader/efi/chainloader.c
    if (!buffer_aligned)
      {
        grub_error (GRUB_ERR_OUT_OF_MEMORY, N_("out of memory"));
-@@ -544,27 +564,62 @@ handle_image (void *data, grub_efi_uint3
+@@ -548,27 +568,62 @@ handle_image (void *data, grub_efi_uint32_t datasize)
  
    grub_memcpy (buffer_aligned, data, context.size_of_headers);
  
@@ -107,7 +113,7 @@ Index: b/grub-core/loader/efi/chainloader.c
    char *reloc_base, *reloc_base_end;
 -  reloc_base = image_address (buffer_aligned, datasize,
 +  grub_dprintf ("chain", "reloc_dir: %p reloc_size: 0x%08x\n",
-+		context.reloc_dir->rva,
++		(void *)(unsigned long long)context.reloc_dir->rva,
 +		context.reloc_dir->size);
 +  reloc_base = image_address (buffer_aligned, context.image_size,
  			      context.reloc_dir->rva);
@@ -159,7 +165,7 @@ Index: b/grub-core/loader/efi/chainloader.c
  
        /* We do want to process .reloc, but it's often marked
         * discardable, so we don't want to memcpy it. */
-@@ -583,21 +638,46 @@ handle_image (void *data, grub_efi_uint3
+@@ -587,21 +642,46 @@ handle_image (void *data, grub_efi_uint32_t datasize)
  	  if (section->raw_data_size && section->virtual_size &&
  	      base && end && reloc_base == base && reloc_base_end == end)
  	    {
@@ -210,7 +216,7 @@ Index: b/grub-core/loader/efi/chainloader.c
  	{
  	  grub_error (GRUB_ERR_BAD_ARGUMENT,
  		      "Section %d is inside image headers", i);
-@@ -605,13 +685,24 @@ handle_image (void *data, grub_efi_uint3
+@@ -609,13 +689,24 @@ handle_image (void *data, grub_efi_uint32_t datasize)
  	}
  
        if (section->raw_data_size > 0)
@@ -240,7 +246,7 @@ Index: b/grub-core/loader/efi/chainloader.c
      }
  
    /* 5 == EFI_IMAGE_DIRECTORY_ENTRY_BASERELOC */
-@@ -634,12 +725,15 @@ handle_image (void *data, grub_efi_uint3
+@@ -638,12 +729,15 @@ handle_image (void *data, grub_efi_uint32_t datasize)
  	}
      }
  
@@ -261,7 +267,7 @@ Index: b/grub-core/loader/efi/chainloader.c
        goto error_exit;
      }
  
-@@ -657,26 +751,24 @@ handle_image (void *data, grub_efi_uint3
+@@ -661,26 +755,24 @@ handle_image (void *data, grub_efi_uint32_t datasize)
    li->load_options_size = cmdline_len;
    li->file_path = grub_efi_get_media_file_path (file_path);
    li->device_handle = dev_handle;
@@ -292,8 +298,8 @@ Index: b/grub-core/loader/efi/chainloader.c
    if (buffer)
        efi_call_1 (b->free_pool, buffer);
  
-Index: b/include/grub/efi/pe32.h
-===================================================================
+diff --git a/include/grub/efi/pe32.h b/include/grub/efi/pe32.h
+index f79782e1b..8396bde49 100644
 --- a/include/grub/efi/pe32.h
 +++ b/include/grub/efi/pe32.h
 @@ -227,12 +227,18 @@ struct grub_pe32_section_table

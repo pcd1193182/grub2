@@ -1,7 +1,7 @@
-From 6cb5703868e185c60b3cb5e78bd84288dd41f275 Mon Sep 17 00:00:00 2001
+From dffbb7316bdbee9595d0e2c247972ec70bf8bec6 Mon Sep 17 00:00:00 2001
 From: Peter Jones <pjones@redhat.com>
 Date: Tue, 6 Oct 2015 13:04:37 -0400
-Subject: [PATCH] Add secureboot support on efi chainloader
+Subject: Add secureboot support on efi chainloader
 
 Expand the chainloader to be able to verify the image by means of shim
 lock protocol. The PE/COFF image is loaded and relocated by the
@@ -16,14 +16,32 @@ such as xen.efi, and could be signed by any of MOK, KEK or DB.
 Based on https://build.opensuse.org/package/view_file/openSUSE:Factory/grub2/grub2-secureboot-chainloader.patch
 
 Signed-off-by: Peter Jones <pjones@redhat.com>
----
- grub-core/Makefile.core.def        |    3 
- grub-core/loader/efi/chainloader.c |  612 ++++++++++++++++++++++++++++++++++---
- include/grub/efi/pe32.h            |   20 +
- 3 files changed, 598 insertions(+), 37 deletions(-)
 
-Index: b/grub-core/loader/efi/chainloader.c
-===================================================================
+Origin: vendor, https://github.com/rhboot/grub2/commit/a00fc9f578d2c310438ced8d4be07f5fa4005873
+Forwarded: no
+Last-Update: 2017-11-01
+
+Patch-Name: linuxefi_add_sb_to_efi_chainload.patch
+---
+ grub-core/Makefile.core.def        |   1 +
+ grub-core/loader/efi/chainloader.c | 612 ++++++++++++++++++++++++++++++++++---
+ include/grub/efi/pe32.h            |  20 +-
+ 3 files changed, 596 insertions(+), 37 deletions(-)
+
+diff --git a/grub-core/Makefile.core.def b/grub-core/Makefile.core.def
+index 1b642472e..9b7b661ff 100644
+--- a/grub-core/Makefile.core.def
++++ b/grub-core/Makefile.core.def
+@@ -1747,6 +1747,7 @@ module = {
+ module = {
+   name = chain;
+   efi = loader/efi/chainloader.c;
++  efi = loader/efi/linux.c;
+   i386_pc = loader/i386/pc/chainloader.c;
+   i386_coreboot = loader/i386/coreboot/chainloader.c;
+   i386_coreboot = lib/LzmaDec.c;
+diff --git a/grub-core/loader/efi/chainloader.c b/grub-core/loader/efi/chainloader.c
+index 14ce6ddd7..456043407 100644
 --- a/grub-core/loader/efi/chainloader.c
 +++ b/grub-core/loader/efi/chainloader.c
 @@ -32,6 +32,8 @@
@@ -58,7 +76,7 @@ Index: b/grub-core/loader/efi/chainloader.c
  
    grub_dl_unref (my_mod);
    return GRUB_ERR_NONE;
-@@ -187,12 +195,523 @@ make_file_path (grub_efi_device_path_t *
+@@ -191,12 +199,523 @@ make_file_path (grub_efi_device_path_t *dp, const char *filename)
    return file_path;
  }
  
@@ -243,7 +261,7 @@ Index: b/grub-core/loader/efi/chainloader.c
 +      return GRUB_EFI_UNSUPPORTED;
 +    }
 +
-+  adjust = (grub_uint64_t)(unsigned long)data - context->image_address;
++  adjust = (grub_uint64_t)data - context->image_address;
 +  if (adjust == 0)
 +    return GRUB_EFI_SUCCESS;
 +
@@ -392,7 +410,7 @@ Index: b/grub-core/loader/efi/chainloader.c
 +  buffer_size = context.image_size + section_alignment;
 +
 +  efi_status = efi_call_3 (b->allocate_pool, GRUB_EFI_LOADER_DATA,
-+			   buffer_size, (void **) &buffer);
++			   buffer_size, (void**) &buffer);
 +
 +  if (efi_status != GRUB_EFI_SUCCESS)
 +    {
@@ -583,7 +601,7 @@ Index: b/grub-core/loader/efi/chainloader.c
    grub_efi_status_t status;
    grub_efi_boot_services_t *b;
    grub_device_t dev = 0;
-@@ -200,7 +719,6 @@ grub_cmd_chainloader (grub_command_t cmd
+@@ -204,7 +723,6 @@ grub_cmd_chainloader (grub_command_t cmd __attribute__ ((unused)),
    grub_efi_loaded_image_t *loaded_image;
    char *filename;
    void *boot_image = 0;
@@ -591,7 +609,7 @@ Index: b/grub-core/loader/efi/chainloader.c
  
    if (argc == 0)
      return grub_error (GRUB_ERR_BAD_ARGUMENT, N_("filename expected"));
-@@ -212,9 +730,36 @@ grub_cmd_chainloader (grub_command_t cmd
+@@ -216,9 +734,36 @@ grub_cmd_chainloader (grub_command_t cmd __attribute__ ((unused)),
    address = 0;
    image_handle = 0;
    file_path = 0;
@@ -628,7 +646,7 @@ Index: b/grub-core/loader/efi/chainloader.c
    file = grub_file_open (filename);
    if (! file)
      goto fail;
-@@ -263,14 +808,14 @@ grub_cmd_chainloader (grub_command_t cmd
+@@ -267,14 +812,14 @@ grub_cmd_chainloader (grub_command_t cmd __attribute__ ((unused)),
    grub_printf ("file path: ");
    grub_efi_print_device_path (file_path);
  
@@ -646,7 +664,7 @@ Index: b/grub-core/loader/efi/chainloader.c
  
    status = efi_call_4 (b->allocate_pages, GRUB_EFI_ALLOCATE_ANY_PAGES,
  			      GRUB_EFI_LOADER_CODE,
-@@ -284,7 +829,7 @@ grub_cmd_chainloader (grub_command_t cmd
+@@ -288,7 +833,7 @@ grub_cmd_chainloader (grub_command_t cmd __attribute__ ((unused)),
      }
  
    boot_image = (void *) ((grub_addr_t) address);
@@ -655,7 +673,7 @@ Index: b/grub-core/loader/efi/chainloader.c
      {
        if (grub_errno == GRUB_ERR_NONE)
  	grub_error (GRUB_ERR_BAD_OS, N_("premature end of file %s"),
-@@ -294,7 +839,7 @@ grub_cmd_chainloader (grub_command_t cmd
+@@ -298,7 +843,7 @@ grub_cmd_chainloader (grub_command_t cmd __attribute__ ((unused)),
      }
  
  #if defined (__i386__) || defined (__x86_64__)
@@ -664,7 +682,7 @@ Index: b/grub-core/loader/efi/chainloader.c
      {
        struct grub_macho_fat_header *head = boot_image;
        if (head->magic
-@@ -303,6 +848,14 @@ grub_cmd_chainloader (grub_command_t cmd
+@@ -307,6 +852,14 @@ grub_cmd_chainloader (grub_command_t cmd __attribute__ ((unused)),
  	  grub_uint32_t i;
  	  struct grub_macho_fat_arch *archs
  	    = (struct grub_macho_fat_arch *) (head + 1);
@@ -679,7 +697,7 @@ Index: b/grub-core/loader/efi/chainloader.c
  	  for (i = 0; i < grub_cpu_to_le32 (head->nfat_arch); i++)
  	    {
  	      if (GRUB_MACHO_CPUTYPE_IS_HOST_CURRENT (archs[i].cputype))
-@@ -317,21 +870,28 @@ grub_cmd_chainloader (grub_command_t cmd
+@@ -321,21 +874,28 @@ grub_cmd_chainloader (grub_command_t cmd __attribute__ ((unused)),
  	      > ~grub_cpu_to_le32 (archs[i].size)
  	      || grub_cpu_to_le32 (archs[i].offset)
  	      + grub_cpu_to_le32 (archs[i].size)
@@ -712,7 +730,7 @@ Index: b/grub-core/loader/efi/chainloader.c
    if (status != GRUB_EFI_SUCCESS)
      {
        if (status == GRUB_EFI_OUT_OF_RESOURCES)
-@@ -353,33 +913,10 @@ grub_cmd_chainloader (grub_command_t cmd
+@@ -357,33 +917,10 @@ grub_cmd_chainloader (grub_command_t cmd __attribute__ ((unused)),
      }
    loaded_image->device_handle = dev_handle;
  
@@ -748,7 +766,7 @@ Index: b/grub-core/loader/efi/chainloader.c
      }
  
    grub_file_close (file);
-@@ -401,6 +938,9 @@ grub_cmd_chainloader (grub_command_t cmd
+@@ -405,6 +942,9 @@ grub_cmd_chainloader (grub_command_t cmd __attribute__ ((unused)),
    if (address)
      efi_call_2 (b->free_pages, address, pages);
  
@@ -758,8 +776,8 @@ Index: b/grub-core/loader/efi/chainloader.c
    grub_dl_unref (my_mod);
  
    return grub_errno;
-Index: b/include/grub/efi/pe32.h
-===================================================================
+diff --git a/include/grub/efi/pe32.h b/include/grub/efi/pe32.h
+index f79c36c02..f79782e1b 100644
 --- a/include/grub/efi/pe32.h
 +++ b/include/grub/efi/pe32.h
 @@ -212,7 +212,11 @@ struct grub_pe64_optional_header
@@ -796,25 +814,3 @@ Index: b/include/grub/efi/pe32.h
  struct grub_pe32_fixup_block
  {
    grub_uint32_t page_rva;
-Index: b/grub-core/Makefile.core.def
-===================================================================
---- a/grub-core/Makefile.core.def
-+++ b/grub-core/Makefile.core.def
-@@ -1734,6 +1734,7 @@ module = {
- 
- module = {
-   name = linuxefi;
-+  cflags = '-Wno-error=format= -Wno-error=cast-align -Wno-error=int-to-pointer-cast -Wno-error=pointer-to-int-cast -Wno-error=unused-parameter';
-   efi = loader/i386/efi/linux.c;
-   efi = lib/cmdline.c;
-   efi = loader/efi/linux.c;
-@@ -1743,7 +1744,9 @@ module = {
- 
- module = {
-   name = chain;
-+  cflags = '-Wno-error=format= -Wno-error=cast-align -Wno-error=int-to-pointer-cast -Wno-error=pointer-to-int-cast -Wno-error=unused-parameter';
-   efi = loader/efi/chainloader.c;
-+  efi = loader/efi/linux.c;
-   i386_pc = loader/i386/pc/chainloader.c;
-   i386_coreboot = loader/i386/coreboot/chainloader.c;
-   i386_coreboot = lib/LzmaDec.c;

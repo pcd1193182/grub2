@@ -1,4 +1,4 @@
-From 1742785b839b12f570796e594b0c589a2973e59b Mon Sep 17 00:00:00 2001
+From fd18e1f54c7f0b4cbf5a0f40913b636ed8f73a45 Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@debian.org>
 Date: Mon, 13 Jan 2014 12:13:32 +0000
 Subject: Ignore functional test failures for now as they are broken
@@ -14,7 +14,7 @@ Patch-Name: ignore_grub_func_test_failures.patch
  1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/tests/grub_func_test.in b/tests/grub_func_test.in
-index c8cc263..f458f74 100644
+index c8cc26376..f458f741e 100644
 --- a/tests/grub_func_test.in
 +++ b/tests/grub_func_test.in
 @@ -16,6 +16,8 @@ out=`echo all_functional_test | @builddir@/grub-shell --timeout=3600 --files="/b
