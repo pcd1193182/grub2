@@ -1,3 +1,11 @@
+grub2 (2.02-2ubuntu2) bionic; urgency=medium
+
+  * Cherry-pick upstream patch to change the default TSC calibration method
+    to pmtimer on EFI systems (LP: #1734278)
+  * debian/control: Update Vcs fields for code location on Ubuntu.
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Tue, 05 Dec 2017 11:47:31 -0500
+
 grub2 (2.02-2ubuntu1) bionic; urgency=medium
 
   * Merge with Debian; remaining changes:
