@@ -2012,12 +2012,11 @@ main (int argc, char *argv[])
 	if (uefi_secure_boot)
 	  {
 	    char *shim_signed = NULL;
-	    char *mok_signed = NULL, *mok_file = NULL;
+	    char *mok_file = NULL;
 	    char *config_dst;
 	    FILE *config_dst_f;
 
 	    shim_signed = xasprintf ("/usr/lib/shim/shim%s.efi.signed", efi_suffix);
-	    mok_signed = xasprintf ("mm%s.efi.signed", efi_suffix);
 	    mok_file = xasprintf ("mm%s.efi", efi_suffix);
 
 	    if (grub_util_is_regular (shim_signed))
@@ -2042,7 +2041,7 @@ main (int argc, char *argv[])
 		   won't be for older releases); but if we have them, make
 		   sure they are installed.  */
 		mok_src = grub_util_path_concat (2, "/usr/lib/shim/",
-						    mok_signed);
+						    mok_file);
 		mok_dst = grub_util_path_concat (2, efidir,
 						    mok_file);
 		grub_install_copy_file (mok_src,
