@@ -886,7 +886,6 @@ also_install_removable(const char *src,
   char *dst = NULL;
   char *cur = NULL;
   char *found = NULL;
-  char *fb_signed = NULL;
   char *fb_file = NULL;
   char *generic_efidir = NULL;
 
@@ -896,7 +895,6 @@ also_install_removable(const char *src,
     grub_util_error ("%s", _("efi_suffix_upper not set"));
 
   efi_file = xasprintf ("BOOT%s.EFI", efi_suffix_upper);
-  fb_signed = xasprintf ("fb%s.efi.signed", efi_suffix);
   fb_file = xasprintf ("fb%s.efi", efi_suffix);
 
   /* We need to install in $base_efidir/EFI/BOOT/$efi_file, but we
@@ -936,7 +934,7 @@ also_install_removable(const char *src,
   free (dst);
 
   /* Now try to also install fallback */
-  efi_file = grub_util_path_concat (2, "/usr/lib/shim/", fb_signed);
+  efi_file = grub_util_path_concat (2, "/usr/lib/shim/", fb_file);
   dst = grub_util_path_concat (2, generic_efidir, fb_file);
   free (generic_efidir);
   grub_install_copy_file (efi_file, dst, 0);
@@ -944,7 +942,6 @@ also_install_removable(const char *src,
   free (dst);
 
   free (fb_file);
-  free (fb_signed);
 }
 
 int
@@ -2043,13 +2040,12 @@ main (int argc, char *argv[])
 	if (uefi_secure_boot)
 	  {
 	    char *shim_signed = NULL;
-	    char *mok_signed = NULL, *mok_file = NULL;
+	    char *mok_file = NULL;
 	    char *bootcsv = NULL;
 	    char *config_dst;
 	    FILE *config_dst_f;
 
 	    shim_signed = xasprintf ("/usr/lib/shim/shim%s.efi.signed", efi_suffix);
-	    mok_signed = xasprintf ("mm%s.efi.signed", efi_suffix);
 	    mok_file = xasprintf ("mm%s.efi", efi_suffix);
 	    bootcsv = xasprintf ("BOOT%s.CSV", efi_suffix_upper);
 
@@ -2081,7 +2077,7 @@ main (int argc, char *argv[])
 		   won't be for older releases); but if we have MokManager,
 		   make sure it gets installed.  */
 		mok_src = grub_util_path_concat (2, "/usr/lib/shim/",
-						    mok_signed);
+						    mok_file);
 		mok_dst = grub_util_path_concat (2, efidir,
 						    mok_file);
 		grub_install_copy_file (mok_src,

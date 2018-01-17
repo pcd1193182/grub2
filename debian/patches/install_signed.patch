@@ -1,4 +1,4 @@
-From 0c58db5d40a48dff1dbc87bb964a4b34abab3017 Mon Sep 17 00:00:00 2001
+From e871ef5120652c6fbf1abada734fd4a935559aa5 Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Mon, 13 Jan 2014 12:13:22 +0000
 Subject: Install signed images if UEFI Secure Boot is enabled
@@ -15,11 +15,11 @@ Last-Update: 2016-11-01
 
 Patch-Name: install_signed.patch
 ---
- util/grub-install.c | 196 +++++++++++++++++++++++++++++++++++++++-------------
- 1 file changed, 149 insertions(+), 47 deletions(-)
+ util/grub-install.c | 195 +++++++++++++++++++++++++++++++++++++++-------------
+ 1 file changed, 148 insertions(+), 47 deletions(-)
 
 diff --git a/util/grub-install.c b/util/grub-install.c
-index 0e1303ee5..4f092afe7 100644
+index 0e1303ee5..11940d6e6 100644
 --- a/util/grub-install.c
 +++ b/util/grub-install.c
 @@ -80,6 +80,7 @@ static char *label_color;
@@ -216,7 +216,7 @@ index 0e1303ee5..4f092afe7 100644
  	{
  	  char *uuid = NULL;
  	  /*  generic method (used on coreboot and ata mod).  */
-@@ -1871,7 +1905,75 @@ main (int argc, char *argv[])
+@@ -1871,7 +1905,74 @@ main (int argc, char *argv[])
      case GRUB_INSTALL_PLATFORM_IA64_EFI:
        {
  	char *dst = grub_util_path_concat (2, efidir, efi_file);
@@ -224,13 +224,12 @@ index 0e1303ee5..4f092afe7 100644
 +	if (uefi_secure_boot)
 +	  {
 +	    char *shim_signed = NULL;
-+	    char *mok_signed = NULL, *mok_file = NULL;
++	    char *mok_file = NULL;
 +	    char *bootcsv = NULL;
 +	    char *config_dst;
 +	    FILE *config_dst_f;
 +
 +	    shim_signed = xasprintf ("/usr/lib/shim/shim%s.efi.signed", efi_suffix);
-+	    mok_signed = xasprintf ("mm%s.efi.signed", efi_suffix);
 +	    mok_file = xasprintf ("mm%s.efi", efi_suffix);
 +	    bootcsv = xasprintf ("BOOT%s.CSV", efi_suffix_upper);
 +
@@ -262,7 +261,7 @@ index 0e1303ee5..4f092afe7 100644
 +		   won't be for older releases); but if we have MokManager,
 +		   make sure it gets installed.  */
 +		mok_src = grub_util_path_concat (2, "/usr/lib/shim/",
-+						    mok_signed);
++						    mok_file);
 +		mok_dst = grub_util_path_concat (2, efidir,
 +						    mok_file);
 +		grub_install_copy_file (mok_src,
