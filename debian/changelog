@@ -1,3 +1,12 @@
+grub2 (2.02-2ubuntu3) bionic; urgency=medium
+
+  * util/grub-install.c: Drop extra handling for x.efi.signed files for mok
+    and fallback binaries: shim now installs them without the .signed
+    extension. (LP: #1708245)
+  * debian/control: Breaks shim (<< 13).
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Wed, 17 Jan 2018 09:25:09 -0500
+
 grub2 (2.02-2ubuntu2) bionic; urgency=medium
 
   * Cherry-pick upstream patch to change the default TSC calibration method

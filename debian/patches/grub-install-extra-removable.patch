@@ -1,4 +1,4 @@
-From c5486f3a81aacdbb9f0092fa9e8c106b6928d7ca Mon Sep 17 00:00:00 2001
+From de1567e356fabb27c9a853f123134fceb34fe3fc Mon Sep 17 00:00:00 2001
 From: Steve McIntyre <93sam@debian.org>
 Date: Wed, 3 Dec 2014 01:25:12 +0000
 Subject: Add support for forcing EFI installation to the removable media path
@@ -18,11 +18,11 @@ Last-Update: 2014-12-20
 
 Patch-Name: grub-install-extra-removable.patch
 ---
- util/grub-install.c | 128 +++++++++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 126 insertions(+), 2 deletions(-)
+ util/grub-install.c | 125 +++++++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 123 insertions(+), 2 deletions(-)
 
 diff --git a/util/grub-install.c b/util/grub-install.c
-index a7c0f566e..a4f253918 100644
+index 1e5642d65..333d55e07 100644
 --- a/util/grub-install.c
 +++ b/util/grub-install.c
 @@ -56,6 +56,7 @@
@@ -64,7 +64,7 @@ index a7c0f566e..a4f253918 100644
    {0, 0, 0, 0, 0, 0}
  };
  
-@@ -835,6 +844,109 @@ fill_core_services (const char *core_services)
+@@ -835,6 +844,106 @@ fill_core_services (const char *core_services)
    free (sysv_plist);
  }
  
@@ -110,7 +110,6 @@ index a7c0f566e..a4f253918 100644
 +  char *dst = NULL;
 +  char *cur = NULL;
 +  char *found = NULL;
-+  char *fb_signed = NULL;
 +  char *fb_file = NULL;
 +  char *generic_efidir = NULL;
 +
@@ -120,7 +119,6 @@ index a7c0f566e..a4f253918 100644
 +    grub_util_error ("%s", _("efi_suffix_upper not set"));
 +
 +  efi_file = xasprintf ("BOOT%s.EFI", efi_suffix_upper);
-+  fb_signed = xasprintf ("fb%s.efi.signed", efi_suffix);
 +  fb_file = xasprintf ("fb%s.efi", efi_suffix);
 +
 +  /* We need to install in $base_efidir/EFI/BOOT/$efi_file, but we
@@ -160,7 +158,7 @@ index a7c0f566e..a4f253918 100644
 +  free (dst);
 +
 +  /* Now try to also install fallback */
-+  efi_file = grub_util_path_concat (2, "/usr/lib/shim/", fb_signed);
++  efi_file = grub_util_path_concat (2, "/usr/lib/shim/", fb_file);
 +  dst = grub_util_path_concat (2, generic_efidir, fb_file);
 +  free (generic_efidir);
 +  grub_install_copy_file (efi_file, dst, 0);
@@ -168,13 +166,12 @@ index a7c0f566e..a4f253918 100644
 +  free (dst);
 +
 +  free (fb_file);
-+  free (fb_signed);
 +}
 +
  int
  main (int argc, char *argv[])
  {
-@@ -852,6 +964,7 @@ main (int argc, char *argv[])
+@@ -852,6 +961,7 @@ main (int argc, char *argv[])
    char *relative_grubdir;
    char **efidir_device_names = NULL;
    grub_device_t efidir_grub_dev = NULL;
@@ -182,7 +179,7 @@ index a7c0f566e..a4f253918 100644
    char *efidir_grub_devname;
    int efidir_is_mac = 0;
    int is_prep = 0;
-@@ -884,6 +997,9 @@ main (int argc, char *argv[])
+@@ -884,6 +994,9 @@ main (int argc, char *argv[])
        bootloader_id = xstrdup ("grub");
      }
  
@@ -192,7 +189,7 @@ index a7c0f566e..a4f253918 100644
    if (!grub_install_source_directory)
      {
        if (!target)
-@@ -1093,6 +1209,8 @@ main (int argc, char *argv[])
+@@ -1093,6 +1206,8 @@ main (int argc, char *argv[])
        if (!efidir_is_mac && grub_strcmp (fs->name, "fat") != 0)
  	grub_util_error (_("%s doesn't look like an EFI partition"), efidir);
  
@@ -201,7 +198,7 @@ index a7c0f566e..a4f253918 100644
        /* The EFI specification requires that an EFI System Partition must
  	 contain an "EFI" subdirectory, and that OS loaders are stored in
  	 subdirectories below EFI.  Vendors are expected to pick names that do
-@@ -1984,9 +2102,15 @@ main (int argc, char *argv[])
+@@ -1983,9 +2098,15 @@ main (int argc, char *argv[])
  	    fprintf (config_dst_f, "configfile $prefix/grub.cfg\n");
  	    fclose (config_dst_f);
  	    free (config_dst);
