@@ -1,4 +1,4 @@
-From f093da698abb974e8691102311ed26435a99202b Mon Sep 17 00:00:00 2001
+From 9d390495e55bd4cd55c9f831227d6ae958c92545 Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Mon, 13 Jan 2014 12:13:27 +0000
 Subject: Cope with Kubuntu setting GRUB_DISTRIBUTOR
@@ -17,7 +17,7 @@ Patch-Name: install_efi_ubuntu_flavours.patch
  1 file changed, 2 insertions(+)
 
 diff --git a/util/grub-install.c b/util/grub-install.c
-index 4f092afe7..7b77a0e7f 100644
+index 11940d6e6..e1a0202da 100644
 --- a/util/grub-install.c
 +++ b/util/grub-install.c
 @@ -1101,6 +1101,8 @@ main (int argc, char *argv[])
