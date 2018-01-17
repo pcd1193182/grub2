@@ -1,3 +1,15 @@
+grub2 (2.02~beta3-4ubuntu7.1) artful; urgency=medium
+
+  * Cherry-pick upstream patch to change the default TSC calibration method
+    to pmtimer on EFI systems (LP: #1734278)
+  * util/grub-install.c: Use fallback and MokManager EFI binary names without
+    the .signed extension now that shim handles signing via sbsigntool
+    natively. (LP: #1708245)
+    - debian/patches/grub-install-extra-removable.patch
+    - debian/patches/install_signed.patch
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Wed, 17 Jan 2018 11:51:20 -0500
+
 grub2 (2.02~beta3-4ubuntu7) artful; urgency=medium
 
   * debian/patches/headers_for_device_macros.patch,

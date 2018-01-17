@@ -17,8 +17,8 @@ Last-Update: 2014-12-20
 
 Patch-Name: grub-install-extra-removable.patch
 ---
- util/grub-install.c |  124 +++++++++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 122 insertions(+), 2 deletions(-)
+ util/grub-install.c |  121 +++++++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 119 insertions(+), 2 deletions(-)
 
 Index: b/util/grub-install.c
 ===================================================================
@@ -63,7 +63,7 @@ Index: b/util/grub-install.c
    {0, 0, 0, 0, 0, 0}
  };
  
-@@ -835,6 +844,105 @@ fill_core_services (const char *core_ser
+@@ -835,6 +844,102 @@ fill_core_services (const char *core_ser
    free (sysv_plist);
  }
  
@@ -109,7 +109,6 @@ Index: b/util/grub-install.c
 +  char *dst = NULL;
 +  char *cur = NULL;
 +  char *found = NULL;
-+  char *fb_signed = NULL;
 +  char *fb_file = NULL;
 +  char *generic_efidir = NULL;
 +
@@ -119,7 +118,6 @@ Index: b/util/grub-install.c
 +    grub_util_error ("%s", _("efi_suffix_upper not set"));
 +
 +  efi_file = xasprintf ("BOOT%s.EFI", efi_suffix_upper);
-+  fb_signed = xasprintf ("fb%s.efi.signed", efi_suffix);
 +  fb_file = xasprintf ("fb%s.efi", efi_suffix);
 +
 +  /* We need to install in $base_efidir/EFI/BOOT/$efi_file, but we
@@ -157,19 +155,18 @@ Index: b/util/grub-install.c
 +  free (efi_file);
 +
 +  /* Now try to also install fallback */
-+  efi_file = grub_util_path_concat (2, "/usr/lib/shim/", fb_signed);
++  efi_file = grub_util_path_concat (2, "/usr/lib/shim/", fb_file);
 +  dst = grub_util_path_concat (2, generic_efidir, fb_file);
 +  grub_install_copy_file (efi_file, dst, 0);
 +  free (efi_file);
 +  free (fb_file);
-+  free (fb_signed);
 +  free (dst);
 +}
 +
  int
  main (int argc, char *argv[])
  {
-@@ -852,6 +960,7 @@ main (int argc, char *argv[])
+@@ -852,6 +957,7 @@ main (int argc, char *argv[])
    char *relative_grubdir;
    char **efidir_device_names = NULL;
    grub_device_t efidir_grub_dev = NULL;
@@ -177,7 +174,7 @@ Index: b/util/grub-install.c
    char *efidir_grub_devname;
    int efidir_is_mac = 0;
    int is_prep = 0;
-@@ -884,6 +993,9 @@ main (int argc, char *argv[])
+@@ -884,6 +990,9 @@ main (int argc, char *argv[])
        bootloader_id = xstrdup ("grub");
      }
  
@@ -187,7 +184,7 @@ Index: b/util/grub-install.c
    if (!grub_install_source_directory)
      {
        if (!target)
-@@ -1093,6 +1205,8 @@ main (int argc, char *argv[])
+@@ -1093,6 +1202,8 @@ main (int argc, char *argv[])
        if (!efidir_is_mac && grub_strcmp (fs->name, "fat") != 0)
  	grub_util_error (_("%s doesn't look like an EFI partition"), efidir);
  
@@ -196,7 +193,7 @@ Index: b/util/grub-install.c
        /* The EFI specification requires that an EFI System Partition must
  	 contain an "EFI" subdirectory, and that OS loaders are stored in
  	 subdirectories below EFI.  Vendors are expected to pick names that do
-@@ -1973,9 +2087,15 @@ main (int argc, char *argv[])
+@@ -1982,9 +2093,15 @@ main (int argc, char *argv[])
  	    fprintf (config_dst_f, "configfile $prefix/grub.cfg\n");
  	    fclose (config_dst_f);
  	    free (config_dst);

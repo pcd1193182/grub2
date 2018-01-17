@@ -67,3 +67,4 @@ support_initrd-less_boot.patch
 mount-ext4-fs-with-crypto-enabled.patch
 headers_for_device_macros.patch
 fix_check_for_sys_macros.patch
+tsc_efi_default_to_pmtimer.patch
