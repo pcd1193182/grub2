@@ -1,3 +1,12 @@
+grub2 (2.02-2ubuntu4) bionic; urgency=medium
+
+  * debian/patches/vt_handoff.patch: modify the existing patch to set
+    vt.handoff=1 instead of vt.handoff=7 as we now start display managers on
+    vt1 anyway. This also fixes issues with netboot installed server systems
+    not displaying the login prompt on boot. (LP: #1675453)
+
+ -- Łukasz 'sil2100' Zemczak <lukasz.zemczak@ubuntu.com>  Thu, 18 Jan 2018 18:32:31 +0100
+
 grub2 (2.02-2ubuntu3) bionic; urgency=medium
 
   * util/grub-install.c: Drop extra handling for x.efi.signed files for mok
