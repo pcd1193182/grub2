@@ -240,7 +240,7 @@ EOF
 if [ "$vt_handoff" = 1 ]; then
   cat << 'EOF'
 	if [ "${1}" = "keep" ]; then
-		set vt_handoff=vt.handoff=7
+		set vt_handoff=vt.handoff=1
 	else
 		set vt_handoff=
 	fi

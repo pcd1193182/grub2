@@ -1,15 +1,18 @@
 From b50a7ea8b5cbddc90188c5bb9fb7fd5d9b9c15fe Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Mon, 13 Jan 2014 12:13:30 +0000
-Subject: Add configure option to use vt.handoff=7
+Subject: Add configure option to use vt.handoff=1
 
 This is used for non-recovery Linux entries only; it enables
 flicker-free booting if gfxpayload=keep is in use and a suitable kernel
 is present.
 
+Recently modified by Łukasz 'sil2100' Zemczak to do a vt.handoff=1 instead
+of vt.handoff=7.
+
 Author: Andy Whitcroft <apw@canonical.com>
 Forwarded: not-needed
-Last-Update: 2013-12-25
+Last-Update: 2018-01-18
 
 Patch-Name: vt_handoff.patch
 ---
@@ -86,7 +89,7 @@ index 2983b515f..18c859214 100644
 +if [ "$vt_handoff" = 1 ]; then
 +  cat << 'EOF'
 +	if [ "${1}" = "keep" ]; then
-+		set vt_handoff=vt.handoff=7
++		set vt_handoff=vt.handoff=1
 +	else
 +		set vt_handoff=
 +	fi
