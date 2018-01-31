@@ -1,3 +1,10 @@
+grub2 (2.02-2ubuntu5) bionic; urgency=medium
+
+  * debian/patches/mkconfig_keep_native_term_active.patch: Keep the
+    default EFI console active while enabling gfxterm. (LP: #1743884)
+
+ -- dann frazier <dannf@ubuntu.com>  Wed, 31 Jan 2018 10:51:11 -0700
+
 grub2 (2.02-2ubuntu4) bionic; urgency=medium
 
   * debian/patches/vt_handoff.patch: modify the existing patch to set
