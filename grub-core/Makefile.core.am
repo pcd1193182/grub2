@@ -200,31 +200,6 @@ cs5536.marker: $(cs5536_module_SOURCES) $(nodist_cs5536_module_SOURCES)
 	grep 'MARKER' $@.new > $@; rm -f $@.new
 endif
 
-if COND_emu
-if COND_GRUB_EMU_USB
-platform_PROGRAMS += libusb.module
-MODULE_FILES += libusb.module$(EXEEXT)
-libusb_module_SOURCES  = bus/usb/emu/usb.c  ## platform sources
-nodist_libusb_module_SOURCES  =  ## platform nodist sources
-libusb_module_LDADD  = 
-libusb_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
-libusb_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
-libusb_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
-libusb_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
-libusb_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
-dist_noinst_DATA += 
-BUILT_SOURCES += $(nodist_libusb_module_SOURCES)
-CLEANFILES += $(nodist_libusb_module_SOURCES)
-MOD_FILES += libusb.mod
-MARKER_FILES += libusb.marker
-CLEANFILES += libusb.marker
-
-libusb.marker: $(libusb_module_SOURCES) $(nodist_libusb_module_SOURCES)
-	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libusb_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
-	grep 'MARKER' $@.new > $@; rm -f $@.new
-endif COND_GRUB_EMU_USB
-endif
-
 if COND_mips_loongson
 platform_PROGRAMS += lsspd.module
 MODULE_FILES += lsspd.module$(EXEEXT)
@@ -430,31 +405,6 @@ CLEANFILES += usb.marker
 usb.marker: $(usb_module_SOURCES) $(nodist_usb_module_SOURCES)
 	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(usb_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
 	grep 'MARKER' $@.new > $@; rm -f $@.new
-endif
-
-if COND_emu
-if COND_GRUB_EMU_USB
-platform_PROGRAMS += emuusb.module
-MODULE_FILES += emuusb.module$(EXEEXT)
-emuusb_module_SOURCES  = bus/usb/usb.c  ## platform sources
-nodist_emuusb_module_SOURCES  =  ## platform nodist sources
-emuusb_module_LDADD  = 
-emuusb_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
-emuusb_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
-emuusb_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
-emuusb_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
-emuusb_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
-dist_noinst_DATA += 
-BUILT_SOURCES += $(nodist_emuusb_module_SOURCES)
-CLEANFILES += $(nodist_emuusb_module_SOURCES)
-MOD_FILES += emuusb.mod
-MARKER_FILES += emuusb.marker
-CLEANFILES += emuusb.marker
-
-emuusb.marker: $(emuusb_module_SOURCES) $(nodist_emuusb_module_SOURCES)
-	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(emuusb_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
-	grep 'MARKER' $@.new > $@; rm -f $@.new
-endif COND_GRUB_EMU_USB
 endif
 
 if COND_i386_pc
@@ -2100,7 +2050,7 @@ nodist_lsxen_module_SOURCES  =  ## platform nodist sources
 lsxen_module_LDADD  = 
 lsxen_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
 lsxen_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
-lsxen_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) $(CPPFLAGS_XEN) 
+lsxen_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
 lsxen_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
 lsxen_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
 dist_noinst_DATA += 
@@ -2123,7 +2073,7 @@ nodist_lsxen_module_SOURCES  =  ## platform nodist sources
 lsxen_module_LDADD  = 
 lsxen_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
 lsxen_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
-lsxen_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) $(CPPFLAGS_XEN) 
+lsxen_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
 lsxen_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
 lsxen_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
 dist_noinst_DATA += 
@@ -3357,7 +3307,7 @@ regexp.marker: $(regexp_module_SOURCES) $(nodist_regexp_module_SOURCES)
 if COND_i386_pc
 platform_PROGRAMS += acpi.module
 MODULE_FILES += acpi.module$(EXEEXT)
-acpi_module_SOURCES  = commands/i386/pc/acpi.c commands/acpi.c  ## platform sources
+acpi_module_SOURCES  = kern/acpi.c kern/i386/pc/acpi.c commands/acpi.c  ## platform sources
 nodist_acpi_module_SOURCES  =  ## platform nodist sources
 acpi_module_LDADD  = 
 acpi_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
@@ -3380,7 +3330,7 @@ endif
 if COND_i386_efi
 platform_PROGRAMS += acpi.module
 MODULE_FILES += acpi.module$(EXEEXT)
-acpi_module_SOURCES  = commands/efi/acpi.c commands/acpi.c  ## platform sources
+acpi_module_SOURCES  = commands/acpi.c  ## platform sources
 nodist_acpi_module_SOURCES  =  ## platform nodist sources
 acpi_module_LDADD  = 
 acpi_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
@@ -3403,7 +3353,7 @@ endif
 if COND_i386_coreboot
 platform_PROGRAMS += acpi.module
 MODULE_FILES += acpi.module$(EXEEXT)
-acpi_module_SOURCES  = commands/i386/pc/acpi.c commands/acpi.c  ## platform sources
+acpi_module_SOURCES  = commands/acpi.c  ## platform sources
 nodist_acpi_module_SOURCES  =  ## platform nodist sources
 acpi_module_LDADD  = 
 acpi_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
@@ -3426,7 +3376,7 @@ endif
 if COND_i386_multiboot
 platform_PROGRAMS += acpi.module
 MODULE_FILES += acpi.module$(EXEEXT)
-acpi_module_SOURCES  = commands/i386/pc/acpi.c commands/acpi.c  ## platform sources
+acpi_module_SOURCES  = commands/acpi.c  ## platform sources
 nodist_acpi_module_SOURCES  =  ## platform nodist sources
 acpi_module_LDADD  = 
 acpi_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
@@ -3449,7 +3399,7 @@ endif
 if COND_x86_64_efi
 platform_PROGRAMS += acpi.module
 MODULE_FILES += acpi.module$(EXEEXT)
-acpi_module_SOURCES  = commands/efi/acpi.c commands/acpi.c  ## platform sources
+acpi_module_SOURCES  = commands/acpi.c  ## platform sources
 nodist_acpi_module_SOURCES  =  ## platform nodist sources
 acpi_module_LDADD  = 
 acpi_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
@@ -3472,7 +3422,7 @@ endif
 if COND_ia64_efi
 platform_PROGRAMS += acpi.module
 MODULE_FILES += acpi.module$(EXEEXT)
-acpi_module_SOURCES  = commands/efi/acpi.c commands/acpi.c  ## platform sources
+acpi_module_SOURCES  = commands/acpi.c  ## platform sources
 nodist_acpi_module_SOURCES  =  ## platform nodist sources
 acpi_module_LDADD  = 
 acpi_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
@@ -3495,7 +3445,7 @@ endif
 if COND_arm_efi
 platform_PROGRAMS += acpi.module
 MODULE_FILES += acpi.module$(EXEEXT)
-acpi_module_SOURCES  = commands/efi/acpi.c commands/acpi.c  ## platform sources
+acpi_module_SOURCES  = commands/acpi.c  ## platform sources
 nodist_acpi_module_SOURCES  =  ## platform nodist sources
 acpi_module_LDADD  = 
 acpi_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
@@ -3518,7 +3468,7 @@ endif
 if COND_arm64_efi
 platform_PROGRAMS += acpi.module
 MODULE_FILES += acpi.module$(EXEEXT)
-acpi_module_SOURCES  = commands/efi/acpi.c commands/acpi.c  ## platform sources
+acpi_module_SOURCES  = commands/acpi.c  ## platform sources
 nodist_acpi_module_SOURCES  =  ## platform nodist sources
 acpi_module_LDADD  = 
 acpi_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
@@ -5477,7 +5427,7 @@ nodist_halt_module_SOURCES  =  ## platform nodist sources
 halt_module_LDADD  = 
 halt_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
 halt_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
-halt_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) $(CPPFLAGS_XEN) 
+halt_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
 halt_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
 halt_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
 dist_noinst_DATA += 
@@ -5500,7 +5450,7 @@ nodist_halt_module_SOURCES  =  ## platform nodist sources
 halt_module_LDADD  = 
 halt_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
 halt_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
-halt_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) $(CPPFLAGS_XEN) 
+halt_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
 halt_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
 halt_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
 dist_noinst_DATA += 
@@ -5914,7 +5864,7 @@ nodist_reboot_module_SOURCES  =  ## platform nodist sources
 reboot_module_LDADD  = 
 reboot_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
 reboot_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
-reboot_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) $(CPPFLAGS_XEN) 
+reboot_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
 reboot_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
 reboot_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
 dist_noinst_DATA += 
@@ -5937,7 +5887,7 @@ nodist_reboot_module_SOURCES  =  ## platform nodist sources
 reboot_module_LDADD  = 
 reboot_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
 reboot_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
-reboot_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) $(CPPFLAGS_XEN) 
+reboot_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
 reboot_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
 reboot_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
 dist_noinst_DATA += 
@@ -10758,7 +10708,7 @@ gettext.marker: $(gettext_module_SOURCES) $(nodist_gettext_module_SOURCES)
 	grep 'MARKER' $@.new > $@; rm -f $@.new
 platform_PROGRAMS += gfxmenu.module
 MODULE_FILES += gfxmenu.module$(EXEEXT)
-gfxmenu_module_SOURCES  = gfxmenu/gfxmenu.c gfxmenu/model.c gfxmenu/view.c gfxmenu/font.c gfxmenu/icon_manager.c gfxmenu/theme_loader.c gfxmenu/widget-box.c gfxmenu/gui_canvas.c gfxmenu/gui_circular_progress.c gfxmenu/gui_box.c gfxmenu/gui_label.c gfxmenu/gui_list.c gfxmenu/gui_image.c gfxmenu/gui_progress_bar.c gfxmenu/gui_util.c gfxmenu/gui_string_util.c  ## platform sources
+gfxmenu_module_SOURCES  = gfxmenu/gfxmenu.c gfxmenu/view.c gfxmenu/font.c gfxmenu/icon_manager.c gfxmenu/theme_loader.c gfxmenu/widget-box.c gfxmenu/gui_canvas.c gfxmenu/gui_circular_progress.c gfxmenu/gui_box.c gfxmenu/gui_label.c gfxmenu/gui_list.c gfxmenu/gui_image.c gfxmenu/gui_progress_bar.c gfxmenu/gui_util.c gfxmenu/gui_string_util.c  ## platform sources
 nodist_gfxmenu_module_SOURCES  =  ## platform nodist sources
 gfxmenu_module_LDADD  = 
 gfxmenu_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
@@ -11457,7 +11407,7 @@ nodist_relocator_module_SOURCES  =  ## platform nodist sources
 relocator_module_LDADD  = 
 relocator_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
 relocator_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
-relocator_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) $(CPPFLAGS_XEN) 
+relocator_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
 relocator_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
 relocator_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
 dist_noinst_DATA += lib/i386/relocator_common.S kern/powerpc/cache_flush.S 
@@ -11480,7 +11430,7 @@ nodist_relocator_module_SOURCES  =  ## platform nodist sources
 relocator_module_LDADD  = 
 relocator_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
 relocator_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
-relocator_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) $(CPPFLAGS_XEN) 
+relocator_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
 relocator_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
 relocator_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
 dist_noinst_DATA += lib/i386/relocator_common.S kern/powerpc/cache_flush.S 
@@ -11756,7 +11706,7 @@ nodist_datetime_module_SOURCES  =  ## platform nodist sources
 datetime_module_LDADD  = 
 datetime_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
 datetime_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
-datetime_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) $(CPPFLAGS_XEN) 
+datetime_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
 datetime_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
 datetime_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
 dist_noinst_DATA += 
@@ -11779,7 +11729,7 @@ nodist_datetime_module_SOURCES  =  ## platform nodist sources
 datetime_module_LDADD  = 
 datetime_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
 datetime_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
-datetime_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) $(CPPFLAGS_XEN) 
+datetime_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
 datetime_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
 datetime_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
 dist_noinst_DATA += 
@@ -13010,6 +12960,29 @@ multiboot.marker: $(multiboot_module_SOURCES) $(nodist_multiboot_module_SOURCES)
 	grep 'MARKER' $@.new > $@; rm -f $@.new
 endif
 
+if COND_arm64_efi
+platform_PROGRAMS += xen_boot.module
+MODULE_FILES += xen_boot.module$(EXEEXT)
+xen_boot_module_SOURCES  = loader/arm64/xen_boot.c lib/cmdline.c  ## platform sources
+nodist_xen_boot_module_SOURCES  =  ## platform nodist sources
+xen_boot_module_LDADD  = 
+xen_boot_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+xen_boot_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+xen_boot_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+xen_boot_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+xen_boot_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+dist_noinst_DATA += 
+BUILT_SOURCES += $(nodist_xen_boot_module_SOURCES)
+CLEANFILES += $(nodist_xen_boot_module_SOURCES)
+MOD_FILES += xen_boot.mod
+MARKER_FILES += xen_boot.marker
+CLEANFILES += xen_boot.marker
+
+xen_boot.marker: $(xen_boot_module_SOURCES) $(nodist_xen_boot_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(xen_boot_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+	grep 'MARKER' $@.new > $@; rm -f $@.new
+endif
+
 if COND_i386_pc
 platform_PROGRAMS += linux.module
 MODULE_FILES += linux.module$(EXEEXT)
@@ -13179,7 +13152,7 @@ nodist_linux_module_SOURCES  =  ## platform nodist sources
 linux_module_LDADD  = 
 linux_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
 linux_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
-linux_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) $(CPPFLAGS_XEN) 
+linux_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
 linux_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
 linux_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
 dist_noinst_DATA += 
@@ -13202,7 +13175,7 @@ nodist_linux_module_SOURCES  =  ## platform nodist sources
 linux_module_LDADD  = 
 linux_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
 linux_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
-linux_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) $(CPPFLAGS_XEN) 
+linux_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
 linux_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
 linux_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
 dist_noinst_DATA += 
@@ -13358,7 +13331,7 @@ endif
 if COND_arm_uboot
 platform_PROGRAMS += linux.module
 MODULE_FILES += linux.module$(EXEEXT)
-linux_module_SOURCES  = loader/arm/linux.c lib/fdt.c loader/linux.c lib/cmdline.c  ## platform sources
+linux_module_SOURCES  = loader/arm/linux.c loader/linux.c lib/cmdline.c  ## platform sources
 nodist_linux_module_SOURCES  =  ## platform nodist sources
 linux_module_LDADD  = 
 linux_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
@@ -13381,7 +13354,7 @@ endif
 if COND_arm_efi
 platform_PROGRAMS += linux.module
 MODULE_FILES += linux.module$(EXEEXT)
-linux_module_SOURCES  = loader/arm/linux.c lib/fdt.c loader/linux.c lib/cmdline.c  ## platform sources
+linux_module_SOURCES  = loader/arm/linux.c loader/linux.c lib/cmdline.c  ## platform sources
 nodist_linux_module_SOURCES  =  ## platform nodist sources
 linux_module_LDADD  = 
 linux_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
@@ -13404,7 +13377,7 @@ endif
 if COND_arm64_efi
 platform_PROGRAMS += linux.module
 MODULE_FILES += linux.module$(EXEEXT)
-linux_module_SOURCES  = loader/arm64/linux.c lib/fdt.c loader/linux.c lib/cmdline.c  ## platform sources
+linux_module_SOURCES  = loader/arm64/linux.c loader/linux.c lib/cmdline.c  ## platform sources
 nodist_linux_module_SOURCES  =  ## platform nodist sources
 linux_module_LDADD  = 
 linux_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
@@ -13421,6 +13394,75 @@ CLEANFILES += linux.marker
 
 linux.marker: $(linux_module_SOURCES) $(nodist_linux_module_SOURCES)
 	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(linux_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+	grep 'MARKER' $@.new > $@; rm -f $@.new
+endif
+
+if COND_arm_uboot
+platform_PROGRAMS += fdt.module
+MODULE_FILES += fdt.module$(EXEEXT)
+fdt_module_SOURCES  = lib/fdt.c  ## platform sources
+nodist_fdt_module_SOURCES  =  ## platform nodist sources
+fdt_module_LDADD  = 
+fdt_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+fdt_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+fdt_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+fdt_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+fdt_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+dist_noinst_DATA += 
+BUILT_SOURCES += $(nodist_fdt_module_SOURCES)
+CLEANFILES += $(nodist_fdt_module_SOURCES)
+MOD_FILES += fdt.mod
+MARKER_FILES += fdt.marker
+CLEANFILES += fdt.marker
+
+fdt.marker: $(fdt_module_SOURCES) $(nodist_fdt_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(fdt_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+	grep 'MARKER' $@.new > $@; rm -f $@.new
+endif
+
+if COND_arm_efi
+platform_PROGRAMS += fdt.module
+MODULE_FILES += fdt.module$(EXEEXT)
+fdt_module_SOURCES  = lib/fdt.c  ## platform sources
+nodist_fdt_module_SOURCES  =  ## platform nodist sources
+fdt_module_LDADD  = 
+fdt_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+fdt_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+fdt_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+fdt_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+fdt_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+dist_noinst_DATA += 
+BUILT_SOURCES += $(nodist_fdt_module_SOURCES)
+CLEANFILES += $(nodist_fdt_module_SOURCES)
+MOD_FILES += fdt.mod
+MARKER_FILES += fdt.marker
+CLEANFILES += fdt.marker
+
+fdt.marker: $(fdt_module_SOURCES) $(nodist_fdt_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(fdt_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+	grep 'MARKER' $@.new > $@; rm -f $@.new
+endif
+
+if COND_arm64_efi
+platform_PROGRAMS += fdt.module
+MODULE_FILES += fdt.module$(EXEEXT)
+fdt_module_SOURCES  = loader/arm64/fdt.c lib/fdt.c  ## platform sources
+nodist_fdt_module_SOURCES  =  ## platform nodist sources
+fdt_module_LDADD  = 
+fdt_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+fdt_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+fdt_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+fdt_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+fdt_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+dist_noinst_DATA += 
+BUILT_SOURCES += $(nodist_fdt_module_SOURCES)
+CLEANFILES += $(nodist_fdt_module_SOURCES)
+MOD_FILES += fdt.mod
+MARKER_FILES += fdt.marker
+CLEANFILES += fdt.marker
+
+fdt.marker: $(fdt_module_SOURCES) $(nodist_fdt_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(fdt_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
 	grep 'MARKER' $@.new > $@; rm -f $@.new
 endif
 
@@ -13448,29 +13490,6 @@ xnu.marker: $(xnu_module_SOURCES) $(nodist_xnu_module_SOURCES)
 endif
 
 if COND_i386_efi
-platform_PROGRAMS += xnu.module
-MODULE_FILES += xnu.module$(EXEEXT)
-xnu_module_SOURCES  = loader/xnu_resume.c loader/i386/xnu.c loader/xnu.c  ## platform sources
-nodist_xnu_module_SOURCES  =  ## platform nodist sources
-xnu_module_LDADD  = 
-xnu_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
-xnu_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
-xnu_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
-xnu_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
-xnu_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
-dist_noinst_DATA += 
-BUILT_SOURCES += $(nodist_xnu_module_SOURCES)
-CLEANFILES += $(nodist_xnu_module_SOURCES)
-MOD_FILES += xnu.mod
-MARKER_FILES += xnu.marker
-CLEANFILES += xnu.marker
-
-xnu.marker: $(xnu_module_SOURCES) $(nodist_xnu_module_SOURCES)
-	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(xnu_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
-	grep 'MARKER' $@.new > $@; rm -f $@.new
-endif
-
-if COND_i386_qemu
 platform_PROGRAMS += xnu.module
 MODULE_FILES += xnu.module$(EXEEXT)
 xnu_module_SOURCES  = loader/xnu_resume.c loader/i386/xnu.c loader/xnu.c  ## platform sources
@@ -13539,7 +13558,7 @@ xnu.marker: $(xnu_module_SOURCES) $(nodist_xnu_module_SOURCES)
 	grep 'MARKER' $@.new > $@; rm -f $@.new
 endif
 
-if COND_i386_ieee1275
+if COND_x86_64_efi
 platform_PROGRAMS += xnu.module
 MODULE_FILES += xnu.module$(EXEEXT)
 xnu_module_SOURCES  = loader/xnu_resume.c loader/i386/xnu.c loader/xnu.c  ## platform sources
@@ -13562,26 +13581,118 @@ xnu.marker: $(xnu_module_SOURCES) $(nodist_xnu_module_SOURCES)
 	grep 'MARKER' $@.new > $@; rm -f $@.new
 endif
 
-if COND_x86_64_efi
-platform_PROGRAMS += xnu.module
-MODULE_FILES += xnu.module$(EXEEXT)
-xnu_module_SOURCES  = loader/xnu_resume.c loader/i386/xnu.c loader/xnu.c  ## platform sources
-nodist_xnu_module_SOURCES  =  ## platform nodist sources
-xnu_module_LDADD  = 
-xnu_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
-xnu_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
-xnu_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
-xnu_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
-xnu_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+if COND_i386_pc
+platform_PROGRAMS += random.module
+MODULE_FILES += random.module$(EXEEXT)
+random_module_SOURCES  = kern/i386/tsc_pmtimer.c lib/i386/random.c lib/random.c  ## platform sources
+nodist_random_module_SOURCES  =  ## platform nodist sources
+random_module_LDADD  = 
+random_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+random_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+random_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+random_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+random_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
 dist_noinst_DATA += 
-BUILT_SOURCES += $(nodist_xnu_module_SOURCES)
-CLEANFILES += $(nodist_xnu_module_SOURCES)
-MOD_FILES += xnu.mod
-MARKER_FILES += xnu.marker
-CLEANFILES += xnu.marker
+BUILT_SOURCES += $(nodist_random_module_SOURCES)
+CLEANFILES += $(nodist_random_module_SOURCES)
+MOD_FILES += random.mod
+MARKER_FILES += random.marker
+CLEANFILES += random.marker
 
-xnu.marker: $(xnu_module_SOURCES) $(nodist_xnu_module_SOURCES)
-	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(xnu_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+random.marker: $(random_module_SOURCES) $(nodist_random_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(random_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+	grep 'MARKER' $@.new > $@; rm -f $@.new
+endif
+
+if COND_i386_efi
+platform_PROGRAMS += random.module
+MODULE_FILES += random.module$(EXEEXT)
+random_module_SOURCES  = lib/i386/random.c lib/random.c  ## platform sources
+nodist_random_module_SOURCES  =  ## platform nodist sources
+random_module_LDADD  = 
+random_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+random_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+random_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+random_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+random_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+dist_noinst_DATA += 
+BUILT_SOURCES += $(nodist_random_module_SOURCES)
+CLEANFILES += $(nodist_random_module_SOURCES)
+MOD_FILES += random.mod
+MARKER_FILES += random.marker
+CLEANFILES += random.marker
+
+random.marker: $(random_module_SOURCES) $(nodist_random_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(random_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+	grep 'MARKER' $@.new > $@; rm -f $@.new
+endif
+
+if COND_i386_coreboot
+platform_PROGRAMS += random.module
+MODULE_FILES += random.module$(EXEEXT)
+random_module_SOURCES  = kern/i386/tsc_pmtimer.c lib/i386/random.c lib/random.c  ## platform sources
+nodist_random_module_SOURCES  =  ## platform nodist sources
+random_module_LDADD  = 
+random_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+random_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+random_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+random_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+random_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+dist_noinst_DATA += 
+BUILT_SOURCES += $(nodist_random_module_SOURCES)
+CLEANFILES += $(nodist_random_module_SOURCES)
+MOD_FILES += random.mod
+MARKER_FILES += random.marker
+CLEANFILES += random.marker
+
+random.marker: $(random_module_SOURCES) $(nodist_random_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(random_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+	grep 'MARKER' $@.new > $@; rm -f $@.new
+endif
+
+if COND_i386_multiboot
+platform_PROGRAMS += random.module
+MODULE_FILES += random.module$(EXEEXT)
+random_module_SOURCES  = kern/i386/tsc_pmtimer.c lib/i386/random.c lib/random.c  ## platform sources
+nodist_random_module_SOURCES  =  ## platform nodist sources
+random_module_LDADD  = 
+random_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+random_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+random_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+random_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+random_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+dist_noinst_DATA += 
+BUILT_SOURCES += $(nodist_random_module_SOURCES)
+CLEANFILES += $(nodist_random_module_SOURCES)
+MOD_FILES += random.mod
+MARKER_FILES += random.marker
+CLEANFILES += random.marker
+
+random.marker: $(random_module_SOURCES) $(nodist_random_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(random_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+	grep 'MARKER' $@.new > $@; rm -f $@.new
+endif
+
+if COND_x86_64_efi
+platform_PROGRAMS += random.module
+MODULE_FILES += random.module$(EXEEXT)
+random_module_SOURCES  = lib/i386/random.c lib/random.c  ## platform sources
+nodist_random_module_SOURCES  =  ## platform nodist sources
+random_module_LDADD  = 
+random_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+random_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+random_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+random_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+random_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+dist_noinst_DATA += 
+BUILT_SOURCES += $(nodist_random_module_SOURCES)
+CLEANFILES += $(nodist_random_module_SOURCES)
+MOD_FILES += random.mod
+MARKER_FILES += random.marker
+CLEANFILES += random.marker
+
+random.marker: $(random_module_SOURCES) $(nodist_random_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(random_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
 	grep 'MARKER' $@.new > $@; rm -f $@.new
 endif
 platform_PROGRAMS += macho.module
@@ -16393,6 +16504,374 @@ legacy_password_test.marker: $(legacy_password_test_module_SOURCES) $(nodist_leg
 	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(legacy_password_test_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
 	grep 'MARKER' $@.new > $@; rm -f $@.new
 endif
+
+if COND_emu
+platform_PROGRAMS += div.module
+MODULE_FILES += div.module$(EXEEXT)
+div_module_SOURCES  = lib/division.c  ## platform sources
+nodist_div_module_SOURCES  =  ## platform nodist sources
+div_module_LDADD  = 
+div_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+div_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+div_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+div_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+div_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+dist_noinst_DATA += 
+BUILT_SOURCES += $(nodist_div_module_SOURCES)
+CLEANFILES += $(nodist_div_module_SOURCES)
+MOD_FILES += div.mod
+MARKER_FILES += div.marker
+CLEANFILES += div.marker
+
+div.marker: $(div_module_SOURCES) $(nodist_div_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(div_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+	grep 'MARKER' $@.new > $@; rm -f $@.new
+endif
+
+if COND_i386_pc
+platform_PROGRAMS += div.module
+MODULE_FILES += div.module$(EXEEXT)
+div_module_SOURCES  = lib/division.c  ## platform sources
+nodist_div_module_SOURCES  =  ## platform nodist sources
+div_module_LDADD  = 
+div_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+div_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+div_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+div_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+div_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+dist_noinst_DATA += 
+BUILT_SOURCES += $(nodist_div_module_SOURCES)
+CLEANFILES += $(nodist_div_module_SOURCES)
+MOD_FILES += div.mod
+MARKER_FILES += div.marker
+CLEANFILES += div.marker
+
+div.marker: $(div_module_SOURCES) $(nodist_div_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(div_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+	grep 'MARKER' $@.new > $@; rm -f $@.new
+endif
+
+if COND_i386_efi
+platform_PROGRAMS += div.module
+MODULE_FILES += div.module$(EXEEXT)
+div_module_SOURCES  = lib/division.c  ## platform sources
+nodist_div_module_SOURCES  =  ## platform nodist sources
+div_module_LDADD  = 
+div_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+div_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+div_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+div_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+div_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+dist_noinst_DATA += 
+BUILT_SOURCES += $(nodist_div_module_SOURCES)
+CLEANFILES += $(nodist_div_module_SOURCES)
+MOD_FILES += div.mod
+MARKER_FILES += div.marker
+CLEANFILES += div.marker
+
+div.marker: $(div_module_SOURCES) $(nodist_div_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(div_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+	grep 'MARKER' $@.new > $@; rm -f $@.new
+endif
+
+if COND_i386_qemu
+platform_PROGRAMS += div.module
+MODULE_FILES += div.module$(EXEEXT)
+div_module_SOURCES  = lib/division.c  ## platform sources
+nodist_div_module_SOURCES  =  ## platform nodist sources
+div_module_LDADD  = 
+div_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+div_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+div_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+div_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+div_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+dist_noinst_DATA += 
+BUILT_SOURCES += $(nodist_div_module_SOURCES)
+CLEANFILES += $(nodist_div_module_SOURCES)
+MOD_FILES += div.mod
+MARKER_FILES += div.marker
+CLEANFILES += div.marker
+
+div.marker: $(div_module_SOURCES) $(nodist_div_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(div_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+	grep 'MARKER' $@.new > $@; rm -f $@.new
+endif
+
+if COND_i386_coreboot
+platform_PROGRAMS += div.module
+MODULE_FILES += div.module$(EXEEXT)
+div_module_SOURCES  = lib/division.c  ## platform sources
+nodist_div_module_SOURCES  =  ## platform nodist sources
+div_module_LDADD  = 
+div_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+div_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+div_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+div_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+div_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+dist_noinst_DATA += 
+BUILT_SOURCES += $(nodist_div_module_SOURCES)
+CLEANFILES += $(nodist_div_module_SOURCES)
+MOD_FILES += div.mod
+MARKER_FILES += div.marker
+CLEANFILES += div.marker
+
+div.marker: $(div_module_SOURCES) $(nodist_div_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(div_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+	grep 'MARKER' $@.new > $@; rm -f $@.new
+endif
+
+if COND_i386_multiboot
+platform_PROGRAMS += div.module
+MODULE_FILES += div.module$(EXEEXT)
+div_module_SOURCES  = lib/division.c  ## platform sources
+nodist_div_module_SOURCES  =  ## platform nodist sources
+div_module_LDADD  = 
+div_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+div_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+div_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+div_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+div_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+dist_noinst_DATA += 
+BUILT_SOURCES += $(nodist_div_module_SOURCES)
+CLEANFILES += $(nodist_div_module_SOURCES)
+MOD_FILES += div.mod
+MARKER_FILES += div.marker
+CLEANFILES += div.marker
+
+div.marker: $(div_module_SOURCES) $(nodist_div_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(div_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+	grep 'MARKER' $@.new > $@; rm -f $@.new
+endif
+
+if COND_i386_ieee1275
+platform_PROGRAMS += div.module
+MODULE_FILES += div.module$(EXEEXT)
+div_module_SOURCES  = lib/division.c  ## platform sources
+nodist_div_module_SOURCES  =  ## platform nodist sources
+div_module_LDADD  = 
+div_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+div_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+div_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+div_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+div_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+dist_noinst_DATA += 
+BUILT_SOURCES += $(nodist_div_module_SOURCES)
+CLEANFILES += $(nodist_div_module_SOURCES)
+MOD_FILES += div.mod
+MARKER_FILES += div.marker
+CLEANFILES += div.marker
+
+div.marker: $(div_module_SOURCES) $(nodist_div_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(div_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+	grep 'MARKER' $@.new > $@; rm -f $@.new
+endif
+
+if COND_x86_64_efi
+platform_PROGRAMS += div.module
+MODULE_FILES += div.module$(EXEEXT)
+div_module_SOURCES  = lib/division.c  ## platform sources
+nodist_div_module_SOURCES  =  ## platform nodist sources
+div_module_LDADD  = 
+div_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+div_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+div_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+div_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+div_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+dist_noinst_DATA += 
+BUILT_SOURCES += $(nodist_div_module_SOURCES)
+CLEANFILES += $(nodist_div_module_SOURCES)
+MOD_FILES += div.mod
+MARKER_FILES += div.marker
+CLEANFILES += div.marker
+
+div.marker: $(div_module_SOURCES) $(nodist_div_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(div_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+	grep 'MARKER' $@.new > $@; rm -f $@.new
+endif
+
+if COND_i386_xen
+platform_PROGRAMS += div.module
+MODULE_FILES += div.module$(EXEEXT)
+div_module_SOURCES  = lib/division.c  ## platform sources
+nodist_div_module_SOURCES  =  ## platform nodist sources
+div_module_LDADD  = 
+div_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+div_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+div_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+div_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+div_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+dist_noinst_DATA += 
+BUILT_SOURCES += $(nodist_div_module_SOURCES)
+CLEANFILES += $(nodist_div_module_SOURCES)
+MOD_FILES += div.mod
+MARKER_FILES += div.marker
+CLEANFILES += div.marker
+
+div.marker: $(div_module_SOURCES) $(nodist_div_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(div_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+	grep 'MARKER' $@.new > $@; rm -f $@.new
+endif
+
+if COND_x86_64_xen
+platform_PROGRAMS += div.module
+MODULE_FILES += div.module$(EXEEXT)
+div_module_SOURCES  = lib/division.c  ## platform sources
+nodist_div_module_SOURCES  =  ## platform nodist sources
+div_module_LDADD  = 
+div_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+div_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+div_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+div_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+div_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+dist_noinst_DATA += 
+BUILT_SOURCES += $(nodist_div_module_SOURCES)
+CLEANFILES += $(nodist_div_module_SOURCES)
+MOD_FILES += div.mod
+MARKER_FILES += div.marker
+CLEANFILES += div.marker
+
+div.marker: $(div_module_SOURCES) $(nodist_div_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(div_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+	grep 'MARKER' $@.new > $@; rm -f $@.new
+endif
+
+if COND_mips_loongson
+platform_PROGRAMS += div.module
+MODULE_FILES += div.module$(EXEEXT)
+div_module_SOURCES  = lib/division.c  ## platform sources
+nodist_div_module_SOURCES  =  ## platform nodist sources
+div_module_LDADD  = 
+div_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+div_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+div_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+div_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+div_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+dist_noinst_DATA += 
+BUILT_SOURCES += $(nodist_div_module_SOURCES)
+CLEANFILES += $(nodist_div_module_SOURCES)
+MOD_FILES += div.mod
+MARKER_FILES += div.marker
+CLEANFILES += div.marker
+
+div.marker: $(div_module_SOURCES) $(nodist_div_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(div_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+	grep 'MARKER' $@.new > $@; rm -f $@.new
+endif
+
+if COND_sparc64_ieee1275
+platform_PROGRAMS += div.module
+MODULE_FILES += div.module$(EXEEXT)
+div_module_SOURCES  = lib/division.c  ## platform sources
+nodist_div_module_SOURCES  =  ## platform nodist sources
+div_module_LDADD  = 
+div_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+div_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+div_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+div_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+div_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+dist_noinst_DATA += 
+BUILT_SOURCES += $(nodist_div_module_SOURCES)
+CLEANFILES += $(nodist_div_module_SOURCES)
+MOD_FILES += div.mod
+MARKER_FILES += div.marker
+CLEANFILES += div.marker
+
+div.marker: $(div_module_SOURCES) $(nodist_div_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(div_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+	grep 'MARKER' $@.new > $@; rm -f $@.new
+endif
+
+if COND_powerpc_ieee1275
+platform_PROGRAMS += div.module
+MODULE_FILES += div.module$(EXEEXT)
+div_module_SOURCES  = lib/division.c  ## platform sources
+nodist_div_module_SOURCES  =  ## platform nodist sources
+div_module_LDADD  = 
+div_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+div_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+div_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+div_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+div_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+dist_noinst_DATA += 
+BUILT_SOURCES += $(nodist_div_module_SOURCES)
+CLEANFILES += $(nodist_div_module_SOURCES)
+MOD_FILES += div.mod
+MARKER_FILES += div.marker
+CLEANFILES += div.marker
+
+div.marker: $(div_module_SOURCES) $(nodist_div_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(div_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+	grep 'MARKER' $@.new > $@; rm -f $@.new
+endif
+
+if COND_mips_arc
+platform_PROGRAMS += div.module
+MODULE_FILES += div.module$(EXEEXT)
+div_module_SOURCES  = lib/division.c  ## platform sources
+nodist_div_module_SOURCES  =  ## platform nodist sources
+div_module_LDADD  = 
+div_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+div_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+div_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+div_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+div_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+dist_noinst_DATA += 
+BUILT_SOURCES += $(nodist_div_module_SOURCES)
+CLEANFILES += $(nodist_div_module_SOURCES)
+MOD_FILES += div.mod
+MARKER_FILES += div.marker
+CLEANFILES += div.marker
+
+div.marker: $(div_module_SOURCES) $(nodist_div_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(div_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+	grep 'MARKER' $@.new > $@; rm -f $@.new
+endif
+
+if COND_mips_qemu_mips
+platform_PROGRAMS += div.module
+MODULE_FILES += div.module$(EXEEXT)
+div_module_SOURCES  = lib/division.c  ## platform sources
+nodist_div_module_SOURCES  =  ## platform nodist sources
+div_module_LDADD  = 
+div_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+div_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+div_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+div_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+div_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+dist_noinst_DATA += 
+BUILT_SOURCES += $(nodist_div_module_SOURCES)
+CLEANFILES += $(nodist_div_module_SOURCES)
+MOD_FILES += div.mod
+MARKER_FILES += div.marker
+CLEANFILES += div.marker
+
+div.marker: $(div_module_SOURCES) $(nodist_div_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(div_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+	grep 'MARKER' $@.new > $@; rm -f $@.new
+endif
+
+if COND_arm64_efi
+platform_PROGRAMS += div.module
+MODULE_FILES += div.module$(EXEEXT)
+div_module_SOURCES  = lib/division.c  ## platform sources
+nodist_div_module_SOURCES  =  ## platform nodist sources
+div_module_LDADD  = 
+div_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+div_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+div_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+div_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+div_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+dist_noinst_DATA += 
+BUILT_SOURCES += $(nodist_div_module_SOURCES)
+CLEANFILES += $(nodist_div_module_SOURCES)
+MOD_FILES += div.mod
+MARKER_FILES += div.marker
+CLEANFILES += div.marker
+
+div.marker: $(div_module_SOURCES) $(nodist_div_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(div_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+	grep 'MARKER' $@.new > $@; rm -f $@.new
+endif
 platform_PROGRAMS += div_test.module
 MODULE_FILES += div_test.module$(EXEEXT)
 div_test_module_SOURCES  = tests/div_test.c  ## platform sources
@@ -16412,6 +16891,106 @@ CLEANFILES += div_test.marker
 
 div_test.marker: $(div_test_module_SOURCES) $(nodist_div_test_module_SOURCES)
 	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(div_test_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+	grep 'MARKER' $@.new > $@; rm -f $@.new
+platform_PROGRAMS += mul_test.module
+MODULE_FILES += mul_test.module$(EXEEXT)
+mul_test_module_SOURCES  = tests/mul_test.c  ## platform sources
+nodist_mul_test_module_SOURCES  =  ## platform nodist sources
+mul_test_module_LDADD  = 
+mul_test_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+mul_test_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+mul_test_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+mul_test_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+mul_test_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+dist_noinst_DATA += 
+BUILT_SOURCES += $(nodist_mul_test_module_SOURCES)
+CLEANFILES += $(nodist_mul_test_module_SOURCES)
+MOD_FILES += mul_test.mod
+MARKER_FILES += mul_test.marker
+CLEANFILES += mul_test.marker
+
+mul_test.marker: $(mul_test_module_SOURCES) $(nodist_mul_test_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(mul_test_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+	grep 'MARKER' $@.new > $@; rm -f $@.new
+platform_PROGRAMS += shift_test.module
+MODULE_FILES += shift_test.module$(EXEEXT)
+shift_test_module_SOURCES  = tests/shift_test.c  ## platform sources
+nodist_shift_test_module_SOURCES  =  ## platform nodist sources
+shift_test_module_LDADD  = 
+shift_test_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+shift_test_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+shift_test_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+shift_test_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+shift_test_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+dist_noinst_DATA += 
+BUILT_SOURCES += $(nodist_shift_test_module_SOURCES)
+CLEANFILES += $(nodist_shift_test_module_SOURCES)
+MOD_FILES += shift_test.mod
+MARKER_FILES += shift_test.marker
+CLEANFILES += shift_test.marker
+
+shift_test.marker: $(shift_test_module_SOURCES) $(nodist_shift_test_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(shift_test_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+	grep 'MARKER' $@.new > $@; rm -f $@.new
+platform_PROGRAMS += cmp_test.module
+MODULE_FILES += cmp_test.module$(EXEEXT)
+cmp_test_module_SOURCES  = tests/cmp_test.c  ## platform sources
+nodist_cmp_test_module_SOURCES  =  ## platform nodist sources
+cmp_test_module_LDADD  = 
+cmp_test_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+cmp_test_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+cmp_test_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+cmp_test_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+cmp_test_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+dist_noinst_DATA += 
+BUILT_SOURCES += $(nodist_cmp_test_module_SOURCES)
+CLEANFILES += $(nodist_cmp_test_module_SOURCES)
+MOD_FILES += cmp_test.mod
+MARKER_FILES += cmp_test.marker
+CLEANFILES += cmp_test.marker
+
+cmp_test.marker: $(cmp_test_module_SOURCES) $(nodist_cmp_test_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(cmp_test_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+	grep 'MARKER' $@.new > $@; rm -f $@.new
+platform_PROGRAMS += ctz_test.module
+MODULE_FILES += ctz_test.module$(EXEEXT)
+ctz_test_module_SOURCES  = tests/ctz_test.c  ## platform sources
+nodist_ctz_test_module_SOURCES  =  ## platform nodist sources
+ctz_test_module_LDADD  = 
+ctz_test_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+ctz_test_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+ctz_test_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+ctz_test_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+ctz_test_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+dist_noinst_DATA += 
+BUILT_SOURCES += $(nodist_ctz_test_module_SOURCES)
+CLEANFILES += $(nodist_ctz_test_module_SOURCES)
+MOD_FILES += ctz_test.mod
+MARKER_FILES += ctz_test.marker
+CLEANFILES += ctz_test.marker
+
+ctz_test.marker: $(ctz_test_module_SOURCES) $(nodist_ctz_test_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(ctz_test_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
+	grep 'MARKER' $@.new > $@; rm -f $@.new
+platform_PROGRAMS += bswap_test.module
+MODULE_FILES += bswap_test.module$(EXEEXT)
+bswap_test_module_SOURCES  = tests/bswap_test.c  ## platform sources
+nodist_bswap_test_module_SOURCES  =  ## platform nodist sources
+bswap_test_module_LDADD  = 
+bswap_test_module_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_MODULE) 
+bswap_test_module_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_MODULE) 
+bswap_test_module_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_MODULE) 
+bswap_test_module_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_MODULE) 
+bswap_test_module_DEPENDENCIES  = $(TARGET_OBJ2ELF) 
+dist_noinst_DATA += 
+BUILT_SOURCES += $(nodist_bswap_test_module_SOURCES)
+CLEANFILES += $(nodist_bswap_test_module_SOURCES)
+MOD_FILES += bswap_test.mod
+MARKER_FILES += bswap_test.marker
+CLEANFILES += bswap_test.marker
+
+bswap_test.marker: $(bswap_test_module_SOURCES) $(nodist_bswap_test_module_SOURCES)
+	$(TARGET_CPP) -DGRUB_LST_GENERATOR $(CPPFLAGS_MARKER) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(bswap_test_module_CPPFLAGS) $(CPPFLAGS) $^ > $@.new || (rm -f $@; exit 1)
 	grep 'MARKER' $@.new > $@; rm -f $@.new
 platform_PROGRAMS += videotest_checksum.module
 MODULE_FILES += videotest_checksum.module$(EXEEXT)
@@ -19374,7 +19953,7 @@ platform_PROGRAMS += kernel.exec
 kernel_exec_SOURCES  = 
 kernel_exec_SOURCES += disk/host.c kern/emu/cache_s.S kern/emu/hostdisk.c osdep/unix/hostdisk.c osdep/exec.c osdep/devmapper/hostdisk.c osdep/hostdisk.c kern/emu/hostfs.c kern/emu/main.c kern/emu/argp_common.c kern/emu/misc.c kern/emu/mm.c kern/emu/time.c kern/emu/cache.c osdep/emuconsole.c osdep/dl.c osdep/sleep.c osdep/init.c osdep/emunet.c osdep/cputime.c term/terminfo.c term/tparm.c commands/extcmd.c lib/arg.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
 nodist_kernel_exec_SOURCES  =  ## platform nodist sources
-kernel_exec_LDADD  = $(LDADD_KERNEL) 
+kernel_exec_LDADD  = 
 kernel_exec_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_KERNEL) $(CFLAGS_GNULIB) 
 kernel_exec_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_KERNEL) -Wl,-r,-d 
 kernel_exec_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_KERNEL) $(CPPFLAGS_GNULIB) 
@@ -19394,9 +19973,9 @@ endif
 if COND_i386_pc
 platform_PROGRAMS += kernel.exec
 kernel_exec_SOURCES  = kern/i386/pc/startup.S 
-kernel_exec_SOURCES += kern/i386/pc/init.c kern/i386/pc/mmap.c term/i386/pc/console.c kern/i386/dl.c kern/i386/tsc.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
+kernel_exec_SOURCES += kern/i386/pc/init.c kern/i386/pc/mmap.c term/i386/pc/console.c kern/i386/dl.c kern/i386/tsc.c kern/i386/tsc_pit.c kern/compiler-rt.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
 nodist_kernel_exec_SOURCES  = symlist.c  ## platform nodist sources
-kernel_exec_LDADD  = $(LDADD_KERNEL) 
+kernel_exec_LDADD  = 
 kernel_exec_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_KERNEL) 
 kernel_exec_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_KERNEL) $(TARGET_IMG_LDFLAGS) $(TARGET_IMG_BASE_LDOPT),0x9000 
 kernel_exec_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_KERNEL) 
@@ -19410,15 +19989,15 @@ platform_DATA += kernel.img
 CLEANFILES += kernel.img
 
 kernel.img: kernel.exec$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1); else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;   rm -f $@.bin;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1);      rm -f $@.bin; else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
 endif
 
 if COND_i386_efi
 platform_PROGRAMS += kernel.exec
 kernel_exec_SOURCES  = kern/i386/efi/startup.S 
-kernel_exec_SOURCES += kern/i386/efi/init.c bus/pci.c disk/efi/efidisk.c kern/efi/efi.c kern/efi/init.c kern/efi/mm.c term/efi/console.c kern/i386/dl.c kern/i386/tsc.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
+kernel_exec_SOURCES += kern/i386/efi/tsc.c kern/i386/tsc_pmtimer.c kern/i386/efi/init.c bus/pci.c disk/efi/efidisk.c kern/efi/efi.c kern/efi/init.c kern/efi/mm.c term/efi/console.c kern/acpi.c kern/efi/acpi.c kern/i386/dl.c kern/i386/tsc.c kern/i386/tsc_pit.c kern/compiler-rt.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
 nodist_kernel_exec_SOURCES  = symlist.c  ## platform nodist sources
-kernel_exec_LDADD  = $(LDADD_KERNEL) 
+kernel_exec_LDADD  = 
 kernel_exec_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_KERNEL) 
 kernel_exec_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_KERNEL) -Wl,-r,-d 
 kernel_exec_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_KERNEL) 
@@ -19432,15 +20011,15 @@ platform_DATA += kernel.img
 CLEANFILES += kernel.img
 
 kernel.img: kernel.exec$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1); else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;   rm -f $@.bin;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1);      rm -f $@.bin; else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
 endif
 
 if COND_i386_qemu
 platform_PROGRAMS += kernel.exec
 kernel_exec_SOURCES  = kern/i386/qemu/startup.S 
-kernel_exec_SOURCES += kern/i386/qemu/init.c bus/pci.c kern/vga_init.c kern/i386/qemu/mmap.c term/i386/pc/vga_text.c kern/i386/dl.c kern/i386/tsc.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
+kernel_exec_SOURCES += kern/i386/qemu/init.c bus/pci.c kern/vga_init.c kern/i386/qemu/mmap.c term/i386/pc/vga_text.c kern/i386/dl.c kern/i386/tsc.c kern/i386/tsc_pit.c kern/compiler-rt.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
 nodist_kernel_exec_SOURCES  = symlist.c  ## platform nodist sources
-kernel_exec_LDADD  = $(LDADD_KERNEL) 
+kernel_exec_LDADD  = 
 kernel_exec_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_KERNEL) 
 kernel_exec_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_KERNEL) $(TARGET_IMG_LDFLAGS) $(TARGET_IMG_BASE_LDOPT),0x8200 
 kernel_exec_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_KERNEL) -DGRUB_BOOT_MACHINE_LINK_ADDR=$(GRUB_BOOT_MACHINE_LINK_ADDR) 
@@ -19454,15 +20033,15 @@ platform_DATA += kernel.img
 CLEANFILES += kernel.img
 
 kernel.img: kernel.exec$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1); else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;   rm -f $@.bin;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1);      rm -f $@.bin; else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
 endif
 
 if COND_i386_coreboot
 platform_PROGRAMS += kernel.exec
 kernel_exec_SOURCES  = kern/i386/coreboot/startup.S 
-kernel_exec_SOURCES += kern/i386/coreboot/init.c video/i386/coreboot/cbfb.c kern/i386/coreboot/mmap.c kern/i386/coreboot/cbtable.c term/gfxterm.c font/font.c font/font_cmd.c io/bufio.c video/fb/fbblit.c video/fb/fbfill.c video/fb/fbutil.c video/fb/video_fb.c video/video.c term/i386/pc/vga_text.c kern/i386/dl.c kern/i386/tsc.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
+kernel_exec_SOURCES += kern/i386/coreboot/init.c video/i386/coreboot/cbfb.c kern/i386/pc/acpi.c kern/acpi.c kern/i386/tsc_pmtimer.c kern/i386/coreboot/mmap.c kern/i386/coreboot/cbtable.c term/gfxterm.c font/font.c font/font_cmd.c io/bufio.c video/fb/fbblit.c video/fb/fbfill.c video/fb/fbutil.c video/fb/video_fb.c video/video.c term/i386/pc/vga_text.c kern/i386/dl.c kern/i386/tsc.c kern/i386/tsc_pit.c kern/compiler-rt.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
 nodist_kernel_exec_SOURCES  = symlist.c  ## platform nodist sources
-kernel_exec_LDADD  = $(LDADD_KERNEL) 
+kernel_exec_LDADD  = 
 kernel_exec_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_KERNEL) 
 kernel_exec_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_KERNEL) $(TARGET_IMG_LDFLAGS) $(TARGET_IMG_BASE_LDOPT),0x8200 
 kernel_exec_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_KERNEL) 
@@ -19476,15 +20055,15 @@ platform_DATA += kernel.img
 CLEANFILES += kernel.img
 
 kernel.img: kernel.exec$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1); else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;   rm -f $@.bin;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1);      rm -f $@.bin; else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
 endif
 
 if COND_i386_multiboot
 platform_PROGRAMS += kernel.exec
 kernel_exec_SOURCES  = kern/i386/coreboot/startup.S 
-kernel_exec_SOURCES += kern/i386/coreboot/init.c kern/i386/multiboot_mmap.c term/i386/pc/vga_text.c kern/i386/dl.c kern/i386/tsc.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
+kernel_exec_SOURCES += kern/i386/coreboot/init.c kern/i386/pc/acpi.c kern/acpi.c kern/i386/multiboot_mmap.c term/i386/pc/vga_text.c kern/i386/dl.c kern/i386/tsc.c kern/i386/tsc_pit.c kern/compiler-rt.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
 nodist_kernel_exec_SOURCES  = symlist.c  ## platform nodist sources
-kernel_exec_LDADD  = $(LDADD_KERNEL) 
+kernel_exec_LDADD  = 
 kernel_exec_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_KERNEL) 
 kernel_exec_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_KERNEL) $(TARGET_IMG_LDFLAGS) $(TARGET_IMG_BASE_LDOPT),0x8200 
 kernel_exec_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_KERNEL) 
@@ -19498,15 +20077,15 @@ platform_DATA += kernel.img
 CLEANFILES += kernel.img
 
 kernel.img: kernel.exec$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1); else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;   rm -f $@.bin;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1);      rm -f $@.bin; else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
 endif
 
 if COND_i386_ieee1275
 platform_PROGRAMS += kernel.exec
 kernel_exec_SOURCES  = kern/i386/ieee1275/startup.S 
-kernel_exec_SOURCES += disk/ieee1275/ofdisk.c kern/ieee1275/cmain.c kern/ieee1275/ieee1275.c kern/ieee1275/mmap.c kern/ieee1275/openfw.c term/ieee1275/console.c kern/ieee1275/init.c kern/i386/dl.c kern/i386/tsc.c term/terminfo.c term/tparm.c commands/extcmd.c lib/arg.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
+kernel_exec_SOURCES += disk/ieee1275/ofdisk.c kern/ieee1275/cmain.c kern/ieee1275/ieee1275.c kern/ieee1275/mmap.c kern/ieee1275/openfw.c term/ieee1275/console.c kern/ieee1275/init.c kern/i386/dl.c kern/i386/tsc.c kern/i386/tsc_pit.c term/terminfo.c term/tparm.c commands/extcmd.c lib/arg.c kern/compiler-rt.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
 nodist_kernel_exec_SOURCES  = symlist.c  ## platform nodist sources
-kernel_exec_LDADD  = $(LDADD_KERNEL) 
+kernel_exec_LDADD  = 
 kernel_exec_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_KERNEL) 
 kernel_exec_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_KERNEL) $(TARGET_IMG_LDFLAGS) $(TARGET_IMG_BASE_LDOPT),0x10000 
 kernel_exec_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_KERNEL) 
@@ -19520,15 +20099,15 @@ platform_DATA += kernel.img
 CLEANFILES += kernel.img
 
 kernel.img: kernel.exec$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1); else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;   rm -f $@.bin;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1);      rm -f $@.bin; else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
 endif
 
 if COND_x86_64_efi
 platform_PROGRAMS += kernel.exec
 kernel_exec_SOURCES  = kern/x86_64/efi/startup.S 
-kernel_exec_SOURCES += kern/x86_64/efi/callwrap.S kern/i386/efi/init.c bus/pci.c kern/x86_64/dl.c disk/efi/efidisk.c kern/efi/efi.c kern/efi/init.c kern/efi/mm.c term/efi/console.c kern/i386/tsc.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
+kernel_exec_SOURCES += kern/i386/efi/tsc.c kern/i386/tsc_pmtimer.c kern/x86_64/efi/callwrap.S kern/i386/efi/init.c bus/pci.c kern/x86_64/dl.c disk/efi/efidisk.c kern/efi/efi.c kern/efi/init.c kern/efi/mm.c term/efi/console.c kern/acpi.c kern/efi/acpi.c kern/i386/tsc.c kern/i386/tsc_pit.c kern/compiler-rt.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
 nodist_kernel_exec_SOURCES  = symlist.c  ## platform nodist sources
-kernel_exec_LDADD  = $(LDADD_KERNEL) 
+kernel_exec_LDADD  = 
 kernel_exec_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_KERNEL) 
 kernel_exec_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_KERNEL) -Wl,-r,-d 
 kernel_exec_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_KERNEL) 
@@ -19542,18 +20121,18 @@ platform_DATA += kernel.img
 CLEANFILES += kernel.img
 
 kernel.img: kernel.exec$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1); else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;   rm -f $@.bin;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1);      rm -f $@.bin; else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
 endif
 
 if COND_i386_xen
 platform_PROGRAMS += kernel.exec
 kernel_exec_SOURCES  = kern/i386/xen/startup.S 
-kernel_exec_SOURCES += kern/i386/dl.c kern/i386/xen/hypercall.S kern/i386/tsc.c kern/xen/init.c term/xen/console.c disk/xen/xendisk.c commands/boot.c term/terminfo.c term/tparm.c commands/extcmd.c lib/arg.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
+kernel_exec_SOURCES += kern/i386/dl.c kern/i386/xen/hypercall.S kern/i386/tsc.c kern/i386/xen/tsc.c kern/xen/init.c term/xen/console.c disk/xen/xendisk.c commands/boot.c term/terminfo.c term/tparm.c commands/extcmd.c lib/arg.c kern/compiler-rt.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
 nodist_kernel_exec_SOURCES  = symlist.c  ## platform nodist sources
-kernel_exec_LDADD  = $(LDADD_KERNEL) 
+kernel_exec_LDADD  = 
 kernel_exec_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_KERNEL) 
 kernel_exec_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_KERNEL) $(TARGET_IMG_LDFLAGS) $(TARGET_IMG_BASE_LDOPT),0 
-kernel_exec_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_KERNEL) $(CPPFLAGS_XEN) 
+kernel_exec_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_KERNEL) 
 kernel_exec_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_KERNEL) 
 kernel_exec_STRIPFLAGS  = $(AM_STRIPFLAGS) $(STRIPFLAGS_KERNEL) 
 kernel_exec_DEPENDENCIES  = $(TARGET_OBJ2ELF)
@@ -19564,18 +20143,18 @@ platform_DATA += kernel.img
 CLEANFILES += kernel.img
 
 kernel.img: kernel.exec$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1); else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;   rm -f $@.bin;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1);      rm -f $@.bin; else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
 endif
 
 if COND_x86_64_xen
 platform_PROGRAMS += kernel.exec
 kernel_exec_SOURCES  = kern/x86_64/xen/startup.S 
-kernel_exec_SOURCES += kern/x86_64/dl.c kern/x86_64/xen/hypercall.S kern/i386/tsc.c kern/xen/init.c term/xen/console.c disk/xen/xendisk.c commands/boot.c term/terminfo.c term/tparm.c commands/extcmd.c lib/arg.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
+kernel_exec_SOURCES += kern/x86_64/dl.c kern/x86_64/xen/hypercall.S kern/i386/tsc.c kern/i386/xen/tsc.c kern/xen/init.c term/xen/console.c disk/xen/xendisk.c commands/boot.c term/terminfo.c term/tparm.c commands/extcmd.c lib/arg.c kern/compiler-rt.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
 nodist_kernel_exec_SOURCES  = symlist.c  ## platform nodist sources
-kernel_exec_LDADD  = $(LDADD_KERNEL) 
+kernel_exec_LDADD  = 
 kernel_exec_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_KERNEL) 
 kernel_exec_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_KERNEL) $(TARGET_IMG_LDFLAGS) $(TARGET_IMG_BASE_LDOPT),0 
-kernel_exec_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_KERNEL) $(CPPFLAGS_XEN) 
+kernel_exec_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_KERNEL) 
 kernel_exec_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_KERNEL) 
 kernel_exec_STRIPFLAGS  = $(AM_STRIPFLAGS) $(STRIPFLAGS_KERNEL) 
 kernel_exec_DEPENDENCIES  = $(TARGET_OBJ2ELF)
@@ -19586,15 +20165,15 @@ platform_DATA += kernel.img
 CLEANFILES += kernel.img
 
 kernel.img: kernel.exec$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1); else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;   rm -f $@.bin;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1);      rm -f $@.bin; else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
 endif
 
 if COND_mips_loongson
 platform_PROGRAMS += kernel.exec
 kernel_exec_SOURCES  = kern/mips/startup.S 
-kernel_exec_SOURCES += term/ns8250.c bus/bonito.c bus/cs5536.c bus/pci.c kern/mips/loongson/init.c term/at_keyboard.c commands/boot.c term/serial.c video/sm712.c video/sis315pro.c video/radeon_fuloong2e.c video/radeon_yeeloong3a.c commands/keylayouts.c term/gfxterm.c font/font.c font/font_cmd.c io/bufio.c video/fb/fbblit.c video/fb/fbfill.c video/fb/fbutil.c video/fb/video_fb.c video/video.c kern/generic/rtc_get_time_ms.c kern/mips/cache.S kern/mips/dl.c kern/mips/init.c term/terminfo.c term/tparm.c commands/extcmd.c lib/arg.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
+kernel_exec_SOURCES += term/ns8250.c bus/bonito.c bus/cs5536.c bus/pci.c kern/mips/loongson/init.c term/at_keyboard.c commands/boot.c term/serial.c video/sm712.c video/sis315pro.c video/radeon_fuloong2e.c video/radeon_yeeloong3a.c commands/keylayouts.c term/gfxterm.c font/font.c font/font_cmd.c io/bufio.c video/fb/fbblit.c video/fb/fbfill.c video/fb/fbutil.c video/fb/video_fb.c video/video.c kern/generic/rtc_get_time_ms.c kern/mips/cache.S kern/mips/dl.c kern/mips/init.c term/terminfo.c term/tparm.c commands/extcmd.c lib/arg.c kern/compiler-rt.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
 nodist_kernel_exec_SOURCES  = symlist.c  ## platform nodist sources
-kernel_exec_LDADD  = $(LDADD_KERNEL) 
+kernel_exec_LDADD  = 
 kernel_exec_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_KERNEL) 
 kernel_exec_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_KERNEL) -Wl,-Ttext,0x80200000 
 kernel_exec_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_KERNEL) 
@@ -19608,15 +20187,15 @@ platform_DATA += kernel.img
 CLEANFILES += kernel.img
 
 kernel.img: kernel.exec$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1); else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;   rm -f $@.bin;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1);      rm -f $@.bin; else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
 endif
 
 if COND_sparc64_ieee1275
 platform_PROGRAMS += kernel.exec
 kernel_exec_SOURCES  = kern/sparc64/ieee1275/crt0.S 
-kernel_exec_SOURCES += kern/sparc64/cache.S kern/sparc64/dl.c kern/sparc64/ieee1275/ieee1275.c disk/ieee1275/ofdisk.c kern/ieee1275/cmain.c kern/ieee1275/ieee1275.c kern/ieee1275/mmap.c kern/ieee1275/openfw.c term/ieee1275/console.c kern/ieee1275/init.c term/terminfo.c term/tparm.c commands/extcmd.c lib/arg.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
+kernel_exec_SOURCES += kern/sparc64/cache.S kern/sparc64/dl.c kern/sparc64/ieee1275/ieee1275.c disk/ieee1275/ofdisk.c kern/ieee1275/cmain.c kern/ieee1275/ieee1275.c kern/ieee1275/mmap.c kern/ieee1275/openfw.c term/ieee1275/console.c kern/ieee1275/init.c term/terminfo.c term/tparm.c commands/extcmd.c lib/arg.c kern/compiler-rt.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
 nodist_kernel_exec_SOURCES  = symlist.c  ## platform nodist sources
-kernel_exec_LDADD  = $(LDADD_KERNEL) 
+kernel_exec_LDADD  = 
 kernel_exec_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_KERNEL) 
 kernel_exec_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_KERNEL) -Wl,-Ttext,0x4400 
 kernel_exec_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_KERNEL) 
@@ -19630,15 +20209,15 @@ platform_DATA += kernel.img
 CLEANFILES += kernel.img
 
 kernel.img: kernel.exec$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1); else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;   rm -f $@.bin;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1);      rm -f $@.bin; else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
 endif
 
 if COND_powerpc_ieee1275
 platform_PROGRAMS += kernel.exec
 kernel_exec_SOURCES  = kern/powerpc/ieee1275/startup.S 
-kernel_exec_SOURCES += kern/powerpc/cache.S kern/powerpc/dl.c disk/ieee1275/ofdisk.c kern/ieee1275/cmain.c kern/ieee1275/ieee1275.c kern/ieee1275/mmap.c kern/ieee1275/openfw.c term/ieee1275/console.c kern/ieee1275/init.c term/terminfo.c term/tparm.c commands/extcmd.c lib/arg.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
+kernel_exec_SOURCES += kern/powerpc/cache.S kern/powerpc/dl.c kern/powerpc/compiler-rt.S disk/ieee1275/ofdisk.c kern/ieee1275/cmain.c kern/ieee1275/ieee1275.c kern/ieee1275/mmap.c kern/ieee1275/openfw.c term/ieee1275/console.c kern/ieee1275/init.c term/terminfo.c term/tparm.c commands/extcmd.c lib/arg.c kern/compiler-rt.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
 nodist_kernel_exec_SOURCES  = symlist.c  ## platform nodist sources
-kernel_exec_LDADD  = $(LDADD_KERNEL) 
+kernel_exec_LDADD  = 
 kernel_exec_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_KERNEL) 
 kernel_exec_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_KERNEL) -Wl,-Ttext,0x200000 
 kernel_exec_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_KERNEL) 
@@ -19652,15 +20231,15 @@ platform_DATA += kernel.img
 CLEANFILES += kernel.img
 
 kernel.img: kernel.exec$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1); else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;   rm -f $@.bin;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1);      rm -f $@.bin; else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
 endif
 
 if COND_mips_arc
 platform_PROGRAMS += kernel.exec
 kernel_exec_SOURCES  = kern/mips/startup.S 
-kernel_exec_SOURCES += kern/mips/arc/init.c term/arc/console.c disk/arc/arcdisk.c kern/generic/rtc_get_time_ms.c kern/mips/cache.S kern/mips/dl.c kern/mips/init.c term/terminfo.c term/tparm.c commands/extcmd.c lib/arg.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
+kernel_exec_SOURCES += kern/mips/arc/init.c term/arc/console.c disk/arc/arcdisk.c kern/generic/rtc_get_time_ms.c kern/mips/cache.S kern/mips/dl.c kern/mips/init.c term/terminfo.c term/tparm.c commands/extcmd.c lib/arg.c kern/compiler-rt.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
 nodist_kernel_exec_SOURCES  = symlist.c  ## platform nodist sources
-kernel_exec_LDADD  = $(LDADD_KERNEL) 
+kernel_exec_LDADD  = 
 kernel_exec_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_KERNEL) 
 kernel_exec_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_KERNEL) -Wl,-Ttext,$(TARGET_LINK_ADDR) 
 kernel_exec_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_KERNEL) -DGRUB_DECOMPRESSOR_LINK_ADDR=$(TARGET_DECOMPRESSOR_LINK_ADDR) 
@@ -19674,15 +20253,15 @@ platform_DATA += kernel.img
 CLEANFILES += kernel.img
 
 kernel.img: kernel.exec$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1); else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;   rm -f $@.bin;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1);      rm -f $@.bin; else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
 endif
 
 if COND_ia64_efi
 platform_PROGRAMS += kernel.exec
 kernel_exec_SOURCES  = 
-kernel_exec_SOURCES += kern/ia64/efi/startup.S kern/ia64/efi/init.c kern/ia64/dl.c kern/ia64/dl_helper.c kern/ia64/cache.c disk/efi/efidisk.c kern/efi/efi.c kern/efi/init.c kern/efi/mm.c term/efi/console.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
+kernel_exec_SOURCES += kern/ia64/efi/startup.S kern/ia64/efi/init.c kern/ia64/dl.c kern/ia64/dl_helper.c kern/ia64/cache.c lib/division.c disk/efi/efidisk.c kern/efi/efi.c kern/efi/init.c kern/efi/mm.c term/efi/console.c kern/acpi.c kern/efi/acpi.c kern/compiler-rt.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
 nodist_kernel_exec_SOURCES  = symlist.c  ## platform nodist sources
-kernel_exec_LDADD  = $(LDADD_KERNEL) 
+kernel_exec_LDADD  = 
 kernel_exec_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_KERNEL) -fno-builtin -fpic -minline-int-divide-max-throughput 
 kernel_exec_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_KERNEL) -Wl,-r,-d 
 kernel_exec_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_KERNEL) 
@@ -19696,15 +20275,15 @@ platform_DATA += kernel.img
 CLEANFILES += kernel.img
 
 kernel.img: kernel.exec$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1); else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;   rm -f $@.bin;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1);      rm -f $@.bin; else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
 endif
 
 if COND_mips_qemu_mips
 platform_PROGRAMS += kernel.exec
 kernel_exec_SOURCES  = kern/mips/startup.S 
-kernel_exec_SOURCES += kern/mips/qemu_mips/init.c term/ns8250.c term/serial.c term/at_keyboard.c commands/boot.c commands/keylayouts.c term/i386/pc/vga_text.c kern/vga_init.c kern/generic/rtc_get_time_ms.c kern/mips/cache.S kern/mips/dl.c kern/mips/init.c term/terminfo.c term/tparm.c commands/extcmd.c lib/arg.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
+kernel_exec_SOURCES += kern/mips/qemu_mips/init.c term/ns8250.c term/serial.c term/at_keyboard.c commands/boot.c commands/keylayouts.c term/i386/pc/vga_text.c kern/vga_init.c kern/generic/rtc_get_time_ms.c kern/mips/cache.S kern/mips/dl.c kern/mips/init.c term/terminfo.c term/tparm.c commands/extcmd.c lib/arg.c kern/compiler-rt.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
 nodist_kernel_exec_SOURCES  = symlist.c  ## platform nodist sources
-kernel_exec_LDADD  = $(LDADD_KERNEL) 
+kernel_exec_LDADD  = 
 kernel_exec_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_KERNEL) 
 kernel_exec_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_KERNEL) -Wl,-Ttext,0x80200000 
 kernel_exec_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_KERNEL) 
@@ -19718,17 +20297,17 @@ platform_DATA += kernel.img
 CLEANFILES += kernel.img
 
 kernel.img: kernel.exec$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1); else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;   rm -f $@.bin;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1);      rm -f $@.bin; else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
 endif
 
 if COND_arm_uboot
 platform_PROGRAMS += kernel.exec
 kernel_exec_SOURCES  = kern/arm/uboot/startup.S 
-kernel_exec_SOURCES += disk/uboot/ubootdisk.c kern/uboot/uboot.c kern/uboot/init.c kern/uboot/hw.c term/uboot/console.c kern/arm/dl.c kern/arm/dl_helper.c kern/arm/cache_armv6.S kern/arm/cache_armv7.S kern/arm/cache.c kern/arm/misc.S term/terminfo.c term/tparm.c commands/extcmd.c lib/arg.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
+kernel_exec_SOURCES += disk/uboot/ubootdisk.c kern/uboot/uboot.c kern/uboot/init.c kern/uboot/hw.c term/uboot/console.c kern/arm/dl.c kern/arm/dl_helper.c kern/arm/cache_armv6.S kern/arm/cache_armv7.S kern/arm/cache.c kern/arm/compiler-rt.S lib/division.c term/terminfo.c term/tparm.c commands/extcmd.c lib/arg.c kern/compiler-rt.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
 nodist_kernel_exec_SOURCES  = symlist.c  ## platform nodist sources
-kernel_exec_LDADD  = $(LDADD_KERNEL) 
+kernel_exec_LDADD  = 
 kernel_exec_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_KERNEL) 
-kernel_exec_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_KERNEL) -Wl,-Ttext=0x08000000 
+kernel_exec_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_KERNEL) -Wl,-r,-d 
 kernel_exec_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_KERNEL) 
 kernel_exec_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_KERNEL) 
 kernel_exec_STRIPFLAGS  = $(AM_STRIPFLAGS) $(STRIPFLAGS_KERNEL) --strip-unneeded -K start -R .note -R .comment -R .note.gnu.gold-version 
@@ -19740,15 +20319,15 @@ platform_DATA += kernel.img
 CLEANFILES += kernel.img
 
 kernel.img: kernel.exec$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1); else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;   rm -f $@.bin;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1);      rm -f $@.bin; else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
 endif
 
 if COND_arm_efi
 platform_PROGRAMS += kernel.exec
 kernel_exec_SOURCES  = kern/arm/efi/startup.S 
-kernel_exec_SOURCES += kern/arm/efi/init.c kern/arm/efi/misc.c kern/arm/dl.c kern/arm/dl_helper.c kern/arm/cache_armv6.S kern/arm/cache_armv7.S kern/arm/cache.c kern/arm/misc.S disk/efi/efidisk.c kern/efi/efi.c kern/efi/init.c kern/efi/mm.c term/efi/console.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
+kernel_exec_SOURCES += kern/arm/efi/init.c kern/arm/efi/misc.c kern/arm/dl.c kern/arm/dl_helper.c kern/arm/cache_armv6.S kern/arm/cache_armv7.S kern/arm/cache.c kern/arm/compiler-rt.S lib/division.c disk/efi/efidisk.c kern/efi/efi.c kern/efi/init.c kern/efi/mm.c term/efi/console.c kern/acpi.c kern/efi/acpi.c kern/compiler-rt.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
 nodist_kernel_exec_SOURCES  = symlist.c  ## platform nodist sources
-kernel_exec_LDADD  = $(LDADD_KERNEL) 
+kernel_exec_LDADD  = 
 kernel_exec_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_KERNEL) 
 kernel_exec_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_KERNEL) -Wl,-r,-d 
 kernel_exec_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_KERNEL) 
@@ -19762,20 +20341,20 @@ platform_DATA += kernel.img
 CLEANFILES += kernel.img
 
 kernel.img: kernel.exec$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1); else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;   rm -f $@.bin;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1);      rm -f $@.bin; else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
 endif
 
 if COND_arm64_efi
 platform_PROGRAMS += kernel.exec
 kernel_exec_SOURCES  = kern/arm64/efi/startup.S 
-kernel_exec_SOURCES += kern/arm/efi/init.c kern/arm64/cache.c kern/arm64/cache_flush.S kern/arm64/dl.c kern/arm64/dl_helper.c disk/efi/efidisk.c kern/efi/efi.c kern/efi/init.c kern/efi/mm.c term/efi/console.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
+kernel_exec_SOURCES += kern/arm64/efi/init.c kern/arm64/cache.c kern/arm64/cache_flush.S kern/arm64/dl.c kern/arm64/dl_helper.c disk/efi/efidisk.c kern/efi/efi.c kern/efi/init.c kern/efi/mm.c term/efi/console.c kern/acpi.c kern/efi/acpi.c kern/compiler-rt.c kern/mm.c kern/time.c kern/generic/millisleep.c kern/command.c kern/corecmd.c kern/device.c kern/disk.c kern/dl.c kern/env.c kern/err.c kern/file.c kern/fs.c kern/list.c kern/main.c kern/misc.c kern/parser.c kern/partition.c kern/rescue_parser.c kern/rescue_reader.c kern/term.c 
 nodist_kernel_exec_SOURCES  = symlist.c  ## platform nodist sources
-kernel_exec_LDADD  = $(LDADD_KERNEL) 
+kernel_exec_LDADD  = 
 kernel_exec_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_KERNEL) 
 kernel_exec_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_KERNEL) -Wl,-r,-d 
 kernel_exec_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_KERNEL) 
 kernel_exec_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_KERNEL) 
-kernel_exec_STRIPFLAGS  = $(AM_STRIPFLAGS) $(STRIPFLAGS_KERNEL) --strip-unneeded -K start -R .note -R .comment -R .note.gnu.gold-version 
+kernel_exec_STRIPFLAGS  = $(AM_STRIPFLAGS) $(STRIPFLAGS_KERNEL) --strip-unneeded -K start -R .note -R .comment -R .note.gnu.gold-version -R .eh_frame 
 kernel_exec_DEPENDENCIES  = $(TARGET_OBJ2ELF)
 dist_noinst_DATA += video/sm712_init.c video/sis315_init.c kern/arm/cache.S osdep/unix/exec.c osdep/unix/emuconsole.c osdep/windows/emuconsole.c osdep/unix/dl.c osdep/windows/dl.c osdep/linux/emunet.c osdep/basic/emunet.c osdep/unix/cputime.c osdep/windows/cputime.c kern/i386/int.S kern/i386/realmode.S boot/i386/pc/lzma_decode.S kern/mips/cache_flush.S 
 BUILT_SOURCES += $(nodist_kernel_exec_SOURCES)
@@ -19784,7 +20363,7 @@ platform_DATA += kernel.img
 CLEANFILES += kernel.img
 
 kernel.img: kernel.exec$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1); else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(TARGET_STRIP) -S -x $(kernel_exec) -o $@.bin $<;   $(TARGET_OBJCONV) -f$(TARGET_MODULE_FORMAT) -nr:_grub_mod_init:grub_mod_init -nr:_grub_mod_fini:grub_mod_fini -ed2022 -ed2016 -wd1106 -nu -nd $@.bin $@;   rm -f $@.bin;    elif test ! -z '$(TARGET_OBJ2ELF)'; then      $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@.bin $< &&      $(TARGET_OBJ2ELF) $@.bin $@ || (rm -f $@; rm -f $@.bin; exit 1);      rm -f $@.bin; else $(TARGET_STRIP) $(kernel_exec_STRIPFLAGS) -o $@ $<; fi
 endif
 
 if COND_i386_pc
@@ -19804,7 +20383,7 @@ platform_DATA += boot.img
 CLEANFILES += boot.img
 
 boot.img: boot.image$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(boot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .reginfo -R .rel.dyn -R .note.gnu.gold-version $< $@; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(boot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
 	
 endif
 
@@ -19825,7 +20404,7 @@ platform_DATA += boot.img
 CLEANFILES += boot.img
 
 boot.img: boot.image$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(boot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .reginfo -R .rel.dyn -R .note.gnu.gold-version $< $@; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(boot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
 	
 endif
 
@@ -19846,7 +20425,7 @@ platform_DATA += boot.img
 CLEANFILES += boot.img
 
 boot.img: boot.image$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(boot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .reginfo -R .rel.dyn -R .note.gnu.gold-version $< $@; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(boot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
 	
 endif
 
@@ -19867,7 +20446,7 @@ platform_DATA += boot_hybrid.img
 CLEANFILES += boot_hybrid.img
 
 boot_hybrid.img: boot_hybrid.image$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(boot_hybrid_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .reginfo -R .rel.dyn -R .note.gnu.gold-version $< $@; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(boot_hybrid_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
 	
 endif
 
@@ -19888,7 +20467,7 @@ platform_DATA += cdboot.img
 CLEANFILES += cdboot.img
 
 cdboot.img: cdboot.image$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(cdboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .reginfo -R .rel.dyn -R .note.gnu.gold-version $< $@; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(cdboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
 	
 endif
 
@@ -19909,7 +20488,7 @@ platform_DATA += cdboot.img
 CLEANFILES += cdboot.img
 
 cdboot.img: cdboot.image$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(cdboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .reginfo -R .rel.dyn -R .note.gnu.gold-version $< $@; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(cdboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
 	
 endif
 
@@ -19930,7 +20509,7 @@ platform_DATA += pxeboot.img
 CLEANFILES += pxeboot.img
 
 pxeboot.img: pxeboot.image$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(pxeboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .reginfo -R .rel.dyn -R .note.gnu.gold-version $< $@; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(pxeboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
 	
 endif
 
@@ -19951,7 +20530,7 @@ platform_DATA += diskboot.img
 CLEANFILES += diskboot.img
 
 diskboot.img: diskboot.image$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(diskboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .reginfo -R .rel.dyn -R .note.gnu.gold-version $< $@; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(diskboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
 	
 endif
 
@@ -19972,7 +20551,7 @@ platform_DATA += diskboot.img
 CLEANFILES += diskboot.img
 
 diskboot.img: diskboot.image$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(diskboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .reginfo -R .rel.dyn -R .note.gnu.gold-version $< $@; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(diskboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
 	
 endif
 
@@ -19993,17 +20572,17 @@ platform_DATA += lnxboot.img
 CLEANFILES += lnxboot.img
 
 lnxboot.img: lnxboot.image$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(lnxboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .reginfo -R .rel.dyn -R .note.gnu.gold-version $< $@; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(lnxboot_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
 	
 endif
 
 if COND_mips_loongson
 platform_PROGRAMS += xz_decompress.image
-xz_decompress_image_SOURCES  = boot/mips/startup_raw.S boot/decompressor/minilib.c boot/decompressor/xz.c lib/xzembed/xz_dec_bcj.c lib/xzembed/xz_dec_lzma2.c lib/xzembed/xz_dec_stream.c 
+xz_decompress_image_SOURCES  = boot/mips/startup_raw.S boot/decompressor/minilib.c boot/decompressor/xz.c lib/xzembed/xz_dec_bcj.c lib/xzembed/xz_dec_lzma2.c lib/xzembed/xz_dec_stream.c kern/compiler-rt.c 
 nodist_xz_decompress_image_SOURCES  = ## platform nodist sources
-xz_decompress_image_LDADD  = $(TARGET_LIBGCC) 
-xz_decompress_image_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_IMAGE) -Wno-unreachable-code $(TARGET_LDFLAGS_STATIC_LIBGCC) 
-xz_decompress_image_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_IMAGE) $(TARGET_LDFLAGS_STATIC_LIBGCC) -Wl,-Ttext,$(TARGET_DECOMPRESSOR_LINK_ADDR) 
+xz_decompress_image_LDADD  = 
+xz_decompress_image_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_IMAGE) -Wno-unreachable-code 
+xz_decompress_image_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_IMAGE) -Wl,-Ttext,$(TARGET_DECOMPRESSOR_LINK_ADDR) 
 xz_decompress_image_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_IMAGE) -I$(srcdir)/lib/posix_wrap -I$(srcdir)/lib/xzembed -DGRUB_EMBED_DECOMPRESSOR=1 
 xz_decompress_image_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_IMAGE) 
 xz_decompress_image_OBJCOPYFLAGS  = $(OBJCOPYFLAGS_IMAGE) -O binary 
@@ -20014,17 +20593,17 @@ platform_DATA += xz_decompress.img
 CLEANFILES += xz_decompress.img
 
 xz_decompress.img: xz_decompress.image$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(xz_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .reginfo -R .rel.dyn -R .note.gnu.gold-version $< $@; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(xz_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
 	
 endif
 
 if COND_mips_arc
 platform_PROGRAMS += xz_decompress.image
-xz_decompress_image_SOURCES  = boot/mips/startup_raw.S boot/decompressor/minilib.c boot/decompressor/xz.c lib/xzembed/xz_dec_bcj.c lib/xzembed/xz_dec_lzma2.c lib/xzembed/xz_dec_stream.c 
+xz_decompress_image_SOURCES  = boot/mips/startup_raw.S boot/decompressor/minilib.c boot/decompressor/xz.c lib/xzembed/xz_dec_bcj.c lib/xzembed/xz_dec_lzma2.c lib/xzembed/xz_dec_stream.c kern/compiler-rt.c 
 nodist_xz_decompress_image_SOURCES  = ## platform nodist sources
-xz_decompress_image_LDADD  = $(TARGET_LIBGCC) 
-xz_decompress_image_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_IMAGE) -Wno-unreachable-code $(TARGET_LDFLAGS_STATIC_LIBGCC) 
-xz_decompress_image_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_IMAGE) $(TARGET_LDFLAGS_STATIC_LIBGCC) -Wl,-Ttext,$(TARGET_DECOMPRESSOR_LINK_ADDR) 
+xz_decompress_image_LDADD  = 
+xz_decompress_image_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_IMAGE) -Wno-unreachable-code 
+xz_decompress_image_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_IMAGE) -Wl,-Ttext,$(TARGET_DECOMPRESSOR_LINK_ADDR) 
 xz_decompress_image_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_IMAGE) -I$(srcdir)/lib/posix_wrap -I$(srcdir)/lib/xzembed -DGRUB_EMBED_DECOMPRESSOR=1 
 xz_decompress_image_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_IMAGE) 
 xz_decompress_image_OBJCOPYFLAGS  = $(OBJCOPYFLAGS_IMAGE) -O binary 
@@ -20035,17 +20614,17 @@ platform_DATA += xz_decompress.img
 CLEANFILES += xz_decompress.img
 
 xz_decompress.img: xz_decompress.image$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(xz_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .reginfo -R .rel.dyn -R .note.gnu.gold-version $< $@; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(xz_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
 	
 endif
 
 if COND_mips_qemu_mips
 platform_PROGRAMS += xz_decompress.image
-xz_decompress_image_SOURCES  = boot/mips/startup_raw.S boot/decompressor/minilib.c boot/decompressor/xz.c lib/xzembed/xz_dec_bcj.c lib/xzembed/xz_dec_lzma2.c lib/xzembed/xz_dec_stream.c 
+xz_decompress_image_SOURCES  = boot/mips/startup_raw.S boot/decompressor/minilib.c boot/decompressor/xz.c lib/xzembed/xz_dec_bcj.c lib/xzembed/xz_dec_lzma2.c lib/xzembed/xz_dec_stream.c kern/compiler-rt.c 
 nodist_xz_decompress_image_SOURCES  = ## platform nodist sources
-xz_decompress_image_LDADD  = $(TARGET_LIBGCC) 
-xz_decompress_image_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_IMAGE) -Wno-unreachable-code $(TARGET_LDFLAGS_STATIC_LIBGCC) 
-xz_decompress_image_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_IMAGE) $(TARGET_LDFLAGS_STATIC_LIBGCC) -Wl,-Ttext,$(TARGET_DECOMPRESSOR_LINK_ADDR) 
+xz_decompress_image_LDADD  = 
+xz_decompress_image_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_IMAGE) -Wno-unreachable-code 
+xz_decompress_image_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_IMAGE) -Wl,-Ttext,$(TARGET_DECOMPRESSOR_LINK_ADDR) 
 xz_decompress_image_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_IMAGE) -I$(srcdir)/lib/posix_wrap -I$(srcdir)/lib/xzembed -DGRUB_EMBED_DECOMPRESSOR=1 
 xz_decompress_image_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_IMAGE) 
 xz_decompress_image_OBJCOPYFLAGS  = $(OBJCOPYFLAGS_IMAGE) -O binary 
@@ -20056,7 +20635,7 @@ platform_DATA += xz_decompress.img
 CLEANFILES += xz_decompress.img
 
 xz_decompress.img: xz_decompress.image$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(xz_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .reginfo -R .rel.dyn -R .note.gnu.gold-version $< $@; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(xz_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
 	
 endif
 
@@ -20064,9 +20643,9 @@ if COND_mips_loongson
 platform_PROGRAMS += none_decompress.image
 none_decompress_image_SOURCES  = boot/mips/startup_raw.S boot/decompressor/none.c 
 nodist_none_decompress_image_SOURCES  = ## platform nodist sources
-none_decompress_image_LDADD  = $(TARGET_LIBGCC) 
-none_decompress_image_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_IMAGE) $(TARGET_LDFLAGS_STATIC_LIBGCC) 
-none_decompress_image_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_IMAGE) $(TARGET_LDFLAGS_STATIC_LIBGCC) -Wl,-Ttext,$(TARGET_DECOMPRESSOR_LINK_ADDR) 
+none_decompress_image_LDADD  = 
+none_decompress_image_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_IMAGE) 
+none_decompress_image_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_IMAGE) -Wl,-Ttext,$(TARGET_DECOMPRESSOR_LINK_ADDR) 
 none_decompress_image_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_IMAGE) -DGRUB_EMBED_DECOMPRESSOR=1 
 none_decompress_image_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_IMAGE) 
 none_decompress_image_OBJCOPYFLAGS  = $(OBJCOPYFLAGS_IMAGE) -O binary 
@@ -20077,7 +20656,7 @@ platform_DATA += none_decompress.img
 CLEANFILES += none_decompress.img
 
 none_decompress.img: none_decompress.image$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(none_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .reginfo -R .rel.dyn -R .note.gnu.gold-version $< $@; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(none_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
 	
 endif
 
@@ -20085,9 +20664,9 @@ if COND_mips_arc
 platform_PROGRAMS += none_decompress.image
 none_decompress_image_SOURCES  = boot/mips/startup_raw.S boot/decompressor/none.c 
 nodist_none_decompress_image_SOURCES  = ## platform nodist sources
-none_decompress_image_LDADD  = $(TARGET_LIBGCC) 
-none_decompress_image_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_IMAGE) $(TARGET_LDFLAGS_STATIC_LIBGCC) 
-none_decompress_image_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_IMAGE) $(TARGET_LDFLAGS_STATIC_LIBGCC) -Wl,-Ttext,$(TARGET_DECOMPRESSOR_LINK_ADDR) 
+none_decompress_image_LDADD  = 
+none_decompress_image_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_IMAGE) 
+none_decompress_image_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_IMAGE) -Wl,-Ttext,$(TARGET_DECOMPRESSOR_LINK_ADDR) 
 none_decompress_image_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_IMAGE) -DGRUB_EMBED_DECOMPRESSOR=1 
 none_decompress_image_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_IMAGE) 
 none_decompress_image_OBJCOPYFLAGS  = $(OBJCOPYFLAGS_IMAGE) -O binary 
@@ -20098,7 +20677,7 @@ platform_DATA += none_decompress.img
 CLEANFILES += none_decompress.img
 
 none_decompress.img: none_decompress.image$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(none_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .reginfo -R .rel.dyn -R .note.gnu.gold-version $< $@; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(none_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
 	
 endif
 
@@ -20106,9 +20685,9 @@ if COND_mips_qemu_mips
 platform_PROGRAMS += none_decompress.image
 none_decompress_image_SOURCES  = boot/mips/startup_raw.S boot/decompressor/none.c 
 nodist_none_decompress_image_SOURCES  = ## platform nodist sources
-none_decompress_image_LDADD  = $(TARGET_LIBGCC) 
-none_decompress_image_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_IMAGE) $(TARGET_LDFLAGS_STATIC_LIBGCC) 
-none_decompress_image_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_IMAGE) $(TARGET_LDFLAGS_STATIC_LIBGCC) -Wl,-Ttext,$(TARGET_DECOMPRESSOR_LINK_ADDR) 
+none_decompress_image_LDADD  = 
+none_decompress_image_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_IMAGE) 
+none_decompress_image_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_IMAGE) -Wl,-Ttext,$(TARGET_DECOMPRESSOR_LINK_ADDR) 
 none_decompress_image_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_IMAGE) -DGRUB_EMBED_DECOMPRESSOR=1 
 none_decompress_image_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_IMAGE) 
 none_decompress_image_OBJCOPYFLAGS  = $(OBJCOPYFLAGS_IMAGE) -O binary 
@@ -20119,7 +20698,7 @@ platform_DATA += none_decompress.img
 CLEANFILES += none_decompress.img
 
 none_decompress.img: none_decompress.image$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(none_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .reginfo -R .rel.dyn -R .note.gnu.gold-version $< $@; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(none_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
 	
 endif
 
@@ -20140,7 +20719,7 @@ platform_DATA += lzma_decompress.img
 CLEANFILES += lzma_decompress.img
 
 lzma_decompress.img: lzma_decompress.image$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(lzma_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .reginfo -R .rel.dyn -R .note.gnu.gold-version $< $@; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(lzma_decompress_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
 	
 endif
 
@@ -20150,7 +20729,7 @@ fwstart_image_SOURCES  = boot/mips/loongson/fwstart.S
 nodist_fwstart_image_SOURCES  = ## platform nodist sources
 fwstart_image_LDADD  = 
 fwstart_image_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_IMAGE) 
-fwstart_image_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_IMAGE) $(TARGET_LDFLAGS_STATIC_LIBGCC) $(TARGET_LIBGCC) -Wl,-N,-S,-Ttext,0xbfc00000,-Bstatic 
+fwstart_image_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_IMAGE) -Wl,-N,-S,-Ttext,0xbfc00000,-Bstatic 
 fwstart_image_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_IMAGE) 
 fwstart_image_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_IMAGE) 
 fwstart_image_OBJCOPYFLAGS  = $(OBJCOPYFLAGS_IMAGE) -O binary 
@@ -20161,7 +20740,7 @@ platform_DATA += fwstart.img
 CLEANFILES += fwstart.img
 
 fwstart.img: fwstart.image$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(fwstart_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .reginfo -R .rel.dyn -R .note.gnu.gold-version $< $@; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(fwstart_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
 	
 endif
 
@@ -20171,7 +20750,7 @@ fwstart_fuloong2f_image_SOURCES  = boot/mips/loongson/fuloong2f.S
 nodist_fwstart_fuloong2f_image_SOURCES  = ## platform nodist sources
 fwstart_fuloong2f_image_LDADD  = 
 fwstart_fuloong2f_image_CFLAGS  = $(AM_CFLAGS) $(CFLAGS_IMAGE) 
-fwstart_fuloong2f_image_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_IMAGE) $(TARGET_LDFLAGS_STATIC_LIBGCC) $(TARGET_LIBGCC) -Wl,-N,-S,-Ttext,0xbfc00000,-Bstatic 
+fwstart_fuloong2f_image_LDFLAGS  = $(AM_LDFLAGS) $(LDFLAGS_IMAGE) -Wl,-N,-S,-Ttext,0xbfc00000,-Bstatic 
 fwstart_fuloong2f_image_CPPFLAGS  = $(AM_CPPFLAGS) $(CPPFLAGS_IMAGE) 
 fwstart_fuloong2f_image_CCASFLAGS  = $(AM_CCASFLAGS) $(CCASFLAGS_IMAGE) 
 fwstart_fuloong2f_image_OBJCOPYFLAGS  = $(OBJCOPYFLAGS_IMAGE) -O binary 
@@ -20182,7 +20761,7 @@ platform_DATA += fwstart_fuloong2f.img
 CLEANFILES += fwstart_fuloong2f.img
 
 fwstart_fuloong2f.img: fwstart_fuloong2f.image$(EXEEXT)
-	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(fwstart_fuloong2f_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .reginfo -R .rel.dyn -R .note.gnu.gold-version $< $@; fi
+	if test x$(TARGET_APPLE_LINKER) = x1; then   $(MACHO2IMG) $< $@; else   $(TARGET_OBJCOPY) $(fwstart_fuloong2f_image_OBJCOPYFLAGS) --strip-unneeded -R .note -R .comment -R .note.gnu.build-id -R .MIPS.abiflags -R .reginfo -R .rel.dyn -R .note.gnu.gold-version -R .ARM.exidx $< $@; fi
 	
 endif
 
@@ -20222,7 +20801,7 @@ dist_noinst_DATA +=
 BUILT_SOURCES += $(nodist_grub_emu_lite_SOURCES)
 CLEANFILES += $(nodist_grub_emu_lite_SOURCES)
 endif
-noinst_SCRIPTS += gensyminfo.sh
+noinst_DATA += gensyminfo.sh
 
 gensyminfo.sh: $(top_builddir)/config.status gensyminfo.sh.in 
 	(for x in gensyminfo.sh.in ; do cat $(srcdir)/"$$x"; done) | $(top_builddir)/config.status --file=$@:-
@@ -20231,7 +20810,7 @@ gensyminfo.sh: $(top_builddir)/config.status gensyminfo.sh.in
 CLEANFILES += gensyminfo.sh
 EXTRA_DIST += 
 dist_noinst_DATA += gensyminfo.sh.in 
-noinst_SCRIPTS += genmod.sh
+noinst_DATA += genmod.sh
 
 genmod.sh: $(top_builddir)/config.status genmod.sh.in 
 	(for x in genmod.sh.in ; do cat $(srcdir)/"$$x"; done) | $(top_builddir)/config.status --file=$@:-
@@ -20240,7 +20819,7 @@ genmod.sh: $(top_builddir)/config.status genmod.sh.in
 CLEANFILES += genmod.sh
 EXTRA_DIST += 
 dist_noinst_DATA += genmod.sh.in 
-noinst_SCRIPTS += modinfo.sh
+noinst_DATA += modinfo.sh
 
 modinfo.sh: $(top_builddir)/config.status modinfo.sh.in 
 	(for x in modinfo.sh.in ; do cat $(srcdir)/"$$x"; done) | $(top_builddir)/config.status --file=$@:-
@@ -20249,7 +20828,7 @@ modinfo.sh: $(top_builddir)/config.status modinfo.sh.in
 CLEANFILES += modinfo.sh
 EXTRA_DIST += 
 dist_noinst_DATA += modinfo.sh.in 
-platform_SCRIPTS += gmodule.pl
+platform_DATA += gmodule.pl
 
 gmodule.pl: $(top_builddir)/config.status gmodule.pl.in 
 	(for x in gmodule.pl.in ; do cat $(srcdir)/"$$x"; done) | $(top_builddir)/config.status --file=$@:-
@@ -20258,7 +20837,7 @@ gmodule.pl: $(top_builddir)/config.status gmodule.pl.in
 CLEANFILES += gmodule.pl
 EXTRA_DIST += 
 dist_noinst_DATA += gmodule.pl.in 
-platform_SCRIPTS += gdb_grub
+platform_DATA += gdb_grub
 
 gdb_grub: $(top_builddir)/config.status gdb_grub.in 
 	(for x in gdb_grub.in ; do cat $(srcdir)/"$$x"; done) | $(top_builddir)/config.status --file=$@:-
@@ -20269,7 +20848,7 @@ EXTRA_DIST +=
 dist_noinst_DATA += gdb_grub.in 
 
 if COND_powerpc_ieee1275
-platform_SCRIPTS += grub.chrp
+platform_DATA += grub.chrp
 
 grub.chrp: $(top_builddir)/config.status boot/powerpc/grub.chrp.in 
 	(for x in boot/powerpc/grub.chrp.in ; do cat $(srcdir)/"$$x"; done) | $(top_builddir)/config.status --file=$@:-
@@ -20281,7 +20860,7 @@ dist_noinst_DATA += boot/powerpc/grub.chrp.in
 endif
 
 if COND_powerpc_ieee1275
-platform_SCRIPTS += bootinfo.txt
+platform_DATA += bootinfo.txt
 
 bootinfo.txt: $(top_builddir)/config.status boot/powerpc/bootinfo.txt.in 
 	(for x in boot/powerpc/bootinfo.txt.in ; do cat $(srcdir)/"$$x"; done) | $(top_builddir)/config.status --file=$@:-
