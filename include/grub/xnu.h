@@ -109,4 +109,7 @@ extern grub_size_t grub_xnu_heap_size;
 extern void *grub_xnu_heap_start;
 extern struct grub_video_bitmap *grub_xnu_bitmap;
 extern int grub_xnu_is_64bit;
+typedef enum {GRUB_XNU_BITMAP_CENTER, GRUB_XNU_BITMAP_STRETCH}
+  grub_xnu_bitmap_mode_t;
+extern grub_xnu_bitmap_mode_t grub_xnu_bitmap_mode;
 #endif

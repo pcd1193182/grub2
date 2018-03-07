@@ -105,6 +105,7 @@ for OS in ${OSPROBED} ; do
       cat << EOF
 menuentry "${LONGNAME} (on ${DEVICE})" {
 EOF
+      save_default_entry | sed -e "s/^/\t/"
       prepare_grub_to_access_device ${DEVICE} | sed -e "s/^/\t/"
 
       case ${LONGNAME} in
@@ -146,6 +147,7 @@ EOF
         cat << EOF
 menuentry "${LLABEL} (on ${DEVICE})" {
 EOF
+	save_default_entry | sed -e "s/^/\t/"
 	if [ -z "${prepare_boot_cache}" ]; then
 	  prepare_boot_cache="$(prepare_grub_to_access_device ${LBOOT} | sed -e "s/^/\t/")"
 	fi
@@ -172,6 +174,7 @@ EOF
       cat << EOF
 menuentry "${LONGNAME} (on ${DEVICE})" {
 EOF
+      save_default_entry | sed -e "s/^/\t/"
       prepare_grub_to_access_device ${DEVICE} | sed -e "s/^/\t/"
       grub_device="`${grub_probe} --device ${DEVICE} --target=drive`"
       mach_device="`echo "${grub_device}" | tr -d '()' | tr , s`"

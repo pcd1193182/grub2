@@ -18,7 +18,6 @@
  */
 
 #include <grub/loader.h>
-#include <grub/machine/loader.h>
 #include <grub/multiboot2.h>
 #include <multiboot2.h>
 #include <grub/elfload.h>

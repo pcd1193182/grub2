@@ -21,7 +21,7 @@
 #include <multiboot2.h>
 #include <grub/elf.h>
 #include <grub/err.h>
-#include <grub/machine/loader.h>
+#include <grub/cpu/loader.h>
 #include <grub/mm.h>
 #include <grub/multiboot.h>
 #include <grub/cpu/multiboot.h>

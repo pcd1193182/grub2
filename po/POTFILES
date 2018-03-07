@@ -8,7 +8,7 @@ lib/arg.c
 
 normal/dyncmd.c
 
-util/i386/pc/grub-mkimage.c
+util/grub-mkrawimage.c
 util/i386/pc/grub-setup.c
 
 util/mkisofs/eltorito.c
