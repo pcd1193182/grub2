@@ -40,7 +40,7 @@ void
 grub_wait_after_message (void)
 {
   grub_putchar ('\n');
-  grub_printf (_("Press any key to continue..."));
+  grub_printf_ (N_("Press any key to continue..."));
   (void) grub_getkey ();
   grub_putchar ('\n');
 }
@@ -206,7 +206,7 @@ entry is highlighted.");
       if (nested)
         {
           grub_printf ("\n        ");
-          grub_printf (_("ESC to return previous menu."));
+          grub_printf_ (N_("ESC to return previous menu."));
         }
     }
 }
@@ -341,6 +341,32 @@ grub_menu_init_page (int nested, int edit)
   print_message (nested, edit);
 }
 
+/* Get the entry number from the variable NAME.  */
+static int
+get_entry_number (const char *name)
+{
+  char *val;
+  int entry;
+
+  val = grub_env_get (name);
+  if (! val)
+    return -1;
+
+  grub_error_push ();
+
+  entry = (int) grub_strtoul (val, 0, 0);
+
+  if (grub_errno != GRUB_ERR_NONE)
+    {
+      grub_errno = GRUB_ERR_NONE;
+      entry = -1;
+    }
+
+  grub_error_pop ();
+
+  return entry;
+}
+
 static void
 print_timeout (int timeout, int offset, int second_stage)
 {
@@ -375,7 +401,7 @@ run_menu (grub_menu_t menu, int nested, int *auto_boot)
 
   first = 0;
 
-  default_entry = grub_menu_get_default_entry_index (menu);
+  default_entry = get_entry_number ("default");
 
   /* If DEFAULT_ENTRY is not within the menu entries, fall back to
      the first entry.  */
@@ -410,7 +436,7 @@ run_menu (grub_menu_t menu, int nested, int *auto_boot)
   if (timeout > 0)
     print_timeout (timeout, offset, 0);
 
-  while (! grub_menu_viewer_should_return ())
+  while (1)
     {
       int c;
       timeout = grub_menu_get_timeout ();
@@ -583,10 +609,6 @@ run_menu (grub_menu_t menu, int nested, int *auto_boot)
 		}
 	      goto refresh;
 
-	    case 't':
-	      grub_env_set ("menuviewer", "gfxmenu");
-	      goto refresh;
-
 	    default:
 	      break;
 	    }
@@ -595,8 +617,7 @@ run_menu (grub_menu_t menu, int nested, int *auto_boot)
 	}
     }
 
-  /* Exit menu without activating an item.  This occurs if the user presses
-   * 't', switching to the graphical menu viewer.  */
+  /* Never reach here.  */
   return -1;
 }
 
@@ -606,7 +627,7 @@ notify_booting (grub_menu_entry_t entry,
 		void *userdata __attribute__((unused)))
 {
   grub_printf ("  ");
-  grub_printf (_("Booting \'%s\'"), entry->title);
+  grub_printf_ (N_("Booting \'%s\'"), entry->title);
   grub_printf ("\n\n");
 }
 
@@ -618,7 +639,7 @@ notify_fallback (grub_menu_entry_t entry,
 		 void *userdata __attribute__((unused)))
 {
   grub_printf ("\n   ");
-  grub_printf (_("Falling back to \'%s\'"), entry->title);
+  grub_printf_ (N_("Falling back to \'%s\'"), entry->title);
   grub_printf ("\n\n");
   grub_millisleep (DEFAULT_ENTRY_ERROR_DELAY_MS);
 }
@@ -634,7 +655,7 @@ notify_execution_failure (void *userdata __attribute__((unused)))
       grub_errno = GRUB_ERR_NONE;
     }
   grub_printf ("\n  ");
-  grub_printf (_("Failed to boot default entries.\n"));
+  grub_printf_ (N_("Failed to boot default entries.\n"));
   grub_wait_after_message ();
 }
 

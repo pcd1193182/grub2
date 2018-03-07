@@ -21,40 +21,41 @@
 #include <grub/pci.h>
 
 grub_pci_address_t
-grub_pci_make_address (grub_pci_device_t dev, int reg)
+grub_pci_make_address (int bus, int device, int function, int reg)
 {
-  return (1 << 31) | (dev.bus << 16) | (dev.device << 11)
-    | (dev.function << 8) | (reg << 2);
+  return (1 << 31) | (bus << 16) | (device << 11) | (function << 8) | (reg << 2);
 }
 
 void
 grub_pci_iterate (grub_pci_iteratefunc_t hook)
 {
-  grub_pci_device_t dev;
+  int bus;
+  int dev;
+  int func;
   grub_pci_address_t addr;
   grub_pci_id_t id;
   grub_uint32_t hdr;
 
-  for (dev.bus = 0; dev.bus < GRUB_PCI_NUM_BUS; dev.bus++)
+  for (bus = 0; bus < 256; bus++)
     {
-      for (dev.device = 0; dev.device < GRUB_PCI_NUM_DEVICES; dev.device++)
+      for (dev = 0; dev < 32; dev++)
 	{
-	  for (dev.function = 0; dev.function < 8; dev.function++)
+	  for (func = 0; func < 8; func++)
 	    {
-	      addr = grub_pci_make_address (dev, 0);
+	      addr = grub_pci_make_address (bus, dev, func, 0);
 	      id = grub_pci_read (addr);
 
 	      /* Check if there is a device present.  */
 	      if (id >> 16 == 0xFFFF)
 		continue;
 
-	      if (hook (dev, id))
+	      if (hook (bus, dev, func, id))
 		return;
 
 	      /* Probe only func = 0 if the device if not multifunction */
-	      if (dev.function == 0)
+	      if (func == 0)
 		{
-		  addr = grub_pci_make_address (dev, 3);
+		  addr = grub_pci_make_address (bus, dev, func, 3);
 		  hdr = grub_pci_read (addr);
 		  if (!(hdr & 0x800000))
 		    break;
