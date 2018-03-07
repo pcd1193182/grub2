@@ -1,7 +1,7 @@
 /* grub-fstest.c - debug tool for filesystem driver */
 /*
  *  GRUB  --  GRand Unified Bootloader
- *  Copyright (C) 2008,2009 Free Software Foundation, Inc.
+ *  Copyright (C) 2008,2009,2010 Free Software Foundation, Inc.
  *
  *  GRUB is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -85,7 +85,7 @@ execute_command (char *name, int n, char **args)
 
 #define BUF_SIZE  32256
 
-static grub_off_t skip, leng;
+static grub_disk_addr_t skip, leng;
 
 static void
 read_file (char *pathname, int (*hook) (grub_off_t ofs, char *buf, int len))
@@ -140,7 +140,7 @@ read_file (char *pathname, int (*hook) (grub_off_t ofs, char *buf, int len))
 
   if (skip > file->size)
     {
-      grub_util_error ("invalid skip value %d.");
+      grub_util_error ("invalid skip value %lld.", (unsigned long long) skip);
       return;
     }
 
@@ -384,9 +384,8 @@ main (int argc, char *argv[])
   int i, cmd, num_opts, image_index, num_disks = 1;
 
   set_program_name (argv[0]);
-  setlocale (LC_ALL, "");
-  bindtextdomain (PACKAGE, LOCALEDIR);
-  textdomain (PACKAGE);
+
+  grub_util_init_nls ();
 
   /* Find the first non option entry.  */
   for (num_opts = 1; num_opts < argc; num_opts++)

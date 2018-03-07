@@ -1,6 +1,6 @@
 #! /usr/bin/ruby -w
 #
-# Copyright (C) 2002,2003,2004,2005,2006,2007,2008  Free Software Foundation, Inc.
+# Copyright (C) 2002,2003,2004,2005,2006,2007,2008,2009  Free Software Foundation, Inc.
 #
 # This genmk.rb is free software; the author
 # gives unlimited permission to copy and/or distribute it,
@@ -192,7 +192,9 @@ endif
       fs = 'fs-' + obj.suffix('lst')
       partmap = 'partmap-' + obj.suffix('lst')
       handler = 'handler-' + obj.suffix('lst')
+      terminal = 'terminal-' + obj.suffix('lst')
       parttool = 'parttool-' + obj.suffix('lst')
+      video = 'video-' + obj.suffix('lst')
       dep = deps[i]
       flag = if /\.c$/ =~ src then 'CFLAGS' else 'ASFLAGS' end
       extra_flags = if /\.S$/ =~ src then '-DASM_FILE=1' else '' end
@@ -203,7 +205,7 @@ endif
 -include #{dep}
 
 clean-module-#{extra_target}.#{@rule_count}:
-	rm -f #{command} #{fs} #{partmap} #{handler} #{parttool}
+	rm -f #{command} #{fs} #{partmap} #{handler} #{parttool} #{video}
 
 CLEAN_MODULE_TARGETS += clean-module-#{extra_target}.#{@rule_count}
 
@@ -212,6 +214,8 @@ FSFILES += #{fs}
 PARTTOOLFILES += #{parttool}
 PARTMAPFILES += #{partmap}
 HANDLERFILES += #{handler}
+TERMINALFILES += #{terminal}
+VIDEOFILES += #{video}
 
 #{command}: #{src} $(#{src}_DEPENDENCIES) gencmdlist.sh
 	set -e; \
@@ -237,6 +241,16 @@ HANDLERFILES += #{handler}
 	set -e; \
 	  $(TARGET_CC) -I#{dir} -I$(srcdir)/#{dir} $(TARGET_CPPFLAGS) #{extra_flags} $(TARGET_#{flag}) $(#{prefix}_#{flag}) -E $< \
 	  | sh $(srcdir)/genhandlerlist.sh #{symbolic_name} > $@ || (rm -f $@; exit 1)
+
+#{terminal}: #{src} $(#{src}_DEPENDENCIES) genterminallist.sh
+	set -e; \
+	  $(TARGET_CC) -I#{dir} -I$(srcdir)/#{dir} $(TARGET_CPPFLAGS) #{extra_flags} $(TARGET_#{flag}) $(#{prefix}_#{flag}) -E $< \
+	  | sh $(srcdir)/genterminallist.sh #{symbolic_name} > $@ || (rm -f $@; exit 1)
+
+#{video}: #{src} $(#{src}_DEPENDENCIES) genvideolist.sh
+	set -e; \
+	  $(TARGET_CC) -I#{dir} -I$(srcdir)/#{dir} $(TARGET_CPPFLAGS) #{extra_flags} $(TARGET_#{flag}) $(#{prefix}_#{flag}) -E $< \
+	  | sh $(srcdir)/genvideolist.sh #{symbolic_name} > $@ || (rm -f $@; exit 1)
 
 "
     end.join('')
@@ -357,6 +371,7 @@ class Script
 
 #{@name}: #{src} $(#{src}_DEPENDENCIES) config.status
 	./config.status --file=#{name}:#{src}
+	sed -i -e 's,@pkglib_DATA@,$(pkglib_DATA),g' $@
 	chmod +x $@
 
 "

@@ -1,7 +1,7 @@
 /* completion.c - complete a command, a disk, a partition or a file */
 /*
  *  GRUB  --  GRand Unified Bootloader
- *  Copyright (C) 1999,2000,2001,2002,2003,2004,2005,2007,2008  Free Software Foundation, Inc.
+ *  Copyright (C) 1999,2000,2001,2002,2003,2004,2005,2007,2008,2009  Free Software Foundation, Inc.
  *
  *  GRUB is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -409,13 +409,16 @@ grub_normal_do_completion (char *buf, int *restore,
   if (grub_parser_split_cmdline (buf, 0, &argc, &argv))
     return 0;
 
-  current_word = argv[argc];
+  if (argc == 0)
+    current_word = "";
+  else
+    current_word = argv[argc - 1];
 
   /* Determine the state the command line is in, depending on the
      state, it can be determined how to complete.  */
   cmdline_state = get_state (buf);
 
-  if (argc == 0)
+  if (argc == 1 || argc == 0)
     {
       /* Complete a command.  */
       if (grub_command_iterate (iterate_command))
@@ -485,13 +488,15 @@ grub_normal_do_completion (char *buf, int *restore,
           goto fail;
 	}
 
-      grub_free (argv[0]);
+      if (argc != 0)
+	grub_free (argv[0]);
       grub_free (match);
       return ret;
     }
 
  fail:
-  grub_free (argv[0]);
+  if (argc != 0)
+    grub_free (argv[0]);
   grub_free (match);
   grub_errno = GRUB_ERR_NONE;
 

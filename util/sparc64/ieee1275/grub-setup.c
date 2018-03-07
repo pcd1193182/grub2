@@ -1,7 +1,7 @@
 /* grub-setup.c - make GRUB usable */
 /*
  *  GRUB  --  GRand Unified Bootloader
- *  Copyright (C) 1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009  Free Software Foundation, Inc.
+ *  Copyright (C) 1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010  Free Software Foundation, Inc.
  *
  *  GRUB is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 #include <grub/types.h>
 #include <grub/util/misc.h>
 #include <grub/device.h>
+#include <grub/i18n.h>
 #include <grub/disk.h>
 #include <grub/file.h>
 #include <grub/fs.h>
@@ -48,6 +49,8 @@
 
 #define _GNU_SOURCE	1
 #include <getopt.h>
+
+#include "progname.h"
 
 /* This program fills in various fields inside of the 'boot' and 'core'
  * image files.
@@ -419,7 +422,7 @@ DEVICE must be a GRUB device (e.g. ``(hd0,1)'').\n\
   -v, --verbose           print verbose messages\n\
 \n\
 Report bugs to <%s>.\n\
-", program_name
+", program_name,
 	    DEFAULT_BOOT_FILE, DEFAULT_CORE_FILE, DEFAULT_DIRECTORY,
 	    DEFAULT_DEVICE_MAP, PACKAGE_BUGREPORT);
 
@@ -617,9 +620,8 @@ main (int argc, char *argv[])
   struct grub_setup_info ginfo;
 
   set_program_name (argv[0]);
-  setlocale (LC_ALL, "");
-  bindtextdomain (PACKAGE, LOCALEDIR);
-  textdomain (PACKAGE);
+
+  grub_util_init_nls ();
 
   init_info (&ginfo);
   if (!parse_options (&ginfo, argc, argv))
