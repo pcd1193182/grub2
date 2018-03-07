@@ -26,6 +26,9 @@
 #include <grub/i18n.h>
 
 static int
+grub_vsnprintf_real (char *str, grub_size_t n, const char *fmt, va_list args);
+
+static int
 grub_iswordseparator (int c)
 {
   return (grub_isspace (c) || c == ',' || c == ';' || c == '|' || c == '&');
@@ -200,11 +203,7 @@ grub_real_dprintf (const char *file, const int line, const char *condition,
 int
 grub_vprintf (const char *fmt, va_list args)
 {
-  int ret;
-
-  ret = grub_vsprintf (0, fmt, args);
-  grub_refresh ();
-  return ret;
+  return grub_vsnprintf_real (0, 0, fmt, args);
 }
 
 int
@@ -636,11 +635,11 @@ grub_lltoa (char *str, int c, unsigned long long n)
   return p;
 }
 
-int
-grub_vsprintf (char *str, const char *fmt, va_list args)
+static int
+grub_vsnprintf_real (char *str, grub_size_t max_len, const char *fmt, va_list args)
 {
   char c;
-  int count = 0;
+  grub_size_t count = 0;
   auto void write_char (unsigned char ch);
   auto void write_str (const char *s);
   auto void write_fill (const char ch, int n);
@@ -648,7 +647,10 @@ grub_vsprintf (char *str, const char *fmt, va_list args)
   void write_char (unsigned char ch)
     {
       if (str)
-	*str++ = ch;
+	{
+	  if (count < max_len)
+	    *str++ = ch;
+	}
       else
 	grub_putchar (ch);
 
@@ -870,20 +872,68 @@ grub_vsprintf (char *str, const char *fmt, va_list args)
   if (str)
     *str = '\0';
 
-  if (count && !str)
-    grub_refresh ();
-
   return count;
 }
 
 int
-grub_sprintf (char *str, const char *fmt, ...)
+grub_vsnprintf (char *str, grub_size_t n, const char *fmt, va_list ap)
+{
+  grub_size_t ret;
+
+  if (!n)
+    return 0;
+
+  n--;
+
+  ret = grub_vsnprintf_real (str, n, fmt, ap);
+
+  return ret < n ? ret : n;
+}
+
+int
+grub_snprintf (char *str, grub_size_t n, const char *fmt, ...)
 {
   va_list ap;
   int ret;
 
   va_start (ap, fmt);
-  ret = grub_vsprintf (str, fmt, ap);
+  ret = grub_vsnprintf (str, n, fmt, ap);
+  va_end (ap);
+
+  return ret;
+}
+
+#define PREALLOC_SIZE 255
+
+char *
+grub_avsprintf (const char *fmt, va_list ap)
+{
+  grub_size_t s, as = PREALLOC_SIZE;
+  char *ret;
+
+  while (1)
+    {
+      ret = grub_malloc (as + 1);
+      if (!ret)
+	return NULL;
+
+      s = grub_vsnprintf_real (ret, as, fmt, ap);
+      if (s <= as)
+	return ret;
+
+      grub_free (ret);
+      as = s;
+    }
+}
+
+char *
+grub_asprintf (const char *fmt, ...)
+{
+  va_list ap;
+  char *ret;
+
+  va_start (ap, fmt);
+  ret = grub_avsprintf (fmt, ap);
   va_end (ap);
 
   return ret;

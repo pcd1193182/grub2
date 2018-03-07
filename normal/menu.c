@@ -98,7 +98,7 @@ grub_menu_set_timeout (int timeout)
     {
       char buf[16];
 
-      grub_sprintf (buf, "%d", timeout);
+      grub_snprintf (buf, sizeof (buf), "%d", timeout);
       grub_env_set ("timeout", buf);
     }
 }
@@ -156,6 +156,8 @@ grub_menu_execute_entry(grub_menu_entry_t entry)
       grub_errno = GRUB_ERR_NONE;
       return;
     }
+
+  grub_env_set ("chosen", entry->title);
 
   grub_parser_execute ((char *) entry->sourcecode);
 
@@ -273,7 +275,7 @@ grub_menu_register_viewer (struct grub_menu_viewer *viewer)
 
 /* Get the entry number from the variable NAME.  */
 static int
-get_entry_number (const char *name)
+get_entry_number (grub_menu_t menu, const char *name)
 {
   char *val;
   int entry;
@@ -285,6 +287,28 @@ get_entry_number (const char *name)
   grub_error_push ();
 
   entry = (int) grub_strtoul (val, 0, 0);
+
+  if (grub_errno == GRUB_ERR_BAD_NUMBER)
+    {
+      /* See if the variable matches the title of a menu entry.  */
+      grub_menu_entry_t e = menu->entry_list;
+      int i;
+
+      grub_errno = GRUB_ERR_NONE;
+
+      for (i = 0; e; i++)
+	{
+	  if (grub_strcmp (e->title, val) == 0)
+	    {
+	      entry = i;
+	      break;
+	    }
+	  e = e->next;
+	}
+
+      if (! e)
+	entry = -1;
+    }
 
   if (grub_errno != GRUB_ERR_NONE)
     {
@@ -312,7 +336,7 @@ run_menu (grub_menu_t menu, int nested, int *auto_boot)
   int default_entry, current_entry;
   int timeout;
 
-  default_entry = get_entry_number ("default");
+  default_entry = get_entry_number (menu, "default");
 
   /* If DEFAULT_ENTRY is not within the menu entries, fall back to
      the first entry.  */
@@ -338,6 +362,8 @@ run_menu (grub_menu_t menu, int nested, int *auto_boot)
 
   if (timeout > 0)
     menu_print_timeout (timeout);
+  else
+    clear_timeout ();
 
   while (1)
     {
@@ -452,6 +478,18 @@ run_menu (grub_menu_t menu, int nested, int *auto_boot)
 	      goto refresh;
 
 	    default:
+	      {
+		grub_menu_entry_t entry;
+		int i;
+		for (i = 0, entry = menu->entry_list; i < menu->size;
+		     i++, entry = entry->next)
+		  if (entry->hotkey == c)
+		    {
+		      menu_fini ();
+		      *auto_boot = 0;
+		      return i;
+		    }
+	      }
 	      break;
 	    }
 	}

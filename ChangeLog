@@ -1152,7 +1152,7 @@
 	(grub_cmd_read): Restructure for readability. Support "-v" option.
 	(grub_cmd_write): Restructure for readability.
 
-2009-12-22  Felix Zielcke <fzielcke@z-51.de>
+2009-12-22 Felix Zielcke <fzielcke@z-51.de>
 
 	* genmk.rb (class SCRIPT): Prepend #{src} path with $(srcdir).
 

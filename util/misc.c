@@ -303,10 +303,18 @@ grub_memalign (grub_size_t align, grub_size_t size)
   return p;
 }
 
+void *
+grub_memalign_policy (grub_size_t align, grub_size_t size,
+		      int policy __attribute__ ((unused)))
+{
+  return grub_memalign (align, size);
+}
+
 /* Some functions that we don't use.  */
 void
 grub_mm_init_region (void *addr __attribute__ ((unused)),
-		     grub_size_t size __attribute__ ((unused)))
+		     grub_size_t size __attribute__ ((unused)),
+		     grub_size_t *policies __attribute__ ((unused)))
 {
 }
 

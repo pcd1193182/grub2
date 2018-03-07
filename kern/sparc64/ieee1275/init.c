@@ -90,10 +90,7 @@ grub_machine_set_prefix (void)
 	}
       prefix = grub_ieee1275_encode_devname (bootpath);
 
-      path = grub_malloc (grub_strlen (grub_prefix)
-			  + grub_strlen (prefix)
-			  + 2);
-      grub_sprintf(path, "%s%s", prefix, grub_prefix);
+      path = grub_asprintf("%s%s", prefix, grub_prefix);
 
       grub_strcpy (grub_prefix, path);
 
@@ -107,7 +104,13 @@ grub_machine_set_prefix (void)
 static void
 grub_heap_init (void)
 {
-  grub_mm_init_region ((void *)(long)0x4000UL, 0x200000 - 0x4000);
+  grub_size_t policy_normal[GRUB_MM_NPOLICIES]
+    = { [GRUB_MM_MALLOC_DEFAULT] = GRUB_MM_ALLOCATOR_SECOND,
+	[GRUB_MM_MALLOC_KERNEL] = GRUB_MM_ALLOCATOR_SECOND
+  };
+
+  grub_mm_init_region ((void *)(long)0x4000UL, 0x200000 - 0x4000,
+		       policy_normal);
 }
 
 static void
