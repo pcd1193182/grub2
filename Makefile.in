@@ -75,7 +75,7 @@ TARGET_ASFLAGS = @TARGET_ASFLAGS@
 TARGET_MODULE_FORMAT = @TARGET_MODULE_FORMAT@
 TARGET_APPLE_CC = @TARGET_APPLE_CC@
 OBJCONV = @OBJCONV@
-TARGET_CPPFLAGS = @TARGET_CPPFLAGS@ -isystem=$(srcdir)/include -I$(srcdir)/include -I$(builddir) -I$(builddir)/include \
+TARGET_CPPFLAGS = @TARGET_CPPFLAGS@ -nostdinc -isystem $(shell $(TARGET_CC) -print-file-name=include) -I$(srcdir)/include -I$(builddir) -I$(builddir)/include \
 	-Wall -W
 TARGET_LDFLAGS = @TARGET_LDFLAGS@
 TARGET_IMG_LDSCRIPT = @TARGET_IMG_LDSCRIPT@
@@ -104,6 +104,7 @@ YACC = @YACC@
 UNIFONT_BDF = @UNIFONT_BDF@
 
 # Options.
+enable_grub_emu = @enable_grub_emu@
 enable_grub_emu_usb = @enable_grub_emu_usb@
 enable_grub_fstest = @enable_grub_fstest@
 enable_grub_pe2elf = @enable_grub_pe2elf@
@@ -145,11 +146,7 @@ $(addprefix $(srcdir)/,$(MKFILES)): %.mk: %.rmk genmk.rb
 	  $(RUBY) $(srcdir)/genmk.rb < $< > $@; \
 	fi
 
-ifeq ($(platform), emu)
-include $(srcdir)/conf/any-emu.mk
-else
 include $(srcdir)/conf/$(target_cpu)-$(platform).mk
-endif
 
 # For external modules.
 -include $(wildcard $(GRUB_CONTRIB)/*/conf/common.mk)
