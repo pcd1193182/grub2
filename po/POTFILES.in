@@ -39,6 +39,10 @@
 ./grub-core/commands/efi/lssal.c
 ./grub-core/commands/eval.c
 ./grub-core/commands/extcmd.c
+./grub-core/commands/file.c
+./grub-core/commands/file32.c
+./grub-core/commands/file64.c
+./grub-core/commands/fileXX.c
 ./grub-core/commands/gptsync.c
 ./grub-core/commands/halt.c
 ./grub-core/commands/hashsum.c
@@ -50,7 +54,6 @@
 ./grub-core/commands/i386/coreboot/cb_timestamps.c
 ./grub-core/commands/i386/coreboot/cbls.c
 ./grub-core/commands/i386/cpuid.c
-./grub-core/commands/i386/nthibr.c
 ./grub-core/commands/i386/pc/acpi.c
 ./grub-core/commands/i386/pc/drivemap.c
 ./grub-core/commands/i386/pc/halt.c
@@ -67,6 +70,7 @@
 ./grub-core/commands/lsacpi.c
 ./grub-core/commands/lsmmap.c
 ./grub-core/commands/lspci.c
+./grub-core/commands/macbless.c
 ./grub-core/commands/memrw.c
 ./grub-core/commands/menuentry.c
 ./grub-core/commands/minicmd.c
@@ -87,6 +91,7 @@
 ./grub-core/commands/search_wrap.c
 ./grub-core/commands/setpci.c
 ./grub-core/commands/sleep.c
+./grub-core/commands/syslinuxcfg.c
 ./grub-core/commands/terminal.c
 ./grub-core/commands/test.c
 ./grub-core/commands/testload.c
@@ -441,6 +446,7 @@
 ./grub-core/lib/envblk.c
 ./grub-core/lib/fake_module.c
 ./grub-core/lib/fdt.c
+./grub-core/lib/getline.c
 ./grub-core/lib/hexdump.c
 ./grub-core/lib/i386/backtrace.c
 ./grub-core/lib/i386/halt.c
@@ -583,6 +589,7 @@
 ./grub-core/lib/progress.c
 ./grub-core/lib/reed_solomon.c
 ./grub-core/lib/relocator.c
+./grub-core/lib/syslinux_parse.c
 ./grub-core/lib/uboot/datetime.c
 ./grub-core/lib/uboot/halt.c
 ./grub-core/lib/uboot/reboot.c
@@ -600,6 +607,7 @@
 ./grub-core/lib/xzembed/xz_stream.h
 ./grub-core/loader/aout.c
 ./grub-core/loader/arm/linux.c
+./grub-core/loader/arm64/linux.c
 ./grub-core/loader/efi/appleloader.c
 ./grub-core/loader/efi/chainloader.c
 ./grub-core/loader/i386/bsd.c
@@ -616,6 +624,7 @@
 ./grub-core/loader/i386/pc/ntldr.c
 ./grub-core/loader/i386/pc/plan9.c
 ./grub-core/loader/i386/pc/pxechainloader.c
+./grub-core/loader/i386/pc/truecrypt.c
 ./grub-core/loader/i386/xen.c
 ./grub-core/loader/i386/xen_file.c
 ./grub-core/loader/i386/xen_file32.c
@@ -751,6 +760,7 @@
 ./grub-core/osdep/windows/hostdisk.c
 ./grub-core/osdep/windows/init.c
 ./grub-core/osdep/windows/password.c
+./grub-core/osdep/windows/platform.c
 ./grub-core/osdep/windows/random.c
 ./grub-core/osdep/windows/relpath.c
 ./grub-core/osdep/windows/sleep.c
@@ -808,10 +818,12 @@
 ./grub-core/tests/setjmp_test.c
 ./grub-core/tests/signature_test.c
 ./grub-core/tests/signatures.h
+./grub-core/tests/sleep_test.c
 ./grub-core/tests/test_blockarg.c
 ./grub-core/tests/video_checksum.c
 ./grub-core/tests/videotest_checksum.c
 ./grub-core/tests/xnu_uuid_test.c
+./grub-core/unidata.c
 ./grub-core/video/bitmap.c
 ./grub-core/video/bitmap_scale.c
 ./grub-core/video/bochs.c
@@ -830,6 +842,7 @@
 ./grub-core/video/i386/pc/vga.c
 ./grub-core/video/ieee1275.c
 ./grub-core/video/radeon_fuloong2e.c
+./grub-core/video/radeon_yeeloong3a.c
 ./grub-core/video/readers/jpeg.c
 ./grub-core/video/readers/png.c
 ./grub-core/video/readers/tga.c
@@ -854,6 +867,7 @@
 ./include/grub/arm/types.h
 ./include/grub/arm/uboot/kernel.h
 ./include/grub/arm64/efi/memory.h
+./include/grub/arm64/linux.h
 ./include/grub/arm64/reloc.h
 ./include/grub/arm64/setjmp.h
 ./include/grub/arm64/time.h
@@ -919,11 +933,14 @@
 ./include/grub/fbutil.h
 ./include/grub/fdt.h
 ./include/grub/file.h
+./include/grub/fileid.h
 ./include/grub/font.h
 ./include/grub/fontformat.h
 ./include/grub/fs.h
 ./include/grub/fshelp.h
 ./include/grub/gcry/types.h
+./include/grub/gcrypt/g10lib.h
+./include/grub/gcrypt/gcrypt.h
 ./include/grub/gcrypt/gpg-error.h
 ./include/grub/gdb.h
 ./include/grub/gfxmenu_model.h
@@ -1088,7 +1105,6 @@
 ./include/grub/ns8250.h
 ./include/grub/ntfs.h
 ./include/grub/offsets.h
-./include/grub/osdep/exec_unix.h
 ./include/grub/osdep/hostfile.h
 ./include/grub/osdep/hostfile_aros.h
 ./include/grub/osdep/hostfile_unix.h
@@ -1128,6 +1144,7 @@
 ./include/grub/sparc64/types.h
 ./include/grub/speaker.h
 ./include/grub/symbol.h
+./include/grub/syslinux_parse.h
 ./include/grub/term.h
 ./include/grub/terminfo.h
 ./include/grub/test.h
@@ -1209,10 +1226,12 @@
 ./util/getroot.c
 ./util/glue-efi.c
 ./util/grub-editenv.c
+./util/grub-file.c
 ./util/grub-fstest.c
 ./util/grub-glue-efi.c
 ./util/grub-install-common.c
 ./util/grub-install.c
+./util/grub-macbless.c
 ./util/grub-macho2img.c
 ./util/grub-menulst2cfg.c
 ./util/grub-mkfont.c
@@ -1230,6 +1249,7 @@
 ./util/grub-render-label.c
 ./util/grub-script-check.c
 ./util/grub-setup.c
+./util/grub-syslinux2cfg.c
 ./util/ieee1275/grub-ofpathname.c
 ./util/misc.c
 ./util/mkimage.c

@@ -127,7 +127,7 @@ widthspec.h: $(FONT_SOURCE) build-grub-gen-widthspec
 CLEANFILES += widthspec.h
 
 # Install config.h into platformdir
-platform_HEADERS = config.h
+nodist_platform_HEADERS = config.h
 
 pkgdata_DATA += grub-mkconfig_lib
 
@@ -399,7 +399,7 @@ bootcheck: $(BOOTCHECKS)
 
 if COND_i386_coreboot
 default_payload.elf: grub-mkstandalone grub-mkimage
-	pkgdatadir=. ./grub-mkstandalone --grub-mkimage=./grub-mkimage -O i386-coreboot -o $@ --modules='ahci pata ehci uhci ohci usb_keyboard usbms part_msdos xfs ext2 fat at_keyboard part_gpt usbserial_usbdebug cbfs' --install-modules='ls linux search configfile normal cbtime cbls memrw iorw minicmd lsmmap lspci halt reboot hexdump pcidump regexp setpci lsacpi chain test' --fonts= --themes= --locales= -d grub-core/ /boot/grub/grub.cfg=$(srcdir)/coreboot.cfg
+	pkgdatadir=. ./grub-mkstandalone --grub-mkimage=./grub-mkimage -O i386-coreboot -o $@ --modules='ahci pata ehci uhci ohci usb_keyboard usbms part_msdos xfs ext2 fat at_keyboard part_gpt usbserial_usbdebug cbfs' --install-modules='ls linux search configfile normal cbtime cbls memrw iorw minicmd lsmmap lspci halt reboot hexdump pcidump regexp setpci lsacpi chain test serial' --fonts= --themes= --locales= -d grub-core/ /boot/grub/grub.cfg=$(srcdir)/coreboot.cfg
 endif
 
 windowsdir=$(top_builddir)/$(PACKAGE)-$(VERSION)-for-windows

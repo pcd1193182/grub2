@@ -52,33 +52,7 @@ typedef struct
 
 
 /* A sample 1024 bit RSA key used for the selftests.  */
-static const char sample_secret_key[] =
-"(private-key"
-" (rsa"
-"  (n #00e0ce96f90b6c9e02f3922beada93fe50a875eac6bcc18bb9a9cf2e84965caa"
-"      2d1ff95a7f542465c6c0c19d276e4526ce048868a7a914fd343cc3a87dd74291"
-"      ffc565506d5bbb25cbac6a0e2dd1f8bcaab0d4a29c2f37c950f363484bf269f7"
-"      891440464baf79827e03a36e70b814938eebdc63e964247be75dc58b014b7ea251#)"
-"  (e #010001#)"
-"  (d #046129f2489d71579be0a75fe029bd6cdb574ebf57ea8a5b0fda942cab943b11"
-"      7d7bb95e5d28875e0f9fc5fcc06a72f6d502464dabded78ef6b716177b83d5bd"
-"      c543dc5d3fed932e59f5897e92e6f58a0f33424106a3b6fa2cbf877510e4ac21"
-"      c3ee47851e97d12996222ac3566d4ccb0b83d164074abf7de655fc2446da1781#)"
-"  (p #00e861b700e17e8afe6837e7512e35b6ca11d0ae47d8b85161c67baf64377213"
-"      fe52d772f2035b3ca830af41d8a4120e1c1c70d12cc22f00d28d31dd48a8d424f1#)"
-"  (q #00f7a7ca5367c661f8e62df34f0d05c10c88e5492348dd7bddc942c9a8f369f9"
-"      35a07785d2db805215ed786e4285df1658eed3ce84f469b81b50d358407b4ad361#)"
-"  (u #304559a9ead56d2309d203811a641bb1a09626bc8eb36fffa23c968ec5bd891e"
-"      ebbafc73ae666e01ba7c8990bae06cc2bbe10b75e69fcacb353a6473079d8e9b#)))";
 /* A sample 1024 bit RSA key used for the selftests (public only).  */
-static const char sample_public_key[] =
-"(public-key"
-" (rsa"
-"  (n #00e0ce96f90b6c9e02f3922beada93fe50a875eac6bcc18bb9a9cf2e84965caa"
-"      2d1ff95a7f542465c6c0c19d276e4526ce048868a7a914fd343cc3a87dd74291"
-"      ffc565506d5bbb25cbac6a0e2dd1f8bcaab0d4a29c2f37c950f363484bf269f7"
-"      891440464baf79827e03a36e70b814938eebdc63e964247be75dc58b014b7ea251#)"
-"  (e #010001#)))";
 
 
 

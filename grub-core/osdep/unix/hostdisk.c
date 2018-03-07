@@ -181,7 +181,7 @@ grub_util_fd_open (const char *os_dev, int flags)
   flags |= O_BINARY;
 #endif
 
-  return open (os_dev, flags, S_IRUSR | S_IWUSR);
+  return open (os_dev, flags, S_IROTH | S_IRGRP | S_IRUSR | S_IWUSR);
 }
 #endif
 
@@ -274,6 +274,10 @@ grub_util_get_mtime (const char *path)
 
   return st.st_mtime;
 }
+
+#endif
+
+#if defined (__CYGWIN__) || (!defined (__MINGW32__) && !defined (__AROS__))
 
 int
 grub_util_is_special_file (const char *path)

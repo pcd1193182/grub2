@@ -49,7 +49,7 @@ struct grub_ldm_vblk {
   grub_uint8_t type;
   grub_uint32_t unused2;
   grub_uint8_t dynamic[104];
-} __attribute__ ((packed));
+} GRUB_PACKED;
 #define LDM_VBLK_MAGIC "VBLK"
 
 enum
@@ -83,7 +83,7 @@ struct grub_ldm_label
   grub_uint64_t pv_size;
   grub_uint64_t config_start;
   grub_uint64_t config_size;
-} __attribute__ ((packed));
+} GRUB_PACKED;
 
 
 #define LDM_MAGIC "PRIVHEAD"
@@ -1012,7 +1012,7 @@ grub_util_ldm_embed (struct grub_disk *disk, unsigned int *nsectors,
 			      usable for bootloaders (called generically
 			      "embedding zone") and this operation is
 			      called "embedding".  */
-			   N_("your LDM embedding Partition is too small;"
+			   N_("your LDM Embedding Partition is too small;"
 			      " embedding won't be possible"));
       *nsectors = lv->size;
       if (*nsectors > max_nsectors)

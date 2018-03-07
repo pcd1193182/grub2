@@ -22,8 +22,13 @@
 #include <grub/util/misc.h>
 #include <grub/emu/config.h>
 
-#include <argp.h>
 #include <string.h>
+
+#pragma GCC diagnostic ignored "-Wmissing-prototypes"
+#pragma GCC diagnostic ignored "-Wmissing-declarations"
+#include <argp.h>
+#pragma GCC diagnostic error "-Wmissing-prototypes"
+#pragma GCC diagnostic error "-Wmissing-declarations"
 
 static char *output_image;
 static char **files;
@@ -42,7 +47,7 @@ static struct argp_option options[] = {
   {"output", 'o', N_("FILE"),
    0, N_("save output in FILE [required]"), 2},
   {"format", 'O', N_("FILE"), 0, 0, 2},
-  {"compression", 'C', N_("xz|none|auto"), OPTION_HIDDEN, 0, 2},
+  {"compression", 'C', "xz|none|auto", OPTION_HIDDEN, 0, 2},
   {0, 0, 0, 0, 0, 0}
 };
 
@@ -132,7 +137,7 @@ struct head
   char devminor[8];
   char prefix[155];
   char pad[12];
-} __attribute__ ((packed));
+} GRUB_PACKED;
 
 static void
 write_zeros (unsigned rsz)
