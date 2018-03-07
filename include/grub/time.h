@@ -23,7 +23,7 @@
 #include <grub/symbol.h>
 #include <grub/cpu/time.h>
 
-#if defined (GRUB_MACHINE_EMU) || defined (GRUB_UTIL)
+#ifdef GRUB_MACHINE_EMU
 #define GRUB_TICKS_PER_SECOND 100000
 #else
 #include <grub/machine/time.h>

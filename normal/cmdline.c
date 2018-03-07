@@ -1,6 +1,6 @@
 /*
  *  GRUB  --  GRand Unified Bootloader
- *  Copyright (C) 1999,2000,2001,2002,2003,2004,2005,2007  Free Software Foundation, Inc.
+ *  Copyright (C) 1999,2000,2001,2002,2003,2004,2005,2007,2009  Free Software Foundation, Inc.
  *
  *  GRUB is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 #include <grub/disk.h>
 #include <grub/file.h>
 #include <grub/env.h>
+#include <grub/i18n.h>
 
 static char *kill_buf;
 
@@ -193,12 +194,15 @@ grub_cmdline_get (const char *prompt, char cmdline[], unsigned max_len,
   auto void cl_delete (unsigned len);
   auto void cl_print (int pos, int c);
   auto void cl_set_pos (void);
+  const char *prompt_translated = _(prompt);
 
   void cl_set_pos (void)
     {
       xpos = (plen + lpos) % 79;
       ypos = ystart + (plen + lpos) / 79;
       grub_gotoxy (xpos, ypos);
+
+      grub_refresh ();
     }
 
   void cl_print (int pos, int c)
@@ -239,6 +243,8 @@ grub_cmdline_get (const char *prompt, char cmdline[], unsigned max_len,
 	  cl_print (lpos - len, echo_char);
 	  cl_set_pos ();
 	}
+
+      grub_refresh ();
     }
 
   void cl_delete (unsigned len)
@@ -258,16 +264,18 @@ grub_cmdline_get (const char *prompt, char cmdline[], unsigned max_len,
 	  cl_print (lpos, echo_char);
 	  cl_set_pos ();
 	}
+
+      grub_refresh ();
     }
 
-  plen = grub_strlen (prompt);
+  plen = grub_strlen (prompt_translated);
   lpos = llen = 0;
   buf[0] = '\0';
 
   if ((grub_getxy () >> 8) != 0)
     grub_putchar ('\n');
 
-  grub_printf ("%s", prompt);
+  grub_printf ("%s", prompt_translated);
 
   xpos = plen;
   ystart = ypos = (grub_getxy () & 0xFF);
@@ -276,8 +284,6 @@ grub_cmdline_get (const char *prompt, char cmdline[], unsigned max_len,
 
   if (history && hist_used == 0)
     grub_history_add (buf);
-
-  grub_refresh ();
 
   while ((key = GRUB_TERM_ASCII_CHAR (grub_getkey ())) != '\n' && key != '\r')
     {
@@ -330,7 +336,7 @@ grub_cmdline_get (const char *prompt, char cmdline[], unsigned max_len,
 		if (restore)
 		  {
 		    /* Restore the prompt.  */
-		    grub_printf ("\n%s%s", prompt, buf);
+		    grub_printf ("\n%s %s", prompt_translated, buf);
 		    xpos = plen;
 		    ystart = ypos = (grub_getxy () & 0xFF);
 		  }
@@ -453,8 +459,6 @@ grub_cmdline_get (const char *prompt, char cmdline[], unsigned max_len,
 	    }
 	  break;
 	}
-
-      grub_refresh ();
     }
 
   grub_putchar ('\n');

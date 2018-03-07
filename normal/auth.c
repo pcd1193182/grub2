@@ -23,6 +23,7 @@
 #include <grub/env.h>
 #include <grub/normal.h>
 #include <grub/time.h>
+#include <grub/i18n.h>
 
 struct grub_auth_user
 {
@@ -34,6 +35,58 @@ struct grub_auth_user
 };
 
 struct grub_auth_user *users = NULL;
+
+int
+grub_auth_strcmp (const char *s1, const char *s2)
+{
+  int ret;
+  grub_uint64_t end;
+
+  end = grub_get_time_ms () + 100;
+  ret = grub_strcmp (s1, s2);
+
+  /* This prevents an attacker from deriving information about the
+     password from the time it took to execute this function.  */
+  while (grub_get_time_ms () < end);
+
+  return ret;
+}
+
+static int
+grub_iswordseparator (int c)
+{
+  return (grub_isspace (c) || c == ',' || c == ';' || c == '|' || c == '&');
+}
+
+int
+grub_auth_strword (const char *haystack, const char *needle)
+{
+  const char *n_pos = needle;
+  int found = 0;
+
+  while (grub_iswordseparator (*haystack))
+    haystack++;
+
+  while (*haystack)
+    {
+      int ok = 1;
+      /* Crawl both the needle and the haystack word we're on.  */
+      while(*haystack && !grub_iswordseparator (*haystack))
+        {
+	  if (*haystack == *n_pos && ok)
+	    n_pos++;
+	  else
+	    ok = 0;
+
+          haystack++;
+        }
+
+      if (ok)
+	found = 1;
+    }
+
+  return found;
+}
 
 grub_err_t
 grub_auth_register_authentication (const char *user,
@@ -141,8 +194,8 @@ is_authenticated (const char *userlist)
       return 0;
     name = ((struct grub_auth_user *) item)->name;
 
-    return (userlist && grub_strword (userlist, name))
-      || grub_strword (superusers, name);
+    return (userlist && grub_auth_strword (userlist, name))
+      || grub_auth_strword (superusers, name);
   }
 
   superusers = grub_env_get ("superusers");
@@ -160,12 +213,11 @@ grub_auth_check_authentication (const char *userlist)
   struct grub_auth_user *cur = NULL;
   grub_err_t err;
   static unsigned long punishment_delay = 1;
-  char entered[GRUB_AUTH_MAX_PASSLEN];
 
   auto int hook (grub_list_t item);
   int hook (grub_list_t item)
   {
-    if (grub_strcmp (login, ((struct grub_auth_user *) item)->name) == 0)
+    if (grub_auth_strcmp (login, ((struct grub_auth_user *) item)->name) == 0)
       cur = (struct grub_auth_user *) item;
     return 0;
   }
@@ -186,21 +238,26 @@ grub_auth_check_authentication (const char *userlist)
       return GRUB_ERR_NONE;
     }
 
-  if (!grub_cmdline_get ("Enter username: ", login, sizeof (login) - 1,
+  if (!grub_cmdline_get (N_("Enter username:"), login, sizeof (login) - 1,
 			 0, 0, 0))
-    goto access_denied;
-
-  grub_printf ("Enter password: ");
-
-  if (!grub_password_get (entered, GRUB_AUTH_MAX_PASSLEN))
     goto access_denied;
 
   grub_list_iterate (GRUB_AS_LIST (users), hook);
 
   if (!cur || ! cur->callback)
-    goto access_denied;
+    {
+      grub_list_iterate (GRUB_AS_LIST (users), hook_any);
 
-  err = cur->callback (login, entered, cur->arg);
+      /* No users present at all.  */
+      if (!cur)
+	goto access_denied;
+
+      /* Display any of available authentication schemes.  */
+      err = cur->callback (login, 0);
+
+      goto access_denied;
+    }
+  err = cur->callback (login, cur->arg);
   if (is_authenticated (userlist))
     {
       punishment_delay = 1;

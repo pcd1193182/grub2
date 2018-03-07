@@ -31,7 +31,7 @@ dnl (such as TARGET_CC, TARGET_CFLAGS, etc.) are used for the target
 dnl type.
 
 
-AC_INIT([GRUB],[1.97+experimental],[bug-grub@gnu.org])
+AC_INIT([GRUB],[1.97],[bug-grub@gnu.org])
 AM_INIT_AUTOMAKE()
 AC_PREREQ(2.60)
 AC_CONFIG_SRCDIR([include/grub/dl.h])
@@ -47,16 +47,6 @@ AC_ARG_PROGRAM
 case "$target_cpu" in
   i[[3456]]86)	target_cpu=i386 ;;
   sparc)	target_cpu=sparc64 ;;
-  mipsel|mips64el)
-                target_cpu=mips;    
-		TARGET_CFLAGS="$TARGET_CFLAGS -DGRUB_CPU_MIPSEL=1"; 
-		CFLAGS="$CFLAGS -DGRUB_CPU_MIPSEL=1";
-		;;
-  mips|mips64)
-                target_cpu=mips;    
-		TARGET_CFLAGS="$TARGET_CFLAGS -DGRUB_CPU_MIPS=1"; 
-		CFLAGS="$CFLAGS -DGRUB_CPU_MIPS=1";
-		;;
 esac
 
 # Specify the platform (such as firmware).
@@ -74,7 +64,6 @@ if test "x$with_platform" = x; then
     powerpc-*) platform=ieee1275 ;;
     powerpc64-*) platform=ieee1275 ;;
     sparc64-*) platform=ieee1275 ;;
-    mips-*) platform=yeeloong ;;
     *) AC_MSG_ERROR([unsupported CPU: "$target_cpu"]) ;;
   esac
 else
@@ -101,8 +90,6 @@ case "$target_cpu"-"$platform" in
   i386-qemu) ;;
   powerpc-ieee1275) ;;
   sparc64-ieee1275) ;;
-  mips-qemu-mips) ;;
-  mips-yeeloong) ;;
   *-emu) ;;
   *) AC_MSG_ERROR([platform "$platform" is not supported for target CPU "$target_cpu"]) ;;
 esac
@@ -133,8 +120,6 @@ case "$platform" in
   qemu)		machine_CFLAGS="-DGRUB_MACHINE_QEMU=1" ;;
   pc)		machine_CFLAGS="-DGRUB_MACHINE_PCBIOS=1" ;;
   emu)		machine_CFLAGS="-DGRUB_MACHINE_EMU=1" ;;
-  yeeloong)	machine_CFLAGS="-DGRUB_MACHINE_MIPS_YEELOONG=1 -DGRUB_MACHINE_MIPS=1 -DGRUB_MACHINE_MIPS_BONITO=1" ;;
-  qemu-mips)	machine_CFLAGS="-DGRUB_MACHINE_MIPS_QEMU_MIPS=1 -DGRUB_MACHINE_MIPS=1 -DGRUB_MACHINE_MIPS_BONITO=1" ;;
 esac
 CFLAGS="$CFLAGS $machine_CFLAGS"
 TARGET_ASFLAGS="$TARGET_ASFLAGS $machine_CFLAGS"
@@ -541,10 +526,6 @@ AC_ARG_ENABLE([grub-emu-usb],
 	      [AS_HELP_STRING([--enable-grub-emu-usb],
                              [build and install the `grub-emu' debugging utility with USB support (default=guessed)])])
 
-AC_ARG_ENABLE([grub-emu-sdl],
-	      [AS_HELP_STRING([--enable-grub-emu-sdl],
-                             [build and install the `grub-emu' debugging utility with SDL support (default=guessed)])])
-
 AC_ARG_ENABLE([grub-emu-pci],
 	      [AS_HELP_STRING([--enable-grub-emu-pci],
                              [build and install the `grub-emu' debugging utility with PCI support (potentially dangerous) (default=no)])])
@@ -595,16 +576,6 @@ else
 enable_grub_emu_usb=no
 fi
 
-if test x"$enable_grub_emu_sdl" = xno ; then
-  grub_emu_sdl_excuse="explicitely disabled"
-fi
-[if [ x"$grub_emu_sdl_excuse" = x ]; then
-    # Check for libSDL libraries.]
-AC_CHECK_LIB([SDL], [SDL_Init], [LIBSDL="-lSDL"],
-    [grub_emu_sdl_excuse=["libSDL libraries are required to build \`grub-emu' with SDL support"]])
-    AC_SUBST([LIBSDL])
-[fi]
-
 if test x"$enable_grub_emu_pci" != xyes ; then
    grub_emu_pci_excuse="not enabled"
 fi
@@ -619,27 +590,11 @@ fi
       [grub_emu_pci_excuse=["need libpciaccess library"]])
     AC_SUBST([LIBPCIACCESS])
 [fi]
-
-[if [ x"$grub_emu_sdl_excuse" = x ]; then
-    # Check for headers.]
-    AC_CHECK_HEADERS([SDL/SDL.h], [],
-      [grub_emu_sdl_excuse=["libSDL header file is required to build \`grub-emu' with SDL support"]])
-[fi]
-
 [if [ x"$grub_emu_pci_excuse" = x ]; then
     # Check for headers.]
     AC_CHECK_HEADERS([pci/pci.h], [],
       [grub_emu_pci_excuse=["need libpciaccess headers"]])
 [fi]
-
-if test x"enable_grub_emu_sdl" = xyes && test x"$grub_emu_sdl_excuse" != x ; then
-  AC_MSG_ERROR([SDL support for grub-emu was explicitely requested but can't be compiled])
-fi
-if test x"$grub_emu_sdl_excuse" = x ; then
-enable_grub_emu_sdl=yes
-else
-enable_grub_emu_sdl=no
-fi
 
 if test x"$grub_emu_pci_excuse" = x ; then
 enable_grub_emu_pci=yes
@@ -647,7 +602,6 @@ else
 enable_grub_emu_pci=no
 fi
 
-AC_SUBST([enable_grub_emu_sdl])
 AC_SUBST([enable_grub_emu_usb])
 AC_SUBST([enable_grub_emu_pci])
 fi
@@ -723,11 +677,6 @@ if [ x"$grub_emu_usb_excuse" = x ]; then
 echo USB support for grub-emu: Yes
 else
 echo USB support for grub-emu: No "($grub_emu_usb_excuse)"
-fi
-if [ x"$grub_emu_sdl_excuse" = x ]; then
-echo SDL support for grub-emu: Yes
-else
-echo SDL support for grub-emu: No "($grub_emu_sdl_excuse)"
 fi
 if [ x"$grub_emu_pci_excuse" = x ]; then
 echo PCI support for grub-emu: Yes
