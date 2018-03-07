@@ -32,11 +32,6 @@
 #include <grub/env.h>
 #include <grub/cache.h>
 
-#if defined (__i386__) || defined (__x86_64__)
-#include <grub/i386/memory.h>
-#endif
-
-
 /* Platforms where modules are in a readonly area of memory.  */
 #if defined(GRUB_MACHINE_QEMU)
 #define GRUB_MODULES_MACHINE_READONLY
@@ -256,13 +251,6 @@ grub_dl_load_segments (grub_dl_t mod, const Elf_Ehdr *e)
   unsigned i;
   Elf_Shdr *s;
 
-#if defined (__i386__) || defined (__x86_64__)
-  char *str;
-
-  s = (Elf_Shdr *) ((char *) e + e->e_shoff + e->e_shentsize * e->e_shstrndx);
-  str = (char *) e + s->sh_offset;
-#endif
-
   for (i = 0, s = (Elf_Shdr *)((char *) e + e->e_shoff);
        i < e->e_shnum;
        i++, s = (Elf_Shdr *)((char *) s + e->e_shentsize))
@@ -279,13 +267,7 @@ grub_dl_load_segments (grub_dl_t mod, const Elf_Ehdr *e)
 	    {
 	      void *addr;
 
-#if defined (__i386__) || defined (__x86_64__)
-	      if (grub_strcmp (str + s->sh_name, ".lowmem") == 0)
-		addr = grub_memalign_policy (s->sh_addralign, s->sh_size,
-					     GRUB_MM_MALLOC_LOW);
-	      else
-#endif
-		addr = grub_memalign (s->sh_addralign, s->sh_size);
+	      addr = grub_memalign (s->sh_addralign, s->sh_size);
 	      if (! addr)
 		{
 		  grub_free (seg);
@@ -359,7 +341,6 @@ grub_dl_resolve_symbols (grub_dl_t mod, Elf_Ehdr *e)
       switch (type)
 	{
 	case STT_NOTYPE:
-	case STT_OBJECT:
 	  /* Resolve a global symbol.  */
 	  if (sym->st_name != 0 && sym->st_shndx == 0)
 	    {
@@ -369,13 +350,15 @@ grub_dl_resolve_symbols (grub_dl_t mod, Elf_Ehdr *e)
 				   "the symbol `%s' not found", name);
 	    }
 	  else
-	    {
-	      sym->st_value += (Elf_Addr) grub_dl_get_section_addr (mod,
-								    sym->st_shndx);
-	      if (bind != STB_LOCAL)
-		if (grub_dl_register_symbol (name, (void *) sym->st_value, mod))
-		  return grub_errno;
-	    }
+	    sym->st_value = 0;
+	  break;
+
+	case STT_OBJECT:
+	  sym->st_value += (Elf_Addr) grub_dl_get_section_addr (mod,
+								sym->st_shndx);
+	  if (bind != STB_LOCAL)
+	    if (grub_dl_register_symbol (name, (void *) sym->st_value, mod))
+	      return grub_errno;
 	  break;
 
 	case STT_FUNC:
@@ -721,5 +704,22 @@ grub_dl_unload_unneeded (void)
 	}
 
       p = p->next;
+    }
+}
+
+/* Unload all modules.  */
+void
+grub_dl_unload_all (void)
+{
+  while (grub_dl_head)
+    {
+      grub_dl_list_t p;
+
+      grub_dl_unload_unneeded ();
+
+      /* Force to decrement the ref count. This will purge pre-loaded
+	 modules and manually inserted modules.  */
+      for (p = grub_dl_head; p; p = p->next)
+	p->mod->ref_count--;
     }
 }

@@ -1,6 +1,6 @@
 /*
  *  GRUB  --  GRand Unified Bootloader
- *  Copyright (C) 2002,2003,2004,2005,2006,2007,2008  Free Software Foundation, Inc.
+ *  Copyright (C) 2002,2003,2004,2005,2006,2007,2008,2009  Free Software Foundation, Inc.
  *
  *  GRUB is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,7 +31,6 @@
 #include <grub/cache.h>
 #include <grub/time.h>
 #include <grub/cpu/tsc.h>
-#include <grub/cpu/memory.h>
 
 struct mem_region
 {
@@ -131,18 +130,6 @@ grub_machine_init (void)
 {
   int i;
   int grub_lower_mem;
-  grub_size_t policy_normal[GRUB_MM_NPOLICIES]
-    = { [GRUB_MM_MALLOC_DEFAULT] = GRUB_MM_ALLOCATOR_SECOND,
-	[GRUB_MM_MALLOC_KERNEL] = GRUB_MM_ALLOCATOR_SECOND,
-	[GRUB_MM_MALLOC_LOW] = GRUB_MM_ALLOCATOR_SKIP,
-	[GRUB_MM_MALLOC_LOW_END]  = GRUB_MM_ALLOCATOR_SKIP,
-  };
-  grub_size_t policy_low[GRUB_MM_NPOLICIES]
-    = { [GRUB_MM_MALLOC_DEFAULT] = GRUB_MM_ALLOCATOR_SKIP,
-	[GRUB_MM_MALLOC_KERNEL] = GRUB_MM_ALLOCATOR_SKIP,
-	[GRUB_MM_MALLOC_LOW] = GRUB_MM_ALLOCATOR_FIRST,
-	[GRUB_MM_MALLOC_LOW_END]  = GRUB_MM_ALLOCATOR_LAST,
-  };
 
   /* Initialize the console as early as possible.  */
   grub_console_init ();
@@ -158,11 +145,15 @@ grub_machine_init (void)
   grub_gate_a20 (1);
 #endif
 
+/* FIXME: This prevents loader/i386/linux.c from using low memory.  When our
+   heap implements support for requesting a chunk in low memory, this should
+   no longer be a problem.  */
+#if 0
   /* Add the lower memory into free memory.  */
   if (grub_lower_mem >= GRUB_MEMORY_MACHINE_RESERVED_END)
-    grub_mm_init_region ((void *) GRUB_MEMORY_MACHINE_RESERVED_END,
-			 grub_lower_mem - GRUB_MEMORY_MACHINE_RESERVED_END,
-			 policy_low);
+    add_mem_region (GRUB_MEMORY_MACHINE_RESERVED_END,
+		    grub_lower_mem - GRUB_MEMORY_MACHINE_RESERVED_END);
+#endif
 
   auto int NESTED_FUNC_ATTR hook (grub_uint64_t, grub_uint64_t, grub_uint32_t);
   int NESTED_FUNC_ATTR hook (grub_uint64_t addr, grub_uint64_t size, grub_uint32_t type)
@@ -206,11 +197,10 @@ grub_machine_init (void)
 	grub_os_area_addr = mem_regions[i].addr;
 	grub_os_area_size = mem_regions[i].size - quarter;
 	grub_mm_init_region ((void *) (grub_os_area_addr + grub_os_area_size),
-                             quarter, policy_normal);
+			     quarter);
       }
     else
-      grub_mm_init_region ((void *) mem_regions[i].addr, mem_regions[i].size,
-			   policy_normal);
+      grub_mm_init_region ((void *) mem_regions[i].addr, mem_regions[i].size);
 
   if (! grub_os_area_addr)
     grub_fatal ("no upper memory");

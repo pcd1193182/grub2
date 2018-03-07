@@ -1,7 +1,7 @@
 /* multiboot2.c - boot a multiboot 2 OS image. */
 /*
  *  GRUB  --  GRand Unified Bootloader
- *  Copyright (C) 2007,2008  Free Software Foundation, Inc.
+ *  Copyright (C) 2007,2008,2009  Free Software Foundation, Inc.
  *
  *  GRUB is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 #include <multiboot2.h>
 #include <grub/elf.h>
 #include <grub/err.h>
-#include <grub/cpu/loader.h>
+#include <grub/machine/loader.h>
 #include <grub/mm.h>
 #include <grub/multiboot.h>
 #include <grub/cpu/multiboot.h>

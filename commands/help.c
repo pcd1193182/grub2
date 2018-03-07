@@ -1,7 +1,7 @@
 /* help.c - command to show a help text.  */
 /*
  *  GRUB  --  GRand Unified Bootloader
- *  Copyright (C) 2005,2007,2008  Free Software Foundation, Inc.
+ *  Copyright (C) 2005,2007,2008,2009  Free Software Foundation, Inc.
  *
  *  GRUB is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,6 +22,8 @@
 #include <grub/term.h>
 #include <grub/extcmd.h>
 #include <grub/i18n.h>
+#include <grub/mm.h>
+#include <grub/normal.h>
 
 static grub_err_t
 grub_cmd_help (grub_extcmd_t ext __attribute__ ((unused)), int argc,
@@ -38,27 +40,46 @@ grub_cmd_help (grub_extcmd_t ext __attribute__ ((unused)), int argc,
       if ((cmd->prio & GRUB_PRIO_LIST_FLAG_ACTIVE) &&
 	  (cmd->flags & GRUB_COMMAND_FLAG_CMDLINE))
 	{
-	  struct grub_term_output *cur;
-	  FOR_ACTIVE_TERM_OUTPUTS(cur)
-	  {
-	    int width = grub_term_width(cur);
-	    const char* summary_translated = _(cmd->summary);
-	    int desclen = grub_strlen (summary_translated);
-	    char description[width / 2];
+	  char *command_help;
+	  int stringwidth;
+	  grub_uint32_t *unicode_command_help;
+	  grub_uint32_t *unicode_last_position;
+	  grub_uint32_t *unicode_last_screen_position;
+	  const char *summary_translated = _(cmd->summary);
 
-	    /* Make a string with a length of GRUB_TERM_WIDTH / 2 - 1 filled
-	       with the description followed by spaces.  */
-	    grub_memset (description, ' ', width / 2 - 1);
-	    description[width / 2 - 1] = '\0';
-	    grub_memcpy (description, summary_translated,
-			 (desclen < width / 2 - 1
-			  ? desclen : width / 2 - 1));
-	    grub_puts_terminal (description, cur);
-	  }
+	  command_help = grub_malloc (grub_strlen (cmd->name) +
+	  			      sizeof (" ") - 1 +
+				      grub_strlen (summary_translated));
+	  			      
+	  grub_sprintf(command_help, "%s %s", cmd->name, summary_translated);
+
+	  grub_utf8_to_ucs4_alloc (command_help, &unicode_command_help,
+	  			   &unicode_last_position);
+	  
+	  unicode_last_screen_position = unicode_command_help;
+
+	  stringwidth = 0;
+
+	  while (unicode_last_screen_position < unicode_last_position && 
+	         stringwidth < ((GRUB_TERM_WIDTH / 2) - 2))
+	    {
+	      stringwidth += grub_getcharwidth (*unicode_last_screen_position);
+	      unicode_last_screen_position++;
+	    }
+
+	  grub_print_ucs4 (unicode_command_help, unicode_last_screen_position);
+	  
 	  if ((cnt++) % 2)
-	    grub_printf ("\n");
-	  else
-	    grub_printf (" ");
+	    {
+	      grub_putchar ('\n');
+	    }
+	    else
+	    {
+	      grub_print_spaces (GRUB_TERM_WIDTH / 2 - stringwidth);
+	    }
+	  
+	  grub_free (command_help);
+	  grub_free (unicode_command_help);
 	}
       return 0;
     }
@@ -83,11 +104,7 @@ grub_cmd_help (grub_extcmd_t ext __attribute__ ((unused)), int argc,
     }
 
   if (argc == 0)
-    {
-      grub_command_iterate (print_command_info);
-      if (!(cnt % 2))
-	grub_printf ("\n");
-    }
+    grub_command_iterate (print_command_info);
   else
     {
       int i;

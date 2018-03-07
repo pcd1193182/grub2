@@ -22,7 +22,6 @@
 
 #include <grub/types.h>
 #include <grub/err.h>
-#include <grub/handler.h>
 #include <grub/reader.h>
 
 /* All the states for the command line.  */

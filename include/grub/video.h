@@ -34,10 +34,6 @@ struct grub_video_render_target;
 struct grub_video_bitmap;
 
 /* Defines used to describe video mode or rendering target.  */
-/* If following is set render target contains currenly displayed image
-   after swapping buffers (otherwise it contains previously displayed image).
- */
-#define GRUB_VIDEO_MODE_TYPE_UPDATING_SWAP	0x00000080
 #define GRUB_VIDEO_MODE_TYPE_PURE_TEXT		0x00000040
 #define GRUB_VIDEO_MODE_TYPE_ALPHA		0x00000020
 #define GRUB_VIDEO_MODE_TYPE_DOUBLE_BUFFERED	0x00000010
@@ -52,8 +48,6 @@ struct grub_video_bitmap;
 #define GRUB_VIDEO_MODE_TYPE_DEPTH_MASK		0x0000ff00
 #define GRUB_VIDEO_MODE_TYPE_DEPTH_POS		8
 
-/* The basic render target representing the whole display.  This always
-   renders to the back buffer when double-buffering is in use.  */
 #define GRUB_VIDEO_RENDER_TARGET_DISPLAY \
   ((struct grub_video_render_target *) 0)
 
@@ -157,16 +151,6 @@ struct grub_video_mode_info
   grub_uint8_t fg_alpha;
 };
 
-/* A 2D rectangle type.  */
-struct grub_video_rect
-{
-  unsigned x;
-  unsigned y;
-  unsigned width;
-  unsigned height;
-};
-typedef struct grub_video_rect grub_video_rect_t;
-
 struct grub_video_palette_data
 {
   grub_uint8_t r; /* Red color value (0-255).  */
@@ -187,7 +171,7 @@ struct grub_video_adapter
   grub_err_t (*fini) (void);
 
   grub_err_t (*setup) (unsigned int width,  unsigned int height,
-                       unsigned int mode_type, unsigned int mode_mask);
+                       unsigned int mode_type);
 
   grub_err_t (*get_info) (struct grub_video_mode_info *mode_info);
 
@@ -323,14 +307,7 @@ grub_err_t grub_video_set_active_render_target (struct grub_video_render_target 
 grub_err_t grub_video_get_active_render_target (struct grub_video_render_target **target);
 
 grub_err_t grub_video_set_mode (const char *modestring,
-				unsigned int modemask,
-				unsigned int modevalue);
-
-static inline int
-grub_video_check_mode_flag (unsigned int flags, unsigned int mask,
-			    unsigned int flag, int def)
-{
-  return (flag & mask) ? !! (flags & flag) : def;
-}
+				int NESTED_FUNC_ATTR (*hook) (grub_video_adapter_t p,
+							      struct grub_video_mode_info *mode_info));
 
 #endif /* ! GRUB_VIDEO_HEADER */

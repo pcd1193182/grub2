@@ -88,7 +88,7 @@ grub_ofconsole_putchar (grub_uint32_t c)
       grub_curr_x++;
       if (grub_curr_x > grub_ofconsole_width)
         {
-          grub_ofconsole_putchar ('\n');
+          grub_putcode ('\n');
           grub_curr_x++;
         }
     }
@@ -319,7 +319,7 @@ grub_ofconsole_cls (void)
    * ANSI escape sequence.  Using video console, Apple Open Firmware (version
    * 3.1.1) only recognizes the literal ^L.  So use both.  */
   grub_ofconsole_writeesc ("\e[2J");
-  grub_ofconsole_gotoxy (0, 0);
+  grub_gotoxy (0, 0);
 }
 
 static void
@@ -414,14 +414,15 @@ static struct grub_term_output grub_ofconsole_term_output =
     .setcolor = grub_ofconsole_setcolor,
     .getcolor = grub_ofconsole_getcolor,
     .setcursor = grub_ofconsole_setcursor,
-    .refresh = grub_ofconsole_refresh
+    .refresh = grub_ofconsole_refresh,
+    .flags = 0,
   };
 
 void
 grub_console_init (void)
 {
-  grub_term_register_input_active ("ofconsole", &grub_ofconsole_term_input);
-  grub_term_register_output_active ("ofconsole", &grub_ofconsole_term_output);
+  grub_term_register_input ("ofconsole", &grub_ofconsole_term_input);
+  grub_term_register_output ("ofconsole", &grub_ofconsole_term_output);
 }
 
 void

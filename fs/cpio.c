@@ -1,7 +1,7 @@
 /* cpio.c - cpio and tar filesystem.  */
 /*
  *  GRUB  --  GRand Unified Bootloader
- *  Copyright (C) 2007,2008 Free Software Foundation, Inc.
+ *  Copyright (C) 2007,2008,2009 Free Software Foundation, Inc.
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -280,10 +280,8 @@ grub_cpio_open (grub_file_t file, const char *name)
 
       /* Compare NAME and FN by hand in order to cope with duplicate
 	 slashes.  */
-      i = 0;
+      i = 1;
       j = 0;
-      while (name[i] == '/')
-	i++;
       while (1)
 	{
 	  if (name[i] != fn[j])
@@ -292,15 +290,12 @@ grub_cpio_open (grub_file_t file, const char *name)
 	  if (name[i] == '\0')
 	    break;
 
-	  while (name[i] == '/' && name[i+1] == '/')
+	  if (name[i] == '/' && name[i+1] == '/')
 	    i++;
 
 	  i++;
 	  j++;
 	}
-
-      if (name[i] != fn[j])
-	goto no_match;
 
       file->data = data;
       file->size = data->size;

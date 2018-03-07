@@ -1,7 +1,7 @@
 /* linux.c - boot Linux */
 /*
  *  GRUB  --  GRand Unified Bootloader
- *  Copyright (C) 2003, 2004, 2005, 2007  Free Software Foundation, Inc.
+ *  Copyright (C) 2003,2004,2005,2007,2009  Free Software Foundation, Inc.
  *
  *  GRUB is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -110,7 +110,7 @@ grub_linux_load32 (grub_elf_t elf)
   if (entry == 0)
     entry = 0x01400000;
 
-  linux_size = grub_elf32_size (elf, 0);
+  linux_size = grub_elf32_size (elf);
   if (linux_size == 0)
     return grub_errno;
   /* Pad it; the kernel scribbles over memory beyond its load address.  */
@@ -160,7 +160,7 @@ grub_linux_load64 (grub_elf_t elf)
   if (entry == 0)
     entry = 0x01400000;
 
-  linux_size = grub_elf64_size (elf, 0);
+  linux_size = grub_elf64_size (elf);
   if (linux_size == 0)
     return grub_errno;
   /* Pad it; the kernel scribbles over memory beyond its load address.  */

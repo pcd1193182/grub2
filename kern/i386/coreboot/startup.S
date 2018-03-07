@@ -18,7 +18,6 @@
 
 #include <grub/symbol.h>
 #include <grub/machine/memory.h>
-#include <grub/cpu/memory.h>
 #include <grub/cpu/linux.h>
 #include <grub/cpu/kernel.h>
 #include <multiboot.h>
@@ -83,3 +82,8 @@ codestart:
  *  only needed for BIOS gates).
  */
 #include "../realmode.S"
+
+/*
+ *  Routines needed by Linux and Multiboot loaders.
+ */
+#include "../loader.S"
