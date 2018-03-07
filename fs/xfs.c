@@ -148,9 +148,7 @@ struct grub_xfs_data
 
 };
 
-#ifndef GRUB_UTIL
 static grub_dl_t my_mod;
-#endif
 
 
 
@@ -220,7 +218,7 @@ grub_xfs_read_inode (struct grub_xfs_data *data, grub_uint64_t ino,
 
   /* Read the inode.  */
   if (grub_disk_read (data->disk, block, offset,
-		      sizeof (struct grub_xfs_inode), (char *) inode))
+		      sizeof (struct grub_xfs_inode), inode))
     return grub_errno;
 
   if (grub_strncmp ((char *) inode->magic, "IN", 2))
@@ -269,7 +267,7 @@ grub_xfs_read_block (grub_fshelp_node_t node, grub_disk_addr_t fileblock)
                               grub_be_to_cpu64 (keys[i - 1 + XFS_INODE_EXTENTS])
                               << (node->data->sblock.log2_bsize
                                   - GRUB_DISK_SECTOR_BITS),
-                              0, node->data->sblock.bsize, (char *) leaf))
+                              0, node->data->sblock.bsize, leaf))
             return 0;
 
           if (grub_strncmp ((char *) leaf->magic, "BMAP", 4))
@@ -585,7 +583,7 @@ grub_xfs_mount (grub_disk_t disk)
 
   /* Read the superblock.  */
   if (grub_disk_read (disk, 0, 0,
-		      sizeof (struct grub_xfs_sblock), (char *) &data->sblock))
+		      sizeof (struct grub_xfs_sblock), &data->sblock))
     goto fail;
   
   if (grub_strncmp ((char *) (data->sblock.magic), "XFSB", 4))
@@ -641,9 +639,7 @@ grub_xfs_dir (grub_device_t device, const char *path,
       return hook (filename, &info);
     }
 
-#ifndef GRUB_UTIL
   grub_dl_ref (my_mod);
-#endif
   
   data = grub_xfs_mount (device->disk);
   if (!data)
@@ -661,9 +657,7 @@ grub_xfs_dir (grub_device_t device, const char *path,
     grub_free (fdiro);
   grub_free (data);
 
-#ifndef GRUB_UTIL
   grub_dl_unref (my_mod);
-#endif
 
   return grub_errno;
 
@@ -678,9 +672,7 @@ grub_xfs_open (struct grub_file *file, const char *name)
   struct grub_xfs_data *data;
   struct grub_fshelp_node *fdiro = 0;
   
-#ifndef GRUB_UTIL
   grub_dl_ref (my_mod);
-#endif
   
   data = grub_xfs_mount (file->device->disk);
   if (!data)
@@ -714,9 +706,7 @@ grub_xfs_open (struct grub_file *file, const char *name)
     grub_free (fdiro);
   grub_free (data);
   
-#ifndef GRUB_UTIL
   grub_dl_unref (my_mod);
-#endif
 
   return grub_errno;
 }
@@ -738,9 +728,7 @@ grub_xfs_close (grub_file_t file)
 {
   grub_free (file->data);
 
-#ifndef GRUB_UTIL
   grub_dl_unref (my_mod);
-#endif
 
   return GRUB_ERR_NONE;
 }
@@ -752,9 +740,7 @@ grub_xfs_label (grub_device_t device, char **label)
   struct grub_xfs_data *data;
   grub_disk_t disk = device->disk;
 
-#ifndef GRUB_UTIL
   grub_dl_ref (my_mod);
-#endif
 
   data = grub_xfs_mount (disk);
   if (data)
@@ -762,9 +748,7 @@ grub_xfs_label (grub_device_t device, char **label)
   else
     *label = 0;
 
-#ifndef GRUB_UTIL
   grub_dl_unref (my_mod);
-#endif
 
   grub_free (data);
 
@@ -777,9 +761,7 @@ grub_xfs_uuid (grub_device_t device, char **uuid)
   struct grub_xfs_data *data;
   grub_disk_t disk = device->disk;
 
-#ifndef GRUB_UTIL
   grub_dl_ref (my_mod);
-#endif
 
   data = grub_xfs_mount (disk);
   if (data)
@@ -794,9 +776,7 @@ grub_xfs_uuid (grub_device_t device, char **uuid)
   else
     *uuid = NULL;
 
-#ifndef GRUB_UTIL
   grub_dl_unref (my_mod);
-#endif
 
   grub_free (data);
 
@@ -820,9 +800,7 @@ static struct grub_fs grub_xfs_fs =
 GRUB_MOD_INIT(xfs)
 {
   grub_fs_register (&grub_xfs_fs);
-#ifndef GRUB_UTIL
   my_mod = mod;
-#endif
 }
 
 GRUB_MOD_FINI(xfs)

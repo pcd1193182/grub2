@@ -317,9 +317,7 @@ struct grub_ext2_data
   struct grub_fshelp_node diropen;
 };
 
-#ifndef GRUB_UTIL
 static grub_dl_t my_mod;
-#endif
 
 
 
@@ -333,7 +331,7 @@ grub_ext2_blockgroup (struct grub_ext2_data *data, int group,
                          ((grub_le_to_cpu32 (data->sblock.first_data_block) + 1)
                           << LOG2_EXT2_BLOCK_SIZE (data)),
 			 group * sizeof (struct grub_ext2_block_group),
-			 sizeof (struct grub_ext2_block_group), (char *) blkgrp);
+			 sizeof (struct grub_ext2_block_group), blkgrp);
 }
 
 static struct grub_ext4_extent_header *
@@ -440,7 +438,7 @@ grub_ext2_read_block (grub_fshelp_node_t node, grub_disk_addr_t fileblock)
       if (grub_disk_read (data->disk,
 			  grub_le_to_cpu32 (inode->blocks.indir_block)
 			  << log2_blksz,
-			  0, blksz, (char *) indir))
+			  0, blksz, indir))
 	return grub_errno;
 	  
       blknr = grub_le_to_cpu32 (indir[fileblock - INDIRECT_BLOCKS]);
@@ -456,13 +454,13 @@ grub_ext2_read_block (grub_fshelp_node_t node, grub_disk_addr_t fileblock)
       if (grub_disk_read (data->disk,
 			  grub_le_to_cpu32 (inode->blocks.double_indir_block)
 			  << log2_blksz,
-			  0, blksz, (char *) indir))
+			  0, blksz, indir))
 	return grub_errno;
 
       if (grub_disk_read (data->disk,
 			  grub_le_to_cpu32 (indir[rblock / perblock])
 			  << log2_blksz,
-			  0, blksz, (char *) indir))
+			  0, blksz, indir))
 	return grub_errno;
 
       
@@ -525,7 +523,7 @@ grub_ext2_read_inode (struct grub_ext2_data *data,
 		      ((grub_le_to_cpu32 (blkgrp.inode_table_id) + blkno)
 		        << LOG2_EXT2_BLOCK_SIZE (data)),
 		      EXT2_INODE_SIZE (data) * blkoff,
-		      sizeof (struct grub_ext2_inode), (char *) inode))
+		      sizeof (struct grub_ext2_inode), inode))
     return grub_errno;
   
   return 0;
@@ -542,7 +540,7 @@ grub_ext2_mount (grub_disk_t disk)
 
   /* Read the superblock.  */
   grub_disk_read (disk, 1 * 2, 0, sizeof (struct grub_ext2_sblock),
-                  (char *) &data->sblock);
+                  &data->sblock);
   if (grub_errno)
     goto fail;
 
@@ -725,9 +723,7 @@ grub_ext2_open (struct grub_file *file, const char *name)
   struct grub_ext2_data *data;
   struct grub_fshelp_node *fdiro = 0;
   
-#ifndef GRUB_UTIL
   grub_dl_ref (my_mod);
-#endif
   
   data = grub_ext2_mount (file->device->disk);
   if (! data)
@@ -759,9 +755,7 @@ grub_ext2_open (struct grub_file *file, const char *name)
     grub_free (fdiro);
   grub_free (data);
   
-#ifndef GRUB_UTIL
   grub_dl_unref (my_mod);
-#endif
 
   return grub_errno;
 }
@@ -771,9 +765,7 @@ grub_ext2_close (grub_file_t file)
 {
   grub_free (file->data);
 
-#ifndef GRUB_UTIL
   grub_dl_unref (my_mod);
-#endif
 
   return GRUB_ERR_NONE;
 }
@@ -825,9 +817,7 @@ grub_ext2_dir (grub_device_t device, const char *path,
       return hook (filename, &info);
     }
 
-#ifndef GRUB_UTIL
   grub_dl_ref (my_mod);
-#endif
   
   data = grub_ext2_mount (device->disk);
   if (! data)
@@ -845,9 +835,7 @@ grub_ext2_dir (grub_device_t device, const char *path,
     grub_free (fdiro);
   grub_free (data);
 
-#ifndef GRUB_UTIL
   grub_dl_unref (my_mod);
-#endif
 
   return grub_errno;
 }
@@ -858,9 +846,7 @@ grub_ext2_label (grub_device_t device, char **label)
   struct grub_ext2_data *data;
   grub_disk_t disk = device->disk;
 
-#ifndef GRUB_UTIL
   grub_dl_ref (my_mod);
-#endif
 
   data = grub_ext2_mount (disk);
   if (data)
@@ -868,9 +854,7 @@ grub_ext2_label (grub_device_t device, char **label)
   else
     *label = NULL;
 
-#ifndef GRUB_UTIL
   grub_dl_unref (my_mod);
-#endif
 
   grub_free (data);
 
@@ -883,9 +867,7 @@ grub_ext2_uuid (grub_device_t device, char **uuid)
   struct grub_ext2_data *data;
   grub_disk_t disk = device->disk;
 
-#ifndef GRUB_UTIL
   grub_dl_ref (my_mod);
-#endif
 
   data = grub_ext2_mount (disk);
   if (data)
@@ -900,9 +882,7 @@ grub_ext2_uuid (grub_device_t device, char **uuid)
   else
     *uuid = NULL;
 
-#ifndef GRUB_UTIL
   grub_dl_unref (my_mod);
-#endif
 
   grub_free (data);
 
@@ -916,9 +896,7 @@ grub_ext2_mtime (grub_device_t device, grub_int32_t *tm)
   struct grub_ext2_data *data;
   grub_disk_t disk = device->disk;
 
-#ifndef GRUB_UTIL
   grub_dl_ref (my_mod);
-#endif
 
   data = grub_ext2_mount (disk);
   if (!data)
@@ -926,9 +904,7 @@ grub_ext2_mtime (grub_device_t device, grub_int32_t *tm)
   else 
     *tm = grub_le_to_cpu32 (data->sblock.utime);
 
-#ifndef GRUB_UTIL
   grub_dl_unref (my_mod);
-#endif
 
   grub_free (data);
 
@@ -954,9 +930,7 @@ static struct grub_fs grub_ext2_fs =
 GRUB_MOD_INIT(ext2)
 {
   grub_fs_register (&grub_ext2_fs);
-#ifndef GRUB_UTIL
   my_mod = mod;
-#endif
 }
 
 GRUB_MOD_FINI(ext2)

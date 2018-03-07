@@ -207,9 +207,7 @@ struct grub_ufs_data
   int linknest;
 };
 
-#ifndef GRUB_UTIL
 static grub_dl_t my_mod;
-#endif
 
 /* Forward declaration.  */
 static grub_err_t grub_ufs_find_file (struct grub_ufs_data *data,
@@ -237,7 +235,7 @@ grub_ufs_get_file_block (struct grub_ufs_data *data, unsigned int blk)
     {
       grub_uint32_t indir[UFS_BLKSZ (sblock) >> 2];
       grub_disk_read (data->disk, INODE_INDIRBLOCKS (data, 0) << log2_blksz,
-		      0, sizeof (indir), (char *) indir);
+		      0, sizeof (indir), indir);
       return (data->ufs_type == UFS1) ? indir[blk] : indir[blk << 1];
     }
   blk -= indirsz;
@@ -248,12 +246,12 @@ grub_ufs_get_file_block (struct grub_ufs_data *data, unsigned int blk)
       grub_uint32_t indir[UFS_BLKSZ (sblock) >> 2];
       
       grub_disk_read (data->disk, INODE_INDIRBLOCKS (data, 1) << log2_blksz,
-		      0, sizeof (indir), (char *) indir);
+		      0, sizeof (indir), indir);
       grub_disk_read (data->disk,
       		      ((data->ufs_type == UFS1) ?
 		      indir[blk / indirsz] : indir [(blk / indirsz) << 1]) 
 		      << log2_blksz,
-		      0, sizeof (indir), (char *) indir);
+		      0, sizeof (indir), indir);
       
       return (data->ufs_type == UFS1) ?
 	     indir[blk % indirsz] : indir[(blk % indirsz) << 1];
@@ -364,7 +362,7 @@ grub_ufs_read_inode (struct grub_ufs_data *data, int ino, char *inode)
 		      + grpino / 4,
 		      (grpino % 4) * sizeof (struct grub_ufs_inode),
 		      sizeof (struct grub_ufs_inode),
-		      (char *) inode);
+		      inode);
     }
   else
     {
@@ -380,7 +378,7 @@ grub_ufs_read_inode (struct grub_ufs_data *data, int ino, char *inode)
 		      + grpino / 2,
 		      (grpino % 2) * sizeof (struct grub_ufs2_inode),
 		      sizeof (struct grub_ufs2_inode),
-		      (char *) inode);
+		      inode);
     }
   
   return grub_errno;
@@ -534,7 +532,7 @@ grub_ufs_mount (grub_disk_t disk)
   while (*sblklist != -1)
     {
       grub_disk_read (disk, *sblklist, 0, sizeof (struct grub_ufs_sblock),
-		      (char *) &data->sblock);
+		      &data->sblock);
       if (grub_errno)
 	goto fail;
       
@@ -720,9 +718,7 @@ grub_ufs_label (grub_device_t device, char **label)
 {
   struct grub_ufs_data *data = 0;
 
-#ifndef GRUB_UTIL
   grub_dl_ref (my_mod);
-#endif
 
   *label = 0;
 
@@ -733,9 +729,7 @@ grub_ufs_label (grub_device_t device, char **label)
         *label = grub_strdup ((char *) data->sblock.volume_name);
     }
 
-#ifndef GRUB_UTIL
   grub_dl_unref (my_mod);
-#endif
 
   grub_free (data);
 
@@ -748,9 +742,7 @@ grub_ufs_mtime (grub_device_t device, grub_int32_t *tm)
 {
   struct grub_ufs_data *data = 0;
 
-#ifndef GRUB_UTIL
   grub_dl_ref (my_mod);
-#endif
 
   data = grub_ufs_mount (device->disk);
   if (!data)
@@ -760,9 +752,7 @@ grub_ufs_mtime (grub_device_t device, grub_int32_t *tm)
   else
     *tm = grub_le_to_cpu64 (data->sblock.mtime2);
 
-#ifndef GRUB_UTIL
   grub_dl_unref (my_mod);
-#endif
 
   grub_free (data);
 
@@ -786,9 +776,7 @@ static struct grub_fs grub_ufs_fs =
 GRUB_MOD_INIT(ufs)
 {
   grub_fs_register (&grub_ufs_fs);
-#ifndef GRUB_UTIL
   my_mod = mod;
-#endif
 }
 
 GRUB_MOD_FINI(ufs)
