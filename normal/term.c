@@ -167,13 +167,14 @@ read_terminal_list (void)
       return;
     }
   
-  filename = grub_asprintf ("%s/terminal.lst", prefix);
+  filename = grub_malloc (grub_strlen (prefix) + sizeof ("/terminal.lst"));
   if (!filename)
     {
       grub_errno = GRUB_ERR_NONE;
       return;
     }
 
+  grub_sprintf (filename, "%s/terminal.lst", prefix);
   file = grub_file_open (filename);
   if (!file)
     {

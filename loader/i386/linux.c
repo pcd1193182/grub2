@@ -18,9 +18,7 @@
 
 #include <grub/loader.h>
 #include <grub/machine/memory.h>
-#include <grub/cpu/loader.h>
-#include <grub/cpu/memory.h>
-#include <grub/cpu/loader.h>
+#include <grub/machine/loader.h>
 #include <grub/normal.h>
 #include <grub/file.h>
 #include <grub/disk.h>
@@ -292,8 +290,7 @@ find_mmap_size (void)
 static void
 free_pages (void)
 {
-  grub_free (real_mode_mem);
-  real_mode_mem = prot_mode_mem = initrd_mem = NULL;
+  real_mode_mem = prot_mode_mem = initrd_mem = 0;
 }
 
 /* Allocate pages for the real mode code and the protected mode code
@@ -319,10 +316,42 @@ allocate_pages (grub_size_t prot_size)
   /* Initialize the memory pointers with NULL for convenience.  */
   free_pages ();
 
-  real_mode_mem = grub_memalign_policy (1, real_size + mmap_size,
-					GRUB_MM_MALLOC_LOW);
+  /* FIXME: Should request low memory from the heap when this feature is
+     implemented.  */
+
+  auto int NESTED_FUNC_ATTR hook (grub_uint64_t, grub_uint64_t, grub_uint32_t);
+  int NESTED_FUNC_ATTR hook (grub_uint64_t addr, grub_uint64_t size, grub_uint32_t type)
+    {
+      /* We must put real mode code in the traditional space.  */
+
+      if (type == GRUB_MACHINE_MEMORY_AVAILABLE
+	  && addr <= 0x90000)
+	{
+	  if (addr < 0x10000)
+	    {
+	      size += addr - 0x10000;
+	      addr = 0x10000;
+	    }
+
+	  if (addr + size > 0x90000)
+	    size = 0x90000 - addr;
+
+	  if (real_size + mmap_size > size)
+	    return 0;
+
+	  real_mode_mem =
+	    (void *) (grub_size_t) ((addr + size) - (real_size + mmap_size));
+	  return 1;
+	}
+
+      return 0;
+    }
+  grub_mmap_iterate (hook);
   if (! real_mode_mem)
-    goto fail;
+    {
+      grub_error (GRUB_ERR_OUT_OF_MEMORY, "cannot allocate real mode pages");
+      goto fail;
+    }
 
   prot_mode_mem = (void *) 0x100000;
 
@@ -490,14 +519,16 @@ grub_linux_boot (void)
      May change in future if we have modes without framebuffer.  */
   if (modevar && *modevar != 0)
     {
-      tmp = grub_asprintf ("%s;text", modevar);
+      tmp = grub_malloc (grub_strlen (modevar)
+			 + sizeof (";text"));
       if (! tmp)
 	return grub_errno;
-      err = grub_video_set_mode (tmp, 0, 0);
+      grub_sprintf (tmp, "%s;text", modevar);
+      err = grub_video_set_mode (tmp, 0);
       grub_free (tmp);
     }
   else
-    err = grub_video_set_mode ("text", 0, 0);
+    err = grub_video_set_mode ("text", 0);
 
   if (err)
     {
@@ -765,18 +796,19 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
 		break;
 	      }
 
-	    linux_mode
-	      = &linux_vesafb_modes[vid_mode - GRUB_LINUX_VID_MODE_VESA_START];
-
-	    buf = grub_asprintf ("%ux%ux%u,%ux%u",
-				 linux_vesafb_res[linux_mode->res_index].width,
-				 linux_vesafb_res[linux_mode->res_index].height,
-				 linux_mode->depth,
-				 linux_vesafb_res[linux_mode->res_index].width,
-				 linux_vesafb_res[linux_mode->res_index].height);
+	    buf = grub_malloc (sizeof ("WWWWxHHHHxDD;WWWWxHHHH"));
 	    if (! buf)
 	      goto fail;
 
+	    linux_mode
+	      = &linux_vesafb_modes[vid_mode - GRUB_LINUX_VID_MODE_VESA_START];
+
+	    grub_sprintf (buf, "%ux%ux%u,%ux%u",
+			  linux_vesafb_res[linux_mode->res_index].width,
+			  linux_vesafb_res[linux_mode->res_index].height,
+			  linux_mode->depth,
+			  linux_vesafb_res[linux_mode->res_index].width,
+			  linux_vesafb_res[linux_mode->res_index].height);
 	    grub_printf ("%s is deprecated. "
 			 "Use set gfxpayload=%s before "
 			 "linux command instead.\n",

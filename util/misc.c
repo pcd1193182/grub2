@@ -303,18 +303,10 @@ grub_memalign (grub_size_t align, grub_size_t size)
   return p;
 }
 
-void *
-grub_memalign_policy (grub_size_t align, grub_size_t size,
-		      int policy __attribute__ ((unused)))
-{
-  return grub_memalign (align, size);
-}
-
 /* Some functions that we don't use.  */
 void
 grub_mm_init_region (void *addr __attribute__ ((unused)),
-		     grub_size_t size __attribute__ ((unused)),
-		     grub_size_t *policies __attribute__ ((unused)))
+		     grub_size_t size __attribute__ ((unused)))
 {
 }
 
@@ -487,6 +479,19 @@ fail:
 
 #endif /* __MINGW32__ */
 
+char *
+canonicalize_file_name (const char *path)
+{
+  char *ret;
+#ifdef PATH_MAX
+  ret = xmalloc (PATH_MAX);
+  (void) realpath (path, ret);
+#else
+  ret = realpath (path, NULL);
+#endif
+  return ret;
+}
+
 /* This function never prints trailing slashes (so that its output
    can be appended a slash unconditionally).  */
 char *
@@ -499,15 +504,11 @@ make_system_path_relative_to_its_root (const char *path)
   size_t len;
 
   /* canonicalize.  */
-  p = realpath (path, NULL);
+  p = canonicalize_file_name (path);
 
   if (p == NULL)
-    {
-      if (errno != EINVAL)
-	grub_util_error ("failed to get realpath of %s", path);
-      else
-	grub_util_error ("realpath not supporting (path, NULL)");
-    }
+    grub_util_error ("failed to get canonical path of %s", path);
+
   len = strlen (p) + 1;
   buf = strdup (p);
   free (p);

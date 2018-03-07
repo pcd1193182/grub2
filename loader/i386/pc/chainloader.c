@@ -1,7 +1,7 @@
 /* chainloader.c - boot another boot loader */
 /*
  *  GRUB  --  GRand Unified Bootloader
- *  Copyright (C) 2002,2004,2007,2009  Free Software Foundation, Inc.
+ *  Copyright (C) 2002,2004,2007,2009,2010  Free Software Foundation, Inc.
  *
  *  GRUB is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
  */
 
 #include <grub/loader.h>
-#include <grub/cpu/loader.h>
+#include <grub/machine/loader.h>
 #include <grub/machine/chainloader.h>
 #include <grub/file.h>
 #include <grub/err.h>
@@ -33,9 +33,8 @@
 #include <grub/command.h>
 #include <grub/machine/biosnum.h>
 #include <grub/i18n.h>
-
-/* This is an asm part of the chainloader.  */
-void grub_chainloader_real_boot (int drive, void *part_addr) __attribute__ ((noreturn));
+#include <grub/video.h>
+#include <grub/mm.h>
 
 static grub_dl_t my_mod;
 static int boot_drive;
@@ -44,6 +43,7 @@ static void *boot_part_addr;
 static grub_err_t
 grub_chainloader_boot (void)
 {
+  grub_video_set_mode ("text", NULL);
   grub_chainloader_real_boot (boot_drive, boot_part_addr);
 
   /* Never reach here.  */

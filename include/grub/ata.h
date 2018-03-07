@@ -98,8 +98,8 @@ struct grub_ata_device
 
   /* IO addresses on which the registers for this device can be
      found.  */
-  grub_port_t ioaddress;
-  grub_port_t ioaddress2;
+  int ioaddress;
+  int ioaddress2;
 
   /* Two devices can be connected to a single cable.  Use this field
      to select device 0 (commonly known as "master") or device 1

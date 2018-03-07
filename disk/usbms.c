@@ -200,15 +200,11 @@ grub_usbms_iterate (int (*hook) (const char *name, int luns))
 
   for (p = grub_usbms_dev_list; p; p = p->next)
     {
-      char *devname;
-      devname = grub_asprintf ("usb%d", cnt);
+      char devname[20];
+      grub_sprintf (devname, "usb%d", cnt);
 
       if (hook (devname, p->luns))
-	{
-	  grub_free (devname);
-	  return 1;
-	}
-      grub_free (devname);
+	return 1;
       cnt++;
     }
 

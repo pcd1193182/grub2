@@ -1,7 +1,7 @@
 /* linux.c - boot Linux zImage or bzImage */
 /*
  *  GRUB  --  GRand Unified Bootloader
- *  Copyright (C) 1999,2000,2001,2002,2003,2004,2005,2007,2008,2009  Free Software Foundation, Inc.
+ *  Copyright (C) 1999,2000,2001,2002,2003,2004,2005,2007,2008,2009,2010  Free Software Foundation, Inc.
  *
  *  GRUB is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
  */
 
 #include <grub/loader.h>
-#include <grub/cpu/loader.h>
+#include <grub/machine/loader.h>
 #include <grub/file.h>
 #include <grub/err.h>
 #include <grub/device.h>
@@ -31,16 +31,11 @@
 #include <grub/cpu/linux.h>
 #include <grub/command.h>
 #include <grub/i18n.h>
+#include <grub/mm.h>
+#include <grub/video.h>
 
 #define GRUB_LINUX_CL_OFFSET		0x9000
 #define GRUB_LINUX_CL_END_OFFSET	0x90FF
-
-extern grub_uint32_t grub_linux_prot_size;
-extern char *grub_linux_tmp_addr;
-extern char *grub_linux_real_addr;
-extern grub_int32_t grub_linux_is_bzimage;
-extern char grub_linux16_boot_end[];
-grub_err_t grub_linux16_boot (void);
 
 static grub_dl_t my_mod;
 
@@ -52,6 +47,16 @@ grub_linux_unload (void)
 {
   grub_dl_unref (my_mod);
   loaded = 0;
+  return GRUB_ERR_NONE;
+}
+
+static grub_err_t
+grub_linux16_boot (void)
+{
+  grub_video_set_mode ("text", NULL);
+  grub_linux16_real_boot ();
+
+  /* Not reached.  */
   return GRUB_ERR_NONE;
 }
 
@@ -123,16 +128,6 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
       if (grub_linux_real_addr > (char *) GRUB_LINUX_OLD_REAL_MODE_ADDR)
 	grub_linux_real_addr = (char *) GRUB_LINUX_OLD_REAL_MODE_ADDR;
 
-      /* Ensure that it doesn't overlap with helper.  */
-      if (((char *) grub_linux16_boot <= grub_linux_real_addr
-	   && grub_linux16_boot_end >= grub_linux_real_addr)
-	  || ((char *) grub_linux16_boot 
-	      <= grub_linux_real_addr + GRUB_LINUX_SETUP_MOVE_SIZE
-	      && grub_linux16_boot_end
-	      >= grub_linux_real_addr + GRUB_LINUX_SETUP_MOVE_SIZE))
-	grub_linux_real_addr = ((char *) grub_linux16_boot)
-	  - GRUB_LINUX_SETUP_MOVE_SIZE;
-
       if (grub_le_to_cpu16 (lh.version) >= 0x0201)
 	{
 	  lh.heap_end_ptr = grub_cpu_to_le16 (GRUB_LINUX_HEAP_END_OFFSET);
@@ -157,19 +152,6 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
       setup_sects = GRUB_LINUX_DEFAULT_SETUP_SECTS;
 
       grub_linux_real_addr = (char *) GRUB_LINUX_OLD_REAL_MODE_ADDR;
-
-      /* Ensure that it doesn't overlap with helper.  */
-      if (((char *) grub_linux16_boot <= grub_linux_real_addr
-	   && grub_linux16_boot_end >= grub_linux_real_addr)
-	  || ((char *) grub_linux16_boot 
-	      <= grub_linux_real_addr + GRUB_LINUX_SETUP_MOVE_SIZE
-	      && grub_linux16_boot_end
-	      >= grub_linux_real_addr + GRUB_LINUX_SETUP_MOVE_SIZE))
-	{
-	  grub_error (GRUB_ERR_OUT_OF_RANGE, "Too much low memory allocated and"
-		      " your kernel is too old.");
-	  goto fail;
-	}
     }
 
   /* If SETUP_SECTS is not set, set it to the default (4).  */

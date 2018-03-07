@@ -80,13 +80,14 @@ read_crypto_list (void)
       return;
     }
   
-  filename = grub_asprintf ("%s/crypto.lst", prefix);
+  filename = grub_malloc (grub_strlen (prefix) + sizeof ("/crypto.lst"));
   if (!filename)
     {
       grub_errno = GRUB_ERR_NONE;
       return;
     }
 
+  grub_sprintf (filename, "%s/crypto.lst", prefix);
   file = grub_file_open (filename);
   if (!file)
     {

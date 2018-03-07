@@ -28,11 +28,6 @@ static const struct grub_arg_option options[] =
     {0, 0, 0, 0, 0, 0}
   };
 
-/* Halt the system, using APM if possible. If NO_APM is true, don't
- * use APM even if it is available.  */
-void grub_halt (int no_apm);
-
-
 static grub_err_t
 grub_cmd_halt (grub_extcmd_t cmd,
 	       int argc __attribute__ ((unused)),

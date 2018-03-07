@@ -111,12 +111,11 @@ grub_machine_set_prefix (void)
 	  *lastslash = '\0';
 	  grub_translate_ieee1275_path (filename);
 
-	  newprefix = grub_asprintf ("%s%s", prefix, filename);
-	  if (newprefix)
-	    {
-	      grub_free (prefix);
-	      prefix = newprefix;
-	    }
+	  newprefix = grub_malloc (grub_strlen (prefix)
+				   + grub_strlen (filename));
+	  grub_sprintf (newprefix, "%s%s", prefix, filename);
+	  grub_free (prefix);
+	  prefix = newprefix;
 	}
     }
 
@@ -162,17 +161,12 @@ static void grub_claim_heap (void)
 
     if (len)
       {
-	grub_size_t policy_normal[GRUB_MM_NPOLICIES]
-	  = { [GRUB_MM_MALLOC_DEFAULT] = GRUB_MM_ALLOCATOR_SECOND,
-	      [GRUB_MM_MALLOC_KERNEL] = GRUB_MM_ALLOCATOR_SECOND
-	};
-
 	/* Claim and use it.  */
 	if (grub_claimmap (addr, len) < 0)
 	  return grub_error (GRUB_ERR_OUT_OF_MEMORY,
 			     "failed to claim heap at 0x%llx, len 0x%llx",
 			     addr, len);
-	grub_mm_init_region ((void *) (grub_addr_t) addr, len, policy_normal);
+	grub_mm_init_region ((void *) (grub_addr_t) addr, len);
       }
 
     total += len;

@@ -38,7 +38,7 @@ grub_children_iterate (char *devpath,
   grub_ieee1275_phandle_t dev;
   grub_ieee1275_phandle_t child;
   char *childtype, *childpath;
-  char *childname;
+  char *childname, *fullname;
   int ret = 0;
 
   if (grub_ieee1275_finddevice (devpath, &dev))
@@ -63,12 +63,19 @@ grub_children_iterate (char *devpath,
       grub_free (childtype);
       return 0;
     }
+  fullname = grub_malloc (IEEE1275_MAX_PATH_LEN);
+  if (!fullname)
+    {
+      grub_free (childname);
+      grub_free (childpath);
+      grub_free (childtype);
+      return 0;
+    }
 
   do
     {
       struct grub_ieee1275_devalias alias;
       grub_ssize_t actual;
-      char *fullname;
 
       if (grub_ieee1275_get_property (child, "device_type", childtype,
 				      IEEE1275_MAX_PROP_LEN, &actual))
@@ -82,25 +89,18 @@ grub_children_iterate (char *devpath,
 				      IEEE1275_MAX_PROP_LEN, &actual))
 	continue;
 
-      fullname = grub_asprintf ("%s/%s", devpath, childname);
-      if (!fullname)
-	{
-	  grub_free (childname);
-	  grub_free (childpath);
-	  grub_free (childtype);
-	  return 0;
-	}
+      grub_sprintf (fullname, "%s/%s", devpath, childname);
 
       alias.type = childtype;
       alias.path = childpath;
       alias.name = fullname;
       ret = hook (&alias);
-      grub_free (fullname);
       if (ret)
 	break;
     }
   while (grub_ieee1275_peer (child, &child));
 
+  grub_free (fullname);
   grub_free (childname);
   grub_free (childpath);
   grub_free (childtype);
@@ -330,11 +330,12 @@ grub_ieee1275_parse_args (const char *path, enum grub_ieee1275_parse_type ptype)
 	    {
 	      char *filepath = comma + 1;
 
+	      ret = grub_malloc (grub_strlen (filepath) + 1);
 	      /* Make sure filepath has leading backslash.  */
 	      if (filepath[0] != '\\')
-		ret = grub_asprintf ("\\%s", filepath);
+		grub_sprintf (ret, "\\%s", filepath);
 	      else
-		ret = grub_strdup (filepath);
+		grub_strcpy (ret, filepath);
 	    }
 	}
       else if (ptype == GRUB_PARSE_PARTITION)
@@ -382,10 +383,15 @@ grub_ieee1275_encode_devname (const char *path)
 	/* GRUB partition 1 is OF partition 0.  */
 	partno++;
 
-      encoding = grub_asprintf ("(%s,%d)", device, partno);
+      /* Assume partno will require less than five bytes to encode.  */
+      encoding = grub_malloc (grub_strlen (device) + 3 + 5);
+      grub_sprintf (encoding, "(%s,%d)", device, partno);
     }
   else
-    encoding = grub_asprintf ("(%s)", device);
+    {
+      encoding = grub_malloc (grub_strlen (device) + 2);
+      grub_sprintf (encoding, "(%s)", device);
+    }
 
   grub_free (partition);
   grub_free (device);

@@ -197,6 +197,7 @@ grub_scsi_iterate (int (*hook) (const char *name))
 
   int scsi_iterate (const char *name, int luns)
     {
+      char sname[40];
       int i;
 
       /* In case of a single LUN, just return `usbX'.  */
@@ -207,13 +208,9 @@ grub_scsi_iterate (int (*hook) (const char *name))
 	 distinguish it.  */
       for (i = 0; i < luns; i++)
 	{
-	  char *sname;
-	  sname = grub_asprintf ("%s%c", name, 'a' + i);
-	  if (!sname)
-	    return 1;
+	  grub_sprintf (sname, "%s%c", name, 'a' + i);
 	  if (hook (sname))
 	    return 1;
-	  grub_free (sname);
 	}
       return 0;
     }

@@ -255,11 +255,12 @@ grub_efiemu_autocore (void)
 
   suffix = grub_efiemu_get_default_core_name ();
 
-  filename = grub_asprintf ("%s/%s", prefix, suffix);
+  filename = grub_malloc (grub_strlen (prefix) + grub_strlen (suffix) + 2);
   if (! filename)
     return grub_error (GRUB_ERR_OUT_OF_MEMORY,
 		       "couldn't allocate temporary space");
 
+  grub_sprintf (filename, "%s/%s", prefix, suffix);
 
   err = grub_efiemu_load_file (filename);
   grub_free (filename);

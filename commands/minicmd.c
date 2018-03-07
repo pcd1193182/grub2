@@ -316,6 +316,7 @@ grub_mini_cmd_lsmod (struct grub_command *cmd __attribute__ ((unused)),
 	  grub_printf ("%s", dep->mod->name);
 	}
       grub_putchar ('\n');
+      grub_refresh ();
 
       return 0;
     }

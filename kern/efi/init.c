@@ -63,10 +63,11 @@ grub_efi_set_prefix (void)
 	  if (p)
 	    *p = '\0';
 
-	  prefix = grub_asprintf ("(%s)%s", device, file);
+	  prefix = grub_malloc (1 + grub_strlen (device) + 1
+				+ grub_strlen (file) + 1);
 	  if (prefix)
 	    {
-	      
+	      grub_sprintf (prefix, "(%s)%s", device, file);
 	      grub_env_set ("prefix", prefix);
 	      grub_free (prefix);
 	    }
@@ -81,6 +82,5 @@ void
 grub_efi_fini (void)
 {
   grub_efidisk_fini ();
-  grub_efi_mm_fini ();
   grub_console_fini ();
 }

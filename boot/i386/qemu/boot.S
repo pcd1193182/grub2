@@ -19,7 +19,6 @@
 #include <config.h>
 #include <grub/symbol.h>
 #include <grub/machine/memory.h>
-#include <grub/cpu/memory.h>
 #include <grub/machine/boot.h>
 #include <grub/machine/kernel.h>
 
@@ -52,7 +51,7 @@ VARIABLE(grub_core_entry_addr)
 	/* Transition to protected mode.  We use pushl to force generation
 	   of a flat return address.  */
 	pushl	$1f
-	REAL_TO_PROT
+	DATA32	jmp real_to_prot
 	.code32
 1:
 	movl	grub_core_entry_addr, %edx

@@ -281,11 +281,6 @@ add_memory_regions (grub_efi_memory_descriptor_t *memory_map,
 {
   grub_efi_memory_descriptor_t *desc;
 
-  grub_size_t policy_normal[GRUB_MM_NPOLICIES]
-    = { [GRUB_MM_MALLOC_DEFAULT] = GRUB_MM_ALLOCATOR_SECOND,
-	[GRUB_MM_MALLOC_KERNEL] = GRUB_MM_ALLOCATOR_SECOND
-  };
-
   for (desc = memory_map;
        desc < memory_map_end;
        desc = NEXT_MEMORY_DESCRIPTOR (desc, desc_size))
@@ -308,7 +303,7 @@ add_memory_regions (grub_efi_memory_descriptor_t *memory_map,
 		    (void *) ((grub_addr_t) start),
 		    (unsigned) pages);
 
-      grub_mm_init_region (addr, PAGES_TO_BYTES (pages), policy_normal);
+      grub_mm_init_region (addr, PAGES_TO_BYTES (pages));
 
       required_pages -= pages;
       if (required_pages == 0)

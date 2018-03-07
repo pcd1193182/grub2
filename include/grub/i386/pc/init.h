@@ -22,7 +22,6 @@
 #include <grub/types.h>
 #include <grub/symbol.h>
 #include <grub/machine/memory.h>
-#include <grub/cpu/memory.h>
 
 /* Get the memory size in KB. If EXTENDED is zero, return conventional
    memory, otherwise return extended memory.  */

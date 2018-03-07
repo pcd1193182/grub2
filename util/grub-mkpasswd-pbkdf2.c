@@ -50,9 +50,9 @@ grub_vprintf (const char *fmt, va_list args)
 }
 
 int 
-grub_vsnprintf (char *str, grub_size_t n, const char *fmt, va_list args)
+grub_vsprintf (char *str, const char *fmt, va_list args)
 {
-  return vsnprintf (str, n, fmt, args);
+  return vsprintf (str, fmt, args);
 }
 
 void
@@ -123,9 +123,8 @@ main (int argc, char *argv[])
   int tty_changed;
 
   set_program_name (argv[0]);
-  setlocale (LC_ALL, "");
-  bindtextdomain (PACKAGE, LOCALEDIR);
-  textdomain (PACKAGE);
+
+  grub_util_init_nls ();
 
   /* Check for options.  */
   while (1)
