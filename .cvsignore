@@ -6,6 +6,7 @@
 00_header
 10_hurd
 10_linux
+30_os-prober
 Makefile
 autom4te.cache
 config.cache
@@ -27,7 +28,6 @@ grub_script.tab.h
 grub_setup_init.c
 grub_setup_init.h
 kernel.elf
-kernel_elf_symlist.c
 mod-*.c
 stamp-h
 stamp-h1
