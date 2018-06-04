@@ -59,6 +59,7 @@ static int removable = 0;
 static int no_extra_removable = 0;
 static int recheck = 0;
 static int update_nvram = 1;
+static int auto_nvram = 0;
 static char *install_device = NULL;
 static char *debug_image = NULL;
 static char *rootdir = NULL;
@@ -115,7 +116,8 @@ enum
     OPTION_PRODUCT_VERSION,
     OPTION_UEFI_SECURE_BOOT,
     OPTION_NO_UEFI_SECURE_BOOT,
-    OPTION_NO_EXTRA_REMOVABLE
+    OPTION_NO_EXTRA_REMOVABLE,
+    OPTION_AUTO_NVRAM
   };
 
 static int fs_probe = 1;
@@ -204,6 +206,10 @@ argp_parser (int key, char *arg, struct argp_state *state)
 
     case OPTION_NO_NVRAM:
       update_nvram = 0;
+      return 0;
+
+    case OPTION_AUTO_NVRAM:
+      auto_nvram = 1;
       return 0;
 
     case OPTION_FORCE:
@@ -295,6 +301,9 @@ static struct argp_option options[] = {
       "This option is only available on BIOS target."), 2},
   {"no-nvram", OPTION_NO_NVRAM, 0, 0,
    N_("don't update the `boot-device'/`Boot*' NVRAM variables. "
+      "This option is only available on EFI and IEEE1275 targets."), 2},
+  {"auto-nvram", OPTION_AUTO_NVRAM, 0, 0,
+   N_("only update NVRAM variables if possible. "
       "This option is only available on EFI and IEEE1275 targets."), 2},
   {"skip-fs-probe",'s',0,      0,
    N_("do not probe for filesystems in DEVICE"), 0},
@@ -1924,7 +1933,7 @@ main (int argc, char *argv[])
 		? ins_dev->disk->partition->number + 1 : 0;
 	      dev = grub_util_get_os_disk (install_device);
 	      grub_install_register_ieee1275 (0, dev, partno,
-					      "\\\\BootX");
+					      "\\\\BootX", auto_nvram);
 	    }
 	  grub_device_close (ins_dev);
   	  free (grub_elf);
@@ -1956,7 +1965,7 @@ main (int argc, char *argv[])
 	  grub_device_close (ins_dev);
 	  if (update_nvram)
 	    grub_install_register_ieee1275 (1, grub_util_get_os_disk (install_device),
-					    0, NULL);
+					    0, NULL, auto_nvram);
 	  break;
       }
       /* fallthrough.  */
@@ -1971,7 +1980,7 @@ main (int argc, char *argv[])
 	    ? grub_dev->disk->partition->number + 1 : 0;
 	  dev = grub_util_get_os_disk (grub_devices[0]);
 	  grub_install_register_ieee1275 (0, dev,
-					  partno, relpath);
+					  partno, relpath, auto_nvram);
 	}
       break;
     case GRUB_INSTALL_PLATFORM_MIPS_ARC:
@@ -2020,7 +2029,7 @@ main (int argc, char *argv[])
 	      int error = 0;
 	      error = grub_install_register_efi (efidir_grub_dev,
 					 "\\System\\Library\\CoreServices",
-					 efi_distributor);
+					 efi_distributor, auto_nvram);
 	      if (error)
 	        grub_util_error (_("efibootmgr failed to register the boot entry: %s"),
 				 strerror (error));
@@ -2135,7 +2144,7 @@ main (int argc, char *argv[])
 			  (part ? ",": ""), (part ? : ""));
 	  grub_free (part);
 	  error = grub_install_register_efi (efidir_grub_dev,
-					     efifile_path, efi_distributor);
+					     efifile_path, efi_distributor, auto_nvram);
 	  if (error)
 	    grub_util_error (_("efibootmgr failed to register the boot entry: %s"),
 			     strerror (error));
