@@ -13,9 +13,9 @@ Last-Update: 2017-11-01
 
 Patch-Name: linuxefi_handle_multiarch_boot.patch
 ---
- grub-core/loader/efi/linux.c      |   9 +++-
- grub-core/loader/i386/efi/linux.c | 108 ++++++++++++++++++++++++++------------
- include/grub/i386/linux.h         |   7 ++-
+ grub-core/loader/efi/linux.c      |   9 ++-
+ grub-core/loader/i386/efi/linux.c | 108 +++++++++++++++++++++---------
+ include/grub/i386/linux.h         |   7 +-
  3 files changed, 88 insertions(+), 36 deletions(-)
 
 diff --git a/grub-core/loader/efi/linux.c b/grub-core/loader/efi/linux.c

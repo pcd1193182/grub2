@@ -15,7 +15,7 @@ Last-Update: 2016-11-01
 
 Patch-Name: install_signed.patch
 ---
- util/grub-install.c | 195 +++++++++++++++++++++++++++++++++++++++-------------
+ util/grub-install.c | 195 +++++++++++++++++++++++++++++++++-----------
  1 file changed, 148 insertions(+), 47 deletions(-)
 
 diff --git a/util/grub-install.c b/util/grub-install.c

@@ -1,0 +1,33 @@
+From aebe41c9004522170f1c93568f4267566e370b61 Mon Sep 17 00:00:00 2001
+From: Łukasz 'sil2100' Zemczak <lukasz.zemczak@canonical.com>
+Date: Wed, 6 Jun 2018 00:55:46 +0200
+Subject: In the grub-shell test helper, disable seabios's serial console
+ through fw_cfg runtime configuration as it's boot output interferes with
+ testing.
+
+---
+ tests/util/grub-shell.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tests/util/grub-shell.in b/tests/util/grub-shell.in
+index 814f36c6b..8e1e86bb0 100644
+--- a/tests/util/grub-shell.in
++++ b/tests/util/grub-shell.in
+@@ -474,7 +474,7 @@ if [ x$boot = xnet ]; then
+     cp "${cfgfile}" "$netdir/boot/grub/grub.cfg"
+     cp "${source}" "$netdir/boot/grub/testcase.cfg"
+     [ -z "$files" ] || copy_extra_files "$netdir" $files
+-    timeout -s KILL $timeout "${qemu}" ${qemuopts} ${serial_null} -serial file:/dev/stdout -boot n -net "user,tftp=$netdir,bootfile=/boot/grub/${grub_modinfo_target_cpu}-${grub_modinfo_platform}/core.$netbootext"  -net nic  | cat | tr -d "\r" | do_trim
++    timeout -s KILL $timeout "${qemu}" ${qemuopts} ${serial_null} -serial file:/dev/stdout -fw_cfg name=etc/sercon-port,string=0 -boot n -net "user,tftp=$netdir,bootfile=/boot/grub/${grub_modinfo_target_cpu}-${grub_modinfo_platform}/core.$netbootext"  -net nic  | cat | tr -d "\r" | do_trim
+ elif [ x$boot = xemu ]; then
+     rootdir="$(mktemp -d "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX")"
+     grubdir="$rootdir/boot/grub"
+@@ -497,7 +497,7 @@ elif [ x$boot = xemu ]; then
+     test -n "$debug" || rm -rf "$rootdir"
+     test -n "$debug" || rm -f "$roottar"
+ else
+-    timeout -s KILL $timeout "${qemu}" ${qemuopts} ${serial_null} -serial file:/dev/stdout -${device}"${isofile}" ${bootdev} | cat | tr -d "\r" | do_trim
++    timeout -s KILL $timeout "${qemu}" ${qemuopts} ${serial_null} -serial file:/dev/stdout -fw_cfg name=etc/sercon-port,string=0 -${device}"${isofile}" ${bootdev} | cat | tr -d "\r" | do_trim
+ fi
+ if [ x$boot = xcoreboot ]; then
+     test -n "$debug" || rm -f "${imgfile}"

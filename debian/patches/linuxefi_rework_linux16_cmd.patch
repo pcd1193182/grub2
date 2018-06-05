@@ -13,7 +13,7 @@ Last-Update: 2017-11-01
 
 Patch-Name: linuxefi_rework_linux16_cmd.patch
 ---
- grub-core/loader/i386/pc/linux.c | 34 +++++++++++++++++++++-------------
+ grub-core/loader/i386/pc/linux.c | 34 ++++++++++++++++++++------------
  1 file changed, 21 insertions(+), 13 deletions(-)
 
 diff --git a/grub-core/loader/i386/pc/linux.c b/grub-core/loader/i386/pc/linux.c

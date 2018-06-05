@@ -24,7 +24,7 @@ Last-Update: 2017-11-01
 Patch-Name: linuxefi_add_sb_to_efi_chainload.patch
 ---
  grub-core/Makefile.core.def        |   1 +
- grub-core/loader/efi/chainloader.c | 612 ++++++++++++++++++++++++++++++++++---
+ grub-core/loader/efi/chainloader.c | 612 +++++++++++++++++++++++++++--
  include/grub/efi/pe32.h            |  20 +-
  3 files changed, 596 insertions(+), 37 deletions(-)
 
