@@ -1,3 +1,12 @@
+grub2 (2.02-2ubuntu10) cosmic; urgency=medium
+
+  * debian/patches/grub-shell-test-helper-disable-seabios-sercon.patch: In the
+    grub-shell test helper, disable seabios's serial console through fw_cfg
+    runtime configuration as its boot output interferes with testing.
+    (LP: #1775249)
+
+ -- Łukasz 'sil2100' Zemczak <lukasz.zemczak@ubuntu.com>  Wed, 06 Jun 2018 01:03:26 +0200
+
 grub2 (2.02-2ubuntu9) cosmic; urgency=medium
 
   * debian/patches/add-an-auto-nvram-option-to-grub-install.patch: Add the

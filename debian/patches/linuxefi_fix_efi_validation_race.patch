@@ -9,7 +9,7 @@ Last-Update: 2017-11-01
 
 Patch-Name: linuxefi_fix_efi_validation_race.patch
 ---
- grub-core/loader/i386/efi/linux.c | 44 ++++++++++-----------------------------
+ grub-core/loader/i386/efi/linux.c | 44 ++++++++-----------------------
  1 file changed, 11 insertions(+), 33 deletions(-)
 
 diff --git a/grub-core/loader/i386/efi/linux.c b/grub-core/loader/i386/efi/linux.c

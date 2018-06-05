@@ -47,11 +47,11 @@ Last-Update: 2017-11-01
 
 Patch-Name: linuxefi_rework_non-sb_efi_chainload.patch
 ---
- grub-core/kern/efi/sb.c            |  14 +++--
+ grub-core/kern/efi/sb.c            |  14 +++-
  grub-core/loader/arm64/linux.c     |   4 +-
- grub-core/loader/efi/chainloader.c | 115 ++++++++++++++++++++++---------------
- grub-core/loader/efi/linux.c       |  13 +++--
- grub-core/loader/i386/efi/linux.c  |   7 ++-
+ grub-core/loader/efi/chainloader.c | 115 ++++++++++++++++++-----------
+ grub-core/loader/efi/linux.c       |  13 ++--
+ grub-core/loader/i386/efi/linux.c  |   7 +-
  include/grub/efi/linux.h           |   2 +-
  6 files changed, 97 insertions(+), 58 deletions(-)
 

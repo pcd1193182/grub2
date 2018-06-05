@@ -13,8 +13,8 @@ Last-Update: 2017-11-01
 
 Patch-Name: linuxefi_rework_pe_loading.patch
 ---
- grub-core/loader/efi/chainloader.c | 156 +++++++++++++++++++++++++++++--------
- include/grub/efi/pe32.h            |  32 +++++++-
+ grub-core/loader/efi/chainloader.c | 156 +++++++++++++++++++++++------
+ include/grub/efi/pe32.h            |  32 +++++-
  2 files changed, 152 insertions(+), 36 deletions(-)
 
 diff --git a/grub-core/loader/efi/chainloader.c b/grub-core/loader/efi/chainloader.c

@@ -17,11 +17,11 @@ Patch-Name: linuxefi_load_arm_with_sb.patch
 ---
  grub-core/Makefile.core.def       |   3 +
  grub-core/loader/arm/linux.c      |   1 +
- grub-core/loader/arm64/linux.c    | 119 ++++++++++++++++++++------------------
- grub-core/loader/efi/linux.c      |  65 +++++++++++++++++++++
- grub-core/loader/i386/efi/linux.c |  39 +------------
- include/grub/arm64/linux.h        |   7 +++
- include/grub/efi/linux.h          |  31 ++++++++++
+ grub-core/loader/arm64/linux.c    | 119 ++++++++++++++++--------------
+ grub-core/loader/efi/linux.c      |  65 ++++++++++++++++
+ grub-core/loader/i386/efi/linux.c |  39 +---------
+ include/grub/arm64/linux.h        |   7 ++
+ include/grub/efi/linux.h          |  31 ++++++++
  7 files changed, 174 insertions(+), 91 deletions(-)
  create mode 100644 grub-core/loader/efi/linux.c
  create mode 100644 include/grub/efi/linux.h
