@@ -1,3 +1,10 @@
+grub2 (2.02-2ubuntu12) cosmic; urgency=medium
+
+  * debian/default/grub: replace GRUB_HIDDEN_* variables with the more concise
+    and less confusing GRUB_TIMEOUT_STYLE=hidden. (LP: #1258597)
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Mon, 16 Jul 2018 14:18:46 -0400
+
 grub2 (2.02-2ubuntu11) cosmic; urgency=medium
 
   * Verify that the current and newer kernels are signed when grub is updated, to
