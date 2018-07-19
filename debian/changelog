@@ -1,3 +1,16 @@
+grub2 (2.02-2ubuntu13) cosmic; urgency=medium
+
+  * debian/patches/tests_update_for_new_qemu.patch: update qemu options to
+    remove deprecated options that fail tests.
+  * debian/patches: fix up busted patches due to git-dpm:
+    - debian/patches/add-an-auto-nvram-option-to-grub-install.patch
+    - debian/patches/grub-shell-test-helper-disable-seabios-sercon.patch
+  * debian/patches/r_x86_64_plt32-is-like-r_x86_64_pc32.patch: For the purpose
+    of grub-mkimage, the R_X86_64_PLT32 relocation is basically the same as
+    R_X86_64_PC32. Make R_X86_64_PLT32 supported.
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Thu, 19 Jul 2018 09:46:53 -0400
+
 grub2 (2.02-2ubuntu12) cosmic; urgency=medium
 
   * debian/default/grub: replace GRUB_HIDDEN_* variables with the more concise

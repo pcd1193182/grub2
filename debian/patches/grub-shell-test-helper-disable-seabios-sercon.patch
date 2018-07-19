@@ -1,10 +1,12 @@
-From aebe41c9004522170f1c93568f4267566e370b61 Mon Sep 17 00:00:00 2001
-From: Łukasz 'sil2100' Zemczak <lukasz.zemczak@canonical.com>
+From 2f0f8e09d0680e4a65c9f15f54db3656b33c031c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=C5=81ukasz=20=27sil2100=27=20Zemczak?=
+ <lukasz.zemczak@canonical.com>
 Date: Wed, 6 Jun 2018 00:55:46 +0200
 Subject: In the grub-shell test helper, disable seabios's serial console
  through fw_cfg runtime configuration as it's boot output interferes with
  testing.
 
+Patch-Name: grub-shell-test-helper-disable-seabios-sercon.patch
 ---
  tests/util/grub-shell.in | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)

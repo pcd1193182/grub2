@@ -1,5 +1,6 @@
-From 1696f83780575139eb0ad801a311c947028278f2 Mon Sep 17 00:00:00 2001
-From: Łukasz 'sil2100' Zemczak <lukasz.zemczak@canonical.com>
+From 69a4e0d9d91ce51c894e395d8a3cf184d1910033 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=C5=81ukasz=20=27sil2100=27=20Zemczak?=
+ <lukasz.zemczak@canonical.com>
 Date: Fri, 20 Apr 2018 19:27:37 +0200
 Subject: Add an auto-nvram option to grub-install for auto-detecting NVRAM
  access

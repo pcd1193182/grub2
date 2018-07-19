@@ -1,0 +1,25 @@
+From 5b9f85ef1ff7747dec537fab938db71ab4149117 Mon Sep 17 00:00:00 2001
+From: Mathieu Trudel-Lapierre <mathieu.trudel-lapierre@canonical.com>
+Date: Thu, 19 Jul 2018 09:39:10 -0400
+Subject: For grub-mkimage, R_X86_64_PLT32 is basically the same as
+ R_X86_64_PC32.
+
+Signed-off-by: Mathieu Trudel-Lapierre <mathieu.trudel-lapierre@canonical.com>
+Last-Update: 2018-07-19
+Patch-Name: r_x86_64_plt32-is-like-r_x86_64_pc32.patch
+---
+ util/grub-mkimagexx.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/util/grub-mkimagexx.c b/util/grub-mkimagexx.c
+index e63f148e4..d7592a267 100644
+--- a/util/grub-mkimagexx.c
++++ b/util/grub-mkimagexx.c
+@@ -831,6 +831,7 @@ SUFFIX (relocate_addresses) (Elf_Ehdr *e, Elf_Shdr *sections,
+ 				  (unsigned long long) offset);
+ 		  break;
+ 
++		case R_X86_64_PLT32:
+ 		case R_X86_64_PC32:
+ 		  {
+ 		    grub_uint32_t *t32 = (grub_uint32_t *) target;
