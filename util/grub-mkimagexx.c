@@ -831,6 +831,7 @@ SUFFIX (relocate_addresses) (Elf_Ehdr *e, Elf_Shdr *sections,
 				  (unsigned long long) offset);
 		  break;
 
+		case R_X86_64_PLT32:
 		case R_X86_64_PC32:
 		  {
 		    grub_uint32_t *t32 = (grub_uint32_t *) target;
