@@ -1,7 +1,8 @@
 Source: grub2
 Section: admin
 Priority: optional
-Maintainer: GRUB Maintainers <pkg-grub-devel@alioth-lists.debian.net>
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+XSBC-Original-Maintainer: GRUB Maintainers <pkg-grub-devel@alioth-lists.debian.net>
 Uploaders: Felix Zielcke <fzielcke@z-51.de>, Jordi Mallach <jordi@debian.org>, Colin Watson <cjwatson@debian.org>, Ian Campbell <ijc@debian.org>
 Build-Depends: debhelper (>= 7.4.2~),
  patchutils,
@@ -36,8 +37,8 @@ Build-Depends: debhelper (>= 7.4.2~),
 Build-Conflicts: autoconf2.13, libzfs-dev, libnvpair-dev
 Standards-Version: 3.9.6
 Homepage: http://www.gnu.org/software/grub/
-Vcs-Git: https://salsa.debian.org/grub-team/grub.git
-Vcs-Browser: https://salsa.debian.org/grub-team/grub
+Vcs-Git: https://git.launchpad.net/~ubuntu-core-dev/grub/+git/ubuntu
+Vcs-Browser: https://git.launchpad.net/~ubuntu-core-dev/grub/+git/ubuntu
 
 Package: grub2
 Section: oldlibs
@@ -91,7 +92,7 @@ Architecture: any-i386 any-amd64 any-powerpc any-ppc64 any-ppc64el any-sparc any
 Depends: grub-common (= ${binary:Version}), dpkg (>= 1.15.4) | install-info, ${shlibs:Depends}, ${misc:Depends}
 Replaces: grub, grub-legacy, ${legacy-doc-br}, grub-common (<< 1.99-1), grub-pc (<< 2.00-4), grub-ieee1275 (<< 2.00-4), grub-efi (<< 1.99-1), grub-coreboot (<< 2.00-4), grub-linuxbios (<< 1.99-1), grub-efi-ia32 (<< 2.00-4), grub-efi-amd64 (<< 2.00-4), grub-efi-ia64 (<< 2.00-4), grub-yeeloong (<< 2.00-4)
 Conflicts: grub-legacy
-Breaks: grub (<< 0.97-54), ${legacy-doc-br}, shim (<< 0.9+1474479173.6c180c6-0ubuntu1~)
+Breaks: grub (<< 0.97-54), ${legacy-doc-br}, shim (<< 13)
 Multi-Arch: foreign
 Description: GRand Unified Bootloader (common files for version 2)
  This package contains common files shared by the distinct flavours of GRUB.

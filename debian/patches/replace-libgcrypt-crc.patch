@@ -1,4 +1,4 @@
-From 4ddac1bc51d1c784d48ad8c890f9cbe2e4c7b1f4 Mon Sep 17 00:00:00 2001
+From b24338842a04f29fc6478dc629455a0d7534c7f2 Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@debian.org>
 Date: Fri, 16 Feb 2018 11:02:19 +0000
 Subject: Import replacement CRC operations from libgcrypt
