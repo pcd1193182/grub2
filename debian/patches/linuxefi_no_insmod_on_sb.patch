@@ -1,4 +1,4 @@
-From 0df94e5a210f217bfb1a8aed9bf5cf6c5e3ad619 Mon Sep 17 00:00:00 2001
+From ad81dbe645c4cb957ea596f506459f570699bc2d Mon Sep 17 00:00:00 2001
 From: Matthew Garrett <mjg@redhat.com>
 Date: Mon, 13 Jan 2014 12:13:09 +0000
 Subject: Don't permit loading modules on UEFI secure boot

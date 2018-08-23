@@ -1,11 +1,14 @@
-From 4a2879d2ea9e6179ac0f45d7196b9d905fcab0f6 Mon Sep 17 00:00:00 2001
+From d02e01d40161e7786f59217c035aaac0e9c72174 Mon Sep 17 00:00:00 2001
 From: Vladimir Serbinenko <phcoder@gmail.com>
 Date: Mon, 14 Aug 2017 14:11:43 +0200
 Subject: yylex: Explicilty cast fprintf to void.
 
 It's needed to avoid warning on recent GCC.
 
-Patch-Name: yylex-explicitly_cast_fprintf_to_void.patch
+Bug-Debian: https://bugs.debian.org/890431
+Last-Update: 2018-02-16
+
+Patch-Name: fix-yylex-build.patch
 ---
  grub-core/script/yylex.l | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)

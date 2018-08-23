@@ -369,6 +369,13 @@ test -z "$debug" || echo "GRUB ROM directory: ${rom_directory}" >&2
 
 if test -z "$debug"; then
   qemuopts="${qemuopts} -nographic -monitor file:/dev/null"
+  # SeaBIOS 1.11.0 added support for VGA emulation over a serial port.  If
+  # this is configured in SeaBIOS, then -nographic causes some extra junk to
+  # end up on the serial console, which interferes with our tests.  This
+  # workaround unfortunately causes qemu to issue a warning 'externally
+  # provided fw_cfg item names should be prefixed with "opt/"', but there
+  # doesn't seem to be a better option.
+  qemuopts="${qemuopts} -fw_cfg name=etc/sercon-port,string=0"
 fi
 
 if [ x$boot != xnet ] && [ x$boot != xemu ]; then
@@ -474,7 +481,7 @@ if [ x$boot = xnet ]; then
     cp "${cfgfile}" "$netdir/boot/grub/grub.cfg"
     cp "${source}" "$netdir/boot/grub/testcase.cfg"
     [ -z "$files" ] || copy_extra_files "$netdir" $files
-    timeout -s KILL $timeout "${qemu}" ${qemuopts} ${serial_null} -serial file:/dev/stdout -fw_cfg name=etc/sercon-port,string=0 -boot n -net "user,tftp=$netdir,bootfile=/boot/grub/${grub_modinfo_target_cpu}-${grub_modinfo_platform}/core.$netbootext"  -net nic  | cat | tr -d "\r" | do_trim
+    timeout -s KILL $timeout "${qemu}" ${qemuopts} ${serial_null} -serial file:/dev/stdout -boot n -net "user,tftp=$netdir,bootfile=/boot/grub/${grub_modinfo_target_cpu}-${grub_modinfo_platform}/core.$netbootext"  -net nic  | cat | tr -d "\r" | do_trim
 elif [ x$boot = xemu ]; then
     rootdir="$(mktemp -d "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX")"
     grubdir="$rootdir/boot/grub"
@@ -497,7 +504,7 @@ elif [ x$boot = xemu ]; then
     test -n "$debug" || rm -rf "$rootdir"
     test -n "$debug" || rm -f "$roottar"
 else
-    timeout -s KILL $timeout "${qemu}" ${qemuopts} ${serial_null} -serial file:/dev/stdout -fw_cfg name=etc/sercon-port,string=0 -${device}"${isofile}" ${bootdev} | cat | tr -d "\r" | do_trim
+    timeout -s KILL $timeout "${qemu}" ${qemuopts} ${serial_null} -serial file:/dev/stdout -${device}"${isofile}" ${bootdev} | cat | tr -d "\r" | do_trim
 fi
 if [ x$boot = xcoreboot ]; then
     test -n "$debug" || rm -f "${imgfile}"

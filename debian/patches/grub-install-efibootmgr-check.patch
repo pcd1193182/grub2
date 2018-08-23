@@ -1,4 +1,4 @@
-From 92d0d274bff65df5347931f3f72905c89da0f44c Mon Sep 17 00:00:00 2001
+From f1fa325b9028b4e9a31da9a706d7b81c61797fa0 Mon Sep 17 00:00:00 2001
 From: Steve McIntyre <93sam@debian.org>
 Date: Mon, 30 Jan 2017 19:04:51 +0000
 Subject: Make grub-install check for errors from efibootmgr
