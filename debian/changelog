@@ -1,3 +1,10 @@
+grub2 (2.02+dfsg1-5ubuntu2) cosmic; urgency=medium
+
+  * debian/patches/add_ext_lfb_base_support.patch: i386/linux: Add support for
+    ext_lfb_base. (LP: #1785033)
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Wed, 05 Sep 2018 14:29:04 -0400
+
 grub2 (2.02+dfsg1-5ubuntu1) cosmic; urgency=medium
 
   [ Mathieu Trudel-Lapierre]
