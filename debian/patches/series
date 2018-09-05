@@ -87,3 +87,4 @@ shorter_version_info.patch
 skip_text_gfxpayload_where_not_supported.patch
 add-an-auto-nvram-option-to-grub-install.patch
 ofnet-init-structs-in-bootpath-parser.patch
+add_ext_lfb_base_support.patch
