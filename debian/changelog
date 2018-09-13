@@ -1,3 +1,10 @@
+grub2 (2.02+dfsg1-5ubuntu3) cosmic; urgency=medium
+
+  * debian/patches/grub-reboot-warn.patch: Warn when "for the next
+    boot only" promise cannot be kept. (LP: #788298)
+
+ -- dann frazier <dannf@ubuntu.com>  Thu, 13 Sep 2018 15:28:50 -0600
+
 grub2 (2.02+dfsg1-5ubuntu2) cosmic; urgency=medium
 
   * debian/patches/add_ext_lfb_base_support.patch: i386/linux: Add support for
