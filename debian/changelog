@@ -1,3 +1,11 @@
+grub2 (2.02+dfsg1-5ubuntu4) cosmic; urgency=medium
+
+  * debian/patches/linuxefi_fix_relocate_coff.patch: fix typo in
+    relocate_coff() causing issues with relocation of code in chainload.
+    (LP: #1792575)
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Mon, 17 Sep 2018 07:45:49 -0400
+
 grub2 (2.02+dfsg1-5ubuntu3) cosmic; urgency=medium
 
   * debian/patches/grub-reboot-warn.patch: Warn when "for the next
