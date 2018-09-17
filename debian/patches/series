@@ -89,3 +89,4 @@ add-an-auto-nvram-option-to-grub-install.patch
 ofnet-init-structs-in-bootpath-parser.patch
 add_ext_lfb_base_support.patch
 grub-reboot-warn.patch
+linuxefi_fix_relocate_coff.patch
