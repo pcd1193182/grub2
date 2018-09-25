@@ -126,7 +126,7 @@ endif
 SB_EFI_VENDOR ?= $(shell dpkg-vendor --query vendor | tr '[:upper:]' '[:lower:]')
 
 %:
-	dh $@ --parallel
+	dh $@ --parallel --with systemd
 
 override_dh_auto_configure: $(patsubst %,configure/%,$(BUILD_PACKAGES))
 

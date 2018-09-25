@@ -7,6 +7,7 @@ Uploaders: Felix Zielcke <fzielcke@z-51.de>, Jordi Mallach <jordi@debian.org>, C
 Build-Depends: debhelper (>= 7.4.2~),
  patchutils,
  dh-autoreconf,
+ dh-systemd,
  automake,
  python,
  flex,
