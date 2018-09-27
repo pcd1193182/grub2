@@ -1,3 +1,14 @@
+grub2 (2.02-2ubuntu8.6) bionic; urgency=medium
+
+  * debian/patches/linuxefi_fix_relocate_coff.patch: fix typo in
+    relocate_coff() causing issues with relocation of code in chainload.
+    (LP: #1792575)
+  * debian/patches/linuxefi_truncate_overlong_reloc_section.patch: The Windows
+    7 bootloader has inconsistent headers; truncate to the smaller, correct
+    size to fix chainloading Windows 7. (LP: #1792575)
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Thu, 27 Sep 2018 17:00:43 +0200
+
 grub2 (2.02-2ubuntu8.5) bionic; urgency=medium
 
   * debian/patches/grub-reboot-warn.patch: Warn when "for the next
