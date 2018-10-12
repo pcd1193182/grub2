@@ -1,3 +1,11 @@
+grub2 (2.02-2ubuntu8.8) bionic; urgency=medium
+
+  * debian/rules: set DEFAULT_TIMEOUT=0 for flicker-free boot scenarios (all
+    arches but ppc64el) to avoid 10 second delays at boot not showing a menu.
+    (LP: #1784363)
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Fri, 12 Oct 2018 15:29:35 -0400
+
 grub2 (2.02-2ubuntu8.7) bionic; urgency=medium
 
   * debian/patches/0001-i386-linux-Add-support-for-ext_lfb_base.patch:
