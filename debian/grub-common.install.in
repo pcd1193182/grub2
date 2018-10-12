@@ -21,6 +21,7 @@ usr/bin/grub-mkstandalone
 usr/bin/grub-render-label
 usr/bin/grub-script-check
 usr/bin/grub-syslinux2cfg
+usr/lib/systemd/system/grub-initrd-fallback.service lib/systemd/system
 usr/sbin/grub-macbless
 usr/sbin/grub-mkconfig
 usr/sbin/grub-mkdevicemap

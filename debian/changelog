@@ -1,3 +1,15 @@
+grub2 (2.02+dfsg1-5ubuntu7) cosmic; urgency=medium
+
+  [ Steve Langasek ]
+  * debian/grub-common.install.in: install the systemd unit that's part of
+    initrd fallback handling, missed when the feature landed.
+
+  [ Mathieu Trudel-Lapierre ]
+  * debian/rules: set DEFAULT_TIMEOUT to 0 if we've enabled FLICKER_FREE_BOOT,
+    to avoid unnecessary delay at boot time. (LP: #1784363)
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Fri, 12 Oct 2018 11:10:10 -0400
+
 grub2 (2.02+dfsg1-5ubuntu6) cosmic; urgency=medium
 
   [ Steve Langasek ]
