@@ -19,6 +19,7 @@
 #include <grub/loader.h>
 #include <grub/file.h>
 #include <grub/err.h>
+#include <grub/misc.h>
 #include <grub/types.h>
 #include <grub/mm.h>
 #include <grub/cpu/linux.h>
@@ -114,6 +115,8 @@ grub_cmd_initrd (grub_command_t cmd __attribute__ ((unused)),
       goto fail;
     }
 
+  grub_dprintf ("linuxefi", "initrd_mem = %lx\n", (unsigned long) initrd_mem);
+
   params->ramdisk_size = size;
   params->ramdisk_image = (grub_uint32_t)(grub_uint64_t) initrd_mem;
 
@@ -202,6 +205,8 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
       goto fail;
     }
 
+  grub_dprintf ("linuxefi", "params = %lx\n", (unsigned long) params);
+
   grub_memset (params, 0, 16384);
 
   grub_memcpy (&lh, kernel, sizeof (lh));
@@ -239,6 +244,9 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
       goto fail;
     }
 
+  grub_dprintf ("linuxefi", "linux_cmdline = %lx\n",
+		(unsigned long)linux_cmdline);
+
   grub_memcpy (linux_cmdline, LINUX_IMAGE, sizeof (LINUX_IMAGE));
   grub_create_loader_cmdline (argc, argv,
                               linux_cmdline + sizeof (LINUX_IMAGE) - 1,
@@ -272,9 +280,10 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
   grub_memcpy (params, &lh, 2 * 512);
 
   params->type_of_loader = 0x21;
+  grub_dprintf("linuxefi", "kernel_mem: %p handover_offset: %08x\n",
+	       kernel_mem, handover_offset);
 
  fail:
-
   if (file)
     grub_file_close (file);
 
