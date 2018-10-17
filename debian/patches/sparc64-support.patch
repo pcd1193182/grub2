@@ -1,4 +1,4 @@
-From 5ac62f5ac97a07658ce9427ea0e4571ea1f0683f Mon Sep 17 00:00:00 2001
+From 2407900d27186b3bd7b520a2b4e7998b5eba977f Mon Sep 17 00:00:00 2001
 From: Eric Snowberg <eric.snowberg@oracle.com>
 Date: Thu, 22 Feb 2018 10:03:46 +0000
 Subject: Add support for modern sparc64 hardware
@@ -2094,10 +2094,10 @@ index 32c77f80f..4b18468d8 100644
  extern grub_addr_t EXPORT_VAR (grub_ieee1275_original_stack);
  
 diff --git a/util/grub-install.c b/util/grub-install.c
-index 2214e4549..1c77ae79e 100644
+index 14a8c9e3c..3b0a326ec 100644
 --- a/util/grub-install.c
 +++ b/util/grub-install.c
-@@ -1631,6 +1631,7 @@ main (int argc, char *argv[])
+@@ -1641,6 +1641,7 @@ main (int argc, char *argv[])
  		{
  		  grub_util_fprint_full_disk_name (load_cfg_f, g, dev);
  		  fprintf (load_cfg_f, " ");

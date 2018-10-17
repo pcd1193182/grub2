@@ -1,4 +1,4 @@
-From 348ef1a45bf8461edd6280727ddb276f3d2b7889 Mon Sep 17 00:00:00 2001
+From 88194e2ce8c184d2ccb7e68b08ceb9a188bd16d5 Mon Sep 17 00:00:00 2001
 From: "H.J. Lu" <hjl.tools@gmail.com>
 Date: Sat, 17 Feb 2018 06:47:28 -0800
 Subject: x86-64: Treat R_X86_64_PLT32 as R_X86_64_PC32

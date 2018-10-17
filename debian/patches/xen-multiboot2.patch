@@ -1,4 +1,4 @@
-From abb7f68db054eb11c43ab564e6397a45c0b05f32 Mon Sep 17 00:00:00 2001
+From 31c0f835e1a0e44b3c7696903f46cfa5126f7c4a Mon Sep 17 00:00:00 2001
 From: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
 Date: Tue, 29 Aug 2017 16:40:53 -0400
 Subject: Use grub-file to figure out whether multiboot2 should be used for

@@ -1,4 +1,4 @@
-From 349170e1aa0ef56196d98020aefc26fcf900b04a Mon Sep 17 00:00:00 2001
+From 8731ee00fc6b0ccad01ecfdb807b4f7f6fda7954 Mon Sep 17 00:00:00 2001
 From: Mathieu Trudel-Lapierre <mathieu.trudel-lapierre@canonical.com>
 Date: Fri, 9 Feb 2018 11:14:35 -0500
 Subject: video: skip 'text' gfxpayload if not supported, to fallback to
