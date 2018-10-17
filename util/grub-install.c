@@ -896,6 +896,7 @@ also_install_removable(const char *src,
   char *cur = NULL;
   char *found = NULL;
   char *fb_file = NULL;
+  char *mm_file = NULL;
   char *generic_efidir = NULL;
 
   if (!efi_suffix)
@@ -905,6 +906,7 @@ also_install_removable(const char *src,
 
   efi_file = xasprintf ("BOOT%s.EFI", efi_suffix_upper);
   fb_file = xasprintf ("fb%s.efi", efi_suffix);
+  mm_file = xasprintf ("mm%s.efi", efi_suffix);
 
   /* We need to install in $base_efidir/EFI/BOOT/$efi_file, but we
    * need to cope with case-insensitive stuff here. Build the path one
@@ -945,12 +947,20 @@ also_install_removable(const char *src,
   /* Now try to also install fallback */
   efi_file = grub_util_path_concat (2, "/usr/lib/shim/", fb_file);
   dst = grub_util_path_concat (2, generic_efidir, fb_file);
-  free (generic_efidir);
   grub_install_copy_file (efi_file, dst, 0);
   free (efi_file);
   free (dst);
 
+  /* Also install MokManager to the removable path */
+  efi_file = grub_util_path_concat (2, "/usr/lib/shim/", mm_file);
+  dst = grub_util_path_concat (2, generic_efidir, mm_file);
+  grub_install_copy_file (efi_file, dst, 0);
+  free (efi_file);
+  free (dst);
+
+  free (generic_efidir);
   free (fb_file);
+  free (mm_file);
 }
 
 int

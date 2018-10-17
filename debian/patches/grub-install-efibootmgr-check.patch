@@ -1,4 +1,4 @@
-From f1fa325b9028b4e9a31da9a706d7b81c61797fa0 Mon Sep 17 00:00:00 2001
+From 19c27bee0b5896ce1314728d70fa173e2be432d6 Mon Sep 17 00:00:00 2001
 From: Steve McIntyre <93sam@debian.org>
 Date: Mon, 30 Jan 2017 19:04:51 +0000
 Subject: Make grub-install check for errors from efibootmgr
@@ -136,10 +136,10 @@ index 9f517a1bb..58648e209 100644
  			   const char *efifile_path,
  			   const char *efi_distributor);
 diff --git a/util/grub-install.c b/util/grub-install.c
-index 333d55e07..2214e4549 100644
+index 1ef30ef4b..14a8c9e3c 100644
 --- a/util/grub-install.c
 +++ b/util/grub-install.c
-@@ -2017,9 +2017,13 @@ main (int argc, char *argv[])
+@@ -2027,9 +2027,13 @@ main (int argc, char *argv[])
  	  if (!removable && update_nvram)
  	    {
  	      /* Try to make this image bootable using the EFI Boot Manager, if available.  */
@@ -154,7 +154,7 @@ index 333d55e07..2214e4549 100644
  	    }
  
  	  grub_device_close (ins_dev);
-@@ -2113,6 +2117,7 @@ main (int argc, char *argv[])
+@@ -2123,6 +2127,7 @@ main (int argc, char *argv[])
  	{
  	  char * efifile_path;
  	  char * part;
@@ -162,7 +162,7 @@ index 333d55e07..2214e4549 100644
  
  	  /* Try to make this image bootable using the EFI Boot Manager, if available.  */
  	  if (!efi_distributor || efi_distributor[0] == '\0')
-@@ -2129,8 +2134,11 @@ main (int argc, char *argv[])
+@@ -2139,8 +2144,11 @@ main (int argc, char *argv[])
  			  efidir_grub_dev->disk->name,
  			  (part ? ",": ""), (part ? : ""));
  	  grub_free (part);
