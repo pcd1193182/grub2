@@ -1,3 +1,11 @@
+grub2 (2.02+dfsg1-5ubuntu10) disco; urgency=medium
+
+  * debian/grub-check-signatures: check kernel signatures against keys known
+    in firmware, in case a kernel is signed but not using a key that will pass
+    validation, such as when using kernels coming from a PPA. (LP: #1789918)
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Mon, 21 Jan 2019 09:34:36 -0500
+
 grub2 (2.02+dfsg1-5ubuntu9) disco; urgency=medium
 
   [ Steve Langasek ]
