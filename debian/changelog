@@ -1,3 +1,19 @@
+grub2 (2.02+dfsg1-5ubuntu11) disco; urgency=medium
+
+  [ Mathieu Trudel-Lapierre ]
+  * debian/grub-check-signatures: properly account for DB showing as empty on
+    some broken firmwares: Guard against mokutil --export --db failing, and do
+    a better job at finding the DER certs for conversion to PEM format.
+    (LP: #1814575)
+
+  [ Steve Langasek ]
+  * debian/patches/quick-boot-lvm.patch: checking the return value of
+    'lsefi' when the command doesn't exist does not do what's expected, so
+    instead check the value of $grub_platform which is simpler anyway.
+    LP: #1814403.
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Mon, 04 Feb 2019 17:51:15 -0500
+
 grub2 (2.02+dfsg1-5ubuntu10) disco; urgency=medium
 
   * debian/grub-check-signatures: check kernel signatures against keys known
