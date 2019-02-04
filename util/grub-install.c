@@ -1641,6 +1641,7 @@ main (int argc, char *argv[])
 		{
 		  grub_util_fprint_full_disk_name (load_cfg_f, g, dev);
 		  fprintf (load_cfg_f, " ");
+		  free (g);
 		}
 	      if (dev != grub_dev)
 		grub_device_close (dev);
