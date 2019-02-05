@@ -383,7 +383,7 @@ fi
 EOF
 if [ "$recordfail_broken" = 1 ]; then
   cat << EOF
-if lsefi; then
+if [ \$grub_platform = efi ]; then
   set timeout=${GRUB_RECORDFAIL_TIMEOUT:-30}
   if [ x\$feature_timeout_style = xy ] ; then
     set timeout_style=menu
