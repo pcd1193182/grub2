@@ -57,9 +57,8 @@ grub_bufio_open (grub_file_t io, int size)
   else if (size > GRUB_BUFIO_MAX_SIZE)
     size = GRUB_BUFIO_MAX_SIZE;
 
-  if ((size < 0) || ((unsigned) size > io->size))
-    size = ((io->size > GRUB_BUFIO_MAX_SIZE) ? GRUB_BUFIO_MAX_SIZE :
-            io->size);
+  if (size < 0)
+    size = GRUB_BUFIO_MAX_SIZE;
 
   bufio = grub_zalloc (sizeof (struct grub_bufio) + size);
   if (! bufio)
