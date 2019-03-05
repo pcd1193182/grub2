@@ -36,7 +36,6 @@
 #include <grub/lib/cmdline.h>
 #include <grub/linux.h>
 #include <grub/machine/kernel.h>
-#include <grub/efi/sb.h>
 
 GRUB_MOD_LICENSE ("GPLv3+");
 
@@ -46,6 +45,7 @@ GRUB_MOD_LICENSE ("GPLv3+");
 
 #ifdef GRUB_MACHINE_EFI
 #include <grub/efi/efi.h>
+#include <grub/efi/sb.h>
 #define HAS_VGA_TEXT 0
 #define DEFAULT_VIDEO_MODE "auto"
 #define ACCEPTS_PURE_TEXT 0
