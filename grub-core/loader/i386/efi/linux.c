@@ -161,7 +161,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
 		int argc, char *argv[])
 {
   grub_file_t file = 0;
-  struct linux_kernel_header *lh = NULL;
+  struct linux_i386_kernel_header *lh = NULL;
   grub_ssize_t start, filelen;
   void *kernel = NULL;
   int setup_header_end_offset;
@@ -225,7 +225,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
   grub_memcpy ((grub_uint8_t *)params + 0x1f1,
 	       (grub_uint8_t *)kernel + 0x1f1,
 		MIN((grub_size_t)0x202+setup_header_end_offset,sizeof (*params)) - 0x1f1);
-  lh = (struct linux_kernel_header *)params;
+  lh = (struct linux_i386_kernel_header *)params;
   grub_dprintf ("linuxefi", "lh is at %p\n", lh);
   grub_dprintf ("linuxefi", "checking lh->boot_flag\n");
   if (lh->boot_flag != grub_cpu_to_le16 (0xaa55))
@@ -299,7 +299,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
 
   start = (lh->setup_sects + 1) * 512;
 
-  kernel_mem = grub_efi_allocate_pages(lh->pref_address,
+  kernel_mem = grub_efi_allocate_fixed(lh->pref_address,
 				       BYTES_TO_PAGES(lh->init_size));
 
   if (!kernel_mem)
