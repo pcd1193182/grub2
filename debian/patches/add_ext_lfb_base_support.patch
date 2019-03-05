@@ -1,4 +1,4 @@
-From 12cd97a08150a5ff9d0df7d03c8ec28f0961dc8e Mon Sep 17 00:00:00 2001
+From 76a317bbf29705a8de65cc4961d2ac9e1b497dfc Mon Sep 17 00:00:00 2001
 From: Arindam Nath <arindam.nath@amd.com>
 Date: Thu, 12 Jul 2018 19:02:49 +0530
 Subject: i386/linux: Add support for ext_lfb_base
@@ -33,10 +33,10 @@ Patch-Name: add_ext_lfb_base_support.patch
  2 files changed, 11 insertions(+), 1 deletion(-)
 
 diff --git a/grub-core/loader/i386/linux.c b/grub-core/loader/i386/linux.c
-index 59b88ca18..adffe589c 100644
+index 083f9417c..e66164bac 100644
 --- a/grub-core/loader/i386/linux.c
 +++ b/grub-core/loader/i386/linux.c
-@@ -308,6 +308,12 @@ grub_linux_setup_video (struct linux_kernel_params *params)
+@@ -306,6 +306,12 @@ grub_linux_setup_video (struct linux_kernel_params *params)
    params->lfb_line_len = mode_info.pitch;
  
    params->lfb_base = (grub_size_t) framebuffer;
@@ -50,7 +50,7 @@ index 59b88ca18..adffe589c 100644
  
    params->red_mask_size = mode_info.red_mask_size;
 diff --git a/include/grub/i386/linux.h b/include/grub/i386/linux.h
-index fc36bdaf3..008166a4a 100644
+index da0ca3b83..df3a2e086 100644
 --- a/include/grub/i386/linux.h
 +++ b/include/grub/i386/linux.h
 @@ -43,6 +43,9 @@
@@ -63,7 +63,7 @@ index fc36bdaf3..008166a4a 100644
  #ifdef __x86_64__
  
  #define GRUB_LINUX_EFI_SIGNATURE	\
-@@ -189,8 +192,9 @@ struct linux_kernel_params
+@@ -188,8 +191,9 @@ struct linux_kernel_params
    grub_uint16_t lfb_pages;		/* 32 */
    grub_uint16_t vesa_attrib;		/* 34 */
    grub_uint32_t capabilities;		/* 36 */

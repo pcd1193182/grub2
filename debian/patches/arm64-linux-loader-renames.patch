@@ -1,4 +1,4 @@
-From 99829bacbf612b93ede41b93fcc7d82e5f456954 Mon Sep 17 00:00:00 2001
+From e5ea8afb37e2e70d289adc7d5f18e0b7fc078b4f Mon Sep 17 00:00:00 2001
 From: Leif Lindholm <leif.lindholm@linaro.org>
 Date: Mon, 9 Jul 2018 18:33:02 +0100
 Subject: arm64/linux/loader: Rename functions and macros and move to common
@@ -134,10 +134,10 @@ index b06347624..8655067e0 100644
  
  #endif /* ! GRUB_ARM64_LINUX_HEADER */
 diff --git a/include/grub/efi/efi.h b/include/grub/efi/efi.h
-index c42a090c9..813de3be9 100644
+index 2d9a51534..217dfe0f1 100644
 --- a/include/grub/efi/efi.h
 +++ b/include/grub/efi/efi.h
-@@ -98,6 +98,10 @@ void *EXPORT_FUNC(grub_efi_get_firmware_fdt)(void);
+@@ -97,6 +97,10 @@ void *EXPORT_FUNC(grub_efi_get_firmware_fdt)(void);
  #endif
  #if defined(__aarch64__)
  grub_err_t EXPORT_FUNC(grub_efi_get_ram_base)(grub_addr_t *);

@@ -1,4 +1,4 @@
-From 6427cc7c960f320163674e549d5e64f2a5ce65c0 Mon Sep 17 00:00:00 2001
+From 03b775aa45704f9498aeff744613ad7f916f2d89 Mon Sep 17 00:00:00 2001
 From: Alexander Graf <agraf@suse.de>
 Date: Mon, 28 Jan 2019 14:35:29 +0100
 Subject: mkimage: Clarify file alignment in efi case

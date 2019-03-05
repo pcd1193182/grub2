@@ -1,4 +1,4 @@
-From ad7daed24607d17256873bd9785685df8bca146b Mon Sep 17 00:00:00 2001
+From fe2d513426f76801807495a43a1b64d2de8725f3 Mon Sep 17 00:00:00 2001
 From: Juergen Gross <jgross@suse.com>
 Date: Fri, 7 Dec 2018 13:11:39 +0100
 Subject: xen: Setup hypercall page for PVH

@@ -1,4 +1,4 @@
-From 9fb8c500105e08a8587b4325245149ceef25dbc8 Mon Sep 17 00:00:00 2001
+From 043b24278327023ce0e48f8c7f875247956824f9 Mon Sep 17 00:00:00 2001
 From: Leif Lindholm <leif.lindholm@linaro.org>
 Date: Thu, 1 Feb 2018 18:18:50 +0000
 Subject: Make arch-specific linux.h include guards architecture unique
@@ -65,7 +65,7 @@ index a981df5d1..a8edf50dc 100644
 -#endif /* ! GRUB_LINUX_CPU_HEADER */
 +#endif /* ! GRUB_ARM64_LINUX_HEADER */
 diff --git a/include/grub/i386/linux.h b/include/grub/i386/linux.h
-index 008166a4a..7647f4907 100644
+index df3a2e086..d36b8963c 100644
 --- a/include/grub/i386/linux.h
 +++ b/include/grub/i386/linux.h
 @@ -16,8 +16,8 @@
@@ -79,7 +79,7 @@ index 008166a4a..7647f4907 100644
  
  #define GRUB_LINUX_MAGIC_SIGNATURE	0x53726448      /* "HdrS" */
  #define GRUB_LINUX_DEFAULT_SETUP_SECTS	4
-@@ -317,4 +317,4 @@ struct linux_kernel_params
+@@ -316,4 +316,4 @@ struct linux_kernel_params
  } GRUB_PACKED;
  #endif /* ! ASM_FILE */
  

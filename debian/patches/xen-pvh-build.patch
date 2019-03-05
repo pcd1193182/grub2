@@ -1,4 +1,4 @@
-From fdb322ca3c1d64f93e7d81a64899773c62eb18f0 Mon Sep 17 00:00:00 2001
+From 85d8751395aaf82a4d5d58819e0ab62eacdfdbbd Mon Sep 17 00:00:00 2001
 From: Juergen Gross <jgross@suse.com>
 Date: Fri, 7 Dec 2018 13:11:43 +0100
 Subject: xen_pvh: Add build runes for grub-core
@@ -67,7 +67,7 @@ index cc884e379..95e9817ca 100644
  KERNEL_HEADER_FILES += $(top_builddir)/include/grub/machine/kernel.h
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/efi/efi.h
 diff --git a/grub-core/Makefile.core.def b/grub-core/Makefile.core.def
-index b6cb87c94..94a15f8c7 100644
+index 751653ded..8d2c01998 100644
 --- a/grub-core/Makefile.core.def
 +++ b/grub-core/Makefile.core.def
 @@ -79,6 +79,8 @@ kernel = {
@@ -199,7 +199,7 @@ index b6cb87c94..94a15f8c7 100644
    mips = loader/mips/linux.c;
    powerpc_ieee1275 = loader/powerpc/ieee1275/linux.c;
    sparc64_ieee1275 = loader/sparc64/ieee1275/linux.c;
-@@ -1768,6 +1796,8 @@ module = {
+@@ -1760,6 +1788,8 @@ module = {
    common = mmap/mmap.c;
    x86 = mmap/i386/uppermem.c;
    x86 = mmap/i386/mmap.c;
@@ -208,7 +208,7 @@ index b6cb87c94..94a15f8c7 100644
  
    i386_pc = mmap/i386/pc/mmap.c;
    i386_pc = mmap/i386/pc/mmap_helper.S;
-@@ -1777,6 +1807,7 @@ module = {
+@@ -1769,6 +1799,7 @@ module = {
    mips = mmap/mips/uppermem.c;
  
    enable = x86;
@@ -216,7 +216,7 @@ index b6cb87c94..94a15f8c7 100644
    enable = ia64_efi;
    enable = arm_efi;
    enable = arm64_efi;
-@@ -2010,6 +2041,7 @@ module = {
+@@ -2002,6 +2033,7 @@ module = {
    name = legacy_password_test;
    common = tests/legacy_password_test.c;
    enable = i386_pc;
@@ -224,7 +224,7 @@ index b6cb87c94..94a15f8c7 100644
    enable = i386_efi;
    enable = x86_64_efi;
    enable = emu;
-@@ -2208,6 +2240,7 @@ module = {
+@@ -2200,6 +2232,7 @@ module = {
    xen = lib/i386/pc/vesa_modes_table.c;
  
    enable = i386_pc;
@@ -232,7 +232,7 @@ index b6cb87c94..94a15f8c7 100644
    enable = i386_efi;
    enable = x86_64_efi;
    enable = emu;
-@@ -2251,10 +2284,12 @@ module = {
+@@ -2243,10 +2276,12 @@ module = {
  module = {
    name = backtrace;
    x86 = lib/i386/backtrace.c;

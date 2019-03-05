@@ -1,6 +1,6 @@
-From 7374c81b450df79084fb732f5a9e6e1bcedf98b4 Mon Sep 17 00:00:00 2001
+From b08df4374c4057fc34582d01b357c67f8726b2c1 Mon Sep 17 00:00:00 2001
 From: Vladimir Serbinenko <phcoder@gmail.com>
-Date: Mon, 7 Aug 2017 18:33:29 +0200
+Date: Wed, 27 Feb 2019 12:01:49 -0500
 Subject: Remove grub_efi_allocate_pages.
 
 grub_efi_allocate_pages Essentially does 2 unrelated things:
@@ -24,8 +24,8 @@ Patch-Name: efi-remove-grub_efi_allocate_pages.patch
  grub-core/loader/arm64/xen_boot.c |  7 +++----
  grub-core/loader/ia64/efi/linux.c | 10 +++++-----
  include/grub/autoefi.h            |  2 +-
- include/grub/efi/efi.h            |  4 +++-
- 8 files changed, 32 insertions(+), 34 deletions(-)
+ include/grub/efi/efi.h            |  7 ++++++-
+ 8 files changed, 35 insertions(+), 34 deletions(-)
 
 diff --git a/grub-core/kern/arm/efi/misc.c b/grub-core/kern/arm/efi/misc.c
 index 7cd41842a..c95e8299d 100644
@@ -50,10 +50,10 @@ index 7cd41842a..c95e8299d 100644
      return GRUB_ERR_OUT_OF_MEMORY;
  
 diff --git a/grub-core/kern/efi/mm.c b/grub-core/kern/efi/mm.c
-index 66a6f22b3..ffcfe4f17 100644
+index d88bc5e43..b97b05fe8 100644
 --- a/grub-core/kern/efi/mm.c
 +++ b/grub-core/kern/efi/mm.c
-@@ -115,20 +115,19 @@ grub_efi_allocate_pages_real (grub_efi_physical_address_t address,
+@@ -83,20 +83,19 @@ grub_efi_allocate_pages_real (grub_efi_physical_address_t address,
  }
  
  void *
@@ -85,7 +85,7 @@ index 66a6f22b3..ffcfe4f17 100644
  				       GRUB_EFI_LOADER_DATA);
  }
  
-@@ -436,7 +435,7 @@ add_memory_regions (grub_efi_memory_descriptor_t *memory_map,
+@@ -404,7 +403,7 @@ add_memory_regions (grub_efi_memory_descriptor_t *memory_map,
  	  pages = required_pages;
  	}
  
@@ -94,7 +94,7 @@ index 66a6f22b3..ffcfe4f17 100644
        if (! addr)
  	grub_fatal ("cannot allocate conventional memory %p with %u pages",
  		    (void *) ((grub_addr_t) start),
-@@ -488,8 +487,7 @@ grub_efi_mm_init (void)
+@@ -456,8 +455,7 @@ grub_efi_mm_init (void)
    int mm_status;
  
    /* Prepare a memory region to store two memory maps.  */
@@ -104,7 +104,7 @@ index 66a6f22b3..ffcfe4f17 100644
    if (! memory_map)
      grub_fatal ("cannot allocate memory");
  
-@@ -507,7 +505,7 @@ grub_efi_mm_init (void)
+@@ -475,7 +473,7 @@ grub_efi_mm_init (void)
        /* Freeing/allocating operations may increase memory map size.  */
        map_size += desc_size * 32;
  
@@ -239,19 +239,21 @@ index b75591176..b7a252e07 100644
  # define grub_autoefi_finish_boot_services grub_efiemu_finish_boot_services
  # define EFI_PRESENT 1
 diff --git a/include/grub/efi/efi.h b/include/grub/efi/efi.h
-index 6202f016e..bb3ab7dfd 100644
+index b4cbebf38..91e29ce66 100644
 --- a/include/grub/efi/efi.h
 +++ b/include/grub/efi/efi.h
-@@ -43,9 +43,11 @@ EXPORT_FUNC(grub_efi_allocate_pages_real) (grub_efi_physical_address_t address,
+@@ -43,8 +43,13 @@ EXPORT_FUNC(grub_efi_allocate_pages_real) (grub_efi_physical_address_t address,
  					   grub_efi_allocate_type_t alloctype,
  					   grub_efi_memory_type_t memtype);
  void *
 -EXPORT_FUNC(grub_efi_allocate_pages) (grub_efi_physical_address_t address,
 +EXPORT_FUNC(grub_efi_allocate_fixed) (grub_efi_physical_address_t address,
  				      grub_efi_uintn_t pages);
- void *
++void *
 +EXPORT_FUNC(grub_efi_allocate_any_pages) (grub_efi_uintn_t pages);
 +void *
- EXPORT_FUNC(grub_efi_allocate_pages_max) (grub_efi_physical_address_t max,
- 					  grub_efi_uintn_t pages);
++EXPORT_FUNC(grub_efi_allocate_pages_max) (grub_efi_physical_address_t max,
++					  grub_efi_uintn_t pages);
  void EXPORT_FUNC(grub_efi_free_pages) (grub_efi_physical_address_t address,
+ 				       grub_efi_uintn_t pages);
+ int

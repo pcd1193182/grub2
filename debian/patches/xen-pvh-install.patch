@@ -1,4 +1,4 @@
-From 1351e65563208e704ddae8b23fc199756f832459 Mon Sep 17 00:00:00 2001
+From 9ae63794e916817185561ee6e912b76956f2fe07 Mon Sep 17 00:00:00 2001
 From: Juergen Gross <jgross@suse.com>
 Date: Fri, 7 Dec 2018 13:11:47 +0100
 Subject: xen_pvh: Support grub-install for xen_pvh
@@ -45,7 +45,7 @@ index c9d5e3d0f..58a30666e 100644
      [GRUB_INSTALL_PLATFORM_MIPSEL_QEMU_MIPS] = { "mipsel",  "qemu_mips" },
      [GRUB_INSTALL_PLATFORM_MIPS_QEMU_MIPS] =   { "mips",    "qemu_mips" },
 diff --git a/util/grub-install.c b/util/grub-install.c
-index 0b97c1ac0..6bc96fc8f 100644
+index 3b0a326ec..2f751e25f 100644
 --- a/util/grub-install.c
 +++ b/util/grub-install.c
 @@ -524,6 +524,7 @@ have_bootdev (enum grub_install_plat pl)
@@ -56,7 +56,7 @@ index 0b97c1ac0..6bc96fc8f 100644
        return 0;
  
        /* pacify warning.  */
-@@ -1026,6 +1027,7 @@ main (int argc, char *argv[])
+@@ -1051,6 +1052,7 @@ main (int argc, char *argv[])
      case GRUB_INSTALL_PLATFORM_ARM_UBOOT:
      case GRUB_INSTALL_PLATFORM_I386_XEN:
      case GRUB_INSTALL_PLATFORM_X86_64_XEN:
@@ -64,7 +64,7 @@ index 0b97c1ac0..6bc96fc8f 100644
        break;
  
      case GRUB_INSTALL_PLATFORM_I386_QEMU:
-@@ -1071,6 +1073,7 @@ main (int argc, char *argv[])
+@@ -1096,6 +1098,7 @@ main (int argc, char *argv[])
      case GRUB_INSTALL_PLATFORM_MIPS_QEMU_MIPS:
      case GRUB_INSTALL_PLATFORM_I386_XEN:
      case GRUB_INSTALL_PLATFORM_X86_64_XEN:
@@ -72,7 +72,7 @@ index 0b97c1ac0..6bc96fc8f 100644
        free (install_device);
        install_device = NULL;
        break;
-@@ -1606,6 +1609,7 @@ main (int argc, char *argv[])
+@@ -1631,6 +1634,7 @@ main (int argc, char *argv[])
  		  case GRUB_INSTALL_PLATFORM_ARM_UBOOT:
  		  case GRUB_INSTALL_PLATFORM_I386_XEN:
  		  case GRUB_INSTALL_PLATFORM_X86_64_XEN:
@@ -80,7 +80,7 @@ index 0b97c1ac0..6bc96fc8f 100644
  		    grub_util_warn ("%s", _("no hints available for your platform. Expect reduced performance"));
  		    break;
  		    /* pacify warning.  */
-@@ -1696,6 +1700,7 @@ main (int argc, char *argv[])
+@@ -1721,6 +1725,7 @@ main (int argc, char *argv[])
      case GRUB_INSTALL_PLATFORM_POWERPC_IEEE1275:
      case GRUB_INSTALL_PLATFORM_I386_XEN:
      case GRUB_INSTALL_PLATFORM_X86_64_XEN:
@@ -88,7 +88,7 @@ index 0b97c1ac0..6bc96fc8f 100644
        core_name = "core.elf";
        snprintf (mkimage_target, sizeof (mkimage_target),
  		"%s-%s",
-@@ -1787,6 +1792,7 @@ main (int argc, char *argv[])
+@@ -1812,6 +1817,7 @@ main (int argc, char *argv[])
      case GRUB_INSTALL_PLATFORM_SPARC64_IEEE1275:
      case GRUB_INSTALL_PLATFORM_I386_XEN:
      case GRUB_INSTALL_PLATFORM_X86_64_XEN:
@@ -96,7 +96,7 @@ index 0b97c1ac0..6bc96fc8f 100644
        break;
        /* pacify warning.  */
      case GRUB_INSTALL_PLATFORM_MAX:
-@@ -2155,6 +2161,7 @@ main (int argc, char *argv[])
+@@ -2183,6 +2189,7 @@ main (int argc, char *argv[])
      case GRUB_INSTALL_PLATFORM_MIPSEL_ARC:
      case GRUB_INSTALL_PLATFORM_ARM_UBOOT:
      case GRUB_INSTALL_PLATFORM_I386_QEMU:

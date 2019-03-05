@@ -1,4 +1,4 @@
-From d9aa347c109422e5c809906909b06028312f0787 Mon Sep 17 00:00:00 2001
+From 2f3b1e69a542a9c9a3de48543e2235bababb2232 Mon Sep 17 00:00:00 2001
 From: Leif Lindholm <leif.lindholm@linaro.org>
 Date: Thu, 21 Feb 2019 10:15:08 +0000
 Subject: arm64/efi: Fix grub_efi_get_ram_base()
@@ -25,10 +25,10 @@ Patch-Name: arm64-fix-grub_efi_get_ram_base.patch
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/grub-core/kern/efi/mm.c b/grub-core/kern/efi/mm.c
-index 9475e2eb5..a0f0c3c81 100644
+index cb2227ace..6307978f2 100644
 --- a/grub-core/kern/efi/mm.c
 +++ b/grub-core/kern/efi/mm.c
-@@ -603,7 +603,7 @@ grub_efi_get_ram_base(grub_addr_t *base_addr)
+@@ -571,7 +571,7 @@ grub_efi_get_ram_base(grub_addr_t *base_addr)
    if (ret < 1)
      return GRUB_ERR_BUG;
  

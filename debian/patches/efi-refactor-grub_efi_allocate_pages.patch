@@ -1,4 +1,4 @@
-From d2392df7176ee62df7032407c3d0dc099ee93dea Mon Sep 17 00:00:00 2001
+From d660320577d20e0752b4ac1c51c3b0912654a380 Mon Sep 17 00:00:00 2001
 From: Leif Lindholm <leif.lindholm@linaro.org>
 Date: Thu, 3 Aug 2017 11:04:23 +0100
 Subject: efi: refactor grub_efi_allocate_pages
@@ -27,10 +27,10 @@ Patch-Name: efi-refactor-grub_efi_allocate_pages.patch
  2 files changed, 29 insertions(+), 22 deletions(-)
 
 diff --git a/grub-core/kern/efi/mm.c b/grub-core/kern/efi/mm.c
-index efb15cc1b..66a6f22b3 100644
+index 20a47aaf5..d88bc5e43 100644
 --- a/grub-core/kern/efi/mm.c
 +++ b/grub-core/kern/efi/mm.c
-@@ -83,36 +83,20 @@ grub_efi_allocate_pages_max (grub_efi_physical_address_t max,
+@@ -51,36 +51,20 @@ int grub_efi_is_finished = 0;
  
  /* Allocate pages. Return the pointer to the first of allocated pages.  */
  void *
@@ -72,7 +72,7 @@ index efb15cc1b..66a6f22b3 100644
    if (status != GRUB_EFI_SUCCESS)
      return 0;
  
-@@ -121,7 +105,7 @@ grub_efi_allocate_pages (grub_efi_physical_address_t address,
+@@ -89,7 +73,7 @@ grub_efi_allocate_pages (grub_efi_physical_address_t address,
        /* Uggh, the address 0 was allocated... This is too annoying,
  	 so reallocate another one.  */
        address = GRUB_EFI_MAX_USABLE_ADDRESS;
@@ -81,7 +81,7 @@ index efb15cc1b..66a6f22b3 100644
        grub_efi_free_pages (0, pages);
        if (status != GRUB_EFI_SUCCESS)
  	return 0;
-@@ -130,6 +114,24 @@ grub_efi_allocate_pages (grub_efi_physical_address_t address,
+@@ -98,6 +82,24 @@ grub_efi_allocate_pages (grub_efi_physical_address_t address,
    return (void *) ((grub_addr_t) address);
  }
  
@@ -107,7 +107,7 @@ index efb15cc1b..66a6f22b3 100644
  void
  grub_efi_free_pages (grub_efi_physical_address_t address,
 diff --git a/include/grub/efi/efi.h b/include/grub/efi/efi.h
-index 62a3d9726..6202f016e 100644
+index e9c601f34..b4cbebf38 100644
 --- a/include/grub/efi/efi.h
 +++ b/include/grub/efi/efi.h
 @@ -38,6 +38,11 @@ void *EXPORT_FUNC(grub_efi_open_protocol) (grub_efi_handle_t handle,
@@ -121,4 +121,4 @@ index 62a3d9726..6202f016e 100644
 +void *
  EXPORT_FUNC(grub_efi_allocate_pages) (grub_efi_physical_address_t address,
  				      grub_efi_uintn_t pages);
- void *
+ void EXPORT_FUNC(grub_efi_free_pages) (grub_efi_physical_address_t address,

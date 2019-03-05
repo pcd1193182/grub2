@@ -1,4 +1,4 @@
-From 0208f2d68a855ba0c4224d71692f399f71f3b562 Mon Sep 17 00:00:00 2001
+From 358aefd6f756d1ed8df9a959610aed996441bc6c Mon Sep 17 00:00:00 2001
 From: Leif Lindholm <leif.lindholm@linaro.org>
 Date: Thu, 3 Aug 2017 11:04:26 +0100
 Subject: arm64 linux loader: improve type portability

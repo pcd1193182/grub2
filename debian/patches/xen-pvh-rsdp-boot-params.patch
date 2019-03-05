@@ -1,4 +1,4 @@
-From 1ab55c0ea0551eda0eb2d4184f141ec61dd465c0 Mon Sep 17 00:00:00 2001
+From e794060dc473597464930b47b89a220fe41272cd Mon Sep 17 00:00:00 2001
 From: Juergen Gross <jgross@suse.com>
 Date: Fri, 7 Dec 2018 13:11:30 +0100
 Subject: loader/linux: Support passing RSDP address via boot params
@@ -21,10 +21,10 @@ Patch-Name: xen-pvh-rsdp-boot-params.patch
  2 files changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/grub-core/loader/i386/linux.c b/grub-core/loader/i386/linux.c
-index 0052b5965..40887e08e 100644
+index 9b53d3168..b624f5926 100644
 --- a/grub-core/loader/i386/linux.c
 +++ b/grub-core/loader/i386/linux.c
-@@ -559,6 +559,10 @@ grub_linux_boot (void)
+@@ -557,6 +557,10 @@ grub_linux_boot (void)
  	}
      }
  
@@ -36,10 +36,10 @@ index 0052b5965..40887e08e 100644
    /* Make sure that each size is aligned to a page boundary.  */
    cl_offset = ALIGN_UP (mmap_size + sizeof (linux_params), 4096);
 diff --git a/include/grub/i386/linux.h b/include/grub/i386/linux.h
-index bb19dbd5a..8f4cf0cd4 100644
+index 60c7c3b5e..a96059311 100644
 --- a/include/grub/i386/linux.h
 +++ b/include/grub/i386/linux.h
-@@ -211,8 +211,9 @@ struct linux_kernel_params
+@@ -210,8 +210,9 @@ struct linux_kernel_params
    grub_uint32_t ist_command;		/* 64 */
    grub_uint32_t ist_event;		/* 68 */
    grub_uint32_t ist_perf_level;		/* 6c */

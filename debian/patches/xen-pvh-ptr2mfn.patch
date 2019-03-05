@@ -1,4 +1,4 @@
-From 8ede54c3183e6f0277fc95890ea68bf5ef94ff5a Mon Sep 17 00:00:00 2001
+From 0df853625792e201d893d71efdef428b92c7073b Mon Sep 17 00:00:00 2001
 From: Juergen Gross <jgross@suse.com>
 Date: Fri, 7 Dec 2018 13:11:35 +0100
 Subject: xen: Modify grub_xen_ptr2mfn() for Xen PVH

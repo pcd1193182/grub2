@@ -1,4 +1,4 @@
-From d664fffc6db23a112ba2f5dc4dd2137a9b2a6756 Mon Sep 17 00:00:00 2001
+From 82d590f4aa6a39ad8157c0704ceeab2fbfdf8717 Mon Sep 17 00:00:00 2001
 From: Juergen Gross <jgross@suse.com>
 Date: Fri, 7 Dec 2018 13:11:37 +0100
 Subject: xen: Add basic hooks for PVH in current code
@@ -189,7 +189,7 @@ index a23dad633..782ca7295 100644
  
  #ifdef GRUB_MACHINE_XEN
 diff --git a/grub-core/loader/i386/linux.c b/grub-core/loader/i386/linux.c
-index 40887e08e..161a6b7de 100644
+index b624f5926..602d11786 100644
 --- a/grub-core/loader/i386/linux.c
 +++ b/grub-core/loader/i386/linux.c
 @@ -35,6 +35,7 @@

@@ -1,4 +1,4 @@
-From 0e3e215f58cbacbd623a19c5283da412d729cc65 Mon Sep 17 00:00:00 2001
+From 323bd9e70bfe105a791de83e239e8668f8e410c7 Mon Sep 17 00:00:00 2001
 From: Juergen Gross <jgross@suse.com>
 Date: Fri, 7 Dec 2018 13:11:48 +0100
 Subject: xen_pvh: Add support to configure

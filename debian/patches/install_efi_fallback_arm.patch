@@ -1,4 +1,4 @@
-From b678887f5e7563f13c41d46f3665b08a7643a2da Mon Sep 17 00:00:00 2001
+From 1690d7936dec9a3820b20cc3c6219b2d98200eb4 Mon Sep 17 00:00:00 2001
 From: Steve McIntyre <93sam@debian.org>
 Date: Tue, 26 Feb 2019 14:14:17 +0000
 Subject: Fall back to arm-uboot if booted using EFI but -efi is missing

@@ -1,4 +1,4 @@
-From 0a7ec8f6baed19a7cb568fe84f5b9ee0c4b12b8c Mon Sep 17 00:00:00 2001
+From e0aa8186ac1b47842f6a69ce01e011b233dc4bb6 Mon Sep 17 00:00:00 2001
 From: Leif Lindholm <leif.lindholm@linaro.org>
 Date: Mon, 9 Jul 2018 18:33:03 +0100
 Subject: arm/efi: Switch to arm64 linux loader
@@ -29,7 +29,7 @@ Patch-Name: arm-efi-switch-to-arm64-linux-loader.patch
  4 files changed, 10 insertions(+), 6 deletions(-)
 
 diff --git a/grub-core/Makefile.core.def b/grub-core/Makefile.core.def
-index dfa350451..b6cb87c94 100644
+index 54db4ed62..751653ded 100644
 --- a/grub-core/Makefile.core.def
 +++ b/grub-core/Makefile.core.def
 @@ -211,7 +211,6 @@ kernel = {
@@ -61,10 +61,10 @@ index dfa350451..b6cb87c94 100644
    enable = fdt;
  };
 diff --git a/grub-core/kern/efi/mm.c b/grub-core/kern/efi/mm.c
-index 3033d5f57..9475e2eb5 100644
+index d866ccaea..cb2227ace 100644
 --- a/grub-core/kern/efi/mm.c
 +++ b/grub-core/kern/efi/mm.c
-@@ -584,7 +584,7 @@ grub_efi_mm_init (void)
+@@ -552,7 +552,7 @@ grub_efi_mm_init (void)
  		       2 * BYTES_TO_PAGES (MEMORY_MAP_SIZE));
  }
  
@@ -90,10 +90,10 @@ index 11325a770..ab53de9ba 100644
  # include <grub/uboot/uboot.h>
  # define LINUX_ADDRESS        (start_of_ram + 0x8000)
 diff --git a/include/grub/efi/efi.h b/include/grub/efi/efi.h
-index 813de3be9..1fe46957a 100644
+index 217dfe0f1..a7c714e5b 100644
 --- a/include/grub/efi/efi.h
 +++ b/include/grub/efi/efi.h
-@@ -95,8 +95,6 @@ extern void (*EXPORT_VAR(grub_efi_net_config)) (grub_efi_handle_t hnd,
+@@ -94,8 +94,6 @@ extern void (*EXPORT_VAR(grub_efi_net_config)) (grub_efi_handle_t hnd,
  
  #if defined(__arm__) || defined(__aarch64__)
  void *EXPORT_FUNC(grub_efi_get_firmware_fdt)(void);

@@ -1,4 +1,4 @@
-From 1ec789bba1726820341a1dc82e0481dad61df5f3 Mon Sep 17 00:00:00 2001
+From fd07a6829e4a0c622f32f0ac10cd7f5591b21908 Mon Sep 17 00:00:00 2001
 From: Juergen Gross <jgross@suse.com>
 Date: Fri, 7 Dec 2018 13:11:31 +0100
 Subject: xen: Carve out grant tab initialization into dedicated function

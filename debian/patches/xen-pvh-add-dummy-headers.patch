@@ -1,4 +1,4 @@
-From c5e44c9c6dd64d4447eae7ceebd8437e63a8d0bf Mon Sep 17 00:00:00 2001
+From 994f0e03a1ebb8c8a6b75c98442851cc24b3575c Mon Sep 17 00:00:00 2001
 From: Juergen Gross <jgross@suse.com>
 Date: Fri, 7 Dec 2018 13:11:33 +0100
 Subject: xen: Add some dummy headers for PVH mode

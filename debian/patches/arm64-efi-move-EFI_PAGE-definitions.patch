@@ -1,4 +1,4 @@
-From c2f64f6b2f407ccf5c4dde8695d4a1490cd5dc02 Mon Sep 17 00:00:00 2001
+From f7715ddb741e9ba864c957c7b7b3219e88ba516d Mon Sep 17 00:00:00 2001
 From: Leif Lindholm <leif.lindholm@linaro.org>
 Date: Thu, 1 Feb 2018 18:18:49 +0000
 Subject: arm64/efi: move EFI_PAGE definitions to efi/memory.h

@@ -1,4 +1,4 @@
-From 63630fac4d3e315d1626936160f947dc04f15755 Mon Sep 17 00:00:00 2001
+From 4bdd7a92845d3780eef1aa435b008e4f958798b3 Mon Sep 17 00:00:00 2001
 From: Leif Lindholm <leif.lindholm@linaro.org>
 Date: Thu, 1 Feb 2018 18:18:51 +0000
 Subject: make GRUB_LINUX_MAGIC_SIGNATURE architecture-specific
@@ -46,10 +46,10 @@ index 12fba99e0..474666d3a 100644
  	  break;
  
 diff --git a/grub-core/loader/i386/linux.c b/grub-core/loader/i386/linux.c
-index adffe589c..4d043fd6f 100644
+index e66164bac..0aeaaa152 100644
 --- a/grub-core/loader/i386/linux.c
 +++ b/grub-core/loader/i386/linux.c
-@@ -762,7 +762,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+@@ -727,7 +727,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
  
    /* FIXME: 2.03 is not always good enough (Linux 2.4 can be 2.03 and
       still not support 32-bit boot.  */
@@ -103,7 +103,7 @@ index 99fad4cad..6e76e16aa 100644
      {
        grub_error (GRUB_ERR_BAD_OS, "version too old for xen boot");
 diff --git a/include/grub/i386/linux.h b/include/grub/i386/linux.h
-index 7647f4907..ed6c941a8 100644
+index d36b8963c..f2cf066c0 100644
 --- a/include/grub/i386/linux.h
 +++ b/include/grub/i386/linux.h
 @@ -19,7 +19,7 @@

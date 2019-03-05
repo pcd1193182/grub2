@@ -1,4 +1,4 @@
-From 8bb113820827608a4d12fbafe12bfb3adcf3babf Mon Sep 17 00:00:00 2001
+From 4a09a6b3945e5423625dfd0fce966ce2c04c1d67 Mon Sep 17 00:00:00 2001
 From: Eric Snowberg <eric.snowberg@oracle.com>
 Date: Thu, 22 Feb 2018 10:03:46 +0000
 Subject: Add support for modern sparc64 hardware
@@ -35,7 +35,7 @@ Patch-Name: sparc64-support.patch
  create mode 100644 include/grub/ieee1275/obdisk.h
 
 diff --git a/grub-core/Makefile.core.def b/grub-core/Makefile.core.def
-index 3b389277c..e751e334c 100644
+index 4fd874ee4..e5b7348c0 100644
 --- a/grub-core/Makefile.core.def
 +++ b/grub-core/Makefile.core.def
 @@ -270,6 +270,7 @@ kernel = {
@@ -2094,10 +2094,10 @@ index 32c77f80f..4b18468d8 100644
  extern grub_addr_t EXPORT_VAR (grub_ieee1275_original_stack);
  
 diff --git a/util/grub-install.c b/util/grub-install.c
-index 04a520481..0b97c1ac0 100644
+index 14a8c9e3c..3b0a326ec 100644
 --- a/util/grub-install.c
 +++ b/util/grub-install.c
-@@ -1616,6 +1616,7 @@ main (int argc, char *argv[])
+@@ -1641,6 +1641,7 @@ main (int argc, char *argv[])
  		{
  		  grub_util_fprint_full_disk_name (load_cfg_f, g, dev);
  		  fprintf (load_cfg_f, " ");

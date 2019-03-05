@@ -1,4 +1,4 @@
-From b5148a73117bceb9d831e7b53509893618bff3df Mon Sep 17 00:00:00 2001
+From 1b400172593fbd7974a8d5fe232b5ff239bf81fa Mon Sep 17 00:00:00 2001
 From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 Date: Sat, 9 Feb 2019 09:49:29 +0000
 Subject: ieee1275: Include a.out header in assembly of sparc64 boot loader
@@ -23,7 +23,7 @@ Patch-Name: sparc64-aout-fix.patch
  3 files changed, 16 insertions(+), 9 deletions(-)
 
 diff --git a/grub-core/Makefile.core.def b/grub-core/Makefile.core.def
-index 94a15f8c7..0f6c5f874 100644
+index 8d2c01998..bd448b683 100644
 --- a/grub-core/Makefile.core.def
 +++ b/grub-core/Makefile.core.def
 @@ -381,8 +381,7 @@ image = {

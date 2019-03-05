@@ -1,4 +1,4 @@
-From 0adc9d7db3b4291b6f533ede619ec28cc8fa4226 Mon Sep 17 00:00:00 2001
+From 2601c4db6562f9c4039c9e629309fadc035958c6 Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Mon, 13 Jan 2014 12:13:33 +0000
 Subject: Add GRUB_RECOVERY_TITLE option
@@ -90,7 +90,7 @@ index 9d8e8fd85..8301d361a 100644
  	  title="$(gettext_printf "%s, with kFreeBSD %s" "${os}" "${version}")"
        fi
 diff --git a/util/grub.d/10_linux.in b/util/grub.d/10_linux.in
-index 18c859214..704e834d5 100644
+index 88bc0e300..4f6e92e39 100644
 --- a/util/grub.d/10_linux.in
 +++ b/util/grub.d/10_linux.in
 @@ -116,7 +116,7 @@ linux_entry ()

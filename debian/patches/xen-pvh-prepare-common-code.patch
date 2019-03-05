@@ -1,4 +1,4 @@
-From 9b8a067360d15bb2ac8899dd9612df44c1f77a28 Mon Sep 17 00:00:00 2001
+From c67d7cde2deb82d687be23dc62f68cd15091adfd Mon Sep 17 00:00:00 2001
 From: Juergen Gross <jgross@suse.com>
 Date: Fri, 7 Dec 2018 13:11:32 +0100
 Subject: xen: Prepare common code for Xen PVH support

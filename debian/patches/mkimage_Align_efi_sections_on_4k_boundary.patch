@@ -1,4 +1,4 @@
-From f13b30739d150f264892975e75fa4b2d8fc68aee Mon Sep 17 00:00:00 2001
+From de3158f00b6070bae78a8b9fb89c51077ed4d7ba Mon Sep 17 00:00:00 2001
 From: Alexander Graf <agraf@suse.de>
 Date: Mon, 28 Jan 2019 14:35:28 +0100
 Subject: mkimage: Align efi sections on 4k boundary

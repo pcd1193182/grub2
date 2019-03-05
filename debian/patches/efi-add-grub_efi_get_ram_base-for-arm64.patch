@@ -1,4 +1,4 @@
-From 25d95e40ea31a52f6cbd753b585e86d76acca1cc Mon Sep 17 00:00:00 2001
+From c03fc0922ebaf3bfd636b6f034764afb87f9fb99 Mon Sep 17 00:00:00 2001
 From: Leif Lindholm <leif.lindholm@linaro.org>
 Date: Mon, 9 Jul 2018 18:33:01 +0100
 Subject: efi: Add grub_efi_get_ram_base() function for arm64
@@ -25,10 +25,10 @@ Patch-Name: efi-add-grub_efi_get_ram_base-for-arm64.patch
  2 files changed, 34 insertions(+)
 
 diff --git a/grub-core/kern/efi/mm.c b/grub-core/kern/efi/mm.c
-index 680ea9d6a..3033d5f57 100644
+index 385ed40a8..d866ccaea 100644
 --- a/grub-core/kern/efi/mm.c
 +++ b/grub-core/kern/efi/mm.c
-@@ -583,3 +583,34 @@ grub_efi_mm_init (void)
+@@ -551,3 +551,34 @@ grub_efi_mm_init (void)
    grub_efi_free_pages ((grub_addr_t) memory_map,
  		       2 * BYTES_TO_PAGES (MEMORY_MAP_SIZE));
  }
@@ -64,10 +64,10 @@ index 680ea9d6a..3033d5f57 100644
 +}
 +#endif
 diff --git a/include/grub/efi/efi.h b/include/grub/efi/efi.h
-index 1adc00f9e..c42a090c9 100644
+index 57d77de90..2d9a51534 100644
 --- a/include/grub/efi/efi.h
 +++ b/include/grub/efi/efi.h
-@@ -96,6 +96,9 @@ extern void (*EXPORT_VAR(grub_efi_net_config)) (grub_efi_handle_t hnd,
+@@ -95,6 +95,9 @@ extern void (*EXPORT_VAR(grub_efi_net_config)) (grub_efi_handle_t hnd,
  #if defined(__arm__) || defined(__aarch64__)
  void *EXPORT_FUNC(grub_efi_get_firmware_fdt)(void);
  #endif

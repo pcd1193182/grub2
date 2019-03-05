@@ -1,4 +1,4 @@
-From 47e4c28ec5131bc0921c15fe9c368e6160b0858f Mon Sep 17 00:00:00 2001
+From 5331e9cbb376b06a65d0eaf5c20bf15f606f09ff Mon Sep 17 00:00:00 2001
 From: Steve McIntyre <93sam@debian.org>
 Date: Mon, 11 Feb 2019 02:42:34 +0000
 Subject: grub-install: Check for arm-efi as a default target
@@ -90,7 +90,7 @@ index 3fd46ec30..5783cc4bc 100644
  grub_install_get_default_x86_platform (void);
  
 diff --git a/util/grub-install.c b/util/grub-install.c
-index 81b648efc..55491589f 100644
+index f317ed9e8..c2767735e 100644
 --- a/util/grub-install.c
 +++ b/util/grub-install.c
 @@ -348,7 +348,7 @@ get_default_platform (void)
