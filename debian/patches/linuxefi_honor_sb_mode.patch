@@ -1,6 +1,6 @@
-From 6e7d7084a80080291727561d915474f36ab42467 Mon Sep 17 00:00:00 2001
+From 97dad10bfe149998d4644d8afff63d7fb135f9d3 Mon Sep 17 00:00:00 2001
 From: Peter Jones <pjones@redhat.com>
-Date: Tue, 6 Oct 2015 16:09:25 -0400
+Date: Wed, 27 Feb 2019 12:42:08 -0500
 Subject: Make any of the loaders that link in efi mode honor secure boot.
 
 And in this case "honor" means "even if somebody does link this in, they
@@ -10,7 +10,7 @@ Signed-off-by: Peter Jones <pjones@redhat.com>
 
 Origin: vendor, https://github.com/rhboot/grub2/commit/3056bfc5044e976fa97f76b81b6a680731005095
 Forwarded: no
-Last-Update: 2017-11-01
+Last-Update: 2019-02-27
 
 Patch-Name: linuxefi_honor_sb_mode.patch
 ---
@@ -32,9 +32,9 @@ Patch-Name: linuxefi_honor_sb_mode.patch
  include/grub/efi/sb.h              | 29 +++++++++++++++
  include/grub/ia64/linux.h          |  0
  include/grub/mips/linux.h          |  0
- include/grub/powerpc/linux.h       | 22 ++++++++++++
+ include/grub/powerpc/linux.h       |  0
  include/grub/sparc64/linux.h       |  0
- 20 files changed, 169 insertions(+), 29 deletions(-)
+ 20 files changed, 147 insertions(+), 29 deletions(-)
  create mode 100644 grub-core/kern/efi/sb.c
  create mode 100644 include/grub/efi/sb.h
  create mode 100644 include/grub/ia64/linux.h
@@ -43,7 +43,7 @@ Patch-Name: linuxefi_honor_sb_mode.patch
  create mode 100644 include/grub/sparc64/linux.h
 
 diff --git a/grub-core/Makefile.am b/grub-core/Makefile.am
-index 04e9395fd..fd715a8ea 100644
+index 95e9817ca..0e37c3fc7 100644
 --- a/grub-core/Makefile.am
 +++ b/grub-core/Makefile.am
 @@ -71,6 +71,7 @@ KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/command.h
@@ -55,10 +55,10 @@ index 04e9395fd..fd715a8ea 100644
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/env_private.h
  KERNEL_HEADER_FILES += $(top_srcdir)/include/grub/err.h
 diff --git a/grub-core/Makefile.core.def b/grub-core/Makefile.core.def
-index 9b7b661ff..50c555e43 100644
+index d35395a09..cdeb6bd9b 100644
 --- a/grub-core/Makefile.core.def
 +++ b/grub-core/Makefile.core.def
-@@ -177,6 +177,7 @@ kernel = {
+@@ -181,6 +181,7 @@ kernel = {
    i386_multiboot = kern/i386/pc/acpi.c;
    i386_coreboot = kern/acpi.c;
    i386_multiboot = kern/acpi.c;
@@ -277,7 +277,7 @@ index 74888c463..69c2a10d3 100644
    grub_unregister_command (cmd);
  }
 diff --git a/grub-core/loader/efi/chainloader.c b/grub-core/loader/efi/chainloader.c
-index 456043407..83e191460 100644
+index 87a91e16f..aee8e6bec 100644
 --- a/grub-core/loader/efi/chainloader.c
 +++ b/grub-core/loader/efi/chainloader.c
 @@ -34,6 +34,7 @@
@@ -321,18 +321,18 @@ index 7f96515da..87709aa23 100644
    grub_unregister_extcmd (cmd_openbsd);
    grub_unregister_extcmd (cmd_netbsd);
 diff --git a/grub-core/loader/i386/linux.c b/grub-core/loader/i386/linux.c
-index 083f9417c..b2438547d 100644
+index 602d11786..25293d235 100644
 --- a/grub-core/loader/i386/linux.c
 +++ b/grub-core/loader/i386/linux.c
-@@ -35,6 +35,7 @@
- #include <grub/i18n.h>
+@@ -36,6 +36,7 @@
  #include <grub/lib/cmdline.h>
  #include <grub/linux.h>
+ #include <grub/machine/kernel.h>
 +#include <grub/efi/sb.h>
  
  GRUB_MOD_LICENSE ("GPLv3+");
  
-@@ -1139,6 +1140,9 @@ static grub_command_t cmd_linux, cmd_initrd;
+@@ -1150,6 +1151,9 @@ static grub_command_t cmd_linux, cmd_initrd;
  
  GRUB_MOD_INIT(linux)
  {
@@ -342,7 +342,7 @@ index 083f9417c..b2438547d 100644
    cmd_linux = grub_register_command ("linux", grub_cmd_linux,
  				     0, N_("Load Linux."));
    cmd_initrd = grub_register_command ("initrd", grub_cmd_initrd,
-@@ -1148,6 +1152,9 @@ GRUB_MOD_INIT(linux)
+@@ -1159,6 +1163,9 @@ GRUB_MOD_INIT(linux)
  
  GRUB_MOD_FINI(linux)
  {
@@ -353,7 +353,7 @@ index 083f9417c..b2438547d 100644
    grub_unregister_command (cmd_initrd);
  }
 diff --git a/grub-core/loader/i386/pc/linux.c b/grub-core/loader/i386/pc/linux.c
-index a293b17aa..91283157e 100644
+index b69cb7a3a..ebe763021 100644
 --- a/grub-core/loader/i386/pc/linux.c
 +++ b/grub-core/loader/i386/pc/linux.c
 @@ -35,6 +35,7 @@
@@ -449,10 +449,10 @@ index c9885b1bc..df8dfdb4b 100644
    grub_unregister_command (cmd_resume);
  #endif
 diff --git a/include/grub/efi/efi.h b/include/grub/efi/efi.h
-index 62a3d9726..764cd11f5 100644
+index 1fe46957a..a7c714e5b 100644
 --- a/include/grub/efi/efi.h
 +++ b/include/grub/efi/efi.h
-@@ -76,7 +76,6 @@ EXPORT_FUNC (grub_efi_set_variable) (const char *var,
+@@ -84,7 +84,6 @@ EXPORT_FUNC (grub_efi_set_variable) (const char *var,
  				     const grub_efi_guid_t *guid,
  				     void *data,
  				     grub_size_t datasize);
@@ -503,32 +503,7 @@ new file mode 100644
 index 000000000..e69de29bb
 diff --git a/include/grub/powerpc/linux.h b/include/grub/powerpc/linux.h
 new file mode 100644
-index 000000000..5761d53e7
---- /dev/null
-+++ b/include/grub/powerpc/linux.h
-@@ -0,0 +1,22 @@
-+/*
-+ *  GRUB  --  GRand Unified Bootloader
-+ *  Copyright (C) 2013  Free Software Foundation, Inc.
-+ *
-+ *  GRUB is free software: you can redistribute it and/or modify
-+ *  it under the terms of the GNU General Public License as published by
-+ *  the Free Software Foundation, either version 3 of the License, or
-+ *  (at your option) any later version.
-+ *
-+ *  GRUB is distributed in the hope that it will be useful,
-+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+ *  GNU General Public License for more details.
-+ *
-+ *  You should have received a copy of the GNU General Public License
-+ *  along with GRUB.  If not, see <http://www.gnu.org/licenses/>.
-+ */
-+
-+#ifndef GRUB_LINUX_CPU_HEADER
-+#define GRUB_LINUX_CPU_HEADER 1
-+
-+#endif /* ! GRUB_LINUX_CPU_HEADER */
+index 000000000..e69de29bb
 diff --git a/include/grub/sparc64/linux.h b/include/grub/sparc64/linux.h
 new file mode 100644
 index 000000000..e69de29bb

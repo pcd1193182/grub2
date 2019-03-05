@@ -99,6 +99,7 @@ CD_MODULES="
 	gfxterm_background
 	gzio
 	halt
+	help
 	hfsplus
 	iso9660
 	jpeg
@@ -106,6 +107,7 @@ CD_MODULES="
 	loadenv
 	loopback
 	linux
+	ls
 	lsefi
 	lsefimmap
 	lsefisystab
@@ -128,6 +130,7 @@ CD_MODULES="
 	test
 	true
 	video
+	xfs
 	zfs
 	zfscrypt
 	zfsinfo
@@ -143,6 +146,30 @@ case $platform in
 esac
 
 GRUB_MODULES="$CD_MODULES
+	cryptodisk
+	gcry_arcfour
+	gcry_blowfish
+	gcry_camellia
+	gcry_cast5
+	gcry_crc
+	gcry_des
+	gcry_dsa
+	gcry_idea
+	gcry_md4
+	gcry_md5
+	gcry_rfc2268
+	gcry_rijndael
+	gcry_rmd160
+	gcry_rsa
+	gcry_seed
+	gcry_serpent
+	gcry_sha1
+	gcry_sha256
+	gcry_sha512
+	gcry_tiger
+	gcry_twofish
+	gcry_whirlpool
+	luks
 	lvm
 	mdraid09
 	mdraid1x
@@ -163,7 +190,5 @@ NET_MODULES="$CD_MODULES
 "$grub_mkimage" -O "$platform" -o "$outdir/grubnet$efi_name.efi" \
 	-d "$grub_core" -c "$workdir/grub-bootstrap.cfg" \
 	-m "$workdir/memdisk-netboot.fat" -p /grub $NET_MODULES
-"$grub_mkimage" -O "$platform" -o "$outdir/gsb$efi_name.efi" \
-	-d "$grub_core" -p /EFI/ubuntu $(echo $GRUB_MODULES | sed -e 's/linux //')
 
 exit 0

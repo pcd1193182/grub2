@@ -1,4 +1,4 @@
-From 256353cb077f5d25bf87a489fc3c8d0d1bafcbcf Mon Sep 17 00:00:00 2001
+From f8a48daebcfe102585fe2431b14e0765d0ff5d97 Mon Sep 17 00:00:00 2001
 From: Peter Jones <pjones@redhat.com>
 Date: Thu, 9 Jun 2016 12:22:29 -0400
 Subject: Re-work some intricacies of PE loading.
@@ -9,7 +9,7 @@ takes a different read than either of them.
 
 Origin: vendor, https://github.com/rhboot/grub2/commit/3f023d25a1ceb6d23c1bb17b754fbc1f8321427d
 Forwarded: no
-Last-Update: 2017-11-01
+Last-Update: 2019-02-27
 
 Patch-Name: linuxefi_rework_pe_loading.patch
 ---
@@ -18,7 +18,7 @@ Patch-Name: linuxefi_rework_pe_loading.patch
  2 files changed, 152 insertions(+), 36 deletions(-)
 
 diff --git a/grub-core/loader/efi/chainloader.c b/grub-core/loader/efi/chainloader.c
-index 83e191460..505d883ef 100644
+index aee8e6bec..4b77a7d5a 100644
 --- a/grub-core/loader/efi/chainloader.c
 +++ b/grub-core/loader/efi/chainloader.c
 @@ -301,7 +301,7 @@ image_is_64_bit (grub_pe_header_t *pe_hdr)
@@ -87,7 +87,7 @@ index 83e191460..505d883ef 100644
 +	       context.image_size, datasize);
  
    efi_status = efi_call_3 (b->allocate_pool, GRUB_EFI_LOADER_DATA,
- 			   buffer_size, (void**) &buffer);
+ 			   buffer_size, &buffer);
 @@ -539,7 +560,6 @@ handle_image (void *data, grub_efi_uint32_t datasize)
      }
  
@@ -299,10 +299,10 @@ index 83e191460..505d883ef 100644
        efi_call_1 (b->free_pool, buffer);
  
 diff --git a/include/grub/efi/pe32.h b/include/grub/efi/pe32.h
-index f79782e1b..8396bde49 100644
+index 24075b19b..f71da19f2 100644
 --- a/include/grub/efi/pe32.h
 +++ b/include/grub/efi/pe32.h
-@@ -227,12 +227,18 @@ struct grub_pe32_section_table
+@@ -236,12 +236,18 @@ struct grub_pe32_section_table
    grub_uint32_t characteristics;
  };
  
@@ -325,7 +325,7 @@ index f79782e1b..8396bde49 100644
  
  #define GRUB_PE32_SCN_ALIGN_1BYTES		0x00100000
  #define GRUB_PE32_SCN_ALIGN_2BYTES		0x00200000
-@@ -241,10 +247,28 @@ struct grub_pe32_section_table
+@@ -250,10 +256,28 @@ struct grub_pe32_section_table
  #define GRUB_PE32_SCN_ALIGN_16BYTES		0x00500000
  #define GRUB_PE32_SCN_ALIGN_32BYTES		0x00600000
  #define GRUB_PE32_SCN_ALIGN_64BYTES		0x00700000

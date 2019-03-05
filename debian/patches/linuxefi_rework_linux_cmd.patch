@@ -1,4 +1,4 @@
-From ecc9225f4a7a7b2cae603ae748f28671a87aac67 Mon Sep 17 00:00:00 2001
+From 314495640f0f1f3545c08f8db11a1515408640c9 Mon Sep 17 00:00:00 2001
 From: Matthew Garrett <mjg59@coreos.com>
 Date: Sun, 9 Aug 2015 16:12:39 -0700
 Subject: Rework linux command
@@ -9,7 +9,7 @@ before pulling out the individual blocks later on.
 
 Origin: vendor, https://github.com/rhboot/grub2/commit/97c97a2e9a95a29c42569952c8be7be1fdb5b4cf
 Forwarded: no
-Last-Update: 2017-11-01
+Last-Update: 2019-02-27
 
 Patch-Name: linuxefi_rework_linux_cmd.patch
 ---
@@ -17,12 +17,12 @@ Patch-Name: linuxefi_rework_linux_cmd.patch
  1 file changed, 21 insertions(+), 13 deletions(-)
 
 diff --git a/grub-core/loader/i386/linux.c b/grub-core/loader/i386/linux.c
-index b2438547d..e4b8342f5 100644
+index 25293d235..e336ac572 100644
 --- a/grub-core/loader/i386/linux.c
 +++ b/grub-core/loader/i386/linux.c
-@@ -681,12 +681,13 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+@@ -692,12 +692,13 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
    grub_file_t file = 0;
-   struct linux_kernel_header lh;
+   struct linux_i386_kernel_header lh;
    grub_uint8_t setup_sects;
 -  grub_size_t real_size, prot_size, prot_file_size;
 +  grub_size_t real_size, prot_size, prot_file_size, kernel_offset;
@@ -35,7 +35,7 @@ index b2438547d..e4b8342f5 100644
  
    grub_dl_ref (my_mod);
  
-@@ -700,7 +701,15 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+@@ -711,7 +712,15 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
    if (! file)
      goto fail;
  
@@ -52,7 +52,7 @@ index b2438547d..e4b8342f5 100644
      {
        if (!grub_errno)
  	grub_error (GRUB_ERR_BAD_OS, N_("premature end of file %s"),
-@@ -708,6 +717,9 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+@@ -719,6 +728,9 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
        goto fail;
      }
  
@@ -62,7 +62,7 @@ index b2438547d..e4b8342f5 100644
    if (lh.boot_flag != grub_cpu_to_le16_compile_time (0xaa55))
      {
        grub_error (GRUB_ERR_BAD_OS, "invalid magic number");
-@@ -807,13 +819,9 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+@@ -818,13 +830,9 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
    linux_params.ps_mouse = linux_params.padding10 =  0;
  
    len = sizeof (linux_params) - sizeof (lh);
@@ -79,7 +79,7 @@ index b2438547d..e4b8342f5 100644
  
    linux_params.type_of_loader = GRUB_LINUX_BOOT_LOADER_TYPE;
  
-@@ -872,7 +880,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+@@ -883,7 +891,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
  
    /* The other parameters are filled when booting.  */
  
@@ -88,7 +88,7 @@ index b2438547d..e4b8342f5 100644
  
    grub_dprintf ("linux", "bzImage, setup=0x%x, size=0x%x\n",
  		(unsigned) real_size, (unsigned) prot_size);
-@@ -1020,9 +1028,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+@@ -1031,9 +1039,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
  			      - (sizeof (LINUX_IMAGE) - 1));
  
    len = prot_file_size;
@@ -99,7 +99,7 @@ index b2438547d..e4b8342f5 100644
  
    if (grub_errno == GRUB_ERR_NONE)
      {
-@@ -1033,6 +1039,8 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+@@ -1044,6 +1050,8 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
  
   fail:
  

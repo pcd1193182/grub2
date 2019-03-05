@@ -1,4 +1,4 @@
-From e1499616f7c6206a539cee4aae0d81ea13a38a7e Mon Sep 17 00:00:00 2001
+From 6ae792adf5da31660ba565a797193bf4ee624bc3 Mon Sep 17 00:00:00 2001
 From: Chris Glass <chris.glass@canonical.com>
 Date: Fri, 9 Mar 2018 13:47:07 +0100
 Subject: Added initrd-less boot capabilities.
@@ -31,10 +31,10 @@ index b47b4b1ac..d6d8b0966 100644
 +
  EXTRA_DIST += ChangeLog ChangeLog-2015
 diff --git a/configure.ac b/configure.ac
-index f102b7024..bf7335af8 100644
+index 5b7423be3..79db4fae0 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -291,6 +291,16 @@ AC_SUBST(grubdirname)
+@@ -293,6 +293,16 @@ AC_SUBST(grubdirname)
  AC_DEFINE_UNQUOTED(GRUB_DIR_NAME, "$grubdirname",
      [Default grub directory name])
  
@@ -116,7 +116,7 @@ index 674a76140..23322458a 100644
      cat <<EOF
  function recordfail {
 diff --git a/util/grub.d/10_linux.in b/util/grub.d/10_linux.in
-index 76d4f31bf..01d96f5d0 100644
+index dcccf488d..cb56e45f3 100644
 --- a/util/grub.d/10_linux.in
 +++ b/util/grub.d/10_linux.in
 @@ -104,6 +104,10 @@ if [ "$vt_handoff" = 1 ]; then

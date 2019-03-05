@@ -1,4 +1,4 @@
-From 8adca1c71ecfa7ca1540f03b32e29aa805ab84f2 Mon Sep 17 00:00:00 2001
+From 42a22f8dff168660d39efce677a38d302b9e2c32 Mon Sep 17 00:00:00 2001
 From: Peter Jones <pjones@redhat.com>
 Date: Fri, 10 Jun 2016 14:06:15 -0400
 Subject: Rework even more of efi chainload so non-sb cases work right.
@@ -43,7 +43,7 @@ Signed-off-by: Peter Jones <pjones@redhat.com>
 
 Origin: vendor, https://github.com/rhboot/grub2/commit/149cdec4f9e5fd039a698ef20530bad588b6aeeb
 Forwarded: no
-Last-Update: 2017-11-01
+Last-Update: 2019-02-27
 
 Patch-Name: linuxefi_rework_non-sb_efi_chainload.patch
 ---
@@ -85,18 +85,18 @@ index a41b6c5b8..d74778b0c 100644
    if (*secure_boot && !*setup_mode)
      ret = 1;
 diff --git a/grub-core/loader/arm64/linux.c b/grub-core/loader/arm64/linux.c
-index bc7ebb699..456523b52 100644
+index 2e1ff74aa..f93d72100 100644
 --- a/grub-core/loader/arm64/linux.c
 +++ b/grub-core/loader/arm64/linux.c
-@@ -253,6 +253,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+@@ -286,6 +286,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
    grub_file_t file = 0;
-   struct grub_arm64_linux_kernel_header lh;
+   struct linux_armxx_kernel_header lh;
    struct grub_arm64_linux_pe_header *pe;
 +  int rc;
  
    grub_dl_ref (my_mod);
  
-@@ -297,7 +298,8 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+@@ -330,7 +331,8 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
  
    grub_dprintf ("linux", "kernel @ %p\n", kernel_addr);
  
@@ -107,7 +107,7 @@ index bc7ebb699..456523b52 100644
        grub_error (GRUB_ERR_INVALID_COMMAND, N_("%s has invalid signature"), argv[0]);
        goto fail;
 diff --git a/grub-core/loader/efi/chainloader.c b/grub-core/loader/efi/chainloader.c
-index 505d883ef..a2e2d1b6f 100644
+index 4b77a7d5a..3e89de900 100644
 --- a/grub-core/loader/efi/chainloader.c
 +++ b/grub-core/loader/efi/chainloader.c
 @@ -182,7 +182,6 @@ make_file_path (grub_efi_device_path_t *dp, const char *filename)

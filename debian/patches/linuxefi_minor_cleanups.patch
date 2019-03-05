@@ -1,4 +1,4 @@
-From 010ed501bec8e2e51ed9aee34e8e196d654aeda9 Mon Sep 17 00:00:00 2001
+From 9fcf13b95bf5f619a149c93a93344129f7226cad Mon Sep 17 00:00:00 2001
 From: Peter Jones <pjones@redhat.com>
 Date: Tue, 14 Feb 2017 16:31:52 -0500
 Subject: linuxefi: minor cleanups
@@ -7,7 +7,7 @@ Signed-off-by: Peter Jones <pjones@redhat.com>
 
 Origin: vendor, https://github.com/rhboot/grub2/commit/2c9a6edf8abbc7397174ec2696fce28822996a12
 Forwarded: no
-Last-Update: 2017-11-01
+Last-Update: 2019-02-27
 
 Patch-Name: linuxefi_minor_cleanups.patch
 ---
@@ -15,10 +15,10 @@ Patch-Name: linuxefi_minor_cleanups.patch
  1 file changed, 20 insertions(+), 10 deletions(-)
 
 diff --git a/grub-core/loader/i386/efi/linux.c b/grub-core/loader/i386/efi/linux.c
-index 7df379ab7..6efa30ff8 100644
+index a95e29700..806031838 100644
 --- a/grub-core/loader/i386/efi/linux.c
 +++ b/grub-core/loader/i386/efi/linux.c
-@@ -62,13 +62,18 @@ grub_linuxefi_unload (void)
+@@ -61,13 +61,18 @@ grub_linuxefi_unload (void)
    grub_dl_unref (my_mod);
    loaded = 0;
    if (initrd_mem)
@@ -41,7 +41,7 @@ index 7df379ab7..6efa30ff8 100644
    return GRUB_ERR_NONE;
  }
  
-@@ -118,7 +123,7 @@ grub_cmd_initrd (grub_command_t cmd __attribute__ ((unused)),
+@@ -117,7 +122,7 @@ grub_cmd_initrd (grub_command_t cmd __attribute__ ((unused)),
    grub_dprintf ("linuxefi", "initrd_mem = %lx\n", (unsigned long) initrd_mem);
  
    params->ramdisk_size = size;
@@ -50,7 +50,7 @@ index 7df379ab7..6efa30ff8 100644
  
    ptr = initrd_mem;
  
-@@ -145,7 +150,8 @@ grub_cmd_initrd (grub_command_t cmd __attribute__ ((unused)),
+@@ -144,7 +149,8 @@ grub_cmd_initrd (grub_command_t cmd __attribute__ ((unused)),
    grub_free (files);
  
    if (initrd_mem && grub_errno)
@@ -60,7 +60,7 @@ index 7df379ab7..6efa30ff8 100644
  
    return grub_errno;
  }
-@@ -252,7 +258,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+@@ -251,7 +257,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
                                linux_cmdline + sizeof (LINUX_IMAGE) - 1,
  			      lh.cmdline_size - (sizeof (LINUX_IMAGE) - 1));
  
@@ -69,7 +69,7 @@ index 7df379ab7..6efa30ff8 100644
  
    handover_offset = lh.handover_offset;
  
-@@ -297,13 +303,17 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+@@ -296,13 +302,17 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
      }
  
    if (linux_cmdline && !loaded)

@@ -1,13 +1,13 @@
-From f96415fd6a3be2253e3523ef9747427a5b7b4489 Mon Sep 17 00:00:00 2001
+From 541142fb2c41816b8f9b30fdb1c987b0e77419ea Mon Sep 17 00:00:00 2001
 From: Peter Jones <pjones@redhat.com>
-Date: Wed, 24 May 2017 15:58:18 -0400
+Date: Wed, 27 Feb 2019 12:44:37 -0500
 Subject: Clean up some errors in the linuxefi loader
 
 Signed-off-by: Peter Jones <pjones@redhat.com>
 
 Origin: vendor, https://github.com/rhboot/grub2/commit/df0d3873162dd7e9352e1d4fbd589aa60e722f2e
 Forwarded: no
-Last-Update: 2017-11-01
+Last-Update: 2019-02-27
 
 Patch-Name: linuxefi_cleanup_errors_in_loader.patch
 ---
@@ -16,10 +16,10 @@ Patch-Name: linuxefi_cleanup_errors_in_loader.patch
  2 files changed, 12 insertions(+), 9 deletions(-)
 
 diff --git a/grub-core/loader/i386/efi/linux.c b/grub-core/loader/i386/efi/linux.c
-index d466cafd9..9a3f7477b 100644
+index ed8cc40a0..19950d2f2 100644
 --- a/grub-core/loader/i386/efi/linux.c
 +++ b/grub-core/loader/i386/efi/linux.c
-@@ -162,8 +162,8 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+@@ -161,8 +161,8 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
  		int argc, char *argv[])
  {
    grub_file_t file = 0;
@@ -30,7 +30,7 @@ index d466cafd9..9a3f7477b 100644
    void *kernel = NULL;
    int setup_header_end_offset;
    int rc;
-@@ -213,18 +213,19 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+@@ -212,18 +212,19 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
        goto fail;
      }
  
@@ -54,7 +54,7 @@ index d466cafd9..9a3f7477b 100644
    lh = (struct linux_kernel_header *)params;
    grub_dprintf ("linuxefi", "lh is at %p\n", lh);
    grub_dprintf ("linuxefi", "checking lh->boot_flag\n");
-@@ -298,7 +299,6 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+@@ -297,7 +298,6 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
    handover_offset = lh->handover_offset;
  
    start = (lh->setup_sects + 1) * 512;
@@ -62,7 +62,7 @@ index d466cafd9..9a3f7477b 100644
  
    kernel_mem = grub_efi_allocate_pages(lh->pref_address,
  				       BYTES_TO_PAGES(lh->init_size));
-@@ -344,7 +344,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+@@ -343,7 +343,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
        loaded = 0;
      }
  
@@ -72,18 +72,18 @@ index d466cafd9..9a3f7477b 100644
  			 linux_cmdline,
  			 BYTES_TO_PAGES(lh->cmdline_size + 1));
 diff --git a/grub-core/loader/i386/linux.c b/grub-core/loader/i386/linux.c
-index e4b8342f5..c9e89310b 100644
+index e336ac572..66f0ee246 100644
 --- a/grub-core/loader/i386/linux.c
 +++ b/grub-core/loader/i386/linux.c
-@@ -680,6 +680,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+@@ -691,6 +691,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
  {
    grub_file_t file = 0;
-   struct linux_kernel_header lh;
+   struct linux_i386_kernel_header lh;
 +  grub_uint8_t *linux_params_ptr;
    grub_uint8_t setup_sects;
    grub_size_t real_size, prot_size, prot_file_size, kernel_offset;
    grub_ssize_t len;
-@@ -811,6 +812,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+@@ -822,6 +823,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
  		      preferred_address))
      goto fail;
  
@@ -91,7 +91,7 @@ index e4b8342f5..c9e89310b 100644
    grub_memset (&linux_params, 0, sizeof (linux_params));
    grub_memcpy (&linux_params.setup_sects, &lh.setup_sects, sizeof (lh) - 0x1F1);
  
-@@ -820,7 +822,8 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+@@ -831,7 +833,8 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
  
    len = sizeof (linux_params) - sizeof (lh);
  

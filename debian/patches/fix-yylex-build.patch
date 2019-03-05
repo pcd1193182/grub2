@@ -1,4 +1,4 @@
-From 079d96633ead9e9ba2fefda2fa3e0e7e7eb5e8e6 Mon Sep 17 00:00:00 2001
+From 40f899a96ddd83286ed2c2bc616b57c6026903b4 Mon Sep 17 00:00:00 2001
 From: Vladimir Serbinenko <phcoder@gmail.com>
 Date: Mon, 14 Aug 2017 14:11:43 +0200
 Subject: yylex: Explicilty cast fprintf to void.

@@ -1,4 +1,4 @@
-From db1c321096805c96c98f3cbdd5463fb419d685c9 Mon Sep 17 00:00:00 2001
+From efaac7a5451e2bb71b451e3dd415e5b90907e98e Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?=C5=81ukasz=20=27sil2100=27=20Zemczak?=
  <lukasz.zemczak@canonical.com>
 Date: Fri, 20 Apr 2018 19:27:37 +0200
@@ -119,10 +119,10 @@ index c30025b13..1c9695970 100644
    grub_util_error ("%s", _("no IEEE1275 routines are available for your platform"));
  }
 diff --git a/include/grub/util/install.h b/include/grub/util/install.h
-index 58648e209..115188399 100644
+index 5783cc4bc..cafc3bcda 100644
 --- a/include/grub/util/install.h
 +++ b/include/grub/util/install.h
-@@ -212,11 +212,12 @@ grub_install_get_default_powerpc_machtype (void);
+@@ -216,11 +216,12 @@ grub_install_get_default_powerpc_machtype (void);
  int
  grub_install_register_efi (grub_device_t efidir_grub_dev,
  			   const char *efifile_path,
@@ -138,7 +138,7 @@ index 58648e209..115188399 100644
  void
  grub_install_sgi_setup (const char *install_device,
 diff --git a/util/grub-install.c b/util/grub-install.c
-index 3b0a326ec..c1ba14c3e 100644
+index c2767735e..69b322f8d 100644
 --- a/util/grub-install.c
 +++ b/util/grub-install.c
 @@ -59,6 +59,7 @@ static int removable = 0;
@@ -180,7 +180,7 @@ index 3b0a326ec..c1ba14c3e 100644
    {"skip-fs-probe",'s',0,      0,
     N_("do not probe for filesystems in DEVICE"), 0},
    {"no-bootsector", OPTION_NO_BOOTSECTOR, 0, 0,
-@@ -1935,7 +1944,7 @@ main (int argc, char *argv[])
+@@ -1958,7 +1967,7 @@ main (int argc, char *argv[])
  		? ins_dev->disk->partition->number + 1 : 0;
  	      dev = grub_util_get_os_disk (install_device);
  	      grub_install_register_ieee1275 (0, dev, partno,
@@ -189,7 +189,7 @@ index 3b0a326ec..c1ba14c3e 100644
  	    }
  	  grub_device_close (ins_dev);
    	  free (grub_elf);
-@@ -1967,7 +1976,7 @@ main (int argc, char *argv[])
+@@ -1990,7 +1999,7 @@ main (int argc, char *argv[])
  	  grub_device_close (ins_dev);
  	  if (update_nvram)
  	    grub_install_register_ieee1275 (1, grub_util_get_os_disk (install_device),
@@ -198,7 +198,7 @@ index 3b0a326ec..c1ba14c3e 100644
  	  break;
        }
        /* fallthrough.  */
-@@ -1982,7 +1991,7 @@ main (int argc, char *argv[])
+@@ -2005,7 +2014,7 @@ main (int argc, char *argv[])
  	    ? grub_dev->disk->partition->number + 1 : 0;
  	  dev = grub_util_get_os_disk (grub_devices[0]);
  	  grub_install_register_ieee1275 (0, dev,
@@ -207,7 +207,7 @@ index 3b0a326ec..c1ba14c3e 100644
  	}
        break;
      case GRUB_INSTALL_PLATFORM_MIPS_ARC:
-@@ -2031,7 +2040,7 @@ main (int argc, char *argv[])
+@@ -2054,7 +2063,7 @@ main (int argc, char *argv[])
  	      int error = 0;
  	      error = grub_install_register_efi (efidir_grub_dev,
  					 "\\System\\Library\\CoreServices",
@@ -216,7 +216,7 @@ index 3b0a326ec..c1ba14c3e 100644
  	      if (error)
  	        grub_util_error (_("efibootmgr failed to register the boot entry: %s"),
  				 strerror (error));
-@@ -2146,7 +2155,7 @@ main (int argc, char *argv[])
+@@ -2169,7 +2178,7 @@ main (int argc, char *argv[])
  			  (part ? ",": ""), (part ? : ""));
  	  grub_free (part);
  	  error = grub_install_register_efi (efidir_grub_dev,

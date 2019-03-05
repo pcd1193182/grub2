@@ -1,4 +1,4 @@
-From 0172d1223bdca0977b28312dd067846911bf8c71 Mon Sep 17 00:00:00 2001
+From d03eeceb913751e70e13868051d8c2cda3940362 Mon Sep 17 00:00:00 2001
 From: Mathieu Trudel-Lapierre <mathieu.trudel-lapierre@canonical.com>
 Date: Wed, 1 Nov 2017 13:51:03 -0400
 Subject: Temporarily re-enable the generic linux loader
@@ -10,7 +10,7 @@ correctly.
 This is a temporary measure until we switch to calling linuxefi directly.
 
 Forwarded: no
-Last-Update: 2017-11-01
+Last-Update: 2019-02-27
 
 Patch-Name: linuxefi_re-enable_linux_cmd.patch
 ---
@@ -18,10 +18,10 @@ Patch-Name: linuxefi_re-enable_linux_cmd.patch
  1 file changed, 6 deletions(-)
 
 diff --git a/grub-core/loader/i386/linux.c b/grub-core/loader/i386/linux.c
-index 3e3b45aa8..ae0be0f26 100644
+index 6acdcbe00..8244def22 100644
 --- a/grub-core/loader/i386/linux.c
 +++ b/grub-core/loader/i386/linux.c
-@@ -1194,9 +1194,6 @@ static grub_command_t cmd_linux, cmd_initrd;
+@@ -1203,9 +1203,6 @@ static grub_command_t cmd_linux, cmd_initrd;
  
  GRUB_MOD_INIT(linux)
  {
@@ -31,7 +31,7 @@ index 3e3b45aa8..ae0be0f26 100644
    cmd_linux = grub_register_command ("linux", grub_cmd_linux,
  				     0, N_("Load Linux."));
    cmd_initrd = grub_register_command ("initrd", grub_cmd_initrd,
-@@ -1206,9 +1203,6 @@ GRUB_MOD_INIT(linux)
+@@ -1215,9 +1212,6 @@ GRUB_MOD_INIT(linux)
  
  GRUB_MOD_FINI(linux)
  {

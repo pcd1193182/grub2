@@ -1,4 +1,4 @@
-From 63550d1f906f62decd018aa18bb49568a76abb0c Mon Sep 17 00:00:00 2001
+From fb0816bb7a68479acf4d5a8862694caa106a294d Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Mon, 30 Jul 2018 12:29:44 +0100
 Subject: tests: Fix qemu options for UHCI test

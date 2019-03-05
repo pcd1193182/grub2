@@ -1,4 +1,4 @@
-From 8a476b92aa80265ea8a6b9ed5ab7df294663f083 Mon Sep 17 00:00:00 2001
+From bfce2a719fcf1295e73e14fdf46844b629d90ec1 Mon Sep 17 00:00:00 2001
 From: Matthew Garrett <mjg59@coreos.com>
 Date: Sun, 9 Aug 2015 16:20:58 -0700
 Subject: Rework linux16 command
@@ -9,7 +9,7 @@ before pulling out the individual blocks later on.
 
 Origin: vendor, https://github.com/rhboot/grub2/commit/78d85625026497d96a06e5b7880a1d4785af9d1f
 Forwarded: no
-Last-Update: 2017-11-01
+Last-Update: 2019-02-27
 
 Patch-Name: linuxefi_rework_linux16_cmd.patch
 ---
@@ -17,12 +17,12 @@ Patch-Name: linuxefi_rework_linux16_cmd.patch
  1 file changed, 21 insertions(+), 13 deletions(-)
 
 diff --git a/grub-core/loader/i386/pc/linux.c b/grub-core/loader/i386/pc/linux.c
-index 91283157e..b864e5403 100644
+index ebe763021..e2bb1a99a 100644
 --- a/grub-core/loader/i386/pc/linux.c
 +++ b/grub-core/loader/i386/pc/linux.c
 @@ -124,13 +124,14 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
    grub_file_t file = 0;
-   struct linux_kernel_header lh;
+   struct linux_i386_kernel_header lh;
    grub_uint8_t setup_sects;
 -  grub_size_t real_size;
 +  grub_size_t real_size, kernel_offset = 0;
@@ -78,7 +78,7 @@ index 91283157e..b864e5403 100644
 +	       len);
 +  kernel_offset += len;
  
-   if (lh.header != grub_cpu_to_le32_compile_time (GRUB_LINUX_MAGIC_SIGNATURE)
+   if (lh.header != grub_cpu_to_le32_compile_time (GRUB_LINUX_I386_MAGIC_SIGNATURE)
        || grub_le_to_cpu16 (lh.version) < 0x0200)
 @@ -356,10 +364,8 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
    }

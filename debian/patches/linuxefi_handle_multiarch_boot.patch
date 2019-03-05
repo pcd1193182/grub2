@@ -1,4 +1,4 @@
-From 7e366d790942f8484767768a5d4f0af6fe0ea9de Mon Sep 17 00:00:00 2001
+From b511e5255ae0dbafbb1ac98f4372def65f7fa9db Mon Sep 17 00:00:00 2001
 From: Peter Jones <pjones@redhat.com>
 Date: Tue, 14 Feb 2017 16:18:54 -0500
 Subject: Handle multi-arch (64-on-32) boot in linuxefi loader.
@@ -9,7 +9,7 @@ Signed-off-by: Peter Jones <pjones@redhat.com>
 
 Origin: vendor, https://github.com/rhboot/grub2/commit/1c88c700148acf02863a350055a43eb87e16bbe5
 Forwarded: no
-Last-Update: 2017-11-01
+Last-Update: 2019-02-27
 
 Patch-Name: linuxefi_handle_multiarch_boot.patch
 ---
@@ -43,10 +43,10 @@ index dbf63e20e..7fe7201a3 100644
  
    return GRUB_ERR_BUG;
 diff --git a/grub-core/loader/i386/efi/linux.c b/grub-core/loader/i386/efi/linux.c
-index 6efa30ff8..d466cafd9 100644
+index 806031838..ed8cc40a0 100644
 --- a/grub-core/loader/i386/efi/linux.c
 +++ b/grub-core/loader/i386/efi/linux.c
-@@ -45,14 +45,10 @@ static char *linux_cmdline;
+@@ -44,14 +44,10 @@ static char *linux_cmdline;
  static grub_err_t
  grub_linuxefi_boot (void)
  {
@@ -63,7 +63,7 @@ index 6efa30ff8..d466cafd9 100644
  			      params);
  }
  
-@@ -156,14 +152,20 @@ grub_cmd_initrd (grub_command_t cmd __attribute__ ((unused)),
+@@ -155,14 +151,20 @@ grub_cmd_initrd (grub_command_t cmd __attribute__ ((unused)),
    return grub_errno;
  }
  
@@ -85,7 +85,7 @@ index 6efa30ff8..d466cafd9 100644
    int rc;
  
    grub_dl_ref (my_mod);
-@@ -203,47 +205,78 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+@@ -202,47 +204,78 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
        goto fail;
      }
  
@@ -178,7 +178,7 @@ index 6efa30ff8..d466cafd9 100644
    if (!linux_cmdline)
      {
        grub_error (GRUB_ERR_OUT_OF_MEMORY, N_("can't allocate cmdline"));
-@@ -256,21 +289,23 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+@@ -255,21 +288,23 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
    grub_memcpy (linux_cmdline, LINUX_IMAGE, sizeof (LINUX_IMAGE));
    grub_create_loader_cmdline (argc, argv,
                                linux_cmdline + sizeof (LINUX_IMAGE) - 1,
@@ -209,7 +209,7 @@ index 6efa30ff8..d466cafd9 100644
  
    if (!kernel_mem)
      {
-@@ -278,14 +313,21 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+@@ -277,14 +312,21 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
        goto fail;
      }
  
@@ -235,7 +235,7 @@ index 6efa30ff8..d466cafd9 100644
    grub_dprintf("linuxefi", "kernel_mem: %p handover_offset: %08x\n",
  	       kernel_mem, handover_offset);
  
-@@ -305,7 +347,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+@@ -304,7 +346,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
    if (linux_cmdline && !loaded)
      grub_efi_free_pages ((grub_efi_physical_address_t)(grub_addr_t)
  			 linux_cmdline,
@@ -245,10 +245,10 @@ index 6efa30ff8..d466cafd9 100644
    if (kernel_mem && !loaded)
      grub_efi_free_pages ((grub_efi_physical_address_t)(grub_addr_t)kernel_mem,
 diff --git a/include/grub/i386/linux.h b/include/grub/i386/linux.h
-index fc36bdaf3..110ecf806 100644
+index 8f4cf0cd4..520d87498 100644
 --- a/include/grub/i386/linux.h
 +++ b/include/grub/i386/linux.h
-@@ -130,7 +130,12 @@ struct linux_kernel_header
+@@ -133,7 +133,12 @@ struct linux_i386_kernel_header
    grub_uint32_t kernel_alignment;
    grub_uint8_t relocatable;
    grub_uint8_t min_alignment;

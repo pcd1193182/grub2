@@ -1,0 +1,256 @@
+From e2b7763c67e8674332caeceeb11fe426873e2639 Mon Sep 17 00:00:00 2001
+From: Mathieu Trudel-Lapierre <mathieu.trudel-lapierre@canonical.com>
+Date: Thu, 21 Feb 2019 18:23:03 +0100
+Subject: Fix various format/cast errors in Secure Boot code
+
+Signed-off-by: Mathieu Trudel-Lapierre <mathieu.trudel-lapierre@canonical.com>
+Last-Update: 2019-02-22
+Patch-Name: linuxefi_fixing_more_errors.patch
+---
+ grub-core/Makefile.core.def        |  5 +++++
+ grub-core/kern/efi/sb.c            |  2 ++
+ grub-core/loader/arm64/linux.c     | 17 ++++++++++++-----
+ grub-core/loader/efi/chainloader.c | 24 ++++++++++++++----------
+ grub-core/loader/efi/linux.c       |  5 +++--
+ 5 files changed, 36 insertions(+), 17 deletions(-)
+
+diff --git a/grub-core/Makefile.core.def b/grub-core/Makefile.core.def
+index cdeb6bd9b..7a9f1771f 100644
+--- a/grub-core/Makefile.core.def
++++ b/grub-core/Makefile.core.def
+@@ -1706,10 +1706,12 @@ module = {
+   ia64_efi = loader/ia64/efi/linux.c;
+   arm_coreboot = loader/arm/linux.c;
+   arm_efi = loader/arm64/linux.c;
++  arm_efi = loader/efi/linux.c;
+   arm_uboot = loader/arm/linux.c;
+   arm64 = loader/arm64/linux.c;
+   arm64 = loader/efi/linux.c;
+   fdt = lib/fdt.c;
++  cflags = '-Wno-error=cast-align';
+   common = loader/linux.c;
+   common = lib/cmdline.c;
+   enable = noemu;
+@@ -1778,6 +1780,7 @@ module = {
+   efi = loader/i386/efi/linux.c;
+   efi = lib/cmdline.c;
+   efi = loader/efi/linux.c;
++  cflags = '-Wno-error=cast-align';
+   enable = i386_efi;
+   enable = x86_64_efi;
+ };
+@@ -1785,9 +1788,11 @@ module = {
+ module = {
+   name = chain;
+   efi = loader/efi/chainloader.c;
++  efi = loader/efi/linux.c;
+   i386_pc = loader/i386/pc/chainloader.c;
+   i386_coreboot = loader/i386/coreboot/chainloader.c;
+   i386_coreboot = lib/LzmaDec.c;
++  cflags = '-Wno-error=cast-align';
+   enable = i386_pc;
+   enable = i386_coreboot;
+   enable = efi;
+diff --git a/grub-core/kern/efi/sb.c b/grub-core/kern/efi/sb.c
+index d74778b0c..c14f401d7 100644
+--- a/grub-core/kern/efi/sb.c
++++ b/grub-core/kern/efi/sb.c
+@@ -19,7 +19,9 @@
+ #include <grub/err.h>
+ #include <grub/mm.h>
+ #include <grub/types.h>
++#ifdef GRUB_MACHINE_EFI
+ #include <grub/cpu/linux.h>
++#endif
+ #include <grub/efi/efi.h>
+ #include <grub/efi/pe32.h>
+ #include <grub/efi/linux.h>
+diff --git a/grub-core/loader/arm64/linux.c b/grub-core/loader/arm64/linux.c
+index f93d72100..0bba6f5d6 100644
+--- a/grub-core/loader/arm64/linux.c
++++ b/grub-core/loader/arm64/linux.c
+@@ -49,6 +49,13 @@ static grub_uint32_t cmdline_size;
+ static grub_addr_t initrd_start;
+ static grub_addr_t initrd_end;
+ 
++struct grub_arm64_linux_pe_header
++{
++  grub_uint32_t magic;
++  struct grub_pe32_coff_header coff;
++  struct grub_pe64_optional_header opt;
++};
++
+ grub_err_t
+ grub_armxx_efi_linux_check_image (struct linux_armxx_kernel_header * lh)
+ {
+@@ -115,8 +122,7 @@ finalize_params_linux (void)
+   loaded_image->load_options_size = len =
+     (grub_strlen (linux_args) + 1) * sizeof (grub_efi_char16_t);
+   loaded_image->load_options =
+-    grub_efi_allocate_pages (0,
+-			     GRUB_EFI_BYTES_TO_PAGES (loaded_image->load_options_size));
++    grub_efi_allocate_any_pages (GRUB_EFI_BYTES_TO_PAGES (loaded_image->load_options_size));
+   if (!loaded_image->load_options)
+     return grub_error(GRUB_ERR_BAD_OS, "failed to create kernel parameters");
+ 
+@@ -140,8 +146,7 @@ free_params (void)
+   if (loaded_image)
+     {
+       if (loaded_image->load_options)
+-	grub_efi_free_pages ((grub_efi_physical_address_t)
+-			      loaded_image->load_options,
++	grub_efi_free_pages ((grub_addr_t) loaded_image->load_options,
+ 			     GRUB_EFI_BYTES_TO_PAGES (loaded_image->load_options_size));
+       loaded_image->load_options = NULL;
+       loaded_image->load_options_size = 0;
+@@ -149,7 +154,9 @@ free_params (void)
+ }
+ 
+ grub_err_t
+-grub_armxx_efi_linux_boot_image (grub_addr_t addr, grub_size_t size, char *args)
++grub_armxx_efi_linux_boot_image (grub_addr_t addr __attribute__ ((unused)),
++                                 grub_size_t size __attribute__ ((unused)),
++                                 char *args)
+ {
+   grub_err_t retval;
+ 
+diff --git a/grub-core/loader/efi/chainloader.c b/grub-core/loader/efi/chainloader.c
+index db1ffeefc..1e9ef1b87 100644
+--- a/grub-core/loader/efi/chainloader.c
++++ b/grub-core/loader/efi/chainloader.c
+@@ -325,7 +325,9 @@ relocate_coff (pe_coff_loader_image_context_t *context,
+   char *fixup, *fixup_base, *fixup_data = NULL;
+   grub_efi_uint16_t *fixup_16;
+   grub_efi_uint32_t *fixup_32;
++#if defined(__x86_64__) || defined(__aarch64__)
+   grub_efi_uint64_t *fixup_64;
++#endif /* defined(__x86_64__) || defined(__aarch64__) */
+   grub_efi_uint64_t size = context->image_size;
+   void *image_end = (char *)orig + size;
+   int n = 0;
+@@ -379,14 +381,14 @@ relocate_coff (pe_coff_loader_image_context_t *context,
+       return GRUB_EFI_UNSUPPORTED;
+     }
+ 
+-  adjust = (grub_uint64_t)data - context->image_address;
++  adjust = (grub_uint64_t)(grub_addr_t)data - context->image_address;
+   if (adjust == 0)
+     return GRUB_EFI_SUCCESS;
+ 
+   while (reloc_base < reloc_base_end)
+     {
+       grub_uint16_t *entry;
+-      reloc = (struct grub_pe32_fixup_block *)((char*)reloc_base);
++      reloc = (struct grub_pe32_fixup_block *)reloc_base;
+ 
+       if ((reloc_base->size == 0) ||
+ 	  (reloc_base->size > context->reloc_dir->size))
+@@ -452,6 +454,7 @@ relocate_coff (pe_coff_loader_image_context_t *context,
+                     fixup_data += sizeof (grub_uint32_t);
+                   }
+                 break;
++#if defined(__x86_64__) || defined(__aarch64__)
+               case GRUB_PE32_REL_BASED_DIR64:
+                 fixup_64 = (grub_uint64_t *)fixup;
+                 *fixup_64 = *fixup_64 + (grub_uint64_t)adjust;
+@@ -462,6 +465,7 @@ relocate_coff (pe_coff_loader_image_context_t *context,
+                     fixup_data += sizeof (grub_uint64_t);
+                   }
+                 break;
++#endif /* defined(__x86_64__) || defined(__aarch64__) */
+               default:
+                 grub_error (GRUB_ERR_BAD_ARGUMENT,
+ 			    "Reloc %d unknown relocation type %d",
+@@ -502,7 +506,7 @@ handle_image (void *data, grub_efi_uint32_t datasize)
+ {
+   grub_efi_boot_services_t *b;
+   grub_efi_loaded_image_t *li, li_bak;
+-  grub_efi_status_t efi_status;
++  int efi_status;
+   char *buffer = NULL;
+   char *buffer_aligned = NULL;
+   grub_efi_uint32_t i;
+@@ -552,11 +556,11 @@ handle_image (void *data, grub_efi_uint32_t datasize)
+     section_alignment = 4096;
+ 
+   buffer_size = context.image_size + section_alignment;
+-  grub_dprintf ("chain", "image size is %08lx, datasize is %08x\n",
++  grub_dprintf ("chain", "image size is %08" PRIuGRUB_UINT64_T ", datasize is %08x\n",
+ 	       context.image_size, datasize);
+ 
+   efi_status = efi_call_3 (b->allocate_pool, GRUB_EFI_LOADER_DATA,
+-			   buffer_size, &buffer);
++			   buffer_size, (void**)&buffer);
+ 
+   if (efi_status != GRUB_EFI_SUCCESS)
+     {
+@@ -585,7 +589,7 @@ handle_image (void *data, grub_efi_uint32_t datasize)
+ 
+   char *reloc_base, *reloc_base_end;
+   grub_dprintf ("chain", "reloc_dir: %p reloc_size: 0x%08x\n",
+-		(void *)(unsigned long long)context.reloc_dir->rva,
++		(void *) ((grub_addr_t)context.reloc_dir->rva),
+ 		context.reloc_dir->size);
+   reloc_base = image_address (buffer_aligned, context.image_size,
+ 			      context.reloc_dir->rva);
+@@ -786,7 +790,7 @@ handle_image (void *data, grub_efi_uint32_t datasize)
+   efi_status = efi_call_2 (entry_point, grub_efi_image_handle,
+ 			   grub_efi_system_table);
+ 
+-  grub_dprintf ("chain", "entry_point returned %ld\n", efi_status);
++  grub_dprintf ("chain", "entry_point returned %d\n", efi_status);
+   grub_memcpy (li, &li_bak, sizeof (grub_efi_loaded_image_t));
+   efi_status = efi_call_1 (b->free_pool, buffer);
+ 
+@@ -861,10 +865,10 @@ static grub_err_t
+ grub_secureboot_chainloader_boot (void)
+ {
+   int rc;
+-  rc = handle_image ((void *)address, fsize);
++  rc = handle_image ((void *)((grub_addr_t) address), fsize);
+   if (rc == 0)
+     {
+-      grub_load_and_start_image((void *)address);
++      grub_load_and_start_image((void *)((grub_addr_t) address));
+     }
+ 
+   grub_loader_unset ();
+@@ -1043,7 +1047,7 @@ grub_cmd_chainloader (grub_command_t cmd __attribute__ ((unused)),
+     }
+ #endif
+ 
+-  rc = grub_linuxefi_secure_validate((void *)address, fsize);
++  rc = grub_linuxefi_secure_validate((void *)((grub_addr_t) address), fsize);
+   grub_dprintf ("chain", "linuxefi_secure_validate: %d\n", rc);
+   if (rc > 0)
+     {
+diff --git a/grub-core/loader/efi/linux.c b/grub-core/loader/efi/linux.c
+index 7fe7201a3..5942af26a 100644
+--- a/grub-core/loader/efi/linux.c
++++ b/grub-core/loader/efi/linux.c
+@@ -38,7 +38,7 @@ grub_linuxefi_secure_validate (void *data, grub_uint32_t size)
+ {
+   grub_efi_guid_t guid = SHIM_LOCK_GUID;
+   grub_efi_shim_lock_t *shim_lock;
+-  grub_efi_status_t status;
++  int status;
+ 
+   shim_lock = grub_efi_locate_protocol(&guid, NULL);
+   grub_dprintf ("secureboot", "shim_lock: %p\n", shim_lock);
+@@ -50,7 +50,7 @@ grub_linuxefi_secure_validate (void *data, grub_uint32_t size)
+ 
+   grub_dprintf ("secureboot", "Asking shim to verify kernel signature\n");
+   status = shim_lock->verify (data, size);
+-  grub_dprintf ("secureboot", "shim_lock->verify(): %ld\n", status);
++  grub_dprintf ("secureboot", "shim_lock->verify(): %d\n", status);
+   if (status == GRUB_EFI_SUCCESS)
+     {
+       grub_dprintf ("secureboot", "Kernel signature verification passed\n");
+@@ -73,6 +73,7 @@ grub_efi_linux_boot (void *kernel_addr, grub_off_t handover_offset,
+   int offset = 0;
+ 
+ #ifdef __x86_64__
++  /* Offset to startup64 */
+   offset = 512;
+ #endif
+ 

@@ -1,4 +1,4 @@
-From e8526c4908060e1f101a20bb85691c4646ded46b Mon Sep 17 00:00:00 2001
+From 76a317bbf29705a8de65cc4961d2ac9e1b497dfc Mon Sep 17 00:00:00 2001
 From: Arindam Nath <arindam.nath@amd.com>
 Date: Thu, 12 Jul 2018 19:02:49 +0530
 Subject: i386/linux: Add support for ext_lfb_base
@@ -21,18 +21,22 @@ scenario.
 
 Signed-off-by: Arindam Nath <arindam.nath@amd.com>
 Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+
+Origin: upstream, https://git.savannah.gnu.org/cgit/grub.git/commit/?id=886edba8770ccbc3def0af2a7d6b346d00d0af2f
+Bug-Ubuntu: https://bugs.launchpad.net/bugs/1785033
+Last-Update: 2018-10-29
+
 Patch-Name: add_ext_lfb_base_support.patch
-Last-Update: 2018-09-05
 ---
  grub-core/loader/i386/linux.c | 6 ++++++
  include/grub/i386/linux.h     | 6 +++++-
  2 files changed, 11 insertions(+), 1 deletion(-)
 
 diff --git a/grub-core/loader/i386/linux.c b/grub-core/loader/i386/linux.c
-index a5bfea60f..722615102 100644
+index 083f9417c..e66164bac 100644
 --- a/grub-core/loader/i386/linux.c
 +++ b/grub-core/loader/i386/linux.c
-@@ -309,6 +309,12 @@ grub_linux_setup_video (struct linux_kernel_params *params)
+@@ -306,6 +306,12 @@ grub_linux_setup_video (struct linux_kernel_params *params)
    params->lfb_line_len = mode_info.pitch;
  
    params->lfb_base = (grub_size_t) framebuffer;
@@ -46,7 +50,7 @@ index a5bfea60f..722615102 100644
  
    params->red_mask_size = mode_info.red_mask_size;
 diff --git a/include/grub/i386/linux.h b/include/grub/i386/linux.h
-index 110ecf806..3c96aad3b 100644
+index da0ca3b83..df3a2e086 100644
 --- a/include/grub/i386/linux.h
 +++ b/include/grub/i386/linux.h
 @@ -43,6 +43,9 @@
@@ -59,7 +63,7 @@ index 110ecf806..3c96aad3b 100644
  #ifdef __x86_64__
  
  #define GRUB_LINUX_EFI_SIGNATURE	\
-@@ -194,8 +197,9 @@ struct linux_kernel_params
+@@ -188,8 +191,9 @@ struct linux_kernel_params
    grub_uint16_t lfb_pages;		/* 32 */
    grub_uint16_t vesa_attrib;		/* 34 */
    grub_uint32_t capabilities;		/* 36 */

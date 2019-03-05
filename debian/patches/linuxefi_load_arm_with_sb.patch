@@ -1,6 +1,6 @@
-From 18fdbe1f3c6b13def5561b2cee61359a9681a41b Mon Sep 17 00:00:00 2001
+From ddb7544af7691b18315b14d657b9b632e55b057d Mon Sep 17 00:00:00 2001
 From: Peter Jones <pjones@redhat.com>
-Date: Fri, 3 Nov 2017 12:06:24 -0400
+Date: Wed, 27 Feb 2019 12:38:13 -0500
 Subject: Load arm with SB enabled.
 
 Make sure we actually try to validate secure boot on this platform (even
@@ -12,34 +12,33 @@ is enabled.
 
 Origin: vendor, https://github.com/rhboot/grub2/commit/2786ab864cf00c15123320671f653e9a36ba12b4
 Forwarded: no
-Last-Update: 2017-11-01
+Last-Update: 2019-02-27
 Patch-Name: linuxefi_load_arm_with_sb.patch
 ---
  grub-core/Makefile.core.def       |   3 +
- grub-core/loader/arm/linux.c      |   1 +
- grub-core/loader/arm64/linux.c    | 119 ++++++++++++++++--------------
- grub-core/loader/efi/linux.c      |  65 ++++++++++++++++
- grub-core/loader/i386/efi/linux.c |  39 +---------
- include/grub/arm64/linux.h        |   7 ++
- include/grub/efi/linux.h          |  31 ++++++++
- 7 files changed, 174 insertions(+), 91 deletions(-)
+ grub-core/loader/arm64/linux.c    | 112 ++++++++++++++++--------------
+ grub-core/loader/efi/linux.c      |  65 +++++++++++++++++
+ grub-core/loader/i386/efi/linux.c |  39 +----------
+ include/grub/arm64/linux.h        |   2 +
+ include/grub/efi/linux.h          |  31 +++++++++
+ 6 files changed, 164 insertions(+), 88 deletions(-)
  create mode 100644 grub-core/loader/efi/linux.c
  create mode 100644 include/grub/efi/linux.h
 
 diff --git a/grub-core/Makefile.core.def b/grub-core/Makefile.core.def
-index cedf27eb8..1b642472e 100644
+index 0f6c5f874..d35395a09 100644
 --- a/grub-core/Makefile.core.def
 +++ b/grub-core/Makefile.core.def
-@@ -1670,6 +1670,8 @@ module = {
-   ia64_efi = loader/ia64/efi/linux.c;
-   arm = loader/arm/linux.c;
+@@ -1707,6 +1707,8 @@ module = {
+   arm_efi = loader/arm64/linux.c;
+   arm_uboot = loader/arm/linux.c;
    arm64 = loader/arm64/linux.c;
 +  arm64 = loader/efi/linux.c;
 +  fdt = lib/fdt.c;
    common = loader/linux.c;
    common = lib/cmdline.c;
    enable = noemu;
-@@ -1737,6 +1739,7 @@ module = {
+@@ -1774,6 +1776,7 @@ module = {
    name = linuxefi;
    efi = loader/i386/efi/linux.c;
    efi = lib/cmdline.c;
@@ -47,31 +46,19 @@ index cedf27eb8..1b642472e 100644
    enable = i386_efi;
    enable = x86_64_efi;
  };
-diff --git a/grub-core/loader/arm/linux.c b/grub-core/loader/arm/linux.c
-index 5b39f02bb..d7ebae0ff 100644
---- a/grub-core/loader/arm/linux.c
-+++ b/grub-core/loader/arm/linux.c
-@@ -26,6 +26,7 @@
- #include <grub/command.h>
- #include <grub/cache.h>
- #include <grub/cpu/linux.h>
-+#include <grub/efi/linux.h>
- #include <grub/lib/cmdline.h>
- #include <grub/linux.h>
- 
 diff --git a/grub-core/loader/arm64/linux.c b/grub-core/loader/arm64/linux.c
-index 57890fdda..bc7ebb699 100644
+index 1f86229f8..2e1ff74aa 100644
 --- a/grub-core/loader/arm64/linux.c
 +++ b/grub-core/loader/arm64/linux.c
-@@ -28,6 +28,7 @@
- #include <grub/cpu/linux.h>
+@@ -29,6 +29,7 @@
  #include <grub/efi/efi.h>
  #include <grub/efi/fdtload.h>
+ #include <grub/efi/memory.h>
 +#include <grub/efi/linux.h>
  #include <grub/efi/pe32.h>
  #include <grub/i18n.h>
  #include <grub/lib/cmdline.h>
-@@ -39,6 +40,7 @@ static int loaded;
+@@ -40,6 +41,7 @@ static int loaded;
  
  static void *kernel_addr;
  static grub_uint64_t kernel_size;
@@ -79,7 +66,7 @@ index 57890fdda..bc7ebb699 100644
  
  static char *linux_args;
  static grub_uint32_t cmdline_size;
-@@ -67,7 +69,8 @@ grub_arm64_uefi_check_image (struct grub_arm64_linux_kernel_header * lh)
+@@ -66,7 +68,8 @@ grub_armxx_efi_linux_check_image (struct linux_armxx_kernel_header * lh)
  static grub_err_t
  finalize_params_linux (void)
  {
@@ -89,7 +76,7 @@ index 57890fdda..bc7ebb699 100644
  
    void *fdt;
  
-@@ -102,6 +105,26 @@ finalize_params_linux (void)
+@@ -101,6 +104,26 @@ finalize_params_linux (void)
    if (grub_fdt_install() != GRUB_ERR_NONE)
      goto failure;
  
@@ -116,12 +103,12 @@ index 57890fdda..bc7ebb699 100644
    return GRUB_ERR_NONE;
  
  failure:
-@@ -109,73 +132,49 @@ failure:
+@@ -108,70 +131,45 @@ failure:
    return grub_error(GRUB_ERR_BAD_OS, "failed to install/update FDT");
  }
  
 -grub_err_t
--grub_arm64_uefi_boot_image (grub_addr_t addr, grub_size_t size, char *args)
+-grub_armxx_efi_linux_boot_image (grub_addr_t addr, grub_size_t size, char *args)
 +static void
 +free_params (void)
  {
@@ -168,9 +155,7 @@ index 57890fdda..bc7ebb699 100644
  
 -  grub_dprintf ("linux", "linux command line: '%s'\n", args);
 +grub_err_t
-+grub_arm64_uefi_boot_image (grub_addr_t addr __attribute__ ((unused)),
-+			    grub_size_t size __attribute__ ((unused)),
-+			    char *args)
++grub_armxx_efi_linux_boot_image (grub_addr_t addr, grub_size_t size, char *args)
 +{
 +  grub_err_t retval;
  
@@ -179,8 +164,7 @@ index 57890fdda..bc7ebb699 100644
 -  loaded_image->load_options_size = len =
 -    (grub_strlen (args) + 1) * sizeof (grub_efi_char16_t);
 -  loaded_image->load_options =
--    grub_efi_allocate_pages (0,
--			     GRUB_EFI_BYTES_TO_PAGES (loaded_image->load_options_size));
+-    grub_efi_allocate_any_pages (GRUB_EFI_BYTES_TO_PAGES (loaded_image->load_options_size));
 -  if (!loaded_image->load_options)
 +  retval = finalize_params_linux ();
 +  if (retval != GRUB_ERR_NONE)
@@ -196,9 +180,9 @@ index 57890fdda..bc7ebb699 100644
  
 -  /* When successful, not reached */
 -  b->unload_image (image_handle);
--  grub_efi_free_pages ((grub_efi_physical_address_t) loaded_image->load_options,
+-  grub_efi_free_pages ((grub_addr_t) loaded_image->load_options,
 -		       GRUB_EFI_BYTES_TO_PAGES (loaded_image->load_options_size));
-+  retval = grub_efi_linux_boot ((char *)kernel_addr, handover_offset,
++  retval = grub_efi_linux_boot ((grub_addr_t *)kernel_addr, handover_offset,
 +				kernel_addr);
  
 -  return grub_errno;
@@ -213,22 +197,18 @@ index 57890fdda..bc7ebb699 100644
 -  if (finalize_params_linux () != GRUB_ERR_NONE)
 -    return grub_errno;
 -
--  return (grub_arm64_uefi_boot_image((grub_addr_t)kernel_addr,
--                                     kernel_size, linux_args));
-+  return grub_arm64_uefi_boot_image ((grub_addr_t)kernel_addr,
-+				     kernel_size, linux_args);
+   return (grub_armxx_efi_linux_boot_image((grub_addr_t)kernel_addr,
+                                           kernel_size, linux_args));
  }
- 
- static grub_err_t
-@@ -253,6 +252,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+@@ -287,6 +285,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
  {
    grub_file_t file = 0;
-   struct grub_arm64_linux_kernel_header lh;
+   struct linux_armxx_kernel_header lh;
 +  struct grub_arm64_linux_pe_header *pe;
  
    grub_dl_ref (my_mod);
  
-@@ -297,6 +297,15 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+@@ -331,6 +330,15 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
  
    grub_dprintf ("linux", "kernel @ %p\n", kernel_addr);
  
@@ -383,29 +363,18 @@ index 6afa13d41..ddd50dbf1 100644
  
  static grub_err_t
 diff --git a/include/grub/arm64/linux.h b/include/grub/arm64/linux.h
-index 1ea23696e..a2ba24e9f 100644
+index 8655067e0..7eca7945f 100644
 --- a/include/grub/arm64/linux.h
 +++ b/include/grub/arm64/linux.h
-@@ -20,6 +20,7 @@
- #define GRUB_LINUX_CPU_HEADER 1
+@@ -20,6 +20,8 @@
+ #define GRUB_ARM64_LINUX_HEADER 1
  
- #include <grub/efi/efi.h>
-+#include <grub/efi/pe32.h>
+ #define GRUB_LINUX_ARM64_MAGIC_SIGNATURE 0x644d5241 /* 'ARM\x64' */
++#define GRUB_ARM64_LINUX_MAGIC 0x644d5241 /* 'ARM\x64' */
++#define GRUB_EFI_PE_MAGIC	0x5A4D
  
- #define GRUB_ARM64_LINUX_MAGIC 0x644d5241 /* 'ARM\x64' */
- 
-@@ -44,5 +45,11 @@ grub_err_t grub_arm64_uefi_check_image (struct grub_arm64_linux_kernel_header
-                                         *lh);
- grub_err_t grub_arm64_uefi_boot_image (grub_addr_t addr, grub_size_t size,
-                                        char *args);
-+struct grub_arm64_linux_pe_header
-+{
-+  grub_uint32_t magic;
-+  struct grub_pe32_coff_header coff;
-+  struct grub_pe64_optional_header opt;
-+};
- 
- #endif /* ! GRUB_LINUX_CPU_HEADER */
+ /* From linux/Documentation/arm64/booting.txt */
+ struct linux_arm64_kernel_header
 diff --git a/include/grub/efi/linux.h b/include/grub/efi/linux.h
 new file mode 100644
 index 000000000..d9ede3677

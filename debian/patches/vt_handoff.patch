@@ -1,4 +1,4 @@
-From 74f91d659a5a4ced3ef86d1117ec9680532b783c Mon Sep 17 00:00:00 2001
+From 906bba44ed311a23c826ddb5339a08504fedd467 Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Mon, 13 Jan 2014 12:13:30 +0000
 Subject: Add configure option to use vt.handoff=1

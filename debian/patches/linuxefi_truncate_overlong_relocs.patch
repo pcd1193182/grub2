@@ -1,4 +1,4 @@
-From aa62f5717069c327a801c5250c9125f2a1b7ecba Mon Sep 17 00:00:00 2001
+From 0b6829b4fafe2e10fde2c4b4e9e32fdacac79b6b Mon Sep 17 00:00:00 2001
 From: Laszlo Ersek <lersek@redhat.com>
 Date: Wed, 23 Nov 2016 06:27:09 +0100
 Subject: efi/chainloader: truncate overlong relocation section
@@ -59,13 +59,13 @@ following branches:
 Bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=1347291
 Signed-off-by: Laszlo Ersek <lersek@redhat.com>
 Patch-Name: linuxefi_truncate_overlong_relocs.patch
-Last-Update: 2018-09-25
+Last-Update: 2019-02-27
 ---
  grub-core/loader/efi/chainloader.c | 26 +++++++++++++++++++++-----
  1 file changed, 21 insertions(+), 5 deletions(-)
 
 diff --git a/grub-core/loader/efi/chainloader.c b/grub-core/loader/efi/chainloader.c
-index 2353271cf..216cd7a24 100644
+index ed8c36478..db1ffeefc 100644
 --- a/grub-core/loader/efi/chainloader.c
 +++ b/grub-core/loader/efi/chainloader.c
 @@ -596,7 +596,7 @@ handle_image (void *data, grub_efi_uint32_t datasize)

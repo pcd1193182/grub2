@@ -1,4 +1,4 @@
-From c119d43c5daad5a3750b23a5f6ecd36381581a65 Mon Sep 17 00:00:00 2001
+From ce207b30012e3f28e0e9dfb9bf4a7345d62314ef Mon Sep 17 00:00:00 2001
 From: Raymund Will <rw@suse.com>
 Date: Fri, 10 Apr 2015 01:45:02 -0400
 Subject: Use device part of chainloader target, if present.
@@ -13,7 +13,7 @@ Signed-off-by: Peter Jones <pjones@redhat.com>
 
 Origin: vendor, https://github.com/rhboot/grub2/commit/f8e5b67d99449b8cb9cc45237adb839406f2db97
 Forwarded: no
-Last-Update: 2017-11-01
+Last-Update: 2019-02-27
 
 Patch-Name: linuxefi_use_dev_chainloader_target.patch
 ---

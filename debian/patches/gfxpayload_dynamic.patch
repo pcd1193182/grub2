@@ -1,4 +1,4 @@
-From 9846e9baff85cef0753fa78121f629b21d8104c5 Mon Sep 17 00:00:00 2001
+From ce53392aa25a2bb9b557e9c0fadc8aa8b7d13aa5 Mon Sep 17 00:00:00 2001
 From: Evan Broder <evan@ebroder.net>
 Date: Mon, 13 Jan 2014 12:13:29 +0000
 Subject: Add configure option to enable gfxpayload=keep dynamically
@@ -43,10 +43,10 @@ index e508f9c43..7f1431352 100644
  
  AC_SUBST([FONT_SOURCE])
 diff --git a/grub-core/Makefile.core.def b/grub-core/Makefile.core.def
-index 50c555e43..e3662bb03 100644
+index 2dfa22a92..4fd874ee4 100644
 --- a/grub-core/Makefile.core.def
 +++ b/grub-core/Makefile.core.def
-@@ -890,6 +890,15 @@ module = {
+@@ -889,6 +889,15 @@ module = {
    common = lib/hexdump.c;
  };
  

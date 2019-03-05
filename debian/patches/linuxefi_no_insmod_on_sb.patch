@@ -1,7 +1,7 @@
-From ad81dbe645c4cb957ea596f506459f570699bc2d Mon Sep 17 00:00:00 2001
-From: Matthew Garrett <mjg@redhat.com>
-Date: Mon, 13 Jan 2014 12:13:09 +0000
-Subject: Don't permit loading modules on UEFI secure boot
+From 71bece988f4ca61a82ce38b04b8a70a018fb96d1 Mon Sep 17 00:00:00 2001
+From: Colin Watson <cjwatson@ubuntu.com>
+Date: Tue, 23 Oct 2012 10:40:49 -0400
+Subject: Don't allow insmod when secure boot is enabled.
 
 Hi,
 
@@ -20,7 +20,7 @@ moves the check into grub_dl_load_file.
 Author: Colin Watson <cjwatson@ubuntu.com>
 Origin: vendor, https://github.com/rhboot/grub2/commit/7cd4b7642d1ce2c0ac48f62e0fa4954a432f65a5
 Forwarded: no
-Last-Update: 2013-12-25
+Last-Update: 2019-02-27
 
 Patch-Name: linuxefi_no_insmod_on_sb.patch
 ---
@@ -108,10 +108,10 @@ index d467785fc..bce251df9 100644
  
  /* Search the mods section from the PE32/PE32+ image. This code uses
 diff --git a/include/grub/efi/efi.h b/include/grub/efi/efi.h
-index 764cd11f5..62a3d9726 100644
+index a7c714e5b..1fe46957a 100644
 --- a/include/grub/efi/efi.h
 +++ b/include/grub/efi/efi.h
-@@ -76,6 +76,7 @@ EXPORT_FUNC (grub_efi_set_variable) (const char *var,
+@@ -84,6 +84,7 @@ EXPORT_FUNC (grub_efi_set_variable) (const char *var,
  				     const grub_efi_guid_t *guid,
  				     void *data,
  				     grub_size_t datasize);
