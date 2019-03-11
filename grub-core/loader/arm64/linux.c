@@ -49,6 +49,13 @@ static grub_uint32_t cmdline_size;
 static grub_addr_t initrd_start;
 static grub_addr_t initrd_end;
 
+struct grub_arm64_linux_pe_header
+{
+  grub_uint32_t magic;
+  struct grub_pe32_coff_header coff;
+  struct grub_pe64_optional_header opt;
+};
+
 grub_err_t
 grub_armxx_efi_linux_check_image (struct linux_armxx_kernel_header * lh)
 {
@@ -115,8 +122,7 @@ finalize_params_linux (void)
   loaded_image->load_options_size = len =
     (grub_strlen (linux_args) + 1) * sizeof (grub_efi_char16_t);
   loaded_image->load_options =
-    grub_efi_allocate_pages (0,
-			     GRUB_EFI_BYTES_TO_PAGES (loaded_image->load_options_size));
+    grub_efi_allocate_any_pages (GRUB_EFI_BYTES_TO_PAGES (loaded_image->load_options_size));
   if (!loaded_image->load_options)
     return grub_error(GRUB_ERR_BAD_OS, "failed to create kernel parameters");
 
@@ -140,8 +146,7 @@ free_params (void)
   if (loaded_image)
     {
       if (loaded_image->load_options)
-	grub_efi_free_pages ((grub_efi_physical_address_t)
-			      loaded_image->load_options,
+	grub_efi_free_pages ((grub_addr_t) loaded_image->load_options,
 			     GRUB_EFI_BYTES_TO_PAGES (loaded_image->load_options_size));
       loaded_image->load_options = NULL;
       loaded_image->load_options_size = 0;
@@ -149,7 +154,9 @@ free_params (void)
 }
 
 grub_err_t
-grub_armxx_efi_linux_boot_image (grub_addr_t addr, grub_size_t size, char *args)
+grub_armxx_efi_linux_boot_image (grub_addr_t addr __attribute__ ((unused)),
+                                 grub_size_t size __attribute__ ((unused)),
+                                 char *args)
 {
   grub_err_t retval;
 

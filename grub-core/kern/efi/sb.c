@@ -19,7 +19,9 @@
 #include <grub/err.h>
 #include <grub/mm.h>
 #include <grub/types.h>
+#ifdef GRUB_MACHINE_EFI
 #include <grub/cpu/linux.h>
+#endif
 #include <grub/efi/efi.h>
 #include <grub/efi/pe32.h>
 #include <grub/efi/linux.h>
