@@ -26,6 +26,7 @@
 #include <grub/command.h>
 #include <grub/cache.h>
 #include <grub/cpu/linux.h>
+#include <grub/efi/linux.h>
 #include <grub/lib/cmdline.h>
 #include <grub/linux.h>
 
