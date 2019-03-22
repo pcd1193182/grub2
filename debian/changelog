@@ -1,3 +1,15 @@
+grub2 (2.02~beta2-9ubuntu1.17) trusty; urgency=medium
+
+  * debian/grub-check-signatures: check kernel signatures against keys known
+    in firmware, in case a kernel is signed but not using a key that will pass
+    validation, such as when using kernels coming from a PPA. (LP: #1789918)
+  * debian/patches/linuxefi_disable_sb_fallback.patch: Disallow unsigned
+    kernels if UEFI Secure Boot is enabled.  If UEFI Secure Boot is enabled
+    and kernel signature verification fails, do not boot the kernel. Patch
+    from Linn Crosetto. (LP: #1401532)
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Fri, 22 Mar 2019 11:36:54 -0400
+
 grub2 (2.02~beta2-9ubuntu1.16) trusty; urgency=medium
 
   [ Ivan Hu ]
