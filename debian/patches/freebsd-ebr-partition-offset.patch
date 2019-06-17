@@ -1,4 +1,4 @@
-From fc1d30d5233e8a3561308a52ed64b95d3203c8c9 Mon Sep 17 00:00:00 2001
+From 82924da1b75decd2c99201f4f0e06b36d983ec09 Mon Sep 17 00:00:00 2001
 From: James Clarke <jrtc27@jrtc27.com>
 Date: Tue, 26 Feb 2019 18:34:22 +0000
 Subject: osdep/freebsd: Fix partition calculation for EBR entries

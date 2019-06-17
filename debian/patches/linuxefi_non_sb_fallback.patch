@@ -1,4 +1,4 @@
-From af81e37b875d0bc061745204dee2431f8e13b842 Mon Sep 17 00:00:00 2001
+From 2c48512a45c6af6681bfc006e88b3e5aed4c488e Mon Sep 17 00:00:00 2001
 From: Steve Langasek <steve.langasek@canonical.com>
 Date: Wed, 1 Nov 2017 13:48:26 -0400
 Subject: If running under UEFI secure boot, attempt to use linuxefi loader

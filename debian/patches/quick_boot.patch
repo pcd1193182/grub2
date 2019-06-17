@@ -1,4 +1,4 @@
-From b6b5251d0ee91e24c2a6e461ce1cef3da90a2243 Mon Sep 17 00:00:00 2001
+From ed43a6743da007e53fb12e2c2362d0ec4a1f2c4a Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Mon, 13 Jan 2014 12:13:28 +0000
 Subject: Add configure option to bypass boot menu if possible
@@ -19,7 +19,7 @@ of the normal runlevels), then show the boot menu regardless.
 Author: Richard Laager <rlaager@wiktel.com>
 Author: Robie Basak <robie.basak@ubuntu.com>
 Forwarded: no
-Last-Update: 2015-09-04
+Last-Update: 2019-06-05
 
 Patch-Name: quick_boot.patch
 ---
@@ -29,8 +29,9 @@ Patch-Name: quick_boot.patch
  util/grub-mkconfig.in       |  3 +-
  util/grub.d/00_header.in    | 77 +++++++++++++++++++++++++++++++------
  util/grub.d/10_linux.in     |  4 ++
+ util/grub.d/10_linux_zfs.in |  5 +++
  util/grub.d/30_os-prober.in | 21 ++++++++++
- 7 files changed, 141 insertions(+), 13 deletions(-)
+ 8 files changed, 146 insertions(+), 13 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
 index dd2fbd01c..e508f9c43 100644
@@ -258,7 +259,7 @@ index 93a90233e..674a76140 100644
  EOF
  }
 diff --git a/util/grub.d/10_linux.in b/util/grub.d/10_linux.in
-index 67d57ecfd..0f8a16837 100644
+index e7062aed1..d7d03b439 100644
 --- a/util/grub.d/10_linux.in
 +++ b/util/grub.d/10_linux.in
 @@ -22,6 +22,7 @@ exec_prefix="@exec_prefix@"
@@ -269,7 +270,7 @@ index 67d57ecfd..0f8a16837 100644
  
  . "$pkgdatadir/grub-mkconfig_lib"
  
-@@ -119,6 +120,9 @@ linux_entry ()
+@@ -123,6 +124,9 @@ linux_entry ()
    else
        echo "menuentry '$(echo "$os" | grub_quote)' ${CLASS} \$menuentry_id_option 'gnulinux-simple-$boot_device_id' {" | sed "s/^/$submenu_indentation/"
    fi      
@@ -279,6 +280,29 @@ index 67d57ecfd..0f8a16837 100644
    if [ x$type != xrecovery ] ; then
        save_default_entry | grub_add_tab
    fi
+diff --git a/util/grub.d/10_linux_zfs.in b/util/grub.d/10_linux_zfs.in
+index fb2254e2e..2a3d66af2 100755
+--- a/util/grub.d/10_linux_zfs.in
++++ b/util/grub.d/10_linux_zfs.in
+@@ -21,6 +21,7 @@ prefix="@prefix@"
+ datarootdir="@datarootdir@"
+ ubuntu_recovery="@UBUNTU_RECOVERY@"
+ quiet_boot="@QUIET_BOOT@"
++quick_boot="@QUICK_BOOT@"
+ 
+ . "${pkgdatadir}/grub-mkconfig_lib"
+ 
+@@ -722,6 +723,10 @@ zfs_linux_entry () {
+ 
+     echo "menuentry '$(echo "${title}" | grub_quote)' ${CLASS} \${menuentry_id_option} 'gnulinux-${dataset}-${kernel_version}' {" | sed "s/^/${submenu_indentation}/"
+ 
++    if [ "${quick_boot}" = 1 ]; then
++        echo "	recordfail" | sed "s/^/${submenu_indentation}/"
++    fi
++
+     # Use ELILO's generic "efifb" when it's known to be available.
+     # FIXME: We need an interface to select vesafb in case efifb can't be used.
+     if [ "${GRUB_GFXPAYLOAD_LINUX}" = "" ]; then
 diff --git a/util/grub.d/30_os-prober.in b/util/grub.d/30_os-prober.in
 index 271044f59..da5f28876 100644
 --- a/util/grub.d/30_os-prober.in

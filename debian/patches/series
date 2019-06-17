@@ -5,6 +5,7 @@ dpkg_version_comparison.patch
 grub_legacy_0_based_partitions.patch
 disable_floppies.patch
 grub.cfg_400.patch
+zfs_enhance_support.patch
 gfxpayload_keep_default.patch
 install_stage2_confusion.patch
 mkrescue_efi_modules.patch

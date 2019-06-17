@@ -1,4 +1,4 @@
-From 957cc6a26f1a98f25749c45693405b5fdb6c63ad Mon Sep 17 00:00:00 2001
+From beae4600d132da65033d725ed20fb8742e5ac27d Mon Sep 17 00:00:00 2001
 From: Juergen Gross <jgross@suse.com>
 Date: Fri, 7 Dec 2018 13:11:42 +0100
 Subject: xen: Init memory regions for PVH

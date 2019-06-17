@@ -1,4 +1,4 @@
-From 97dad10bfe149998d4644d8afff63d7fb135f9d3 Mon Sep 17 00:00:00 2001
+From 3b724df54bc85f96dd78e3a3e59e0779b17b4b2b Mon Sep 17 00:00:00 2001
 From: Peter Jones <pjones@redhat.com>
 Date: Wed, 27 Feb 2019 12:42:08 -0500
 Subject: Make any of the loaders that link in efi mode honor secure boot.

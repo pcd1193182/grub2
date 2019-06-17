@@ -1,4 +1,4 @@
-From 9ae63794e916817185561ee6e912b76956f2fe07 Mon Sep 17 00:00:00 2001
+From befd4101adc33b4f2ea986aacef65a684f0bc523 Mon Sep 17 00:00:00 2001
 From: Juergen Gross <jgross@suse.com>
 Date: Fri, 7 Dec 2018 13:11:47 +0100
 Subject: xen_pvh: Support grub-install for xen_pvh

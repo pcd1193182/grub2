@@ -1,4 +1,4 @@
-From 3147314647427eaa69c5a02c0d998bccca227378 Mon Sep 17 00:00:00 2001
+From 5510234a70a2fb6197de414c347f8a5e6b9f9e0a Mon Sep 17 00:00:00 2001
 From: Juergen Gross <jgross@suse.com>
 Date: Fri, 7 Dec 2018 13:11:45 +0100
 Subject: xen: Use elfnote defines instead of plain numbers

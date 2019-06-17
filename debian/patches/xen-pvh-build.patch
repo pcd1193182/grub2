@@ -1,4 +1,4 @@
-From 85d8751395aaf82a4d5d58819e0ab62eacdfdbbd Mon Sep 17 00:00:00 2001
+From c776d0fb6abc5e6318c1c771a610260e76bf6c10 Mon Sep 17 00:00:00 2001
 From: Juergen Gross <jgross@suse.com>
 Date: Fri, 7 Dec 2018 13:11:43 +0100
 Subject: xen_pvh: Add build runes for grub-core

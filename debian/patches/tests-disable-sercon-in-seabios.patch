@@ -1,4 +1,4 @@
-From b5ab039df0ec843ae19e00858aefc7a265e90bef Mon Sep 17 00:00:00 2001
+From b3629716ee8843dbbcfad9933c9f87e27a9ec9e0 Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Mon, 30 Jul 2018 12:27:39 +0100
 Subject: tests: Disable sercon in SeaBIOS

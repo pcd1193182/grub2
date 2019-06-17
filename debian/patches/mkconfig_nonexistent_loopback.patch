@@ -1,4 +1,4 @@
-From 8ccf587b5eea23ac29e302dc28d741d25f9ce29c Mon Sep 17 00:00:00 2001
+From 49de175645ddec11dab973cd8e65a1a3dd7808ba Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Mon, 13 Jan 2014 12:13:08 +0000
 Subject: Avoid getting confused by inaccessible loop device backing paths

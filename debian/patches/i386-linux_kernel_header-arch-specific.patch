@@ -1,4 +1,4 @@
-From c4f5886067d07329ff536bcaeebe6becb24fcef6 Mon Sep 17 00:00:00 2001
+From 34a5f14598fe2aa87b7404d30f9ebce7b3994c59 Mon Sep 17 00:00:00 2001
 From: Leif Lindholm <leif.lindholm@linaro.org>
 Date: Thu, 1 Feb 2018 18:18:52 +0000
 Subject: i386: make struct linux_kernel_header architecture specific

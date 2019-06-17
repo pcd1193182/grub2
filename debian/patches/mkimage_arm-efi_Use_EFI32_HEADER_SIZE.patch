@@ -1,4 +1,4 @@
-From 05a3790ef16785752013c798db67eee297b26375 Mon Sep 17 00:00:00 2001
+From 57148fb3ec69779ff23435a44bbb9d4457b9c687 Mon Sep 17 00:00:00 2001
 From: Alexander Graf <agraf@suse.de>
 Date: Mon, 28 Jan 2019 14:35:27 +0100
 Subject: mkimage: Use EFI32_HEADER_SIZE define in arm-efi case

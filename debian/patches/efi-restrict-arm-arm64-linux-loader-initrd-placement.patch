@@ -1,4 +1,4 @@
-From 52aa349733eab17f59783f29b797f1322748c8b8 Mon Sep 17 00:00:00 2001
+From 045b48dd7119f08eee3ccedbd1bba88095a1840a Mon Sep 17 00:00:00 2001
 From: Leif Lindholm <leif.lindholm@linaro.org>
 Date: Mon, 9 Jul 2018 18:33:05 +0100
 Subject: efi: Restrict arm/arm64 linux loader initrd placement

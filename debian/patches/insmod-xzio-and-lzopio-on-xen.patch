@@ -1,4 +1,4 @@
-From 32f3a71f0b872e8ed1e58cffe278492d5140fdcb Mon Sep 17 00:00:00 2001
+From cf7229cec459c2cb16b1a3fc6e8bec1ea4c7ea3c Mon Sep 17 00:00:00 2001
 From: Ian Campbell <ijc@debian.org>
 Date: Sun, 30 Nov 2014 12:12:52 +0000
 Subject: Arrange to insmod xzio and lzopio when booting a kernel as a Xen
@@ -12,18 +12,19 @@ Signed-off-by: Ian Campbell <ijc@debian.org>
 
 Bug-Debian: https://bugs.debian.org/755256
 Forwarded: http://lists.gnu.org/archive/html/grub-devel/2014-11/msg00091.html
-Last-Update: 2014-11-30
+Last-Update: 2019-06-05
 
 Patch-Name: insmod-xzio-and-lzopio-on-xen.patch
 ---
- util/grub.d/10_linux.in | 1 +
- 1 file changed, 1 insertion(+)
+ util/grub.d/10_linux.in     | 1 +
+ util/grub.d/10_linux_zfs.in | 1 +
+ 2 files changed, 2 insertions(+)
 
 diff --git a/util/grub.d/10_linux.in b/util/grub.d/10_linux.in
-index 4f6e92e39..ac445a370 100644
+index 114a65281..160ba0eee 100644
 --- a/util/grub.d/10_linux.in
 +++ b/util/grub.d/10_linux.in
-@@ -152,6 +152,7 @@ linux_entry ()
+@@ -156,6 +156,7 @@ linux_entry ()
    fi
  
    echo "	insmod gzio" | sed "s/^/$submenu_indentation/"
@@ -31,3 +32,15 @@ index 4f6e92e39..ac445a370 100644
  
    if [ x$dirname = x/ ]; then
      if [ -z "${prepare_root_cache}" ]; then
+diff --git a/util/grub.d/10_linux_zfs.in b/util/grub.d/10_linux_zfs.in
+index 6dd596ece..5229059f5 100755
+--- a/util/grub.d/10_linux_zfs.in
++++ b/util/grub.d/10_linux_zfs.in
+@@ -797,6 +797,7 @@ zfs_linux_entry () {
+     fi
+ 
+     echo "	insmod gzio" | sed "s/^/${submenu_indentation}/"
++    echo "	if [ \"\${grub_platform}\" = xen ]; then insmod xzio; insmod lzopio; fi" | sed "s/^/${submenu_indentation}/"
+ 
+     echo "$(prepare_grub_to_access_device_cached ${boot_device} | grub_add_tab | sed "s/^/${submenu_indentation}/")"
+ 

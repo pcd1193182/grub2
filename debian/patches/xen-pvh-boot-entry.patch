@@ -1,4 +1,4 @@
-From c30ad33cf4a77b816ade5bef000af2f8b4882fb0 Mon Sep 17 00:00:00 2001
+From 8b7fb42bb3d0d1a77a02f822b85803a47fe2baf1 Mon Sep 17 00:00:00 2001
 From: Juergen Gross <jgross@suse.com>
 Date: Fri, 7 Dec 2018 13:11:38 +0100
 Subject: xen: Add PVH boot entry code

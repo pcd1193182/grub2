@@ -1,4 +1,4 @@
-From 775c15cad3692ad98aa9e9de6f1035f17a6017ad Mon Sep 17 00:00:00 2001
+From 3e6f2805d681832725b76a0ed1dbf95bb0f70f68 Mon Sep 17 00:00:00 2001
 From: Mathieu Trudel-Lapierre <mathieu.trudel-lapierre@canonical.com>
 Date: Fri, 14 Dec 2018 13:46:14 -0500
 Subject: grub-mkconfig: leave a trace of what files were sourced to generate

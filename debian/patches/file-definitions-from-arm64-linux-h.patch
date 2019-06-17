@@ -1,4 +1,4 @@
-From fe23bfb12670b92eb2a855329127901e78a7e79c Mon Sep 17 00:00:00 2001
+From 889749caf6b201888cf0c080a9d7e821ee87c7a4 Mon Sep 17 00:00:00 2001
 From: Leif Lindholm <leif.lindholm@linaro.org>
 Date: Mon, 25 Jun 2018 18:01:29 +0100
 Subject: commands/file: Use definitions from arm64/linux.h

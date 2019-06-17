@@ -1,4 +1,4 @@
-From 0c8331cf4c8718d7853571ede521166e85481b97 Mon Sep 17 00:00:00 2001
+From b5453a6bd1d758993157f33fd1ef740dc9fecc39 Mon Sep 17 00:00:00 2001
 From: Heinrich Schuchardt <xypron.glpk@gmx.de>
 Date: Mon, 17 Dec 2018 22:00:24 +0100
 Subject: grub-core/loader/efi/fdt.c: do not copy random memory

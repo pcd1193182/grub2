@@ -1,4 +1,4 @@
-From 6ac9b295d31dcc9307ccd7a1f9657f098edd208f Mon Sep 17 00:00:00 2001
+From d08c21c8294a57f084b62824123d359720280a03 Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@debian.org>
 Date: Mon, 13 Jan 2014 12:12:57 +0000
 Subject: Disable gfxpayload=keep by default
@@ -15,18 +15,19 @@ gfxpayload=keep is a good idea but rather ahead of its time ...
 
 Bug-Debian: http://bugs.debian.org/567245
 Forwarded: no
-Last-Update: 2013-12-25
+Last-Update: 2019-06-05
 
 Patch-Name: gfxpayload_keep_default.patch
 ---
- util/grub.d/10_linux.in | 4 ----
- 1 file changed, 4 deletions(-)
+ util/grub.d/10_linux.in     | 4 ----
+ util/grub.d/10_linux_zfs.in | 4 ----
+ 2 files changed, 8 deletions(-)
 
 diff --git a/util/grub.d/10_linux.in b/util/grub.d/10_linux.in
-index de9044c7f..c34d470c9 100644
+index d44f4befd..5fccade44 100644
 --- a/util/grub.d/10_linux.in
 +++ b/util/grub.d/10_linux.in
-@@ -104,10 +104,6 @@ linux_entry ()
+@@ -108,10 +108,6 @@ linux_entry ()
    # FIXME: We need an interface to select vesafb in case efifb can't be used.
    if [ "x$GRUB_GFXPAYLOAD_LINUX" = x ]; then
        echo "	load_video" | sed "s/^/$submenu_indentation/"
@@ -37,3 +38,18 @@ index de9044c7f..c34d470c9 100644
    else
        if [ "x$GRUB_GFXPAYLOAD_LINUX" != xtext ]; then
  	  echo "	load_video" | sed "s/^/$submenu_indentation/"
+diff --git a/util/grub.d/10_linux_zfs.in b/util/grub.d/10_linux_zfs.in
+index c86a7128f..fcfd24785 100755
+--- a/util/grub.d/10_linux_zfs.in
++++ b/util/grub.d/10_linux_zfs.in
+@@ -699,10 +699,6 @@ zfs_linux_entry () {
+     # FIXME: We need an interface to select vesafb in case efifb can't be used.
+     if [ "${GRUB_GFXPAYLOAD_LINUX}" = "" ]; then
+         echo "	load_video" | sed "s/^/${submenu_indentation}/"
+-        if grep -qx "CONFIG_FB_EFI=y" "${config}" 2> /dev/null \
+-            && grep -qx "CONFIG_VT_HW_CONSOLE_BINDING=y" "${config}" 2> /dev/null; then
+-            echo "	set gfxpayload=keep" | sed "s/^/$submenu_indentation/"
+-        fi
+     else
+         if [ "${GRUB_GFXPAYLOAD_LINUX}" != xtext ]; then
+         echo "	load_video" | sed "s/^/${submenu_indentation}/"

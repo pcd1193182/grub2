@@ -1,4 +1,4 @@
-From d660320577d20e0752b4ac1c51c3b0912654a380 Mon Sep 17 00:00:00 2001
+From da3553cc13edd8d36ea1e23a371968fb0a64a215 Mon Sep 17 00:00:00 2001
 From: Leif Lindholm <leif.lindholm@linaro.org>
 Date: Thu, 3 Aug 2017 11:04:23 +0100
 Subject: efi: refactor grub_efi_allocate_pages

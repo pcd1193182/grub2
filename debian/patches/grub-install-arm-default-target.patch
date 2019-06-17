@@ -1,4 +1,4 @@
-From 5331e9cbb376b06a65d0eaf5c20bf15f606f09ff Mon Sep 17 00:00:00 2001
+From e07816fed5b79bac888230b51b82ae4f31964b7c Mon Sep 17 00:00:00 2001
 From: Steve McIntyre <93sam@debian.org>
 Date: Mon, 11 Feb 2019 02:42:34 +0000
 Subject: grub-install: Check for arm-efi as a default target

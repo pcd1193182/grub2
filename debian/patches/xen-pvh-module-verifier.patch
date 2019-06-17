@@ -1,4 +1,4 @@
-From fc215b128819532888462284340662e6059594d0 Mon Sep 17 00:00:00 2001
+From 2b235e0040f264e080430cdf4146c386fed908e3 Mon Sep 17 00:00:00 2001
 From: Hans van Kranenburg <hans@knorrie.org>
 Date: Fri, 7 Dec 2018 13:11:44 +0100
 Subject: grub-module-verifier: Ignore all_video for xen_pvh

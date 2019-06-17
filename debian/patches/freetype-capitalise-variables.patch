@@ -1,4 +1,4 @@
-From 16a4cb02f7b9c004c7f58a69eda34b4ab93fa87a Mon Sep 17 00:00:00 2001
+From 2f29ad6b638044123961074a94f9b034317a33bc Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Tue, 30 Jan 2018 14:08:26 +0000
 Subject: build: Capitalise *freetype_* variables
@@ -44,7 +44,7 @@ index f0ab1adc3..b47b4b1ac 100644
  
  if COND_STARFIELD
 diff --git a/Makefile.util.def b/Makefile.util.def
-index 168acbe59..fa39d8bd1 100644
+index 5251dfd64..6f9cb1cb9 100644
 --- a/Makefile.util.def
 +++ b/Makefile.util.def
 @@ -302,14 +302,14 @@ program = {

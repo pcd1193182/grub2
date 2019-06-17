@@ -1,4 +1,4 @@
-From b1684619dcdf234719ec185c723afee69b8cf3c4 Mon Sep 17 00:00:00 2001
+From 582247059083a7570f79b8e56603b6dead3a97db Mon Sep 17 00:00:00 2001
 From: Juergen Gross <jgross@suse.com>
 Date: Fri, 7 Dec 2018 13:11:36 +0100
 Subject: xen: Add PVH specific defines to offset.h

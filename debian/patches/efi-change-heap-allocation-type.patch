@@ -1,4 +1,4 @@
-From caf53144a9243756c658d9a1d495e4b775724a34 Mon Sep 17 00:00:00 2001
+From e33d2905219a6b36a2744b524076f064600b625b Mon Sep 17 00:00:00 2001
 From: Leif Lindholm <leif.lindholm@linaro.org>
 Date: Thu, 3 Aug 2017 11:04:32 +0100
 Subject: efi: change heap allocation type to GRUB_EFI_LOADER_CODE

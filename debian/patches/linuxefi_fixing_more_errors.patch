@@ -1,4 +1,4 @@
-From e2b7763c67e8674332caeceeb11fe426873e2639 Mon Sep 17 00:00:00 2001
+From 992441206462c2874d51224b9214989a9260903f Mon Sep 17 00:00:00 2001
 From: Mathieu Trudel-Lapierre <mathieu.trudel-lapierre@canonical.com>
 Date: Thu, 21 Feb 2019 18:23:03 +0100
 Subject: Fix various format/cast errors in Secure Boot code

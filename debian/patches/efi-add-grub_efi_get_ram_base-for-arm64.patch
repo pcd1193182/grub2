@@ -1,4 +1,4 @@
-From c03fc0922ebaf3bfd636b6f034764afb87f9fb99 Mon Sep 17 00:00:00 2001
+From b97ca1240023f530ca686486e4b45e18bb48859c Mon Sep 17 00:00:00 2001
 From: Leif Lindholm <leif.lindholm@linaro.org>
 Date: Mon, 9 Jul 2018 18:33:01 +0100
 Subject: efi: Add grub_efi_get_ram_base() function for arm64

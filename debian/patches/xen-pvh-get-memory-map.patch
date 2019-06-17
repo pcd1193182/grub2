@@ -1,4 +1,4 @@
-From 83f1e00f74858460f76403e9bc20d01225de65e2 Mon Sep 17 00:00:00 2001
+From c656c1182347c209009d4da4263b13faddb4a15f Mon Sep 17 00:00:00 2001
 From: Juergen Gross <jgross@suse.com>
 Date: Fri, 7 Dec 2018 13:11:40 +0100
 Subject: xen: Get memory map from hypervisor for PVH

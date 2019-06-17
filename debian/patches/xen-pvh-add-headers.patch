@@ -1,4 +1,4 @@
-From eb23c3f0092516e7a5d9be06e64fe0b4d1c539fa Mon Sep 17 00:00:00 2001
+From f4ce58312afddbf2a8c0c25947fa2dd105716371 Mon Sep 17 00:00:00 2001
 From: Juergen Gross <jgross@suse.com>
 Date: Fri, 7 Dec 2018 13:11:29 +0100
 Subject: xen: Add some Xen headers

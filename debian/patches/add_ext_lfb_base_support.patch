@@ -1,4 +1,4 @@
-From 76a317bbf29705a8de65cc4961d2ac9e1b497dfc Mon Sep 17 00:00:00 2001
+From 46c799129477e34bbd6e3bf05f49510491d5255f Mon Sep 17 00:00:00 2001
 From: Arindam Nath <arindam.nath@amd.com>
 Date: Thu, 12 Jul 2018 19:02:49 +0530
 Subject: i386/linux: Add support for ext_lfb_base

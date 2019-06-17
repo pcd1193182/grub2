@@ -1,4 +1,4 @@
-From 4884518405418245c0c520721993f029e12e3267 Mon Sep 17 00:00:00 2001
+From fc76aef3087e049463694387514a4af2bed6d832 Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Mon, 13 Jan 2014 12:13:27 +0000
 Subject: Cope with Kubuntu setting GRUB_DISTRIBUTOR

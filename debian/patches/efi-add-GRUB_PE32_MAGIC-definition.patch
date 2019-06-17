@@ -1,4 +1,4 @@
-From 179db5ecab1c775f116598c24e22307e07227036 Mon Sep 17 00:00:00 2001
+From e404c837074791614cb1fee8e2a4d8d7796fae33 Mon Sep 17 00:00:00 2001
 From: Leif Lindholm <leif.lindholm@linaro.org>
 Date: Thu, 3 Aug 2017 11:04:25 +0100
 Subject: efi: Add GRUB_PE32_MAGIC definition

@@ -1,4 +1,4 @@
-From 2f3b1e69a542a9c9a3de48543e2235bababb2232 Mon Sep 17 00:00:00 2001
+From 5b2ffae479723ae8de0789e78b2b12d32a35f392 Mon Sep 17 00:00:00 2001
 From: Leif Lindholm <leif.lindholm@linaro.org>
 Date: Thu, 21 Feb 2019 10:15:08 +0000
 Subject: arm64/efi: Fix grub_efi_get_ram_base()
