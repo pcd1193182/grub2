@@ -1,3 +1,23 @@
+grub2 (2.02+dfsg1-12ubuntu3) eoan; urgency=medium
+
+  * debian/patches/zfs_enhance_support.patch:
+    Enhance ZFS grub support:
+    - Support multiple zfs systems (grouped by machine-id)
+    - Group zfs snapshots and clones with latest dataset for a given
+      installation.
+    - Support "history" entry with one time boot, recovery mode and
+      consecutive reboots.
+    - Pin kernel to particular snapshot, trying to reboot with the exact
+      same kernel and initrd.
+    - Disable in 10_linux zfs support if 10_linux_zfs is installed so that
+      we don't end up with the same installation multiple times.
+  * debian/patches/*:
+    - Apply ubuntu/debian specific changes of 10_linux to 10_linux_zfs.
+
+  Work done with Jean-Baptiste.
+
+ -- Didier Roche <didrocks@ubuntu.com>  Mon, 17 Jun 2019 11:28:48 +0200
+
 grub2 (2.02+dfsg1-12ubuntu2) disco; urgency=medium
 
   * debian/patches/efi-console-set-text-mode-as-needed.patch: in EFI console,

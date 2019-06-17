@@ -1,4 +1,4 @@
-From bfce2a719fcf1295e73e14fdf46844b629d90ec1 Mon Sep 17 00:00:00 2001
+From 712f2270cc638a902e50fe8ae63fcef162a0d118 Mon Sep 17 00:00:00 2001
 From: Matthew Garrett <mjg59@coreos.com>
 Date: Sun, 9 Aug 2015 16:20:58 -0700
 Subject: Rework linux16 command

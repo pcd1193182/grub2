@@ -1,4 +1,4 @@
-From 161dd44e0068e79462cb48e97f6836afd3d13a40 Mon Sep 17 00:00:00 2001
+From 736d3727461365272bcc9d0a579f9bf9c23312ae Mon Sep 17 00:00:00 2001
 From: Leif Lindholm <leif.lindholm@linaro.org>
 Date: Thu, 1 Feb 2018 18:18:54 +0000
 Subject: arm64: align linux kernel magic macro naming with i386

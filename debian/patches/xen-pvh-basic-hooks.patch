@@ -1,4 +1,4 @@
-From 82d590f4aa6a39ad8157c0704ceeab2fbfdf8717 Mon Sep 17 00:00:00 2001
+From 66be0c45cf0e6f3d9586394afd17a18f8e0fe0e6 Mon Sep 17 00:00:00 2001
 From: Juergen Gross <jgross@suse.com>
 Date: Fri, 7 Dec 2018 13:11:37 +0100
 Subject: xen: Add basic hooks for PVH in current code

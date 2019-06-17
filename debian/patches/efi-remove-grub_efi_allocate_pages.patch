@@ -1,4 +1,4 @@
-From b08df4374c4057fc34582d01b357c67f8726b2c1 Mon Sep 17 00:00:00 2001
+From 740fe6ab68c51692e7b44fc98f5aa82b84b36ec6 Mon Sep 17 00:00:00 2001
 From: Vladimir Serbinenko <phcoder@gmail.com>
 Date: Wed, 27 Feb 2019 12:01:49 -0500
 Subject: Remove grub_efi_allocate_pages.

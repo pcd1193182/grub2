@@ -1,4 +1,4 @@
-From 780a012d79f2c3fa51de26e6dfcf36c8c161efdb Mon Sep 17 00:00:00 2001
+From 0df8a8779bfc61035a2b9dc27342bb853d4f73aa Mon Sep 17 00:00:00 2001
 From: Matthew Garrett <mjg@redhat.com>
 Date: Wed, 27 Feb 2019 12:20:48 -0500
 Subject: Add support for linuxefi

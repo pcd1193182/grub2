@@ -1,4 +1,4 @@
-From e794060dc473597464930b47b89a220fe41272cd Mon Sep 17 00:00:00 2001
+From 6137bf3c3cfe2c3c3740ed246b27b308913f9ee8 Mon Sep 17 00:00:00 2001
 From: Juergen Gross <jgross@suse.com>
 Date: Fri, 7 Dec 2018 13:11:30 +0100
 Subject: loader/linux: Support passing RSDP address via boot params

@@ -1,4 +1,4 @@
-From 34bead97c7d821e955cf71ccf5e70797b2ced51d Mon Sep 17 00:00:00 2001
+From 7620bf511de3f3a178af5fcd08370c3f515cbeb1 Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@debian.org>
 Date: Thu, 28 Feb 2019 09:32:00 +0000
 Subject: util: Detect more I/O errors

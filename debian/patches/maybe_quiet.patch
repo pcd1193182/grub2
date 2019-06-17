@@ -1,4 +1,4 @@
-From 07d8d140478558c1909a57bccf8b4f1c153c6978 Mon Sep 17 00:00:00 2001
+From 61135213fe12730a88fa613167d4f959622671c7 Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Mon, 13 Jan 2014 12:13:26 +0000
 Subject: Add configure option to reduce visual clutter at boot time
@@ -29,7 +29,7 @@ provide a cleaner boot experience.
 Bug-Ubuntu: https://bugs.launchpad.net/bugs/386922
 Bug-Ubuntu: https://bugs.launchpad.net/bugs/861048
 Forwarded: (partial) http://lists.gnu.org/archive/html/grub-devel/2009-09/msg00056.html
-Last-Update: 2014-01-03
+Last-Update: 2019-06-05
 
 Patch-Name: maybe_quiet.patch
 ---
@@ -42,7 +42,8 @@ Patch-Name: maybe_quiet.patch
  grub-core/normal/main.c           | 11 +++++++++++
  grub-core/normal/menu.c           | 17 +++++++++++++++--
  util/grub.d/10_linux.in           | 15 +++++++++++----
- 9 files changed, 111 insertions(+), 6 deletions(-)
+ util/grub.d/10_linux_zfs.in       | 15 +++++++++++----
+ 10 files changed, 122 insertions(+), 10 deletions(-)
 
 diff --git a/config.h.in b/config.h.in
 index 9e8f9911b..d2c4ce8e5 100644
@@ -337,7 +338,7 @@ index 9d0ad4c95..1f3447ad3 100644
        if (auto_boot)
  	grub_menu_execute_with_fallback (menu, e, autobooted,
 diff --git a/util/grub.d/10_linux.in b/util/grub.d/10_linux.in
-index 60467460b..67d57ecfd 100644
+index d9646b1d5..e7062aed1 100644
 --- a/util/grub.d/10_linux.in
 +++ b/util/grub.d/10_linux.in
 @@ -21,6 +21,7 @@ prefix="@prefix@"
@@ -348,7 +349,7 @@ index 60467460b..67d57ecfd 100644
  
  . "$pkgdatadir/grub-mkconfig_lib"
  
-@@ -148,10 +149,12 @@ linux_entry ()
+@@ -152,10 +153,12 @@ linux_entry ()
      fi
      printf '%s\n' "${prepare_boot_cache}" | sed "s/^/$submenu_indentation/"
    fi
@@ -363,7 +364,7 @@ index 60467460b..67d57ecfd 100644
    if test -d /sys/firmware/efi && test -e "${linux}.efi.signed"; then
      sed "s/^/$submenu_indentation/" << EOF
  	linux	${rel_dirname}/${basename}.efi.signed root=${linux_root_device_thisversion} ro ${args}
-@@ -163,9 +166,13 @@ EOF
+@@ -167,9 +170,13 @@ EOF
    fi
    if test -n "${initrd}" ; then
      # TRANSLATORS: ramdisk isn't identifier. Should be translated.
@@ -379,3 +380,46 @@ index 60467460b..67d57ecfd 100644
  	initrd	${rel_dirname}/${initrd}
  EOF
    fi
+diff --git a/util/grub.d/10_linux_zfs.in b/util/grub.d/10_linux_zfs.in
+index 191c7d76a..fb2254e2e 100755
+--- a/util/grub.d/10_linux_zfs.in
++++ b/util/grub.d/10_linux_zfs.in
+@@ -20,6 +20,7 @@ set -e
+ prefix="@prefix@"
+ datarootdir="@datarootdir@"
+ ubuntu_recovery="@UBUNTU_RECOVERY@"
++quiet_boot="@QUIET_BOOT@"
+ 
+ . "${pkgdatadir}/grub-mkconfig_lib"
+ 
+@@ -738,10 +739,12 @@ zfs_linux_entry () {
+ 
+     echo "$(prepare_grub_to_access_device_cached ${boot_device} | grub_add_tab | sed "s/^/${submenu_indentation}/")"
+ 
+-    message="$(gettext_printf "Loading Linux %s ..." ${kernel_version})"
+-    sed "s/^/${submenu_indentation}/" << EOF
++    if [ "${quiet_boot}" = 0 ] || [ "${type}" != simple ]; then
++        message="$(gettext_printf "Loading Linux %s ..." ${kernel_version})"
++        sed "s/^/${submenu_indentation}/" << EOF
+ 	echo '$(echo "$message" | grub_quote)'
+ EOF
++    fi
+ 
+     linux_default_args="${GRUB_CMDLINE_LINUX} ${GRUB_CMDLINE_LINUX_DEFAULT}"
+     if [ ${type} = "recovery" ]; then
+@@ -752,9 +755,13 @@ EOF
+ 	linux	${kernel} root=ZFS=${dataset} ro ${linux_default_args} ${kernel_additional_args}
+ EOF
+ 
+-    message="$(gettext_printf "Loading initial ramdisk ...")"
+-    sed "s/^/${submenu_indentation}/" << EOF
++    if [ "${quiet_boot}" = 0 ] || [ "${type}" != simple ]; then
++        message="$(gettext_printf "Loading initial ramdisk ...")"
++        sed "s/^/${submenu_indentation}/" << EOF
+ 	echo	'$(echo "$message" | grub_quote)'
++EOF
++    fi
++    sed "s/^/${submenu_indentation}/" << EOF
+ 	initrd	${initrd}
+ EOF
+ 

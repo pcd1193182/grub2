@@ -1,4 +1,4 @@
-From 1b400172593fbd7974a8d5fe232b5ff239bf81fa Mon Sep 17 00:00:00 2001
+From a56a30d86a6dd5fdb00432eb12ee285226b5d718 Mon Sep 17 00:00:00 2001
 From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 Date: Sat, 9 Feb 2019 09:49:29 +0000
 Subject: ieee1275: Include a.out header in assembly of sparc64 boot loader

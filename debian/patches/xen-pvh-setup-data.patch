@@ -1,4 +1,4 @@
-From 8007f587bc4c2b6b93d300973da0b2ac4cd7ce91 Mon Sep 17 00:00:00 2001
+From 28fb991c818df57621ead252ce8a2d9e77ea5ef0 Mon Sep 17 00:00:00 2001
 From: Juergen Gross <jgross@suse.com>
 Date: Fri, 7 Dec 2018 13:11:41 +0100
 Subject: xen: Setup Xen specific data for PVH

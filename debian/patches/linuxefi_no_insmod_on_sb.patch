@@ -1,4 +1,4 @@
-From 71bece988f4ca61a82ce38b04b8a70a018fb96d1 Mon Sep 17 00:00:00 2001
+From 38b819dbe19e8801d9ce16c654e93140d5de7ceb Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@ubuntu.com>
 Date: Tue, 23 Oct 2012 10:40:49 -0400
 Subject: Don't allow insmod when secure boot is enabled.

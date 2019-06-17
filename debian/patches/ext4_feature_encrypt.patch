@@ -1,4 +1,4 @@
-From 57d06c936e55bf950174407e07c9b8f6c0cd78c2 Mon Sep 17 00:00:00 2001
+From 2d87587fc863c9be1e6f49b185b3bd9e1503598b Mon Sep 17 00:00:00 2001
 From: Eric Biggers <ebiggers@google.com>
 Date: Thu, 29 Jun 2017 13:27:49 +0000
 Subject: Allow GRUB to mount ext2/3/4 filesystems that have the encryption

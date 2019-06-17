@@ -1,4 +1,4 @@
-From 69696ac76a57c981dcc86a12d5ccc6e6d0331c71 Mon Sep 17 00:00:00 2001
+From 215d29633d0c136309c653d78f65a671d9a4244a Mon Sep 17 00:00:00 2001
 From: Leif Lindholm <leif.lindholm@linaro.org>
 Date: Thu, 1 Feb 2018 18:18:55 +0000
 Subject: arm: switch linux loader to linux_arm_kernel_header struct

@@ -1,4 +1,4 @@
-From 9996f2366c9eca9af3370e251d39a4e943a1b85c Mon Sep 17 00:00:00 2001
+From 786e08457a10d877741584da14bec789735e543b Mon Sep 17 00:00:00 2001
 From: Peter Jones <pjones@redhat.com>
 Date: Tue, 6 Oct 2015 13:04:37 -0400
 Subject: Add secureboot support on efi chainloader

@@ -1,4 +1,4 @@
-From e0aa8186ac1b47842f6a69ce01e011b233dc4bb6 Mon Sep 17 00:00:00 2001
+From db552e8861e598dd51c37fae5e9c1a6e3f5d50d8 Mon Sep 17 00:00:00 2001
 From: Leif Lindholm <leif.lindholm@linaro.org>
 Date: Mon, 9 Jul 2018 18:33:03 +0100
 Subject: arm/efi: Switch to arm64 linux loader

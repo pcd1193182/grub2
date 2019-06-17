@@ -1,4 +1,4 @@
-From 78e2f0cfe28e7ec812d10af91579cef37d1fd0a7 Mon Sep 17 00:00:00 2001
+From fb491b848a18018d7f6c1f8171bedae98e20bfc2 Mon Sep 17 00:00:00 2001
 From: Juergen Gross <jgross@suse.com>
 Date: Fri, 7 Dec 2018 13:11:34 +0100
 Subject: xen: Rearrange xen/init.c to prepare it for Xen PVH mode

@@ -1,4 +1,4 @@
-From e5ea8afb37e2e70d289adc7d5f18e0b7fc078b4f Mon Sep 17 00:00:00 2001
+From 6b72182b2d8e5caef04e3178c6d7d1e28bcc453e Mon Sep 17 00:00:00 2001
 From: Leif Lindholm <leif.lindholm@linaro.org>
 Date: Mon, 9 Jul 2018 18:33:02 +0100
 Subject: arm64/linux/loader: Rename functions and macros and move to common

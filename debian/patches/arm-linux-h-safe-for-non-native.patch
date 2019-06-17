@@ -1,4 +1,4 @@
-From f5a9866a4e22c48eeb5a2dfc445215c07306951b Mon Sep 17 00:00:00 2001
+From 934156923bc302feb7ec178e92197d575bd7bc3f Mon Sep 17 00:00:00 2001
 From: Leif Lindholm <leif.lindholm@linaro.org>
 Date: Thu, 1 Feb 2018 18:18:56 +0000
 Subject: arm: make linux.h safe to include for non-native builds

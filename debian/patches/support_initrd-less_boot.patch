@@ -1,4 +1,4 @@
-From 7382f099cc3ec64d2e62973a6d9be4bed34e762d Mon Sep 17 00:00:00 2001
+From 6a0bab86b209bc287c7ca2b46d4afd34f3f5c6e3 Mon Sep 17 00:00:00 2001
 From: Chris Glass <chris.glass@canonical.com>
 Date: Thu, 10 Nov 2016 13:44:25 -0500
 Subject: Added knobs to allow non-initrd boot config
@@ -81,10 +81,10 @@ index ad716384b..9fca8cd7e 100644
  if test "x${grub_cfg}" != "x"; then
    rm -f "${grub_cfg}.new"
 diff --git a/util/grub.d/10_linux.in b/util/grub.d/10_linux.in
-index 22812aacd..dcccf488d 100644
+index 5705650a7..be8892f87 100644
 --- a/util/grub.d/10_linux.in
 +++ b/util/grub.d/10_linux.in
-@@ -179,11 +179,17 @@ EOF
+@@ -183,11 +183,17 @@ EOF
  	linux	${rel_dirname}/${basename}.efi.signed root=${linux_root_device_thisversion} ro ${args}
  EOF
    else

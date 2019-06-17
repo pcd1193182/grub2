@@ -1,4 +1,4 @@
-From 4bdd7a92845d3780eef1aa435b008e4f958798b3 Mon Sep 17 00:00:00 2001
+From 1016cea0a1a56c0a73f1a027a24e6598afd9a5a7 Mon Sep 17 00:00:00 2001
 From: Leif Lindholm <leif.lindholm@linaro.org>
 Date: Thu, 1 Feb 2018 18:18:51 +0000
 Subject: make GRUB_LINUX_MAGIC_SIGNATURE architecture-specific

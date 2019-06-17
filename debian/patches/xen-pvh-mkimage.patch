@@ -1,4 +1,4 @@
-From 652b110144553d61163a9c91534b8ee78037de65 Mon Sep 17 00:00:00 2001
+From 77b501ff0e58d391f31cb827f3020e21730ec2a6 Mon Sep 17 00:00:00 2001
 From: Juergen Gross <jgross@suse.com>
 Date: Fri, 7 Dec 2018 13:11:46 +0100
 Subject: xen_pvh: Support building a standalone image

@@ -1,4 +1,4 @@
-From 0b6829b4fafe2e10fde2c4b4e9e32fdacac79b6b Mon Sep 17 00:00:00 2001
+From a4311bd22247316f0f86c31d3138e73987d96391 Mon Sep 17 00:00:00 2001
 From: Laszlo Ersek <lersek@redhat.com>
 Date: Wed, 23 Nov 2016 06:27:09 +0100
 Subject: efi/chainloader: truncate overlong relocation section

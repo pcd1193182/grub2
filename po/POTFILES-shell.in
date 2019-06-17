@@ -12,6 +12,7 @@ util/grub.d/10_linux.in
 util/grub.d/10_netbsd.in
 util/grub.d/10_windows.in
 util/grub.d/10_xnu.in
+util/grub.d/10_linux_zfs.in
 util/grub.d/20_linux_xen.in
 util/grub.d/30_os-prober.in
 util/grub.d/40_custom.in

@@ -1,4 +1,4 @@
-From 760e5506a014e3fb9d86cd2199fc8526880725e6 Mon Sep 17 00:00:00 2001
+From f5ef4bf821b5b258417106a7aea41dbbc737537d Mon Sep 17 00:00:00 2001
 From: Leif Lindholm <leif.lindholm@linaro.org>
 Date: Mon, 9 Jul 2018 18:33:00 +0100
 Subject: efi: Add central copy of grub_efi_find_mmap_size
