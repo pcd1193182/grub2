@@ -1,3 +1,207 @@
+grub2 (2.04-1ubuntu1) eoan; urgency=medium
+
+  * Merge against Debian; remaining changes:
+    - debian/control: Update Vcs fields for code location on Ubuntu.
+    - debian/control: Breaks shim (<< 13).
+    - debian/patches/linuxefi.patch: Secure Boot support: use newer patchset
+      from rhboot repo, flattened to a single patch.
+    - debian/patches/install_signed.patch, grub-install-extra-removable.patch:
+      - Make sure if we install shim; it should also be exported as the default
+        bootloader to install later to a removable path, if we do.
+      - Rework grub-install-extra-removable.patch to reverse its logic: in the
+        default case, install the bootloader to /EFI/BOOT, unless we're trying
+        to install on a removable device, or explicitly telling grub *not* to
+        do it.
+      - Install a BOOT.CSV for fallback to use.
+      - Make sure postinst and templates know about the replacement of
+        --force-extra-removable with --no-extra-removable.
+    - debian/patches/ubuntu-support-initrd-less-boot.patch: allow non-initrd
+      boot config.
+    - debian/patches/ubuntu-add-initrd-less-boot-fallback.patch: If a kernel
+      fails to boot without initrd, we will fallback to trying to boot the
+      kernel with an initrd.
+    - debian/patches/ubuntu-mkconfig-leave-breadcrumbs.patch: make sure
+      grub-mkconfig leaves a trace of what files were sourced to help generate
+      the config we're building.
+    - debian/patches/ubuntu-efi-console-set-text-mode-as-needed.patch: in EFI
+      console, only set text-mode when we're actually going to need it.
+    - debian/patches/ubuntu-zfs-enhance-support.patch: Better ZFS grub support.
+    - Disable os-prober for ppc64el on the PowerNV platform, to reduce the
+      number of entries/clutter from other OSes in Petitboot
+    - debian/patches/ubuntu-shorter-version-info.patch: Only show the upstream
+      version in menu and console, and hide the package one in a
+      package_version variable.
+    - Verify that the current and newer kernels are signed when grub is
+      updated, to make sure people do not accidentally shutdown without a
+      signed kernel.
+    - debian/default/grub: replace GRUB_HIDDEN_* variables with the less
+      confusing GRUB_TIMEOUT_STYLE=hidden.
+    - debian/rules: shuffle files around for now to keep build artefacts
+      for signing at the same location as they were expected by Launchpad.
+    - debian/rules, debian/control: enable dh-systemd.
+    - debian/grub-common.install.in: install the systemd unit that's part of
+      initrd fallback handling, missed when the feature landed.
+    - debian/build-efi-images: add http module to NET_MODULES.
+  * debian/patches/linuxefi*.patch: Flatten linuxefi patches into one.
+  * debian/patches: rename patches to use "-" as a separator rather than "_".
+  * debian/patches: rename Ubuntu-specific patches and commits to add "ubuntu"
+    so it's clearer which are new or changed when doing a merge.
+  * debian/patches/ubuntu-fix-lzma-decompressor-objcopy.patch: fix FTBFS due
+    to objcopy building an invalid binary padded with zeroes (LP: #1833234)
+  * debian/patches/ubuntu-clear-invalid-initrd-spacing.patch: clear up invalid
+    spacing for the initrd command when not using early initrds.
+  * debian/patches/ubuntu-add-initrd-less-boot-fallback.patch: move the initrd
+    boot success/failure service to start later at boot time. (LP: #1823391)
+  * debian/patches/fix-lockdown.patch: Drop lockdown patch from Debian, which
+    breaks with new linuxefi patchset.
+  * debian/patches/ubuntu-temp-keep-auto-nvram.patch: Temporarily keep the
+    --auto-nvram option we previously had as a supported option in grub-install
+    (with no effect now), to avoid breaking upgrades. "auto-nvram" is default
+    behavior now that we use libefivar instead of calling efibootmgr.
+
+ -- Mathieu Trudel-Lapierre <cyphermox@ubuntu.com>  Tue, 16 Jul 2019 11:31:29 -0400
+
+grub2 (2.04-2) UNRELEASED; urgency=medium
+
+  [ James Clarke ]
+  * Only Build-Depend on libefiboot-dev and libefivar-dev on Linux
+    architectures, since they're Linux-only.
+
+ -- Colin Watson <cjwatson@debian.org>  Tue, 09 Jul 2019 15:04:41 +0100
+
+grub2 (2.04-1) unstable; urgency=medium
+
+  * New upstream release.
+  * debian/upstream/signing-key.asc: Add signing key of new upstream
+    maintainer (Daniel Kiper).
+
+ -- Colin Watson <cjwatson@debian.org>  Tue, 09 Jul 2019 11:48:01 +0100
+
+grub2 (2.04~rc1-3) experimental; urgency=medium
+
+  [ Will Thompson ]
+  * Fix --disable-quiet-boot.
+
+  [ Steve Langasek ]
+  * If we don't have writable grubenv and we're on EFI, always show the menu
+    (merged from Ubuntu).
+
+  [ Steve McIntyre ]
+  * Make all the signed EFI arches have a Recommends: from
+    grub-efi-ARCH-signed to shim-signed, not just amd64.
+    Closes: #931038
+  * Add myself to Uploaders
+
+  [ Colin Watson ]
+  * Squash linuxefi* patches into a single patch.
+
+ -- Colin Watson <cjwatson@debian.org>  Thu, 27 Jun 2019 08:51:37 +0100
+
+grub2 (2.04~rc1-2) experimental; urgency=medium
+
+  [ Colin Watson ]
+  * debian/build-efi-images: Add tpm on x86_64-efi (thanks, Chris Coulson).
+
+  [ Steve McIntyre ]
+  * Add the ntfs module to signed UEFI images. Closes: #923855
+  * Add the cpuid module to signed UEFI images. Closes: #928628
+  * Add the play module to signed UEFI images. Closes: #930290
+  * Add an extra di-specific version of the UEFI netboot image with a
+    different baked-in prefix value. Helps to fix #928750.
+  * Deal with --force-extra-removable with signed shim too. Closes: #930531
+
+ -- Colin Watson <cjwatson@debian.org>  Sat, 15 Jun 2019 09:41:19 +0100
+
+grub2 (2.04~rc1-1) experimental; urgency=medium
+
+  * New upstream release candidate.
+    - getroot: Save/restore CWD more reliably on Unix (closes: #918700).
+  * Rename patches to use "-" as a separator rather than "_" (except when
+    referring to a file, function, or command containing a "_").
+  * Fix format of debian/copyright.
+
+ -- Colin Watson <cjwatson@debian.org>  Thu, 30 May 2019 16:56:05 +0100
+
+grub2 (2.02+dfsg1-20) unstable; urgency=medium
+
+  [ Steve McIntyre ]
+  * Make all the signed EFI arches have a Recommends: from
+    grub-efi-ARCH-signed to shim-signed, not just amd64.
+    Closes: #931038
+  * Add myself to Uploaders
+
+ -- Steve McIntyre <93sam@debian.org>  Tue, 25 Jun 2019 10:11:12 +0100
+
+grub2 (2.02+dfsg1-19) unstable; urgency=medium
+
+  [ Colin Watson ]
+  * Fix format of debian/copyright.
+
+  [ Steve McIntyre ]
+  * Add the ntfs module to signed UEFI images. Closes: #923855
+  * Add the cpuid module to signed UEFI images. Closes: #928628
+  * Add the play module to signed UEFI images. Closes: #930290
+  * Add an extra di-specific version of the UEFI netboot image with a
+    different baked-in prefix value. Helps to fix #928750.
+  * Deal with --force-extra-removable with signed shim too. Closes: #930531
+
+ -- Colin Watson <cjwatson@debian.org>  Fri, 14 Jun 2019 19:04:01 +0100
+
+grub2 (2.02+dfsg1-18) unstable; urgency=medium
+
+  * Apply patches from Alexander Graf to fix grub-efi-arm crash (closes:
+    #927269):
+    - arm: Move trampolines into code section
+    - arm: Align section alignment with manual relocation offset code
+  * Make grub2-common Breaks+Replaces grub-cloud-amd64 (<< 0.0.4) to work
+    around that package shipping colliding configuration file names in
+    stretch-backports (closes: #919915).
+  * Apply patch from Peter Jones to forbid the "devicetree" command when
+    Secure Boot is enabled (closes: #927888).
+
+ -- Colin Watson <cjwatson@debian.org>  Sat, 04 May 2019 22:58:32 +0100
+
+grub2 (2.02+dfsg1-17) unstable; urgency=medium
+
+  * Make grub-efi-*-bin recommend efibootmgr.  We don't actually use it any
+    more, but it's helpful for debugging.
+
+ -- Colin Watson <cjwatson@debian.org>  Mon, 15 Apr 2019 18:38:30 +0100
+
+grub2 (2.02+dfsg1-16) unstable; urgency=medium
+
+  * Fix -Wcast-align diagnostics on ARM.
+
+ -- Colin Watson <cjwatson@debian.org>  Sat, 23 Mar 2019 23:28:17 +0000
+
+grub2 (2.02+dfsg1-15) unstable; urgency=medium
+
+  * Build-depend on libefiboot-dev and libefivar-dev, for EFI variable
+    storage changes.
+  * Drop now-unnecessary dependencies on efibootmgr.
+
+ -- Colin Watson <cjwatson@debian.org>  Sat, 23 Mar 2019 09:56:35 +0000
+
+grub2 (2.02+dfsg1-14) unstable; urgency=medium
+
+  * Make signed packages depend on a matching version of grub-common, in an
+    attempt to prevent incorrect testing migrations (closes: #924814).
+  * Cherry-pick from upstream:
+    - xfs: Accept filesystem with sparse inodes (closes: #924760).
+  * Minimise writes to EFI variable storage (closes: #891434).
+
+ -- Colin Watson <cjwatson@debian.org>  Sat, 23 Mar 2019 09:47:10 +0000
+
+grub2 (2.02+dfsg1-13) unstable; urgency=medium
+
+  * Add regexp module to signed UEFI images.
+  * debian/signing-template.json.in: Use new extendable format.
+
+  [ Debconf translations ]
+  * [nb] Norwegian Bokmål (Petter Reinholdtsen; closes: #924326).
+
+ -- Colin Watson <cjwatson@debian.org>  Thu, 14 Mar 2019 10:33:24 +0000
+
 grub2 (2.02+dfsg1-12ubuntu3) eoan; urgency=medium
 
   * debian/patches/zfs_enhance_support.patch:

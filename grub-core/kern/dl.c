@@ -39,10 +39,6 @@
 #define GRUB_MODULES_MACHINE_READONLY
 #endif
 
-#ifdef GRUB_MACHINE_EMU
-#include <sys/mman.h>
-#endif
-
 #ifdef GRUB_MACHINE_EFI
 #include <grub/efi/efi.h>
 #endif
@@ -234,7 +230,7 @@ grub_dl_load_segments (grub_dl_t mod, const Elf_Ehdr *e)
   unsigned i;
   const Elf_Shdr *s;
   grub_size_t tsize = 0, talign = 1;
-#if !defined (__i386__) && !defined (__x86_64__)
+#if !defined (__i386__) && !defined (__x86_64__) && !defined(__riscv)
   grub_size_t tramp;
   grub_size_t got;
   grub_err_t err;
@@ -250,7 +246,7 @@ grub_dl_load_segments (grub_dl_t mod, const Elf_Ehdr *e)
 	talign = s->sh_addralign;
     }
 
-#if !defined (__i386__) && !defined (__x86_64__)
+#if !defined (__i386__) && !defined (__x86_64__) && !defined(__riscv)
   err = grub_arch_dl_get_tramp_got_size (e, &tramp, &got);
   if (err)
     return err;
@@ -313,7 +309,7 @@ grub_dl_load_segments (grub_dl_t mod, const Elf_Ehdr *e)
 	  mod->segment = seg;
 	}
     }
-#if !defined (__i386__) && !defined (__x86_64__)
+#if !defined (__i386__) && !defined (__x86_64__) && !defined(__riscv)
   ptr = (char *) ALIGN_UP ((grub_addr_t) ptr, GRUB_ARCH_DL_TRAMP_ALIGN);
   mod->tramp = ptr;
   mod->trampptr = ptr;
@@ -698,19 +694,15 @@ grub_dl_load_file (const char *filename)
 #ifdef GRUB_MACHINE_EFI
   if (grub_efi_secure_boot ())
     {
-#if 0
-      /* This is an error, but grub2-mkconfig still generates a pile of
-       * insmod commands, so emitting it would be mostly just obnoxious. */
       grub_error (GRUB_ERR_ACCESS_DENIED,
 		  "Secure Boot forbids loading module from %s", filename);
-#endif
       return 0;
     }
 #endif
 
   grub_boot_time ("Loading module %s", filename);
 
-  file = grub_file_open (filename);
+  file = grub_file_open (filename, GRUB_FILE_TYPE_GRUB_MODULE);
   if (! file)
     return 0;
 

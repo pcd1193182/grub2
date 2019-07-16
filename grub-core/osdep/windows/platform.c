@@ -207,11 +207,10 @@ set_efi_variable_bootn (grub_uint16_t n, void *in, grub_size_t len)
   set_efi_variable (varname, in, len);
 }
 
-void
+int
 grub_install_register_efi (grub_device_t efidir_grub_dev,
 			   const char *efifile_path,
-			   const char *efi_distributor,
-			   int detect_nvram)
+			   const char *efi_distributor)
 {
   grub_uint16_t *boot_order, *new_boot_order;
   grub_uint16_t *distributor16;
@@ -370,7 +369,7 @@ grub_install_register_efi (grub_device_t efidir_grub_dev,
 	grub_util_error ("%s", grub_errmsg);
       efidir_grub_dev->disk->partition = p;
       grub_memcpy (hddp->partition_signature,
-		   gptdata.guid, 16);
+		   &gptdata.guid, 16);
 
       hddp->partmap_type = 2;
       hddp->signature_type = 2;
@@ -414,11 +413,13 @@ grub_install_register_efi (grub_device_t efidir_grub_dev,
 
   set_efi_variable_bootn (order_num, entry, (grub_uint8_t *) pathptr - entry);
   set_efi_variable (L"BootOrder", new_boot_order, new_boot_order_len * sizeof (grub_uint16_t));
+
+  return 0;
 }
 
 void
 grub_install_register_ieee1275 (int is_prep, const char *install_device,
-				int partno, const char *relpath, int detect_nvram)
+				int partno, const char *relpath)
 {
   grub_util_error ("%s", _("no IEEE1275 routines are available for your platform"));
 }

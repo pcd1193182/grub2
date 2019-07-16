@@ -218,7 +218,7 @@ debian/stamps/build-grub-efi-ia32 debian/stamps/build-grub-efi-amd64 debian/stam
 		obj/grub-$(COMMON_PLATFORM)/grub-mkimage \
 		obj/$(package)/grub-core \
 		obj/monolithic/$(package) \
-		$(SB_PLATFORM) $(SB_EFI_NAME) $(SB_EFI_VENDOR)
+		$(DEB_HOST_ARCH) $(SB_PLATFORM) $(SB_EFI_NAME) $(SB_EFI_VENDOR)
 	touch $@
 
 debian/stamps/build-grub-xen-host-i386: PVBOOT_ARCH := i386
@@ -428,6 +428,17 @@ install/grub-pc install/grub-efi-ia32 install/grub-efi-amd64 install/grub-efi-ia
 		echo "$(package_bin): binary-from-other-architecture *efiemu64.o" \
 			>> debian/$(package_bin)/usr/share/lintian/overrides/$(package_bin) ; \
 	fi
+	case $@ in \
+		install/grub-efi*) \
+			(echo "# These aren't Windows executables, and these features wouldn't be very useful." \
+			 echo "$(package_bin): portable-executable-missing-security-features *.efi ASLR DEP/NX") \
+				>> debian/$(package_bin)/usr/share/lintian/overrides/$(package_bin) ;; \
+	esac
+	if [ "$@" = "install/grub-emu" ]; then \
+		(echo "# This seems to be due to a readelf bug: https://bugs.debian.org/929585"; \
+		 echo "$(package_bin): binary-or-shlib-defines-rpath usr/lib/grub/*-emu/macho.mod 0x0") \
+			>> debian/$(package_bin)/usr/share/lintian/overrides/$(package_bin); \
+	fi
 
 	mkdir -p debian/$(package_dbg)/usr/share/lintian/overrides
 	echo "$(package_dbg): unstripped-binary-or-object *.module" \
@@ -501,8 +512,8 @@ ifneq (,$(filter grub2-common,$(BUILD_PACKAGES)))
 		-e "s/@DEFAULT_CMDLINE@/$(DEFAULT_CMDLINE)/g" \
 		-e "s/@DEFAULT_TIMEOUT@/$(DEFAULT_TIMEOUT)/g" \
 		debian/grub2-common/usr/share/grub/default/grub
-ifneq (,$(DEFAULT_HIDDEN_TIMEOUT))
-	perl -pi -e 's/^GRUB_TIMEOUT=.*/GRUB_HIDDEN_TIMEOUT=0\nGRUB_HIDDEN_TIMEOUT_QUIET=true\n$$&/' \
+ifneq (false,$(DEFAULT_HIDDEN_TIMEOUT_BOOL))
+	perl -pi -e 's/^GRUB_TIMEOUT=.*/GRUB_TIMEOUT_STYLE=hidden\n$$&/' \
 		debian/grub2-common/usr/share/grub/default/grub
 endif
 endif

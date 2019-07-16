@@ -25,6 +25,7 @@
 #include <grub/efi/efi.h>
 #include <grub/efi/fdtload.h>
 #include <grub/efi/memory.h>
+#include <grub/efi/sb.h>
 
 static void *loaded_fdt;
 static void *fdt;
@@ -123,7 +124,15 @@ grub_cmd_devicetree (grub_command_t cmd __attribute__ ((unused)),
       return GRUB_ERR_NONE;
     }
 
-  dtb = grub_file_open (argv[0]);
+#ifdef GRUB_MACHINE_EFI
+  if (grub_efi_secure_boot ())
+    {
+      return grub_error (GRUB_ERR_ACCESS_DENIED,
+		  "Secure Boot forbids loading devicetree from %s", argv[0]);
+    }
+#endif
+
+  dtb = grub_file_open (argv[0], GRUB_FILE_TYPE_DEVICE_TREE_IMAGE);
   if (!dtb)
     goto out;
 

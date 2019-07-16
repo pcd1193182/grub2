@@ -1,4 +1,4 @@
-From f7e5873e348ce78273b6fa14dfe95565b1544a66 Mon Sep 17 00:00:00 2001
+From 3316e177f5b0760dbbd545623881355ce8c3995c Mon Sep 17 00:00:00 2001
 From: Steve Langasek <steve.langasek@ubuntu.com>
 Date: Tue, 30 Oct 2018 15:04:16 -0700
 Subject: If we don't have writable grubenv and we're on EFI, always show the
@@ -15,18 +15,21 @@ save_env doesn't work.
 
 Reuse GRUB_RECORDFAIL_TIMEOUT to avoid introducing another variable.
 
-Patch-Name: quick-boot-lvm.patch
 Signed-off-by: Steve Langasek <steve.langasek@canonical.com>
+
 Bug-Ubuntu: https://bugs.launchpad.net/bugs/1800722
+Last-Update: 2019-06-24
+
+Patch-Name: quick-boot-lvm.patch
 ---
  util/grub.d/00_header.in | 18 +++++++++++++++---
  1 file changed, 15 insertions(+), 3 deletions(-)
 
 diff --git a/util/grub.d/00_header.in b/util/grub.d/00_header.in
-index 23322458a..2642f66c5 100644
+index 674a76140..b7135b655 100644
 --- a/util/grub.d/00_header.in
 +++ b/util/grub.d/00_header.in
-@@ -142,7 +142,7 @@ EOF
+@@ -115,7 +115,7 @@ EOF
            cat <<EOF
    # GRUB lacks write support for $abstraction, so recordfail support is disabled.
  EOF
@@ -35,7 +38,7 @@ index 23322458a..2642f66c5 100644
            ;;
        esac
      done
-@@ -153,7 +153,7 @@ EOF
+@@ -126,7 +126,7 @@ EOF
  	cat <<EOF
    # GRUB lacks write support for $FS, so recordfail support is disabled.
  EOF
@@ -44,7 +47,7 @@ index 23322458a..2642f66c5 100644
  	;;
      esac
  
-@@ -162,7 +162,9 @@ EOF
+@@ -135,7 +135,9 @@ EOF
  EOF
    }
  
@@ -55,7 +58,7 @@ index 23322458a..2642f66c5 100644
  
    cat <<EOF
  }
-@@ -406,6 +408,16 @@ EOF
+@@ -379,6 +381,16 @@ EOF
    fi
  fi
  EOF

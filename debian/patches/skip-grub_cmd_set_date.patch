@@ -1,4 +1,4 @@
-From e34e7b9ac3832ed900b351ee764f1af1ab7915d1 Mon Sep 17 00:00:00 2001
+From e3d5052c0621c8aac5789e2468c1a271dfa47b49 Mon Sep 17 00:00:00 2001
 From: Colin Watson <cjwatson@debian.org>
 Date: Sun, 28 Oct 2018 19:45:56 +0000
 Subject: Skip flaky grub_cmd_set_date test
@@ -12,11 +12,11 @@ Patch-Name: skip-grub_cmd_set_date.patch
  1 file changed, 3 insertions(+)
 
 diff --git a/tests/grub_cmd_set_date.in b/tests/grub_cmd_set_date.in
-index c594ae3fc..0b62b9854 100644
+index aac120a6c..1bb5be4ca 100644
 --- a/tests/grub_cmd_set_date.in
 +++ b/tests/grub_cmd_set_date.in
 @@ -1,6 +1,9 @@
- #! /bin/bash
+ #! @BUILD_SHEBANG@
  set -e
  
 +echo "Skipping flaky test."

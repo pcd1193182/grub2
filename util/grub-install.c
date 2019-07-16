@@ -59,7 +59,6 @@ static int removable = 0;
 static int no_extra_removable = 0;
 static int recheck = 0;
 static int update_nvram = 1;
-static int auto_nvram = 0;
 static char *install_device = NULL;
 static char *debug_image = NULL;
 static char *rootdir = NULL;
@@ -99,6 +98,7 @@ enum
     OPTION_FORCE,
     OPTION_FORCE_FILE_ID,
     OPTION_NO_NVRAM, 
+    OPTION_AUTO_NVRAM,
     OPTION_REMOVABLE, 
     OPTION_BOOTLOADER_ID, 
     OPTION_EFI_DIRECTORY,
@@ -116,8 +116,7 @@ enum
     OPTION_PRODUCT_VERSION,
     OPTION_UEFI_SECURE_BOOT,
     OPTION_NO_UEFI_SECURE_BOOT,
-    OPTION_NO_EXTRA_REMOVABLE,
-    OPTION_AUTO_NVRAM
+    OPTION_NO_EXTRA_REMOVABLE
   };
 
 static int fs_probe = 1;
@@ -167,6 +166,7 @@ argp_parser (int key, char *arg, struct argp_state *state)
     case OPTION_EDITENV:
     case OPTION_MKDEVICEMAP:
     case OPTION_NO_FLOPPY:
+    case OPTION_AUTO_NVRAM:
       return 0;
     case OPTION_ROOT_DIRECTORY:
       /* Accept for compatibility.  */
@@ -206,10 +206,6 @@ argp_parser (int key, char *arg, struct argp_state *state)
 
     case OPTION_NO_NVRAM:
       update_nvram = 0;
-      return 0;
-
-    case OPTION_AUTO_NVRAM:
-      auto_nvram = 1;
       return 0;
 
     case OPTION_FORCE:
@@ -302,9 +298,7 @@ static struct argp_option options[] = {
   {"no-nvram", OPTION_NO_NVRAM, 0, 0,
    N_("don't update the `boot-device'/`Boot*' NVRAM variables. "
       "This option is only available on EFI and IEEE1275 targets."), 2},
-  {"auto-nvram", OPTION_AUTO_NVRAM, 0, 0,
-   N_("only update NVRAM variables if possible. "
-      "This option is only available on EFI and IEEE1275 targets."), 2},
+  {"auto-nvram", OPTION_AUTO_NVRAM, 0, OPTION_HIDDEN, 0, 2},
   {"skip-fs-probe",'s',0,      0,
    N_("do not probe for filesystems in DEVICE"), 0},
   {"no-bootsector", OPTION_NO_BOOTSECTOR, 0, 0,
@@ -484,8 +478,8 @@ probe_mods (grub_disk_t disk)
   if (raid_level >= 0)
     {
       grub_install_push_module ("diskfilter");
-      if (disk->dev->raidname)
-	grub_install_push_module (disk->dev->raidname (disk));
+      if (disk->dev->disk_raidname)
+	grub_install_push_module (disk->dev->disk_raidname (disk));
     }
   if (raid_level == 5)
     grub_install_push_module ("raid5rec");
@@ -493,8 +487,8 @@ probe_mods (grub_disk_t disk)
     grub_install_push_module ("raid6rec");
 
   /* In case of LVM/RAID, check the member devices as well.  */
-  if (disk->dev->memberlist)
-    list = disk->dev->memberlist (disk);
+  if (disk->dev->disk_memberlist)
+    list = disk->dev->disk_memberlist (disk);
   while (list)
     {
       probe_mods (list->disk);
@@ -515,6 +509,8 @@ have_bootdev (enum grub_install_plat pl)
     case GRUB_INSTALL_PLATFORM_IA64_EFI:
     case GRUB_INSTALL_PLATFORM_ARM_EFI:
     case GRUB_INSTALL_PLATFORM_ARM64_EFI:
+    case GRUB_INSTALL_PLATFORM_RISCV32_EFI:
+    case GRUB_INSTALL_PLATFORM_RISCV64_EFI:
     case GRUB_INSTALL_PLATFORM_I386_IEEE1275:
     case GRUB_INSTALL_PLATFORM_SPARC64_IEEE1275:
     case GRUB_INSTALL_PLATFORM_POWERPC_IEEE1275:
@@ -524,6 +520,7 @@ have_bootdev (enum grub_install_plat pl)
 
     case GRUB_INSTALL_PLATFORM_I386_QEMU:
     case GRUB_INSTALL_PLATFORM_I386_COREBOOT:
+    case GRUB_INSTALL_PLATFORM_ARM_COREBOOT:
     case GRUB_INSTALL_PLATFORM_I386_MULTIBOOT:
     case GRUB_INSTALL_PLATFORM_MIPSEL_QEMU_MIPS:
     case GRUB_INSTALL_PLATFORM_MIPS_QEMU_MIPS:
@@ -549,9 +546,9 @@ probe_cryptodisk_uuid (grub_disk_t disk)
   grub_disk_memberlist_t list = NULL, tmp;
 
   /* In case of LVM/RAID, check the member devices as well.  */
-  if (disk->dev->memberlist)
+  if (disk->dev->disk_memberlist)
     {
-      list = disk->dev->memberlist (disk);
+      list = disk->dev->disk_memberlist (disk);
     }
   while (list)
     {
@@ -752,7 +749,7 @@ is_prep_partition (grub_device_t dev)
       if (grub_disk_read (dev->disk, p->offset, p->index,
 			  sizeof (gptdata), &gptdata) == 0)
 	{
-	  const grub_gpt_part_type_t template = {
+	  const grub_gpt_part_guid_t template = {
 	    grub_cpu_to_le32_compile_time (0x9e1a2d38),
 	    grub_cpu_to_le16_compile_time (0xc612),
 	    grub_cpu_to_le16_compile_time (0x4316),
@@ -1052,6 +1049,8 @@ main (int argc, char *argv[])
     case GRUB_INSTALL_PLATFORM_X86_64_EFI:
     case GRUB_INSTALL_PLATFORM_ARM_EFI:
     case GRUB_INSTALL_PLATFORM_ARM64_EFI:
+    case GRUB_INSTALL_PLATFORM_RISCV32_EFI:
+    case GRUB_INSTALL_PLATFORM_RISCV64_EFI:
     case GRUB_INSTALL_PLATFORM_IA64_EFI:
     case GRUB_INSTALL_PLATFORM_I386_IEEE1275:
     case GRUB_INSTALL_PLATFORM_SPARC64_IEEE1275:
@@ -1066,6 +1065,7 @@ main (int argc, char *argv[])
 
     case GRUB_INSTALL_PLATFORM_I386_QEMU:
     case GRUB_INSTALL_PLATFORM_I386_COREBOOT:
+    case GRUB_INSTALL_PLATFORM_ARM_COREBOOT:
     case GRUB_INSTALL_PLATFORM_I386_MULTIBOOT:
     case GRUB_INSTALL_PLATFORM_MIPSEL_LOONGSON:
     case GRUB_INSTALL_PLATFORM_MIPSEL_QEMU_MIPS:
@@ -1096,11 +1096,14 @@ main (int argc, char *argv[])
     case GRUB_INSTALL_PLATFORM_X86_64_EFI:
     case GRUB_INSTALL_PLATFORM_ARM_EFI:
     case GRUB_INSTALL_PLATFORM_ARM64_EFI:
+    case GRUB_INSTALL_PLATFORM_RISCV32_EFI:
+    case GRUB_INSTALL_PLATFORM_RISCV64_EFI:
     case GRUB_INSTALL_PLATFORM_IA64_EFI:
     case GRUB_INSTALL_PLATFORM_I386_IEEE1275:
     case GRUB_INSTALL_PLATFORM_ARM_UBOOT:
     case GRUB_INSTALL_PLATFORM_I386_QEMU:
     case GRUB_INSTALL_PLATFORM_I386_COREBOOT:
+    case GRUB_INSTALL_PLATFORM_ARM_COREBOOT:
     case GRUB_INSTALL_PLATFORM_I386_MULTIBOOT:
     case GRUB_INSTALL_PLATFORM_MIPSEL_LOONGSON:
     case GRUB_INSTALL_PLATFORM_MIPSEL_QEMU_MIPS:
@@ -1148,6 +1151,8 @@ main (int argc, char *argv[])
     case GRUB_INSTALL_PLATFORM_X86_64_EFI:
     case GRUB_INSTALL_PLATFORM_ARM_EFI:
     case GRUB_INSTALL_PLATFORM_ARM64_EFI:
+    case GRUB_INSTALL_PLATFORM_RISCV32_EFI:
+    case GRUB_INSTALL_PLATFORM_RISCV64_EFI:
     case GRUB_INSTALL_PLATFORM_IA64_EFI:
       is_efi = 1;
       break;
@@ -1261,6 +1266,14 @@ main (int argc, char *argv[])
 	case GRUB_INSTALL_PLATFORM_ARM64_EFI:
 	  efi_suffix = "aa64";
 	  efi_suffix_upper = "AA64";
+	  break;
+	case GRUB_INSTALL_PLATFORM_RISCV32_EFI:
+	  efi_suffix = "riscv32";
+	  efi_suffix_upper = "RISCV32";
+	  break;
+	case GRUB_INSTALL_PLATFORM_RISCV64_EFI:
+	  efi_suffix = "riscv64";
+	  efi_suffix_upper = "RISCV64";
 	  break;
 	default:
 	  break;
@@ -1554,8 +1567,8 @@ main (int argc, char *argv[])
 	    }
 
 	  /*  generic method (used on coreboot and ata mod).  */
-	  if (!force_file_id && grub_fs->uuid && grub_fs->uuid (grub_dev,
-								&uuid))
+	  if (!force_file_id
+	      && grub_fs->fs_uuid && grub_fs->fs_uuid (grub_dev, &uuid))
 	    {
 	      grub_print_error ();
 	      grub_errno = 0;
@@ -1636,6 +1649,8 @@ main (int argc, char *argv[])
 		  case GRUB_INSTALL_PLATFORM_X86_64_EFI:
 		  case GRUB_INSTALL_PLATFORM_ARM_EFI:
 		  case GRUB_INSTALL_PLATFORM_ARM64_EFI:
+		  case GRUB_INSTALL_PLATFORM_RISCV32_EFI:
+		  case GRUB_INSTALL_PLATFORM_RISCV64_EFI:
 		  case GRUB_INSTALL_PLATFORM_IA64_EFI:
 		    g = grub_util_guess_efi_drive (*curdev);
 		    break;
@@ -1650,6 +1665,7 @@ main (int argc, char *argv[])
 		  case GRUB_INSTALL_PLATFORM_MIPSEL_LOONGSON:
 		  case GRUB_INSTALL_PLATFORM_I386_QEMU:
 		  case GRUB_INSTALL_PLATFORM_I386_COREBOOT:
+		  case GRUB_INSTALL_PLATFORM_ARM_COREBOOT:
 		  case GRUB_INSTALL_PLATFORM_I386_MULTIBOOT:
 		  case GRUB_INSTALL_PLATFORM_MIPSEL_QEMU_MIPS:
 		  case GRUB_INSTALL_PLATFORM_MIPS_QEMU_MIPS:
@@ -1728,6 +1744,8 @@ main (int argc, char *argv[])
     case GRUB_INSTALL_PLATFORM_X86_64_EFI:
     case GRUB_INSTALL_PLATFORM_ARM_EFI:
     case GRUB_INSTALL_PLATFORM_ARM64_EFI:
+    case GRUB_INSTALL_PLATFORM_RISCV32_EFI:
+    case GRUB_INSTALL_PLATFORM_RISCV64_EFI:
     case GRUB_INSTALL_PLATFORM_IA64_EFI:
       core_name = "core.efi";
       snprintf (mkimage_target, sizeof (mkimage_target),
@@ -1746,6 +1764,7 @@ main (int argc, char *argv[])
       break;
 
     case GRUB_INSTALL_PLATFORM_I386_COREBOOT:
+    case GRUB_INSTALL_PLATFORM_ARM_COREBOOT:
     case GRUB_INSTALL_PLATFORM_I386_MULTIBOOT:
     case GRUB_INSTALL_PLATFORM_I386_IEEE1275:
     case GRUB_INSTALL_PLATFORM_POWERPC_IEEE1275:
@@ -1830,10 +1849,13 @@ main (int argc, char *argv[])
       break;
     case GRUB_INSTALL_PLATFORM_ARM_EFI:
     case GRUB_INSTALL_PLATFORM_ARM64_EFI:
+    case GRUB_INSTALL_PLATFORM_RISCV32_EFI:
+    case GRUB_INSTALL_PLATFORM_RISCV64_EFI:
     case GRUB_INSTALL_PLATFORM_IA64_EFI:
     case GRUB_INSTALL_PLATFORM_MIPSEL_QEMU_MIPS:
     case GRUB_INSTALL_PLATFORM_MIPS_QEMU_MIPS:
     case GRUB_INSTALL_PLATFORM_I386_COREBOOT:
+    case GRUB_INSTALL_PLATFORM_ARM_COREBOOT:
     case GRUB_INSTALL_PLATFORM_I386_MULTIBOOT:
     case GRUB_INSTALL_PLATFORM_I386_PC:
     case GRUB_INSTALL_PLATFORM_MIPSEL_ARC:
@@ -1967,7 +1989,7 @@ main (int argc, char *argv[])
 		? ins_dev->disk->partition->number + 1 : 0;
 	      dev = grub_util_get_os_disk (install_device);
 	      grub_install_register_ieee1275 (0, dev, partno,
-					      "\\\\BootX", auto_nvram);
+					      "\\\\BootX");
 	    }
 	  grub_device_close (ins_dev);
   	  free (grub_elf);
@@ -1999,7 +2021,7 @@ main (int argc, char *argv[])
 	  grub_device_close (ins_dev);
 	  if (update_nvram)
 	    grub_install_register_ieee1275 (1, grub_util_get_os_disk (install_device),
-					    0, NULL, auto_nvram);
+					    0, NULL);
 	  break;
       }
       /* fallthrough.  */
@@ -2014,7 +2036,7 @@ main (int argc, char *argv[])
 	    ? grub_dev->disk->partition->number + 1 : 0;
 	  dev = grub_util_get_os_disk (grub_devices[0]);
 	  grub_install_register_ieee1275 (0, dev,
-					  partno, relpath, auto_nvram);
+					  partno, relpath);
 	}
       break;
     case GRUB_INSTALL_PLATFORM_MIPS_ARC:
@@ -2060,13 +2082,13 @@ main (int argc, char *argv[])
 	  if (!removable && update_nvram)
 	    {
 	      /* Try to make this image bootable using the EFI Boot Manager, if available.  */
-	      int error = 0;
-	      error = grub_install_register_efi (efidir_grub_dev,
-					 "\\System\\Library\\CoreServices",
-					 efi_distributor, auto_nvram);
-	      if (error)
-	        grub_util_error (_("efibootmgr failed to register the boot entry: %s"),
-				 strerror (error));
+	      int ret;
+	      ret = grub_install_register_efi (efidir_grub_dev,
+					       "\\System\\Library\\CoreServices",
+					       efi_distributor);
+	      if (ret)
+	        grub_util_error (_("failed to register the EFI boot entry: %s"),
+				 strerror (ret));
 	    }
 
 	  grub_device_close (ins_dev);
@@ -2077,34 +2099,29 @@ main (int argc, char *argv[])
       /* FALLTHROUGH */
     case GRUB_INSTALL_PLATFORM_ARM_EFI:
     case GRUB_INSTALL_PLATFORM_ARM64_EFI:
+    case GRUB_INSTALL_PLATFORM_RISCV32_EFI:
+    case GRUB_INSTALL_PLATFORM_RISCV64_EFI:
     case GRUB_INSTALL_PLATFORM_IA64_EFI:
       {
 	char *dst = grub_util_path_concat (2, efidir, efi_file);
 	if (uefi_secure_boot)
 	  {
 	    char *shim_signed = NULL;
-	    char *mok_file = NULL;
-	    char *bootcsv = NULL;
+	    char *mok_signed = NULL, *mok_file = NULL;
+	    char *fb_signed = NULL, *fb_file = NULL;
 	    char *config_dst;
 	    FILE *config_dst_f;
 
 	    shim_signed = xasprintf ("/usr/lib/shim/shim%s.efi.signed", efi_suffix);
+	    mok_signed = xasprintf ("mm%s.efi.signed", efi_suffix);
 	    mok_file = xasprintf ("mm%s.efi", efi_suffix);
-	    bootcsv = xasprintf ("BOOT%s.CSV", efi_suffix_upper);
+	    fb_signed = xasprintf ("fb%s.efi.signed", efi_suffix);
+	    fb_file = xasprintf ("fb%s.efi", efi_suffix);
 
 	    if (grub_util_is_regular (shim_signed))
 	      {
 		char *chained_base, *chained_dst;
-		char *mok_src, *mok_dst, *bootcsv_src, *bootcsv_dst;
-
-		/* Install grub as our chained bootloader */
-		chained_base = xasprintf ("grub%s.efi", efi_suffix);
-		chained_dst = grub_util_path_concat (2, efidir, chained_base);
-		grub_install_copy_file (efi_signed, chained_dst, 1);
-		free (chained_dst);
-		free (chained_base);
-
-		/* Now handle shim, and make this our new "default" loader. */
+		char *mok_src, *mok_dst, *fb_src, *fb_dst;
 		if (!removable)
 		  {
 		    free (efi_file);
@@ -2113,14 +2130,17 @@ main (int argc, char *argv[])
 		    dst = grub_util_path_concat (2, efidir, efi_file);
 		  }
 		grub_install_copy_file (shim_signed, dst, 1);
-		free (efi_signed);
-		efi_signed = xstrdup (shim_signed);
+		chained_base = xasprintf ("grub%s.efi", efi_suffix);
+		chained_dst = grub_util_path_concat (2, efidir, chained_base);
+		grub_install_copy_file (efi_signed, chained_dst, 1);
+		free (chained_dst);
+		free (chained_base);
 
-		/* Not critical, so not an error if it is not present (as it
-		   won't be for older releases); but if we have MokManager,
-		   make sure it gets installed.  */
+		/* Not critical, so not an error if they are not present (as it
+		   won't be for older releases); but if we have them, make
+		   sure they are installed.  */
 		mok_src = grub_util_path_concat (2, "/usr/lib/shim/",
-						    mok_file);
+						    mok_signed);
 		mok_dst = grub_util_path_concat (2, efidir,
 						    mok_file);
 		grub_install_copy_file (mok_src,
@@ -2128,13 +2148,14 @@ main (int argc, char *argv[])
 		free (mok_src);
 		free (mok_dst);
 
-		/* Also try to install boot.csv for fallback */
-		bootcsv_src = grub_util_path_concat (2, "/usr/lib/shim/",
-							bootcsv);
-		bootcsv_dst = grub_util_path_concat (2, efidir, bootcsv);
-		grub_install_copy_file (bootcsv_src, bootcsv_dst, 0);
-		free (bootcsv_src);
-		free (bootcsv_dst);
+		fb_src = grub_util_path_concat (2, "/usr/lib/shim/",
+						    fb_signed);
+		fb_dst = grub_util_path_concat (2, efidir,
+						    fb_file);
+		grub_install_copy_file (fb_src,
+					fb_dst, 0);
+		free (fb_src);
+		free (fb_dst);
 	      }
 	    else
 	      grub_install_copy_file (efi_signed, dst, 1);
@@ -2160,7 +2181,7 @@ main (int argc, char *argv[])
 	{
 	  char * efifile_path;
 	  char * part;
-	  int error = 0;
+	  int ret;
 
 	  /* Try to make this image bootable using the EFI Boot Manager, if available.  */
 	  if (!efi_distributor || efi_distributor[0] == '\0')
@@ -2177,11 +2198,11 @@ main (int argc, char *argv[])
 			  efidir_grub_dev->disk->name,
 			  (part ? ",": ""), (part ? : ""));
 	  grub_free (part);
-	  error = grub_install_register_efi (efidir_grub_dev,
-					     efifile_path, efi_distributor, auto_nvram);
-	  if (error)
-	    grub_util_error (_("efibootmgr failed to register the boot entry: %s"),
-			     strerror (error));
+	  ret = grub_install_register_efi (efidir_grub_dev,
+					   efifile_path, efi_distributor);
+	  if (ret)
+	    grub_util_error (_("failed to register the EFI boot entry: %s"),
+			     strerror (ret));
 	}
       break;
 
@@ -2211,6 +2232,7 @@ main (int argc, char *argv[])
     case GRUB_INSTALL_PLATFORM_MIPSEL_QEMU_MIPS:
     case GRUB_INSTALL_PLATFORM_MIPS_QEMU_MIPS:
     case GRUB_INSTALL_PLATFORM_I386_COREBOOT:
+    case GRUB_INSTALL_PLATFORM_ARM_COREBOOT:
     case GRUB_INSTALL_PLATFORM_I386_MULTIBOOT:
     case GRUB_INSTALL_PLATFORM_MIPSEL_ARC:
     case GRUB_INSTALL_PLATFORM_ARM_UBOOT:
