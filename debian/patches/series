@@ -135,3 +135,4 @@ linuxefi_fix_relocate_coff.patch
 linuxefi_truncate_overlong_relocs.patch
 squash4-fix-fragments-and-sparse-files.patch
 skip_text_gfxpayload_where_not_supported.patch
+fix_booting_for_large_root_volumes.patch
