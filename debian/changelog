@@ -1,3 +1,11 @@
+grub2 (2.02~beta2-36ubuntu3.23) xenial; urgency=medium
+
+  * d/p/fix_booting_for_large_root_volumes.patch: Cherry pick upstream
+    fix for booting on systems with large root volumes, either by default
+    or from resizing. (LP: #1840686)
+
+ -- Matthew Ruffell <matthew.ruffell@canonical.com>  Sat, 19 Oct 2019 17:47:16 +1300
+
 grub2 (2.02~beta2-36ubuntu3.22) xenial; urgency=medium
 
   * debian/patches/skip_text_gfxpayload_where_not_supported.patch: Skip the
