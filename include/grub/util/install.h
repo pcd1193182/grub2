@@ -216,11 +216,12 @@ grub_install_get_default_powerpc_machtype (void);
 int
 grub_install_register_efi (grub_device_t efidir_grub_dev,
 			   const char *efifile_path,
-			   const char *efi_distributor);
+			   const char *efi_distributor,
+			   int detect_nvram);
 
 void
 grub_install_register_ieee1275 (int is_prep, const char *install_device,
-				int partno, const char *relpath);
+				int partno, const char *relpath, int detect_nvram);
 
 void
 grub_install_sgi_setup (const char *install_device,
