@@ -32,6 +32,16 @@
 #define DEFAULT_ENVBLK_SIZE	1024
 
 void
+grub_util_create_envblk_buffer (char *buf, size_t size)
+{
+  if (size < DEFAULT_ENVBLK_SIZE)
+    grub_util_error (_("Envblock buffer too small"));
+  memcpy (buf, GRUB_ENVBLK_SIGNATURE, sizeof (GRUB_ENVBLK_SIGNATURE) - 1);
+  memset (buf + sizeof (GRUB_ENVBLK_SIGNATURE) - 1, '#',
+    GRUB_ENVBLK_DEFAULT_SIZE - sizeof (GRUB_ENVBLK_SIGNATURE) + 1);
+}
+
+void
 grub_util_create_envblk_file (const char *name)
 {
   FILE *fp;
@@ -39,16 +49,13 @@ grub_util_create_envblk_file (const char *name)
   char *namenew;
 
   buf = xmalloc (DEFAULT_ENVBLK_SIZE);
+  grub_util_create_envblk_buffer(buf, DEFAULT_ENVBLK_SIZE);
 
   namenew = xasprintf ("%s.new", name);
   fp = grub_util_fopen (namenew, "wb");
   if (! fp)
     grub_util_error (_("cannot open `%s': %s"), namenew,
 		     strerror (errno));
-
-  memcpy (buf, GRUB_ENVBLK_SIGNATURE, sizeof (GRUB_ENVBLK_SIGNATURE) - 1);
-  memset (buf + sizeof (GRUB_ENVBLK_SIGNATURE) - 1, '#',
-          DEFAULT_ENVBLK_SIZE - sizeof (GRUB_ENVBLK_SIGNATURE) + 1);
 
   if (fwrite (buf, 1, DEFAULT_ENVBLK_SIZE, fp) != DEFAULT_ENVBLK_SIZE)
     grub_util_error (_("cannot write to `%s': %s"), namenew,
