@@ -58,14 +58,35 @@ grub_file_get_device_name (const char *name)
   return 0;
 }
 
+static grub_file_t
+grub_apply_file_filters (grub_file_t file, const char *name)
+{
+  grub_file_filter_id_t filter;
+  grub_file_t last_file = NULL;
+
+  for (filter = 0; file && filter < ARRAY_SIZE (grub_file_filters_enabled);
+       filter++)
+    if (grub_file_filters_enabled[filter])
+      {
+	last_file = file;
+	file = grub_file_filters_enabled[filter] (file, name);
+      }
+  if (!file)
+    grub_file_close (last_file);
+    
+  grub_memcpy (grub_file_filters_enabled, grub_file_filters_all,
+	       sizeof (grub_file_filters_enabled));
+
+  return file;
+}
+
 grub_file_t
 grub_file_open (const char *name)
 {
-  grub_device_t device = 0;
-  grub_file_t file = 0, last_file = 0;
+  grub_device_t device = NULL;
+  grub_file_t file = NULL;
   char *device_name;
   const char *file_name;
-  grub_file_filter_id_t filter;
 
   device_name = grub_file_get_device_name (name);
   if (grub_errno)
@@ -114,20 +135,7 @@ grub_file_open (const char *name)
   file->name = grub_strdup (name);
   grub_errno = GRUB_ERR_NONE;
 
-  for (filter = 0; file && filter < ARRAY_SIZE (grub_file_filters_enabled);
-       filter++)
-    if (grub_file_filters_enabled[filter])
-      {
-	last_file = file;
-	file = grub_file_filters_enabled[filter] (file, name);
-      }
-  if (!file)
-    grub_file_close (last_file);
-    
-  grub_memcpy (grub_file_filters_enabled, grub_file_filters_all,
-	       sizeof (grub_file_filters_enabled));
-
-  return file;
+  return grub_apply_file_filters(file, name);
 
  fail:
   if (device)
