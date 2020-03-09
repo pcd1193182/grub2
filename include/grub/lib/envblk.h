@@ -21,6 +21,8 @@
 
 #define GRUB_ENVBLK_SIGNATURE	"# GRUB Environment Block\n"
 #define GRUB_ENVBLK_DEFCFG	"grubenv"
+#define GRUB_ENVBLK_SRC_BLK	"block"
+#define GRUB_ENVBLK_SRC_FILE	"file"
 
 #ifndef ASM_FILE
 
