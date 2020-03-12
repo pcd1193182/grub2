@@ -68,3 +68,5 @@ ubuntu-add-devicetree-command-support.patch
 ubuntu-boot-from-multipath-dependent-symlink.patch
 ubuntu-skip-disk-by-id-lvm-pvm-uuid-entries.patch
 ubuntu-tpm-unknown-error-non-fatal.patch
+0071-ubuntu-Make-the-linux-command-in-EFI-grub-always-try.patch
+0072-ubuntu-Update-the-linux-boot-protocol-version-check.patch
