@@ -1,3 +1,10 @@
+grub2 (2.04-1ubuntu12.2) eoan; urgency=medium
+
+  * Make the linux command in EFI grub always try EFI handover; thanks
+    to Chris Coulson for the patches (LP: #1864533)
+
+ -- Julian Andres Klode <juliank@ubuntu.com>  Thu, 12 Mar 2020 17:40:25 +0100
+
 grub2 (2.04-1ubuntu12.1) eoan; urgency=medium
 
   * debian/patches/ubuntu-tpm-unknown-error-non-fatal.patch: treat "unknown"
