@@ -3763,7 +3763,6 @@ zfs_devs_read_zbt (struct grub_zfs_data *data, grub_uint64_t offset, char *buf, 
   grub_err_t err = GRUB_ERR_NONE;
   zio_cksum_t zc;
   unsigned int i;
-  ZIO_SET_CHECKSUM(&zc, offset, 0, 0, 0);
 
   for (i = 0; i < data->n_devices_attached; i++)
     {
@@ -4004,7 +4003,6 @@ grub_zfs_envblk_write (struct grub_file *file, char *buf, grub_size_t len)
   for (l = 0; l < VDEV_LABELS / 2; l++)
     {
       offset = l * sizeof (vdev_label_t) + offsetof (vdev_label_t, vl_be);
-      vbe->vbe_zbt.zec_magic = ZEC_MAGIC;
       ZIO_SET_CHECKSUM(&vbe->vbe_zbt.zec_cksum, offset, 0, 0, 0);
       vbe->vbe_zbt.zec_magic = ZEC_MAGIC;
       zio_checksum_SHA256(vbe, VDEV_PAD_SIZE, GRUB_ZFS_LITTLE_ENDIAN, &cksum);

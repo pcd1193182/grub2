@@ -88,7 +88,7 @@ static grub_file_t
 open_envblk_block (grub_fs_t fs, grub_device_t dev, int untrusted)
 {
   if (fs->fs_envblk_open)
-    return grub_file_envblk_open(fs, dev);
+    return grub_file_envblk_open (fs, dev);
   if (untrusted)
     grub_file_filter_disable_pubkey ();
   return NULL;
@@ -128,7 +128,7 @@ open_envblk (grub_extcmd_context_t ctxt, int untrusted)
 
       fs = grub_fs_probe (device);
       if (! fs) {
-        grub_device_close (device);
+	grub_device_close (device);
 	return NULL;
       }
 
