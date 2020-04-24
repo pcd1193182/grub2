@@ -30,6 +30,7 @@
  *
  */
 
+#include <stddef.h>
 #include <grub/err.h>
 #include <grub/file.h>
 #include <grub/mm.h>
@@ -1146,7 +1147,6 @@ scan_disk (grub_device_t dev, struct grub_zfs_data *data,
 {
   int label = 0;
   uberblock_phys_t *ub_array, *ubbest = NULL;
-  vdev_boot_header_t *bh;
   grub_err_t err;
   int vdevnum;
   struct grub_zfs_device_desc desc;
@@ -1154,13 +1154,6 @@ scan_disk (grub_device_t dev, struct grub_zfs_data *data,
   ub_array = grub_malloc (VDEV_UBERBLOCK_RING);
   if (!ub_array)
     return grub_errno;
-
-  bh = grub_malloc (VDEV_BOOT_HEADER_SIZE);
-  if (!bh)
-    {
-      grub_free (ub_array);
-      return grub_errno;
-    }
 
   vdevnum = VDEV_LABELS;
 
@@ -1175,7 +1168,7 @@ scan_disk (grub_device_t dev, struct grub_zfs_data *data,
     {
       desc.vdev_phys_sector
 	= label * (sizeof (vdev_label_t) >> SPA_MINBLOCKSHIFT)
-	+ ((VDEV_SKIP_SIZE + VDEV_BOOT_HEADER_SIZE) >> SPA_MINBLOCKSHIFT)
+	+ ((VDEV_PAD_SIZE * 2) >> SPA_MINBLOCKSHIFT)
 	+ (label < VDEV_LABELS / 2 ? 0 : 
 	   ALIGN_DOWN (grub_disk_get_size (dev->disk), sizeof (vdev_label_t))
 	   - VDEV_LABELS * (sizeof (vdev_label_t) >> SPA_MINBLOCKSHIFT));
@@ -1184,6 +1177,7 @@ scan_disk (grub_device_t dev, struct grub_zfs_data *data,
       err = grub_disk_read (dev->disk, desc.vdev_phys_sector
 			    + (VDEV_PHYS_SIZE >> SPA_MINBLOCKSHIFT),
 			    0, VDEV_UBERBLOCK_RING, (char *) ub_array);
+
       if (err)
 	{
 	  grub_errno = GRUB_ERR_NONE;
@@ -1219,12 +1213,10 @@ scan_disk (grub_device_t dev, struct grub_zfs_data *data,
 	continue;
 #endif
       grub_free (ub_array);
-      grub_free (bh);
       return GRUB_ERR_NONE;
     }
   
   grub_free (ub_array);
-  grub_free (bh);
 
   return grub_error (GRUB_ERR_BAD_FS, "couldn't find a valid label");
 }
@@ -3765,6 +3757,64 @@ zfs_mtime (grub_device_t device, grub_int32_t *mt)
   return GRUB_ERR_NONE;
 }
 
+static grub_err_t
+zfs_devs_read_zbt (struct grub_zfs_data *data, grub_uint64_t offset, char *buf, grub_size_t len)
+{
+  grub_err_t err = GRUB_ERR_NONE;
+  zio_cksum_t zc;
+  unsigned int i;
+
+  for (i = 0; i < data->n_devices_attached; i++)
+    {
+      err = grub_disk_read (data->devices_attached[i].dev->disk,
+			    offset >> SPA_MINBLOCKSHIFT,
+			    offset & ((1 << SPA_MINBLOCKSHIFT) - 1),
+			    len, buf);
+      if (err)
+	continue;
+      ZIO_SET_CHECKSUM(&zc, offset, 0, 0, 0);
+      err = zio_checksum_verify (zc, ZIO_CHECKSUM_LABEL, GRUB_ZFS_LITTLE_ENDIAN,
+				 buf, len);
+      if (!err)
+	return GRUB_ERR_NONE;
+    }
+  return err;
+}
+
+static grub_err_t
+grub_zfs_envblk_open (struct grub_file *file)
+{
+  grub_err_t err;
+  struct grub_zfs_data *data;
+  vdev_boot_envblock_t *vbe;
+  int l;
+
+  file->offset = 0;
+  data = zfs_mount (file->device);
+  file->data = data;
+  data->file_buf = grub_malloc (sizeof (vdev_boot_envblock_t));
+  for (l = 0; l < VDEV_LABELS / 2; l++)
+    {
+      grub_uint64_t offset = l * sizeof (vdev_label_t) + offsetof (vdev_label_t, vl_be);
+
+      err = zfs_devs_read_zbt (data, offset, data->file_buf,
+			       sizeof (vdev_boot_envblock_t));
+      if (err == GRUB_ERR_NONE)
+	{
+	  vbe = (vdev_boot_envblock_t *)data->file_buf;
+	  if (vbe->vbe_version != VB_RAW)
+	    {
+	      zfs_unmount (data);
+	      return GRUB_ERR_BAD_FILE_TYPE;
+	    }
+	  file->size = grub_strnlen (vbe->vbe_bootenv, sizeof (vbe->vbe_bootenv));
+	  return err;
+	}
+    }
+  zfs_unmount (data);
+  return err;
+}
+
 /*
  * zfs_open() locates a file in the rootpool by following the
  * MOS and places the dnode of the file in the memory address DNODE.
@@ -3851,6 +3901,19 @@ grub_zfs_open (struct grub_file *file, const char *fsfilename)
 }
 
 static grub_ssize_t
+grub_zfs_envblk_read (grub_file_t file, char *buf, grub_size_t len)
+{
+  struct grub_zfs_data *data = (struct grub_zfs_data *) file->data;
+  grub_ssize_t olen = len;
+  grub_uint64_t offset = file->offset + offsetof (vdev_boot_envblock_t, vbe_bootenv);
+
+  if (len + file->offset > file->size)
+    olen = file->size - file->offset;
+  grub_memmove (buf, data->file_buf + offset, olen);
+  return olen;
+}
+
+static grub_ssize_t
 grub_zfs_read (grub_file_t file, char *buf, grub_size_t len)
 {
   struct grub_zfs_data *data = (struct grub_zfs_data *) file->data;
@@ -3858,6 +3921,9 @@ grub_zfs_read (grub_file_t file, char *buf, grub_size_t len)
   grub_size_t length;
   grub_size_t read;
   grub_err_t err;
+
+  if (grub_file_envblk (file))
+	  return grub_zfs_envblk_read (file, buf, len);
 
   /*
    * If offset is in memory, move it into the buffer provided and return.
@@ -3922,6 +3988,51 @@ grub_zfs_read (grub_file_t file, char *buf, grub_size_t len)
     }
 
   return len;
+}
+
+static grub_err_t
+grub_zfs_envblk_write (struct grub_file *file, char *buf, grub_size_t len)
+{
+  grub_uint64_t offset = file->offset + offsetof (vdev_boot_envblock_t, vbe_bootenv);
+  grub_err_t err = GRUB_ERR_NONE;
+  struct grub_zfs_data *data = file->data;
+  unsigned int i, l;
+  zio_cksum_t cksum;
+  vdev_boot_envblock_t *vbe = (vdev_boot_envblock_t *)data->file_buf;
+
+  if (len + file->offset > file->size)
+    return GRUB_ERR_OUT_OF_RANGE;
+
+  grub_memmove (data->file_buf + offset, buf, len);
+
+  for (l = 0; l < VDEV_LABELS / 2; l++)
+    {
+      offset = l * sizeof (vdev_label_t) + offsetof (vdev_label_t, vl_be);
+      ZIO_SET_CHECKSUM(&vbe->vbe_zbt.zec_cksum, offset, 0, 0, 0);
+      vbe->vbe_zbt.zec_magic = ZEC_MAGIC;
+      zio_checksum_SHA256(vbe, VDEV_PAD_SIZE, GRUB_ZFS_LITTLE_ENDIAN, &cksum);
+      vbe->vbe_zbt.zec_cksum = cksum;
+
+      for (i = 0; i < data->n_devices_attached; i++)
+	{
+	  struct grub_zfs_device_desc *desc = &data->devices_attached[i];
+	  int num_sectors = VDEV_PAD_SIZE >> desc->ashift;
+	  int label_seek = l * sizeof (vdev_label_t) >> desc->ashift;
+	  int j;
+
+	  for (j = 0; j < num_sectors; j++)
+	    {
+	      grub_err_t err2;
+
+	      err2 = grub_disk_write (desc->dev->disk, label_seek + num_sectors + j, 0,
+				      1 << desc->ashift,
+				      data->file_buf + (j << desc->ashift));
+	      if (err2 != GRUB_ERR_NONE)
+		err = err2;
+	    }
+	}
+    }
+  return err;
 }
 
 static grub_err_t
@@ -4360,6 +4471,10 @@ static struct grub_fs grub_zfs_fs = {
   .reserved_first_sector = 1,
   .blocklist_install = 0,
 #endif
+  .fs_envblk_open = grub_zfs_envblk_open,
+  .fs_envblk_read = grub_zfs_read,
+  .fs_envblk_write = grub_zfs_envblk_write,
+  .fs_envblk_close = grub_zfs_close,
   .next = 0
 };
 
