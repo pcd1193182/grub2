@@ -154,7 +154,7 @@ grub_zfs_init (grub_device_t dev)
   if (g_zfs == NULL)
     return NULL;
 
-  err = fs_envblk->fs->fs_label(dev, &name);
+  err = fs_envblk->fs->label(dev, &name);
   if (err != GRUB_ERR_NONE) {
     libzfs_fini(g_zfs);
     return NULL;
