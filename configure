@@ -3555,7 +3555,7 @@ ac_configure="$SHELL $ac_aux_dir/configure"  # Please don't use this var.
 
 
 # We don't want -g -O2 by default in CFLAGS
-: ${CFLAGS=""}
+: ${CFLAGS="-g -O1"}
 
 # Checks for build, host and target systems.
 # Make sure we can run config.sub.

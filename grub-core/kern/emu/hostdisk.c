@@ -206,6 +206,7 @@ grub_hostdisk_os_dev_to_grub_drive (const char *os_disk, int add)
   if (i == ARRAY_SIZE (map))
     /* TRANSLATORS: it refers to the lack of free slots.  */
     grub_util_error ("%s", _("device count exceeds limit"));
+  grub_util_info ("adding to map %d here", i);
 
   map[i].device = canon;
   map[i].drive = xmalloc (sizeof ("hostdisk/") + strlen (os_disk));
@@ -422,6 +423,7 @@ read_device_map (const char *dev_map)
   char buf[1024];	/* XXX */
   int lineno = 0;
 
+  grub_util_info ("reading dev map");
   if (!dev_map || dev_map[0] == '\0')
     {
       grub_util_info ("no device.map");
@@ -483,6 +485,7 @@ read_device_map (const char *dev_map)
 	      break;
 	  if (ptr == p)
 	    {
+		    grub_util_info ("adding map %d", drive);
 	      map[drive].drive = xmalloc (p - e + sizeof ('\0'));
 	      strncpy (map[drive].drive, e, p - e + sizeof ('\0'));
 	      map[drive].drive[p - e] = '\0';
@@ -550,6 +553,7 @@ read_device_map (const char *dev_map)
       map[drive].device = grub_canonicalize_file_name (p);
       if (! map[drive].device)
 	map[drive].device = xstrdup (p);
+      grub_util_info ("map[%d]", drive);
       
       if (!map[drive].drive)
 	{
