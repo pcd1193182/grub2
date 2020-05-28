@@ -597,6 +597,7 @@ grub_util_biosdisk_fini (void)
 {
   unsigned i;
 
+  grub_util_info ("fini map");
   for (i = 0; i < ARRAY_SIZE(map); i++)
     {
       if (map[i].drive)
