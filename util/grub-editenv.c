@@ -481,11 +481,6 @@ probe_fs_envblk (fs_envblk_spec_t *spec)
       grub_device_close (dev);
     }
 
-  free (grub_drives);
-  grub_gcry_fini_all ();
-  grub_fini_all ();
-  grub_util_biosdisk_fini ();
-
   for (p = spec; p->fs_name; p++)
     {
       if (strcmp (grub_fs->name, p->fs_name) == 0 && !have_abstraction)
@@ -496,9 +491,20 @@ probe_fs_envblk (fs_envblk_spec_t *spec)
 	  fs_envblk->fs = grub_fs;
 	  fs_envblk->data = p->fs_init (grub_dev);
 	  grub_device_close (grub_dev);
+
+	  free (grub_drives);
+	  grub_gcry_fini_all ();
+	  grub_fini_all ();
+	  grub_util_biosdisk_fini ();
+
 	  return fs_envblk;
 	}
     }
+
+  free (grub_drives);
+  grub_gcry_fini_all ();
+  grub_fini_all ();
+  grub_util_biosdisk_fini ();
 
   grub_device_close (grub_dev);
   return NULL;
