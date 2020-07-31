@@ -56,6 +56,7 @@
 #include <grub/deflate.h>
 #include <grub/crypto.h>
 #include <grub/i18n.h>
+#include <grub/safemath.h>
 
 GRUB_MOD_LICENSE ("GPLv3+");
 
@@ -774,11 +775,14 @@ fill_vdev_info (struct grub_zfs_data *data,
   if (data->n_devices_attached > data->n_devices_allocated)
     {
       void *tmp;
-      data->n_devices_allocated = 2 * data->n_devices_attached + 1;
-      data->devices_attached
-	= grub_realloc (tmp = data->devices_attached,
-			data->n_devices_allocated
-			* sizeof (data->devices_attached[0]));
+      grub_size_t sz;
+
+      if (grub_mul (data->n_devices_attached, 2, &data->n_devices_allocated) ||
+	  grub_add (data->n_devices_allocated, 1, &data->n_devices_allocated) ||
+	  grub_mul (data->n_devices_allocated, sizeof (data->devices_attached[0]), &sz))
+	return GRUB_ERR_OUT_OF_RANGE;
+
+      data->devices_attached = grub_realloc (tmp = data->devices_attached, sz);
       if (!data->devices_attached)
 	{
 	  data->devices_attached = tmp;
@@ -3317,7 +3321,7 @@ dnode_get_fullpath (const char *fullpath, struct subvolume *subvol,
 	}
       subvol->nkeys = 0;
       zap_iterate (&keychain_dn, 8, count_zap_keys, &ctx, data);
-      subvol->keyring = grub_zalloc (subvol->nkeys * sizeof (subvol->keyring[0]));
+      subvol->keyring = grub_calloc (subvol->nkeys, sizeof (subvol->keyring[0]));
       if (!subvol->keyring)
 	{
 	  grub_free (fsname);
@@ -3460,14 +3464,18 @@ grub_zfs_nvlist_lookup_nvlist (const char *nvlist, const char *name)
 {
   char *nvpair;
   char *ret;
-  grub_size_t size;
+  grub_size_t size, sz;
   int found;
 
   found = nvlist_find_value (nvlist, name, DATA_TYPE_NVLIST, &nvpair,
 			     &size, 0);
   if (!found)
     return 0;
-  ret = grub_zalloc (size + 3 * sizeof (grub_uint32_t));
+
+  if (grub_add (size, 3 * sizeof (grub_uint32_t), &sz))
+      return 0;
+
+  ret = grub_zalloc (sz);
   if (!ret)
     return 0;
   grub_memcpy (ret, nvlist, sizeof (grub_uint32_t));
@@ -4447,7 +4455,7 @@ grub_zfs_embed (grub_device_t device __attribute__ ((unused)),
   *nsectors = (VDEV_BOOT_SIZE >> GRUB_DISK_SECTOR_BITS);
   if (*nsectors > max_nsectors)
     *nsectors = max_nsectors;
-  *sectors = grub_malloc (*nsectors * sizeof (**sectors));
+  *sectors = grub_calloc (*nsectors, sizeof (**sectors));
   if (!*sectors)
     return grub_errno;
   for (i = 0; i < *nsectors; i++)
