@@ -128,7 +128,7 @@ struct fs_envblk_spec {
   const char *fs_name;
   int (*fs_read) (void *, char *, size_t, off_t);
   int (*fs_write) (void *, const char *);
-  void *(*fs_init) (grub_device_t);
+  int (*fs_init) (grub_device_t, void **);
   void (*fs_fini) (void *);
 };
 typedef struct fs_envblk_spec fs_envblk_spec_t;
@@ -143,29 +143,40 @@ typedef struct fs_envblk fs_envblk_t;
 fs_envblk_t *fs_envblk = NULL;
 
 #if defined(HAVE_LIBZFS) && defined(HAVE_LIBNVPAIR) && defined(HAVE_LIBZFS_BOOTENV)
-static void *
-grub_zfs_init (grub_device_t dev)
+static int
+grub_zfs_init (grub_device_t dev, void **out)
 {
   libzfs_handle_t *g_zfs = libzfs_init();
   int err;
   char *name;
   zpool_handle_t *zhp;
+  char buf[16];
 
   if (g_zfs == NULL)
-    return NULL;
+    return -1;
 
   err = fs_envblk->fs->label(dev, &name);
   if (err != GRUB_ERR_NONE) {
     libzfs_fini(g_zfs);
-    return NULL;
+    return -1;
   }
   zhp = zpool_open(g_zfs, name);
   if (zhp == NULL)
     {
       libzfs_fini(g_zfs);
-      return NULL;
+      return -1;
     }
-  return zhp;
+  /* If bootenv support isn't present on this system, don't try to use the envblk. */
+  err = zpool_get_bootenv (zhp, buf, 16, 0);
+  if (err == -1 && libzfs_errno(zpool_get_handle(zhp)) == EZFS_IOC_NOTSUPPORTED)
+    {
+      zpool_close(zhp);
+      libzfs_fini(g_zfs);
+      return -1;
+    }
+
+  *out = zhp;
+  return 0;
 }
 
 static void
@@ -188,6 +199,7 @@ grub_zfs_get_bootenv (void *arg, char *buf, size_t size, off_t offset)
   error = libzfs_errno(zpool_get_handle(zhp));
   return error;
 }
+
 #endif
 
 fs_envblk_spec_t fs_envblk_table[] = {
@@ -333,11 +345,12 @@ write_envblk_file (const char *name, grub_envblk_t envblk)
 static void
 write_envblk (const char *name, grub_envblk_t envblk)
 {
+  int err = 0;
   if (fs_envblk == NULL)
     return write_envblk_file(name, envblk);
 
-  if (fs_envblk->spec->fs_write (fs_envblk->data, grub_envblk_buffer (envblk)) != 0)
-    grub_util_error (_("cannot write to envblock: %s"), strerror (errno));
+  if ((err = fs_envblk->spec->fs_write (fs_envblk->data, grub_envblk_buffer (envblk))) != 0)
+    grub_util_error (_("cannot write to envblock: %s"), strerror (err));
 }
 
 static void
@@ -422,7 +435,7 @@ probe_fs_envblk (fs_envblk_spec_t *spec)
   char **grub_drives;
   grub_device_t grub_dev = NULL;
   grub_fs_t grub_fs;
-  int have_abstraction = 0;
+  int have_abstraction = 0, err;
   fs_envblk_spec_t *p;
 
   /* Initialize the emulated biosdisk driver.  */
@@ -489,9 +502,16 @@ probe_fs_envblk (fs_envblk_spec_t *spec)
 	  fs_envblk = xmalloc (sizeof (fs_envblk_t));
 	  fs_envblk->spec = p;
 	  fs_envblk->fs = grub_fs;
-	  fs_envblk->data = p->fs_init (grub_dev);
-	  grub_device_close (grub_dev);
+	  err = p->fs_init (grub_dev, &fs_envblk->data);
 
+	  if (err != 0)
+	    {
+	      grub_util_info ("Envblock init failed, continuing %d", err);
+	      free(fs_envblk);
+	      continue;
+	    }
+
+	  grub_device_close (grub_dev);
 	  free (grub_drives);
 	  grub_gcry_fini_all ();
 	  grub_fini_all ();
