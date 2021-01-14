@@ -57,6 +57,7 @@
 #include <grub/crypto.h>
 #include <grub/i18n.h>
 #include <grub/safemath.h>
+#include <grub/lib/envblk.h>
 
 GRUB_MOD_LICENSE ("GPLv3+");
 
@@ -3809,13 +3810,51 @@ grub_zfs_envblk_open (struct grub_file *file)
 			       sizeof (vdev_boot_envblock_t));
       if (err == GRUB_ERR_NONE)
 	{
+	  size_t size = sizeof (vbe->vbe_bootenv);
+	  char *buf = grub_malloc (size);
 	  vbe = (vdev_boot_envblock_t *)data->file_buf;
-	  if (vbe->vbe_version != VB_RAW)
+	  if (vbe->vbe_version == VB_RAW)
 	    {
-	      zfs_unmount (data);
-	      return GRUB_ERR_BAD_FILE_TYPE;
+	      grub_strncpy (buf, vbe->vbe_bootenv, size - 1);
 	    }
-	  file->size = grub_strnlen (vbe->vbe_bootenv, sizeof (vbe->vbe_bootenv));
+	  else if (vbe->vbe_version == VB_NVLIST)
+	    {
+	      size_t count;
+	      char *nvl = vbe->vbe_bootenv;
+	      const char *nvp = NULL;
+	      grub_memset (buf, '#', size);
+	      grub_snprintf (buf, size, "%s", GRUB_ENVBLK_SIGNATURE);
+	      buf[size - 1] = '\0';
+	      count = grub_strchr(buf, '#') - buf;
+	      while ((nvp = nvlist_next_nvpair (nvl, nvp)) != NULL)
+		{
+		  char *name, *value = NULL;
+		  int rc = 0;
+		  grub_size_t len;
+		  nvpair_name (nvp, &name, &len);
+		  nvpair_value (nvp, &value, &len, NULL);
+		  rc = grub_snprintf (buf + count, size - count, "%s=%s\n", name, value);
+		  if (rc < 0)
+		    {
+		      grub_free (buf);
+		      return grub_error (GRUB_ERR_BUG, N_("Couldn't print nvlist entry %s\n"), name);
+		    }
+		  count += rc;
+		  if (count >= size)
+		    {
+		      grub_free (buf);
+		      return grub_error (GRUB_ERR_BAD_FILE_TYPE, N_("envblk too large"));
+		    }
+		}
+	    }
+	  else
+	    {
+	      return grub_error (GRUB_ERR_BAD_FILE_TYPE, N_("Invalid bootenv type %d\n"), vbe->vbe_version);
+	    }
+
+	  grub_free (data->file_buf);
+	  data->file_buf = buf;
+	  file->size = grub_strnlen (buf, size);
 	  return err;
 	}
     }
